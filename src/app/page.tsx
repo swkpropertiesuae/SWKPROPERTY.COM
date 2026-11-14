@@ -131,21 +131,21 @@ export default function Home() {
       <link
         rel="preload"
         as="image"
-        href="/img/hero/slides/p-palm-jebel-ali-mobile.webp"
+        href="/img/hero/slides/p-creek-haven-mobile.webp"
         media="(max-width: 767px)"
         fetchPriority="high"
       />
       <link
         rel="preload"
         as="image"
-        href="/img/hero/slides/p-palm-jebel-ali-desktop.webp"
+        href="/img/hero/slides/p-creek-haven-desktop.webp"
         media="(min-width: 768px)"
         fetchPriority="high"
       />
       <link
         rel="preload"
         as="image"
-        href="/img/hero/slides/p-palm-jebel-ali-card.webp"
+        href="/img/hero/slides/p-creek-haven-card.webp"
         fetchPriority="high"
       />
 
