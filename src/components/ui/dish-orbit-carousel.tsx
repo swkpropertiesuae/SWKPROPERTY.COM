@@ -75,36 +75,6 @@ export type DishOrbitCarouselProps = {
 
 export const SWK_HERO_DISHES: Dish[] = [
   {
-    title: "Palm Jebel Ali",
-    subtitle: "The Next Palm",
-    label: "Nakheel Palm Jebel Ali",
-    eyebrow: "NAKHEEL FLAGSHIP · ISLAND VILLAS",
-    image: "/img/hero/slides/p-palm-jebel-ali-card.webp",
-    backdropImage: "/img/hero/slides/p-palm-jebel-ali-desktop.webp",
-    mobileBackdropImage: "/img/hero/slides/p-palm-jebel-ali-mobile.webp",
-    alt: "Nakheel Palm Jebel Ali island masterplan off the Jebel Ali coast",
-    rating: 5.0,
-    developerLogo: "/img/developers/nakheel.svg",
-    chef: "Nakheel",
-    kitchen: "Palm Jebel Ali · Off-plan · Payment plan on request",
-    description:
-      "The next palm: a man-made island off the Jebel Ali coast with beaches, marinas and a mix of frond villas and beach apartments by the developer of Palm Jumeirah.",
-    likes: 0,
-    ingredients: [
-      "Freehold Island Living",
-      "Frond Villas",
-      "Beach Residences",
-      "Marinas & Beaches",
-      "Golden Visa Route (AED 2M+)",
-    ],
-    accent: "#4b3a24",
-    href: "/off-plan/palm-jebel-ali",
-    primaryLabel: "Explore Palm Jebel Ali",
-    secondaryLabel: "Price List",
-    whatsappText:
-      "Hello SWK Properties, please share Palm Jebel Ali availability, prices and the Nakheel payment plan.",
-  },
-  {
     title: "Creek Haven",
     subtitle: "Dubai Creek Harbour",
     label: "Emaar Creek Haven",
