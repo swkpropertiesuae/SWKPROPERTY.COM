@@ -6,7 +6,6 @@ import {
   CheckCircle2,
   Compass,
   GraduationCap,
-  MapPin,
   Train,
 } from "lucide-react";
 import { communityGuides, getCommunityGuide } from "@/lib/communities";
@@ -18,6 +17,7 @@ import { NearbyWalk } from "@/components/ui/nearby-walk-menu";
 import { JsonLd } from "@/components/seo/json-ld";
 import { breadcrumbLd, buildMeta, placeLd } from "@/lib/seo";
 import { SITE } from "@/lib/swk";
+import { MapEmbed } from "@/components/site/map-embed";
 
 export function generateStaticParams() {
   return communityGuides.map((c) => ({ slug: c.slug }));
@@ -200,7 +200,7 @@ export default async function CommunityDetailPage({
           <div className="rounded-3xl border border-amber-400/30 bg-amber-50/75 p-6 md:p-8">
             <h2 className="font-serif text-2xl font-semibold text-[#0f2244] flex items-center gap-2.5">
               <AlertCircle className="h-5 w-5 text-amber-700" />
-              Practical Considerations & Trade-Offs (§11)
+              Practical Considerations & Trade-Offs
             </h2>
             <ul className="mt-4 space-y-3 text-xs md:text-sm text-[#39455a]">
               {comm.considerations.map((con) => (
@@ -272,6 +272,8 @@ export default async function CommunityDetailPage({
             </div>
           </section>
         )}
+
+        <MapEmbed lat={comm.lat} lng={comm.lng} zoom={13} title={`${comm.name}, Dubai — map`} />
 
         {/* Interactive Connectivity Walk/Drive Scene */}
         <section className="overflow-hidden rounded-3xl border border-[#e6dfd2]">

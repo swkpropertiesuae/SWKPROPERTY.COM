@@ -1,10 +1,12 @@
 import type { MetadataRoute } from "next"
-import { SITE, communities, team } from "@/lib/swk"
+import { SITE, team } from "@/lib/swk"
+import { communityGuides } from "@/lib/communities"
 import { developers, projects } from "@/lib/developers"
 import { services } from "@/lib/services"
-import { listings } from "@/lib/listings"
+import { listings, isPermitVerified } from "@/lib/listings"
 import { GUIDES } from "@/lib/guides"
 import { blogArticles } from "@/lib/blog"
+import { offPlanAreas } from "@/lib/areas"
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const base = SITE.url
@@ -21,6 +23,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/services",
     "/insights",
     "/calculators",
+    "/guides",
     "/about",
     "/contact",
     "/list-your-property",
@@ -37,17 +40,26 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "weekly" as const,
       priority: p === "" ? 1.0 : 0.85,
     })),
-    ...listings.map((l) => ({
+    // Listings are indexable only once their DLD Trakheesi permit is verified.
+    ...listings.filter(isPermitVerified).map((l) => ({
       url: `${base}/properties/${l.slug}`,
       lastModified: new Date(l.lastChecked),
       changeFrequency: "daily" as const,
       priority: 0.9,
+      images: l.images.slice(0, 5).map((i) => `${base}${i}`),
     })),
     ...projects.map((p) => ({
       url: `${base}/off-plan/${p.slug}`,
       lastModified: now,
       changeFrequency: "weekly" as const,
       priority: 0.8,
+      images: [`${base}${p.image}`],
+    })),
+    ...offPlanAreas.map((a) => ({
+      url: `${base}/off-plan/in/${a.slug}`,
+      lastModified: now,
+      changeFrequency: "weekly" as const,
+      priority: 0.85,
     })),
     ...developers.map((d) => ({
       url: `${base}/developers/${d.slug}`,
@@ -55,11 +67,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "weekly" as const,
       priority: 0.8,
     })),
-    ...communities.map((c) => ({
+    ...communityGuides.map((c) => ({
       url: `${base}/communities/${c.slug}`,
       lastModified: now,
       changeFrequency: "weekly" as const,
       priority: 0.85,
+      images: [`${base}${c.image}`],
     })),
     ...services.map((s) => ({
       url: `${base}/services/${s.slug}`,

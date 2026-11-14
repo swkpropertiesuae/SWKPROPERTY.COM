@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import Link from "next/link"
-import { HelpCircle, ShieldCheck } from "lucide-react"
+import { HelpCircle } from "lucide-react"
 import { faqs } from "@/lib/swk"
 import { GUIDES } from "@/lib/guides"
 import { buildMetadata, faqSchema, breadcrumbSchema } from "@/lib/seo"

@@ -73,8 +73,42 @@ export default function TermsPage() {
           </div>
 
           <div>
+            <h2 className="font-serif text-2xl font-semibold text-[#0f2244]">5. Brokerage Commission</h2>
+            <p className="mt-2">
+              Commission is agreed in writing before any service under the applicable RERA form (Form A for sellers and landlords, Form B
+              for buyers and tenants). On developer off-plan sales the developer normally pays our commission. DLD, Ejari, trustee and
+              mortgage fees are charged by the relevant authority or provider and are separate from our fees.
+            </p>
+          </div>
+
+          <div>
+            <h2 className="font-serif text-2xl font-semibold text-[#0f2244]">6. Listing Accuracy</h2>
+            <p className="mt-2">
+              Listings are advertised only under a valid DLD Trakheesi permit. Availability, prices and specifications can change without
+              notice and are confirmed in writing before any reservation. Report an inaccurate listing to {SITE.email}.
+            </p>
+          </div>
+
+          <div>
+            <h2 className="font-serif text-2xl font-semibold text-[#0f2244]">7. Intellectual Property & Acceptable Use</h2>
+            <p className="mt-2">
+              The SWK Properties name, emblem, logos and original website content belong to {SITE.legalName}. Do not copy, scrape or
+              republish them without written permission. Third-party links are provided for convenience; we are not responsible for their
+              content.
+            </p>
+          </div>
+
+          <div>
+            <h2 className="font-serif text-2xl font-semibold text-[#0f2244]">8. Limitation of Liability</h2>
+            <p className="mt-2">
+              To the extent permitted by UAE law, SWK Properties is not liable for losses arising from reliance on general website
+              information, calculators or third-party data. Nothing here limits liability that cannot be excluded by law.
+            </p>
+          </div>
+
+          <div>
             <h2 className="font-serif text-2xl font-semibold text-[#0f2244]">
-              5. Governing Law & Jurisdiction
+              9. Governing Law & Jurisdiction
             </h2>
             <p className="mt-2">
               These Terms of Use are governed by the federal laws of the United Arab Emirates and the laws of the Emirate of Dubai. Any dispute arising out of the use of this website shall be subject to the exclusive jurisdiction of the competent courts of Dubai, UAE.

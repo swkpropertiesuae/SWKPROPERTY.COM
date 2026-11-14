@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 import { SITE } from "@/lib/swk"
 
 export const SITE_URL = "https://www.swkpropertiesuae.com"
-export const OG_DEFAULT = "/img/hero/dubai-skyline-hero.webp"
+export const OG_DEFAULT = "/og-default.jpg"
 
 /** Search and AI-search keyword clusters used across page metadata and structured data. */
 export const KEYWORDS = {
@@ -115,6 +115,37 @@ export type PageMeta = {
   modifiedTime?: string
 }
 
+const BRAND_SUFFIX = " | SWK Properties"
+const TITLE_MAX = 60
+const DESC_MAX = 160
+
+const cutAtWord = (text: string, max: number) => {
+  if (text.length <= max) return text
+  const cut = text.slice(0, max - 1)
+  return `${cut.slice(0, Math.max(cut.lastIndexOf(" "), max * 0.6)).replace(/[\s,;:—|–-]+$/, "")}…`
+}
+
+/**
+ * Keeps SERP titles within ~60 characters: strips a trailing brand, keeps the most specific
+ * segment when the title has several "|"/"—" parts, and appends the brand only when it fits.
+ */
+export function fitTitle(raw: string) {
+  const t = raw.replace(/\s*[|—–-]\s*SWK Properties(?: Dubai)?\s*$/i, "").trim()
+  const withBrand = (x: string) => (x.length + BRAND_SUFFIX.length <= TITLE_MAX && !/SWK/i.test(x) ? `${x}${BRAND_SUFFIX}` : x)
+  if (t.length + BRAND_SUFFIX.length <= TITLE_MAX) return withBrand(t)
+  if (t.length <= TITLE_MAX) return t
+  const parts = t.split(/\s+[|—–]\s+/)
+  let acc = parts[0]
+  for (const part of parts.slice(1)) {
+    if (`${acc} | ${part}`.length > TITLE_MAX) break
+    acc = `${acc} | ${part}`
+  }
+  return acc.length >= 20 && acc.length <= TITLE_MAX ? withBrand(acc) : cutAtWord(t, TITLE_MAX)
+}
+
+/** Keeps meta descriptions within 160 characters, cutting at a word boundary. */
+export const fitDescription = (d: string) => cutAtWord(d.replace(/\s+/g, " ").trim(), DESC_MAX)
+
 /** Single place that builds consistent metadata (title, description, canonical, OG, Twitter, hreflang). */
 export function buildMeta({
   title,
@@ -129,12 +160,14 @@ export function buildMeta({
   publishedTime,
   modifiedTime,
 }: PageMeta): Metadata {
+  title = fitTitle(title)
+  description = fitDescription(description)
   const resolvedImage = ogImage || image || OG_DEFAULT
   const isNoIndex = noindex || noIndex
   const url = `${SITE_URL}${path === "/" ? "" : path}`
   const imageUrl = resolvedImage.startsWith("http") ? resolvedImage : `${SITE_URL}${resolvedImage}`
   return {
-    title,
+    title: { absolute: title },
     description,
     keywords: [...keywords, ...flat("core")].slice(0, 24),
     alternates: {
@@ -142,7 +175,7 @@ export function buildMeta({
       languages: { "en-AE": url, "x-default": url },
     },
     robots: isNoIndex
-      ? { index: false, follow: false }
+      ? { index: false, follow: true }
       : { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1, "max-video-preview": -1 },
     openGraph: {
       type,
@@ -151,7 +184,7 @@ export function buildMeta({
       locale: "en_AE",
       title,
       description,
-      images: [{ url: imageUrl, width: 1600, height: 900, alt: title }],
+      images: [resolvedImage === OG_DEFAULT ? { url: imageUrl, width: 1200, height: 630, alt: title } : { url: imageUrl, alt: title }],
       ...(type === "article" ? { publishedTime, modifiedTime: modifiedTime ?? publishedTime } : {}),
     },
     twitter: { card: "summary_large_image", title, description, images: [imageUrl] },
@@ -180,18 +213,22 @@ export const organizationLd = {
   name: SITE.name,
   legalName: "SWK Properties LLC",
   url: SITE_URL,
-  logo: abs("/brand/swk-horizontal-lockup.png"),
+  logo: { "@type": "ImageObject", url: abs("/brand/swk-emblem-charcoal-512.png"), width: 512, height: 512 },
   image: abs(OG_DEFAULT),
   description:
     "SWK Properties is a RERA-registered Dubai real estate brokerage advising on off-plan launches, secondary-market sales, leasing, investment, mortgages and property management across the UAE.",
   telephone: SITE.phone,
   email: SITE.email,
   foundingDate: String(SITE.founded),
-  identifier: { "@type": "PropertyValue", name: "RERA ORN", value: "51517" },
+  identifier: [
+    { "@type": "PropertyValue", name: "RERA ORN", value: SITE.orn },
+    ...(SITE.tradeLicense ? [{ "@type": "PropertyValue", name: "Dubai commercial licence", value: SITE.tradeLicense }] : []),
+  ],
   address: {
     "@type": "PostalAddress",
-    streetAddress: "Al Saqr Business Tower, Sheikh Zayed Road",
+    streetAddress: "Office 54, 27th Floor, Al Saqr Business Tower, Sheikh Zayed Road",
     addressLocality: "Dubai",
+    addressRegion: "Dubai",
     addressCountry: "AE",
   },
   geo: { "@type": "GeoCoordinates", latitude: 25.213925, longitude: 55.277978 },
@@ -206,7 +243,21 @@ export const organizationLd = {
     { "@type": "Country", name: "United Arab Emirates" },
   ],
   knowsLanguage: ["en", "ar", "hi", "ur", "ru", "fr"],
-  sameAs: [SITE.instagram, SITE.linkedin],
+  sameAs: Object.values(SITE.socials).filter(Boolean),
+  hasMap: `https://www.google.com/maps?q=${SITE.geo.lat},${SITE.geo.lng}`,
+  slogan: SITE.tagline,
+  priceRange: "AED",
+  currenciesAccepted: "AED",
+  paymentAccepted: "Bank transfer, Cheque",
+  knowsAbout: [
+    "Dubai off-plan property",
+    "Dubai secondary market sales",
+    "Ejari tenancy registration",
+    "DLD transfer procedures",
+    "UAE Golden Visa through property",
+    "UAE mortgages for residents and non-residents",
+    "Property management in Dubai",
+  ],
   contactPoint: [
     { "@type": "ContactPoint", telephone: SITE.phone, contactType: "sales", areaServed: "AE", availableLanguage: ["English", "Arabic", "Hindi", "Urdu", "Russian", "French"] },
   ],
@@ -284,6 +335,8 @@ export function articleLd(a: {
     author: { "@type": "Person", name: a.authorName ?? SITE.name },
     publisher: { "@id": `${SITE_URL}/#organization` },
     inLanguage: "en-AE",
+    // Lets voice assistants read the headline and direct-answer summary aloud.
+    speakable: { "@type": "SpeakableSpecification", cssSelector: ["h1", "[data-speakable]"] },
   }
 }
 

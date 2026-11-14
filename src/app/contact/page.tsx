@@ -1,11 +1,11 @@
 import type { Metadata } from "next"
-import Link from "next/link"
-import { ArrowRight, Building2, CheckCircle2, Clock, Mail, MapPin, Phone, ShieldCheck } from "lucide-react"
+import { CheckCircle2, Clock, Mail, MapPin, Phone } from "lucide-react"
 import { SITE } from "@/lib/swk"
 import { buildMetadata, breadcrumbSchema } from "@/lib/seo"
 import { JsonLd } from "@/components/seo/json-ld"
 import { LivelyPageHero } from "@/components/ui/lively-page-hero"
 import { EnquiryForm } from "@/components/site/enquiry-form"
+import { MapEmbed } from "@/components/site/map-embed";
 
 export const metadata: Metadata = buildMetadata({
   title: "Contact SWK Properties — Sheikh Zayed Road Office, Dubai",
@@ -158,6 +158,8 @@ export default function ContactPage() {
             </div>
 
             {/* Clean Access & Drive-Time Matrix (Replaces old NearbyWalk) */}
+            <MapEmbed lat={SITE.geo.lat} lng={SITE.geo.lng} zoom={16} title={`${SITE.legalName}, Al Saqr Business Tower, Sheikh Zayed Road`} />
+
             <div className="rounded-3xl border border-[#e6dfd2] bg-white p-7 shadow-sm">
               <div className="flex items-center justify-between gap-2 mb-4">
                 <div>

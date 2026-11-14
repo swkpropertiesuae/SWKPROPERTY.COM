@@ -4,6 +4,7 @@ import { notFound } from "next/navigation"
 import { ArrowLeft, Calendar, CheckCircle2, ExternalLink, ShieldCheck, UserCheck } from "lucide-react"
 import { blogArticles, getBlogArticle } from "@/lib/blog"
 import { listings } from "@/lib/listings"
+import { team } from "@/lib/swk"
 import { buildMetadata, articleSchema, faqSchema, breadcrumbSchema } from "@/lib/seo"
 import { JsonLd } from "@/components/seo/json-ld"
 import { PropertyCard } from "@/components/site/property-card"
@@ -112,12 +113,18 @@ export default async function InsightArticlePage({
                 <div className="text-[10px] uppercase tracking-[0.18em] text-[#5f6a82]">
                   Written By
                 </div>
-                <Link
-                  href={`/agents/${article.author.slug}`}
-                  className="font-semibold text-[#0f2244] hover:text-[#94652c]"
-                >
-                  {article.author.name} — {article.author.role}
-                </Link>
+                {team.some((m) => m.slug === article.author.slug) ? (
+                  <Link
+                    href={`/agents/${article.author.slug}`}
+                    className="font-semibold text-[#0f2244] hover:text-[#94652c]"
+                  >
+                    {article.author.name} — {article.author.role}
+                  </Link>
+                ) : (
+                  <span className="font-semibold text-[#0f2244]">
+                    {article.author.name} — {article.author.role}
+                  </span>
+                )}
                 <div className="text-[#5f6a82]">{article.author.credentials}</div>
               </div>
             </div>

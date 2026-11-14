@@ -5,8 +5,10 @@ import { PrefsProvider } from "@/lib/prefs";
 import { SiteHeader } from "@/components/site/site-header";
 import { SiteFooter } from "@/components/site/site-footer";
 import { FloatingChrome } from "@/components/site/floating-chrome";
+import Script from "next/script";
 import { JsonLd } from "@/components/seo/json-ld";
-import { KEYWORDS, organizationLd, websiteLd } from "@/lib/seo";
+import { Analytics, CONSENT_DEFAULT_SCRIPT } from "@/components/seo/analytics";
+import { KEYWORDS, OG_DEFAULT, organizationLd, websiteLd } from "@/lib/seo";
 import { SITE } from "@/lib/swk";
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
@@ -33,57 +35,71 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
   title: {
-    default: "SWK Properties | RERA Licensed Dubai Real Estate Brokerage (ORN 51517)",
-    template: "%s | SWK Properties Dubai",
+    default: "SWK Properties | RERA-Licensed Dubai Real Estate Broker",
+    template: "%s | SWK Properties",
   },
   description:
-    "SWK Properties LLC (RERA ORN 51517) is a Dubai real estate brokerage at Al Saqr Business Tower, Sheikh Zayed Road. Verified off-plan launches, ready secondary homes, residential & commercial leasing, and portfolio management across Dubai & the UAE.",
+    "SWK Properties LLC (RERA ORN 51517): Dubai real estate brokerage on Sheikh Zayed Road for off-plan launches, ready homes, leasing and property management.",
   keywords: KEYWORDS.home,
   alternates: {
     canonical: SITE.url,
-    languages: {
-      "en-AE": SITE.url,
-      "en-GB": SITE.url,
-      "en-US": SITE.url,
-      "ar-AE": `${SITE.url}?lang=ar`,
-      "x-default": SITE.url,
+    languages: { "en-AE": SITE.url, "x-default": SITE.url },
+  },
+  applicationName: SITE.name,
+  authors: [{ name: SITE.legalName, url: SITE.url }],
+  creator: SITE.legalName,
+  publisher: SITE.legalName,
+  category: "Real Estate",
+  formatDetection: { telephone: true, email: true, address: true },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1, "max-video-preview": -1 },
+  },
+  verification: {
+    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
+    other: {
+      ...(process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION ? { "msvalidate.01": process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION } : {}),
+      ...(process.env.NEXT_PUBLIC_YANDEX_VERIFICATION ? { "yandex-verification": process.env.NEXT_PUBLIC_YANDEX_VERIFICATION } : {}),
+      ...(process.env.NEXT_PUBLIC_FACEBOOK_DOMAIN_VERIFICATION ? { "facebook-domain-verification": process.env.NEXT_PUBLIC_FACEBOOK_DOMAIN_VERIFICATION } : {}),
     },
   },
   icons: {
     icon: [
-      { url: "/favicon-48.png", sizes: "48x48", type: "image/png" },
-      { url: "/favicon-32.png", sizes: "32x32", type: "image/png" },
+      { url: "/favicon.ico", sizes: "48x48" },
+      { url: "/favicon.svg", type: "image/svg+xml" },
       { url: "/favicon-16.png", sizes: "16x16", type: "image/png" },
-      { url: "/icon-192.png", sizes: "192x192", type: "image/png" },
-      { url: "/icon-512.png", sizes: "512x512", type: "image/png" },
-      { url: "/favicon.ico" },
+      { url: "/favicon-32.png", sizes: "32x32", type: "image/png" },
+      { url: "/favicon-96.png", sizes: "96x96", type: "image/png" },
+      { url: "/favicon-192.png", sizes: "192x192", type: "image/png" },
+      { url: "/favicon-512.png", sizes: "512x512", type: "image/png" },
     ],
     apple: [{ url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
-    shortcut: ["/favicon-32.png"],
+    shortcut: ["/favicon.ico"],
   },
   openGraph: {
     type: "website",
     locale: "en_AE",
     url: SITE.url,
     siteName: SITE.name,
-    title: "SWK Properties | RERA Licensed Dubai Real Estate Brokerage (ORN 51517)",
+    title: "SWK Properties | RERA-Licensed Dubai Real Estate Broker",
     description:
       "Verified off-plan developer launches, DLD Trakheesi-permitted secondary properties, and Ejari leasing from Sheikh Zayed Road, Dubai.",
     images: [
       {
-        url: `${SITE.url}/img/hero/dubai-skyline-hero.webp`,
+        url: `${SITE.url}${OG_DEFAULT}`,
         width: 1200,
         height: 630,
-        alt: "SWK Properties Dubai Skyline",
+        alt: "SWK Properties — RERA-licensed Dubai real estate brokerage",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "SWK Properties | Dubai Real Estate Advisory (RERA ORN 51517)",
+    title: "SWK Properties | RERA-Licensed Dubai Real Estate Broker",
     description:
       "Off-plan launches, secondary market sales, and leasing across Downtown Dubai, Palm Jumeirah, Dubai Marina & Dubai Hills.",
-    images: [`${SITE.url}/img/hero/dubai-skyline-hero.webp`],
+    images: [`${SITE.url}${OG_DEFAULT}`],
   },
 };
 
@@ -93,6 +109,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${serif.variable} ${raleway.variable} min-h-screen overflow-x-clip bg-[#faf7f2] text-[#0f2244] antialiased selection:bg-[#0f2244] selection:text-white`}
       >
+        {process.env.NEXT_PUBLIC_GTM_ID ? (
+          <Script id="consent-default" strategy="beforeInteractive">
+            {CONSENT_DEFAULT_SCRIPT}
+          </Script>
+        ) : null}
         <JsonLd data={[organizationLd, websiteLd]} />
         <PrefsProvider>
           <a
@@ -107,6 +128,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </main>
           <SiteFooter />
           <FloatingChrome />
+          <Analytics />
         </PrefsProvider>
       </body>
     </html>

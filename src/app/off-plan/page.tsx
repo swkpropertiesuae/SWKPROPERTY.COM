@@ -1,15 +1,15 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { Building2, MapPin, Search, ShieldCheck } from "lucide-react";
+import { offPlanAreas } from "@/lib/areas";
 import { LivelyPageHero } from "@/components/ui/lively-page-hero";
 import Timeline from "@/components/ui/timeline";
 import { PropertyCard } from "@/components/site/property-card";
 import { EnquiryForm } from "@/components/site/enquiry-form";
 import { LISTINGS } from "@/lib/listings";
 import { collections, developers, projectCommunities, projects } from "@/lib/developers";
-import { SITE } from "@/lib/swk";
 
 export default function OffPlanHubPage() {
   const [search, setSearch] = useState("");
@@ -19,9 +19,8 @@ export default function OffPlanHubPage() {
 
   const offPlanListings = LISTINGS.filter((l) => l.purpose === "off-plan");
 
-  const filteredProjects = useMemo(() => {
-    const q = search.trim().toLowerCase();
-    return projects.filter((p) => {
+  const q = search.trim().toLowerCase();
+  const filteredProjects = projects.filter((p) => {
       if (selectedDeveloper && p.developerSlug !== selectedDeveloper) return false;
       if (selectedCollection && p.collection !== selectedCollection) return false;
       if (selectedCommunity && p.community !== selectedCommunity) return false;
@@ -31,12 +30,11 @@ export default function OffPlanHubPage() {
       }
       return true;
     });
-  }, [search, selectedDeveloper, selectedCollection, selectedCommunity]);
 
   return (
     <div className="space-y-16 pb-20">
       <LivelyPageHero
-        badge="108+ Escrow-Verified Launches · 0% Buyer Commission"
+        badge="108+ Developer Launches · Commission Paid by Developer"
         title="108+ Verified Off-Plan Launches Across"
         highlight="27+ UAE Master Developers"
         description="Explore direct developer releases including Azizi Venice, Emaar The Oasis, DAMAC Islands, Sobha Century, Binghatti Maybach Benz, Ellington Berkeley Tower, The Meriva Dubai Islands, Masaar Sharjah, Yas Island, Saadiyat Island, and Al Marjan Island."
@@ -173,9 +171,22 @@ export default function OffPlanHubPage() {
             </select>
           </div>
 
+          {/* Programmatic area hubs */}
+          <nav aria-label="Off-plan projects by area" className="mt-5 flex flex-wrap gap-2 text-xs">
+            {offPlanAreas.map((a) => (
+              <Link
+                key={a.slug}
+                href={`/off-plan/in/${a.slug}`}
+                className="rounded-full border border-[#e6dfd2] bg-white px-3 py-1.5 text-[#0f2244] hover:border-[#94652c] hover:text-[#94652c]"
+              >
+                {a.name} ({a.projects.length})
+              </Link>
+            ))}
+          </nav>
+
           {/* Render Notice Banner (§09) */}
           <div className="mt-5 rounded-2xl border border-[#94652c]/25 bg-[#faf7f2] px-4 py-3 text-xs text-[#39455a]">
-            <strong className="text-[#94652c]">Transparency & Render Notice (§09):</strong> Project visuals shown below are official developer architectural renders for illustrative purposes. Unit prices, payment schedules, and handover dates are confirmed from live developer inventory upon enquiry.
+            <strong className="text-[#94652c]">Transparency & Render Notice:</strong> Project visuals shown below are official developer architectural renders for illustrative purposes. Unit prices, payment schedules, and handover dates are confirmed from live developer inventory upon enquiry.
           </div>
 
           {/* Projects Grid */}
@@ -202,7 +213,7 @@ export default function OffPlanHubPage() {
                           {proj.collection}
                         </span>
                         <span className="rounded-full border border-white/25 bg-white/95 px-2.5 py-1 text-[10px] font-bold text-[#0f2244] shadow-xs">
-                          DLD Escrow Verified
+                          Off-Plan Launch
                         </span>
                       </div>
                       {devObj?.logo && (

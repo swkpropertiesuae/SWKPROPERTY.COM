@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import Link from "next/link"
-import { ArrowRight, BookOpen, Calculator, FileText } from "lucide-react"
+import { ArrowRight, BookOpen, Calculator } from "lucide-react"
 import { buildMetadata, breadcrumbSchema } from "@/lib/seo"
 import { JsonLd } from "@/components/seo/json-ld"
 import { blogArticles } from "@/lib/blog"

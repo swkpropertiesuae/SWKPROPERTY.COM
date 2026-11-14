@@ -4,7 +4,6 @@ import React from "react";
 import Link from "next/link";
 import {
   ArrowRight,
-  ShieldCheck,
   Target,
   Crown,
   Star,

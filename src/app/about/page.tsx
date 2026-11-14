@@ -1,6 +1,5 @@
 import type { Metadata } from "next"
-import Link from "next/link"
-import { ArrowRight, Award, Building2, CheckCircle2, MapPin, Phone, ShieldCheck, Users } from "lucide-react"
+import { Award, Building2, CheckCircle2, Users } from "lucide-react"
 import { SITE, stats } from "@/lib/swk"
 import { buildMetadata, breadcrumbSchema } from "@/lib/seo"
 import { JsonLd } from "@/components/seo/json-ld"

@@ -39,10 +39,23 @@ export const SITE = {
   },
   instagram: "https://www.instagram.com/swk.properties/",
   linkedin: "https://www.linkedin.com/company/swk-properties-llc",
+  /**
+   * Official profiles. Empty values are hidden everywhere; fill them in as profiles go live so they
+   * flow into the footer and Organization `sameAs` (entity signals for Google, Bing and AI answers).
+   */
   socials: {
     instagram: "https://www.instagram.com/swk.properties/",
     linkedin: "https://www.linkedin.com/company/swk-properties-llc",
+    facebook: "",
+    youtube: "",
+    tiktok: "",
+    x: "",
+    googleBusinessProfile: "",
+    propertyFinder: "",
+    bayut: "",
   },
+  /** Dubai Economy & Tourism (DET/DED) commercial licence number. Shown in the footer once set. */
+  tradeLicense: "",
   tagline: "Property advisory across Dubai & the UAE",
 } as const;
 

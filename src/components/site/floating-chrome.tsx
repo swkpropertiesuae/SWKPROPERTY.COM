@@ -5,7 +5,6 @@ import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   BellRing,
-  Bot,
   CheckCircle2,
   ChevronRight,
   Cookie,
@@ -15,11 +14,10 @@ import {
   Scale,
   Send,
   ShieldCheck,
-  Sparkles,
   Trash2,
   X,
 } from "lucide-react";
-import { LISTINGS } from "@/lib/listings";
+import { LISTINGS, permitLabel } from "@/lib/listings";
 import { projects } from "@/lib/developers";
 import { faqs, SITE } from "@/lib/swk";
 import { usePrefs } from "@/lib/prefs";
@@ -152,11 +150,11 @@ function generateAssistantReply(query: string): {
         (l) =>
           `• ${l.title} (${l.community}) — AED ${l.priceAed.toLocaleString("en-US")}${
             l.purpose === "rent" ? "/yr" : ""
-          } · DLD Permit #${l.dld.permitNumber}`
+          }${permitLabel(l) ? ` · ${permitLabel(l)}` : ""}`
       )
       .join("\n");
     return {
-      text: `Here are verified listings in our current inventory matching your query:\n${summary}\n\nLive unit availability and final terms are confirmed directly by our consultants prior to viewing or reservation.`,
+      text: `Here are listings in our current inventory matching your query:\n${summary}\n\nLive unit availability and final terms are confirmed directly by our consultants prior to viewing or reservation.`,
       links: matchedListings.map((l) => ({
         label: `${l.title} (${l.reference})`,
         href: `/properties/${l.slug}`,
@@ -423,9 +421,9 @@ export function FloatingChrome() {
           className="inline-flex h-11 items-center gap-2 rounded-full border border-[#e6dfd2] bg-white/95 px-3.5 sm:px-4 text-xs font-bold text-[#0f2244] shadow-lg backdrop-blur-md transition hover:border-[#94652c] hover:text-[#94652c]"
         >
           <img
-            src="/brand/swk-portal-emblem.png"
-            alt="SWK Concierge"
-            className="h-5 w-5 object-contain"
+            src="/brand/swk-emblem-charcoal.svg"
+            alt=""
+            className="h-6 w-6 rounded-md object-contain"
           />
           <span className="hidden sm:inline">Property Concierge</span>
         </button>
@@ -451,7 +449,7 @@ export function FloatingChrome() {
             <div>
               <div className="flex items-center gap-2">
                 <img
-                  src="/brand/swk-portal-emblem.png"
+                  src="/brand/swk-emblem.svg"
                   alt="SWK"
                   className="h-5 w-5 object-contain"
                 />

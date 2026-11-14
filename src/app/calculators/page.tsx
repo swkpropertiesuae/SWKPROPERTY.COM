@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { Calculator, AlertCircle, Building2, Percent, Wallet, Calendar } from "lucide-react"
+import { AlertCircle, Building2, Percent, Wallet, Calendar } from "lucide-react"
 import { usePrefs } from "@/lib/prefs"
 import { LivelyPageHero } from "@/components/ui/lively-page-hero"
 import { EnquiryForm } from "@/components/site/enquiry-form"
@@ -448,7 +448,7 @@ export default function CalculatorsPage() {
           <AlertCircle className="h-5 w-5 shrink-0 text-[#94652c] mt-0.5" />
           <div>
             <strong className="text-[#94652c] block mb-1">
-              Calculator Assumptions & Non-Financial Advice Notice (Checklist §45):
+              Calculator Assumptions & Non-Financial Advice Notice:
             </strong>
             All calculator outputs on this page are illustrative estimates prepared by SWK Properties (RERA ORN 51517) for initial budgeting only. They do not constitute a mortgage offer, bank pre-approval, financial advice, or a guarantee of future rental returns. Actual DLD registration fees, trustee charges, developer Oqood fees, service charge indexes, and bank LTV ratios vary by property, developer, and borrower residency profile.
           </div>

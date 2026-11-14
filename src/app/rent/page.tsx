@@ -7,7 +7,6 @@ import { JsonLd } from "@/components/seo/json-ld";
 import { LISTINGS } from "@/lib/listings";
 import { GUIDES } from "@/lib/guides";
 import { breadcrumbLd, buildMeta } from "@/lib/seo";
-import { SITE } from "@/lib/swk";
 
 export const metadata: Metadata = buildMeta({
   title: "Rent & Lease Property in Dubai | Annual Ejari Apartments, Villas & Townhouses",

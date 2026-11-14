@@ -2,10 +2,8 @@ import Link from "next/link";
 import {
   ArrowRight,
   ArrowUpRight,
-  Building2,
   CheckCircle2,
   Clock,
-  Compass,
   MapPin,
   Phone,
   ShieldCheck,
@@ -132,6 +130,11 @@ export default function Home() {
         href="/img/hero/slides/04-azizi-venice-thumb.webp"
         fetchPriority="high"
       />
+
+      <h1 className="sr-only">
+        SWK Properties — RERA-licensed Dubai real estate brokerage for off-plan projects, ready homes, rentals and
+        property management across the UAE
+      </h1>
 
       {/* Dish Orbit Carousel Hero */}
       <Hero />

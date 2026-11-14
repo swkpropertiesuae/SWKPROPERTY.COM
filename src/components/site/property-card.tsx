@@ -14,7 +14,7 @@ import {
   Scale,
   ShieldCheck,
 } from "lucide-react";
-import { type PropertyListing } from "@/lib/listings";
+import { type PropertyListing, permitLabel } from "@/lib/listings";
 import { usePrefs } from "@/lib/prefs";
 import { SITE } from "@/lib/swk";
 
@@ -33,7 +33,7 @@ export function PropertyCard({ listing }: { listing: PropertyListing }) {
   const isCompared = compareSlugs.includes(listing.slug);
 
   const waMessage = encodeURIComponent(
-    `Hello SWK Properties, I am enquiring about ${listing.title} in ${listing.community} (Ref: ${listing.reference}, DLD Permit: ${listing.dld.permitNumber}). Please share current availability.`
+    `Hello SWK Properties, I am enquiring about ${listing.title} in ${listing.community} (Ref: ${listing.reference}${permitLabel(listing) ? `, ${permitLabel(listing)}` : ""}). Please share current availability.`
   );
 
   return (
@@ -104,7 +104,7 @@ export function PropertyCard({ listing }: { listing: PropertyListing }) {
         <div className="absolute bottom-3 left-3.5 right-3.5 flex items-center justify-between text-[11px] text-white">
           <span className="inline-flex items-center gap-1 rounded-full bg-[#0f2244]/85 px-2.5 py-0.5 backdrop-blur-md">
             <ShieldCheck className="h-3 w-3 text-emerald-700" />
-            DLD Permit #{listing.dld.permitNumber}
+            {permitLabel(listing) ?? "Permit details on request"}
           </span>
           <span className="rounded-full bg-white/95 px-2.5 py-0.5 font-mono text-[10px] font-bold text-[#0f2244]">
             {listing.reference}

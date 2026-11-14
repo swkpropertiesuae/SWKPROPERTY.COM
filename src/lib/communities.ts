@@ -201,3 +201,7 @@ export const communityGuides: CommunityGuide[] = communities.map((c) => {
 
 export const getCommunity = (slug: string) => communityGuides.find((c) => c.slug === slug)
 export const getCommunityGuide = getCommunity
+
+/** Link to a community guide, falling back to the communities index when no guide exists yet. */
+export const communityHref = (slug: string) =>
+  communityGuides.some((c) => c.slug === slug) ? `/communities/${slug}` : "/communities"

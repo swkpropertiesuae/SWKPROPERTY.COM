@@ -14,6 +14,11 @@ export interface DldCompliance {
   madmounQrId: string;
   escrowBank?: string;
   verificationUrl: string;
+  /**
+   * Set to true only after the Trakheesi permit, BRN and Madmoun QR above have been checked
+   * against the DLD portal. Unverified values are never shown publicly (RERA advertising rules).
+   */
+  permitVerified?: boolean;
 }
 
 export interface PropertyListing {
@@ -931,9 +936,9 @@ export const LISTINGS: PropertyListing[] = [
     metroStation: "Direct Sheikh Zayed Road Metro Access",
     badge: "New Launch",
     isRender: true,
-    agentSlug: "rex",
-    agentName: "Rex",
-    agentRole: "Senior International Property Advisor",
+    agentSlug: "mohammed-islam",
+    agentName: "Mohammed Islam (Rex)",
+    agentRole: "Assistant Director · UK & Dubai Advisory",
     agentPhone: "+971564330448",
     agentLanguages: ["English"],
     lastChecked: "2026-11-01",
@@ -1011,9 +1016,9 @@ export const LISTINGS: PropertyListing[] = [
     nearMetro: false,
     badge: "Waterfront",
     isRender: true,
-    agentSlug: "rex",
-    agentName: "Rex",
-    agentRole: "Senior International Property Advisor",
+    agentSlug: "mohammed-islam",
+    agentName: "Mohammed Islam (Rex)",
+    agentRole: "Assistant Director · UK & Dubai Advisory",
     agentPhone: "+971564330448",
     agentLanguages: ["English"],
     lastChecked: "2026-11-01",
@@ -1138,6 +1143,12 @@ export const LISTINGS: PropertyListing[] = [
 ];
 
 export const listings = LISTINGS;
+
+/** True when the listing's DLD permit, BRN and QR reference are verified and may be advertised. */
+export const isPermitVerified = (l: PropertyListing) => l.dld.permitVerified === true;
+
+/** Public permit label, or null while the permit is unverified. */
+export const permitLabel = (l: PropertyListing) => (isPermitVerified(l) ? `DLD Permit #${l.dld.permitNumber}` : null);
 
 export function getListingBySlug(slug: string): PropertyListing | undefined {
   return LISTINGS.find((item) => item.slug === slug);
