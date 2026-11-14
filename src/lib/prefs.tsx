@@ -120,6 +120,8 @@ export function PrefsProvider({ children }: { children: React.ReactNode }) {
     }, 3500);
   }, []);
 
+  // Hydrate saved preferences from localStorage after mount (cannot run during SSR).
+  /* eslint-disable react-hooks/set-state-in-effect */
   useEffect(() => {
     try {
       const savedCurr = localStorage.getItem("swk_currency") as CurrencyCode | null;
@@ -144,7 +146,7 @@ export function PrefsProvider({ children }: { children: React.ReactNode }) {
       const rawConsent = localStorage.getItem("swk_cookie_consent");
       if (rawConsent) setCookieConsent(JSON.parse(rawConsent));
 
-      // Capture UTM & attribution snapshot (§29)
+      // Capture UTM & attribution snapshot
       const params = new URLSearchParams(window.location.search);
       const utmSource = params.get("utm_source") || "";
       const utmMedium = params.get("utm_medium") || "";
@@ -182,6 +184,7 @@ export function PrefsProvider({ children }: { children: React.ReactNode }) {
       // ignore storage errors in private mode
     }
   }, []);
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   const setCurrency = useCallback((c: CurrencyCode) => {
     setCurrencyState(c);

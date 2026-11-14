@@ -26,13 +26,13 @@ export default function PrivacyPolicyPage() {
       <div className="mx-auto max-w-4xl px-4 py-16 space-y-8">
         <div>
           <span className="inline-flex items-center gap-2 rounded-full border border-[#94652c]/35 bg-[#f6ead7] px-3.5 py-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-[#94652c]">
-            <ShieldCheck className="h-3.5 w-3.5" /> Checklist §53 · Aligned With UAE PDPL
+            <ShieldCheck className="h-3.5 w-3.5" /> Aligned With UAE PDPL
           </span>
           <h1 className="mt-4 font-serif text-3xl md:text-5xl font-semibold text-[#0f2244]">
             Privacy Policy & Personal Data Notice
           </h1>
           <p className="mt-2 text-xs text-[#5f6a82]">
-            Last Updated: October 2026 · Controller: {SITE.legalName} (RERA ORN {SITE.orn}), {SITE.address.full}
+            Last Updated: November 2026 · Controller: {SITE.legalName} (RERA ORN {SITE.orn}), {SITE.address.full}
           </p>
         </div>
 
@@ -99,6 +99,49 @@ export default function PrivacyPolicyPage() {
                 {SITE.phone}
               </a>
               .
+            </p>
+          </div>
+
+          <div>
+            <h2 className="font-serif text-2xl font-semibold text-[#0f2244]">6. Service Providers (Processors)</h2>
+            <ul className="mt-2 list-disc pl-5 space-y-1.5">
+              <li><strong className="text-[#0f2244]">Hosting & security:</strong> Cloudflare (website delivery, DDoS protection, encrypted storage of enquiry records).</li>
+              <li><strong className="text-[#0f2244]">Enquiry handling:</strong> our email and CRM providers, used only to respond to and manage your enquiry.</li>
+              <li><strong className="text-[#0f2244]">Maps:</strong> Google Maps embeds on contact, community and property pages. Google may set its own cookies when a map loads.</li>
+              <li><strong className="text-[#0f2244]">Analytics & advertising (only with your consent):</strong> Google Tag Manager, Google Analytics and advertising pixels configured through it. These stay disabled until you accept analytics cookies.</li>
+              <li><strong className="text-[#0f2244]">Messaging:</strong> WhatsApp (Meta) when you choose to contact us there; its own privacy terms apply.</li>
+            </ul>
+          </div>
+
+          <div>
+            <h2 className="font-serif text-2xl font-semibold text-[#0f2244]">7. Anti-Money-Laundering Records</h2>
+            <p className="mt-2">
+              As a real estate broker we are a Designated Non-Financial Business and Profession under UAE Federal Decree-Law No. 20 of 2018 on
+              anti-money laundering and counter-terrorist financing. When a transaction proceeds we must verify identity (KYC), may need to
+              report to the UAE Financial Intelligence Unit via goAML, and must keep transaction and identification records for at least
+              five years. These legal obligations override deletion requests for those records.
+            </p>
+          </div>
+
+          <div>
+            <h2 className="font-serif text-2xl font-semibold text-[#0f2244]">8. Security</h2>
+            <p className="mt-2">
+              Data is transmitted over HTTPS, stored with access restricted to authorised SWK staff, and never sold. Identity documents are
+              collected only through secure channels, never through this website&apos;s forms.
+            </p>
+          </div>
+
+          <div>
+            <h2 className="font-serif text-2xl font-semibold text-[#0f2244]">9. Children</h2>
+            <p className="mt-2">This website is intended for adults. We do not knowingly collect personal data from anyone under 18.</p>
+          </div>
+
+          <div>
+            <h2 className="font-serif text-2xl font-semibold text-[#0f2244]">10. Complaints & Changes</h2>
+            <p className="mt-2">
+              If you are unhappy with how we handle your data, contact us first at{" "}
+              <a href={`mailto:${SITE.email}`} className="text-[#94652c] underline">{SITE.email}</a>. You may also complain to the UAE Data
+              Office. We will post any changes to this notice on this page with a new &ldquo;Last Updated&rdquo; date.
             </p>
           </div>
         </section>

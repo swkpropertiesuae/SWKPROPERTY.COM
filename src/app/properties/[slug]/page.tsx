@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { LISTINGS, getListingBySlug } from "@/lib/listings";
+import { LISTINGS, getListingBySlug, isPermitVerified, permitLabel } from "@/lib/listings";
+import { communityHref } from "@/lib/communities";
 import { PropertyDetailClient } from "@/components/site/property-detail-client";
 import { JsonLd } from "@/components/seo/json-ld";
 import { breadcrumbLd, buildMeta } from "@/lib/seo";
@@ -27,7 +28,9 @@ export async function generateMetadata({
 
   return buildMeta({
     title: `${listing.title} (${listing.community}) | AED ${listing.priceAed.toLocaleString("en-US")}`,
-    description: `${listing.subtitle}. Ref ${listing.reference}, DLD Trakheesi Permit #${listing.dld.permitNumber}. Contact SWK Properties (RERA ORN ${SITE.reraOrn}).`,
+    description: `${listing.subtitle}. Ref ${listing.reference}${permitLabel(listing) ? `, ${permitLabel(listing)}` : ""}. Contact SWK Properties (RERA ORN ${SITE.reraOrn}).`,
+    // Listings may only be indexed once their Trakheesi permit is verified.
+    noindex: !isPermitVerified(listing),
     path: `/properties/${listing.slug}`,
     image: listing.images[0],
     keywords: [
@@ -36,7 +39,6 @@ export async function generateMetadata({
       listing.building,
       listing.developer,
       `Dubai ${listing.propertyType} for ${listing.purpose}`,
-      `DLD Permit ${listing.dld.permitNumber}`,
     ],
   });
 }
@@ -95,7 +97,7 @@ export default async function PropertyDetailPage({
           breadcrumbLd([
             { name: "Home", path: "/" },
             { name: "Properties", path: "/properties" },
-            { name: listing.community, path: `/communities/${listing.communitySlug}` },
+            { name: listing.community, path: communityHref(listing.communitySlug) },
             { name: listing.title, path: `/properties/${listing.slug}` },
           ]),
           realEstateListingLd,

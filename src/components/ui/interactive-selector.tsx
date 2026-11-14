@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Building2, Compass, KeyRound, Landmark, ShieldCheck } from "lucide-react";
 
 export interface SelectorOption {
@@ -13,7 +13,7 @@ export interface SelectorOption {
 const defaultOptions: SelectorOption[] = [
   {
     title: "Off-Plan Launches",
-    description: "Escrow-verified developer releases & milestone plans",
+    description: "Escrow-registered developer releases & milestone plans",
     image: "/img/communities/downtown-dubai.webp",
     icon: <Landmark size={20} className="text-white" />,
   },

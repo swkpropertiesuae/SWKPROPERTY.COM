@@ -110,7 +110,7 @@ export function EnquiryForm({
     routing: { primaryAgent: string; primaryRole: string; backupAgent: string };
   } | null>(null);
 
-  // Post-submit optional Step 2 Qualification (§27)
+  // Post-submit optional Step 2 Qualification
   const [budgetRange, setBudgetRange] = useState("AED 2M – AED 5M");
   const [timeline, setTimeline] = useState("Within 30–60 days");
   const [financing, setFinancing] = useState("Cash Buyer");
@@ -210,6 +210,26 @@ export function EnquiryForm({
   const handleQualificationSave = async (e: React.FormEvent) => {
     e.preventDefault();
     setQualifiedSaved(true);
+    // Send the qualification as a follow-up record linked to the original enquiry.
+    fetch("/api/enquiries", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name,
+        countryCode,
+        phone,
+        email,
+        context,
+        propertyRef,
+        propertyTitle,
+        community,
+        developer,
+        agentSlug,
+        language: lang,
+        message: `Qualification for ${result?.enquiryId ?? "enquiry"}`,
+        qualification: { budgetRange, timeline, financing, residency },
+      }),
+    }).catch(() => undefined);
     trackEvent("lead_qualified", {
       enquiryId: result?.enquiryId || "unknown",
       budgetRange,

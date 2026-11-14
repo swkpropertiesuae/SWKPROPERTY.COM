@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { notFound } from "next/navigation"
-import { ArrowLeft, Globe2, Mail, MapPin, Phone, ShieldCheck, UserCheck } from "lucide-react"
+import { ArrowLeft, Globe2, Mail, MapPin, Phone, UserCheck } from "lucide-react"
 import { SITE, team } from "@/lib/swk"
 import { getListingsByAgent, listings } from "@/lib/listings"
 import { buildMetadata, breadcrumbSchema } from "@/lib/seo"
@@ -12,56 +12,47 @@ import { EnquiryForm } from "@/components/site/enquiry-form"
 const AGENT_DETAILS: Record<
   string,
   {
-    brn: string
     communities: string[]
     bio: string
     backupAgent: string
   }
 > = {
   "mohammad-haseeb": {
-    brn: "BRN-51517-MH",
     communities: ["Downtown Dubai", "Dubai Hills Estate", "Dubai South", "Palm Jumeirah"],
     bio: "Mohammad Haseeb brings 10+ years of UAE real estate experience and 140+ verified transactions across Emaar, Azizi, Sobha Realty, DAMAC, and Imtiaz Developments.",
     backupAgent: "Mohammed Islam (Rex) · Assistant Director",
   },
   "mohammed-islam": {
-    brn: "BRN-51517-MI",
     communities: ["Dubai Islands", "Downtown Dubai", "Yas Island", "Al Marjan Island"],
     bio: "Mohammed Islam (Rex) brings over a decade of international real estate experience across the United Kingdom and Dubai with 165+ verified transactions in sales, investment advisory, and client relationships.",
     backupAgent: "Mohammad Haseeb · Sales & Operations Manager",
   },
   "issaadi-chahrazed": {
-    brn: "BRN-51517-IC",
     communities: ["Palm Jumeirah", "Dubai Marina", "Downtown Dubai", "Business Bay"],
     bio: "Issaadi Chahrazed advises French-, Arabic-, and English-speaking buyers across waterfront residences, branded developments, and high-yield city-centre apartments, coordinating remote viewings and power-of-attorney handovers.",
     backupAgent: "Talha Shabbir · Business Development Manager",
   },
   "talha-shabbir": {
-    brn: "BRN-51517-TS",
     communities: ["Dubai Creek Harbour", "Dubai Hills Estate", "Mohammed Bin Rashid City", "Dubai South"],
     bio: "Talha Shabbir focuses on verified UAE developer launches, payment-plan structuring, and Oqood registration milestones across Emaar, Sobha, Imtiaz, DAMAC, and Azizi communities.",
     backupAgent: "Mohammad Haseeb · Sales & Operations Manager",
   },
   "fareed-choudhary": {
-    brn: "BRN-51517-FC",
     communities: ["Dubai Hills Estate", "Masaar Sharjah", "Jumeirah Village Circle", "Business Bay"],
     bio: "Fareed Choudhary advises secondary-market buyers and portfolio landlords on ready villas, townhouses, and tenanted investments, preparing DLD transaction comparables and net-yield worksheets.",
     backupAgent: "Mohammad Haseeb · Sales & Operations Manager",
   },
   saifullah: {
-    brn: "BRN-51517-SF",
     communities: ["Dubai South", "Al Jaddaf", "Dubailand", "Business Bay"],
     bio: "Saifullah specialises in high-demand off-plan launches including Imtiaz Kore, Azizi Florence, and Azizi Venice with flexible developer payment schedules.",
     backupAgent: "Talha Shabbir · Business Development Manager",
   },
   "mohammad-umar": {
-    brn: "BRN-51517-MU",
     communities: ["Dubailand", "Dubai Islands", "Al Furjan", "Umm Al Quwain"],
     bio: "Mohammad Umar guides residential buyers and landlords through off-plan reservations and secondary resales across emerging UAE corridors.",
     backupAgent: "Fareed Choudhary · Senior Property Consultant",
   },
   "mohd-shahid-khan": {
-    brn: "BRN-51517-MSK",
     communities: ["Sheikh Zayed Road", "Downtown Dubai", "Business Bay"],
     bio: "Mohd Shahid Khan manages transaction operations, developer portal allocations, and SPA documentation across 500+ coordinated filings at SWK Properties.",
     backupAgent: "Mohammad Haseeb · Sales & Operations Manager",
@@ -87,7 +78,7 @@ export async function generateMetadata({
     })
   }
   return buildMetadata({
-    title: `${member.name} — ${member.role} (${member.focus})`,
+    title: `${member.name}, ${member.role}`,
     description: `Connect with ${member.name}, ${member.role} at SWK Properties Dubai (RERA ORN 51517). Speaks ${member.languages.join(", ")}. View active listings and book a viewing.`,
     path: `/agents/${member.slug}`,
     ogImage: member.photo,
@@ -104,7 +95,6 @@ export default async function AgentProfilePage({
   if (!member) notFound()
 
   const details = AGENT_DETAILS[member.slug] ?? {
-    brn: "BRN-51517",
     communities: ["Downtown Dubai", "Dubai Marina"],
     bio: member.focus,
     backupAgent: "SWK Central Advisory Desk",
@@ -117,11 +107,26 @@ export default async function AgentProfilePage({
     <div className="min-h-screen bg-[#faf7f2] text-[#0f2244]">
       <JsonLd
         id="ld-agent-breadcrumb"
-        data={breadcrumbSchema([
-          { name: "Home", path: "/" },
-          { name: "About SWK", path: "/about" },
-          { name: member.name, path: `/agents/${member.slug}` },
-        ])}
+        data={[
+          breadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "About SWK", path: "/about" },
+            { name: member.name, path: `/agents/${member.slug}` },
+          ]),
+          {
+            "@context": "https://schema.org",
+            "@type": "Person",
+            "@id": `${SITE.url}/agents/${member.slug}#person`,
+            name: member.name,
+            jobTitle: member.role,
+            image: `${SITE.url}${member.photo}`,
+            url: `${SITE.url}/agents/${member.slug}`,
+            worksFor: { "@id": `${SITE.url}/#organization` },
+            knowsLanguage: member.languages,
+            areaServed: details.communities.map((name) => ({ "@type": "Place", name })),
+            ...(member.brn ? { identifier: { "@type": "PropertyValue", name: "RERA BRN", value: member.brn } } : {}),
+          },
+        ]}
       />
 
       <div className="mx-auto max-w-7xl px-4 py-12">
@@ -151,7 +156,8 @@ export default async function AgentProfilePage({
                   {member.role}
                 </span>
                 <span className="rounded-full border border-[#e6dfd2] bg-[#faf7f2] px-3.5 py-1 text-[11px] text-[#39455a]">
-                  RERA ORN {SITE.orn} · {details.brn}
+                  RERA ORN {SITE.orn}
+                  {member.brn ? ` · BRN ${member.brn}` : ""}
                 </span>
               </div>
 

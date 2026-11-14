@@ -10,7 +10,6 @@ import {
   RotateCcw,
   Search,
   Share2,
-  ShieldCheck,
   SlidersHorizontal,
 } from "lucide-react";
 import { LISTINGS, type PropertyListing } from "@/lib/listings";
@@ -195,15 +194,6 @@ function PropertiesSearchInner() {
 
   return (
     <div>
-      <LivelyPageHero
-        badge="DLD Trakheesi & Escrow Verified Search"
-        title="Dubai & UAE Property Search"
-        highlight="Buy Ready, Rent & Off-Plan"
-        description="Filter verified ready homes, Ejari-registered rentals, and developer off-plan allocations across Dubai and the UAE. Use the currency and sq ft / sq m controls in the top bar at any time."
-        backgroundImage="/img/hero/slides/01-dubai-horizon-desktop.webp"
-        primaryCta={{ label: "Browse Off-Plan Launches", href: "/off-plan" }}
-        secondaryCta={{ label: "Open DLD & Yield Calculators", href: "/calculators" }}
-      />
       <div className="mx-auto max-w-7xl px-4 py-12">
         {/* Save & Share Bar */}
         <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
@@ -272,7 +262,7 @@ function PropertiesSearchInner() {
               className="inline-flex items-center gap-1.5 rounded-xl border border-[#e6dfd2] bg-[#faf7f2] px-3.5 py-2 text-xs font-medium text-[#0f2244] hover:border-[#94652c]"
             >
               <SlidersHorizontal className="h-3.5 w-3.5 text-[#94652c]" />
-              {showAdvanced ? "Hide Lifestyle Filters" : "More Filters (§05)"}
+              {showAdvanced ? "Hide Lifestyle Filters" : "More Filters"}
             </button>
           </div>
         </div>
@@ -453,7 +443,7 @@ function PropertiesSearchInner() {
           <div className="mt-5 border-t border-[#e6dfd2] pt-5 space-y-4">
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#94652c] flex items-center gap-1.5">
               <Filter className="h-3.5 w-3.5" />
-              Additional Developer, Financial, View & Accessibility Filters (§05)
+              Additional Developer, Financial, View & Accessibility Filters
             </p>
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-4">
               <div>
@@ -685,14 +675,32 @@ function PropertiesSearchInner() {
 
 export default function PropertiesPage() {
   return (
-    <Suspense
-      fallback={
-        <div className="mx-auto max-w-7xl px-4 py-20 text-center text-sm text-[#94652c]">
-          Loading verified Dubai property inventory...
-        </div>
-      }
-    >
-      <PropertiesSearchInner />
-    </Suspense>
+    <>
+        <LivelyPageHero
+          badge="Buy, Rent & Off-Plan Search"
+          title="Dubai & UAE Property Search"
+          highlight="Buy Ready, Rent & Off-Plan"
+          description="Filter verified ready homes, Ejari-registered rentals, and developer off-plan allocations across Dubai and the UAE. Use the currency and sq ft / sq m controls in the top bar at any time."
+          backgroundImage="/img/hero/slides/01-dubai-horizon-desktop.webp"
+          primaryCta={{ label: "Browse Off-Plan Launches", href: "/off-plan" }}
+          secondaryCta={{ label: "Open DLD & Yield Calculators", href: "/calculators" }}
+        />
+      <Suspense
+        fallback={
+          // Server-rendered inventory index so crawlers and no-JS visitors still reach every listing.
+          <ul className="mx-auto grid max-w-7xl gap-2 px-4 py-12 text-sm sm:grid-cols-2">
+            {LISTINGS.map((l) => (
+              <li key={l.slug}>
+                <Link href={`/properties/${l.slug}`} className="text-[#0f2244] hover:text-[#94652c]">
+                  {l.title} — {l.community}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        }
+      >
+        <PropertiesSearchInner />
+      </Suspense>
+    </>
   );
 }

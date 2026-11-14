@@ -92,7 +92,7 @@ export const SWK_HERO_DISHES: Dish[] = [
       "50/50 Payment Plan",
       "Swimmable Lagoon",
       "Studios to Villas",
-      "DLD Escrow Verified",
+      "DLD Escrow Registered",
     ],
     accent: "#1e4b8f",
     href: "/off-plan/azizi-venice",
@@ -489,7 +489,7 @@ export function DishOrbitCarousel({
   height = "100svh",
   backdrop = "/img/hero/slides/01-dubai-horizon-desktop.webp",
   loop = false,
-  fontSrc = null,
+  fontSrc: _fontSrc = null,
   onPlay,
   onOrder,
   onChange,
@@ -928,7 +928,7 @@ export function DishOrbitCarousel({
                 <p className="dsh-eye">
                   {d.eyebrow ?? "#" + (i + 1) + " Priority UAE Launch"}
                 </p>
-                <h1 style={{ margin: 0, font: "inherit" }}>
+                <h2 style={{ margin: 0, font: "inherit" }}>
                   <span
                     className="dsh-t1"
                     style={{ fontSize: fitSize(d.title.length, 42, 355, 0.58) + "px" }}
@@ -941,7 +941,7 @@ export function DishOrbitCarousel({
                   >
                     {d.subtitle}
                   </span>
-                </h1>
+                </h2>
                 <div className="dsh-kpis">
                   <span className="dsh-kpi">18+ Yrs UAE</span>
                   <span className="dsh-kpi">27+ Developers</span>
@@ -1002,17 +1002,12 @@ export function DishOrbitCarousel({
                   <div className="dsh-rate">
                     <div className="dsh-badge" style={{ background: d.accent }}>
                       <svg viewBox="0 0 24 24" aria-hidden="true">
-                        <path d="m12 2.5 2.9 6 6.6.8-4.9 4.6 1.3 6.6L12 17.2l-5.9 3.3 1.3-6.6-4.9-4.6 6.6-.8z" />
+                        <path d="M12 2 4 5v6c0 5 3.4 9.3 8 11 4.6-1.7 8-6 8-11V5l-8-3Zm-1.2 13.6-3.5-3.5 1.4-1.4 2.1 2.1 4.6-4.6 1.4 1.4-6 6Z" />
                       </svg>
                     </div>
                     <div>
-                      <span
-                        className="dsh-num"
-                        aria-label={"Rated " + d.rating.toFixed(1) + " out of 5"}
-                      >
-                        {d.rating.toFixed(1)}
-                      </span>
-                      <div className="dsh-rate-lbl">DLD Escrow Verified</div>
+                      <span className="dsh-num">{(d.ingredients?.[0] ?? "").split(" ")[0]}</span>
+                      <div className="dsh-rate-lbl">{(d.ingredients?.[0] ?? "").split(" ").slice(1).join(" ")}</div>
                     </div>
                   </div>
                   <p className="dsh-chef">{d.chef}</p>
@@ -1037,7 +1032,7 @@ export function DishOrbitCarousel({
                       }
                     >
                       {Icon.up}
-                      {d.likes + (liked[i] ? 1 : 0)} Shortlisted
+                      {liked[i] ? "Shortlisted" : "Shortlist"}
                     </button>
                     <button
                       type="button"

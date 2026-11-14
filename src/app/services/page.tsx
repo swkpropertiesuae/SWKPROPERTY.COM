@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight, CheckCircle2, ShieldCheck } from "lucide-react";
+import { ArrowRight, CheckCircle2 } from "lucide-react";
 import { LivelyPageHero } from "@/components/ui/lively-page-hero";
 import InteractiveSelector from "@/components/ui/interactive-selector";
 import { EnquiryForm } from "@/components/site/enquiry-form";

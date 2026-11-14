@@ -1,6 +1,5 @@
 import type { Metadata } from "next"
-import Link from "next/link"
-import { Building2, CheckCircle2, FileCheck2, KeyRound, ShieldCheck, Sparkles } from "lucide-react"
+import { Building2, CheckCircle2, FileCheck2, KeyRound } from "lucide-react"
 import { SITE } from "@/lib/swk"
 import { buildMetadata, breadcrumbSchema } from "@/lib/seo"
 import { JsonLd } from "@/components/seo/json-ld"
@@ -166,7 +165,7 @@ export default function ListYourPropertyPage() {
         {/* Required Documents Checklist (§48) */}
         <div className="rounded-3xl border border-[#94652c]/35 bg-[#151319] p-7 md:p-10">
           <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-[#94652c]">
-            <FileCheck2 className="h-4 w-4" /> Mandatory DLD & RERA Onboarding Documents (§48)
+            <FileCheck2 className="h-4 w-4" /> Mandatory DLD & RERA Onboarding Documents
           </div>
           <h2 className="mt-2 font-serif text-2xl md:text-3xl font-semibold text-[#0f2244]">
             Documents Required Before Public Listing

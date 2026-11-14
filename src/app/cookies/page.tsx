@@ -1,37 +1,51 @@
 "use client"
 
 import * as React from "react"
-import { CheckCircle2, Cookie, ShieldCheck } from "lucide-react"
+import { CheckCircle2, Cookie } from "lucide-react"
 import { usePrefs } from "@/lib/prefs"
 
 const TRACKER_INVENTORY = [
   {
-    name: "swk_cookie_consent_v1",
+    name: "swk_cookie_consent",
     category: "Essential",
     storage: "localStorage",
     purpose: "Stores your cookie and analytics consent choices so we do not prompt you on every page load.",
-    retention: "12 months",
+    retention: "Until you change or clear it",
   },
   {
-    name: "swk_prefs_v1",
+    name: "swk_currency, swk_area_unit, swk_lang",
     category: "Preferences",
     storage: "localStorage",
-    purpose: "Remembers your selected display currency (AED/USD/EUR/GBP/INR/RUB), area unit (sq ft / sq m), and language direction.",
-    retention: "Persistent until cleared",
+    purpose: "Remembers your display currency, area unit (sq ft / sq m) and language direction.",
+    retention: "Until cleared",
   },
   {
-    name: "swk_saved_v1 & swk_compare_v1",
+    name: "swk_saved_slugs, swk_compare_slugs, swk_saved_searches",
     category: "Preferences",
     storage: "localStorage",
-    purpose: "Stores your shortlisted property slugs and side-by-side comparison tray locally in your browser.",
-    retention: "Persistent until cleared",
+    purpose: "Keeps your shortlisted properties, comparison tray and saved searches in your own browser.",
+    retention: "Until cleared",
   },
   {
-    name: "swk_attribution_v1",
+    name: "swk_attribution",
     category: "Analytics",
     storage: "localStorage",
-    purpose: "Records first-touch and latest-touch UTM campaign parameters and referrer URL to attribute property enquiries accurately.",
-    retention: "Session / 30 days",
+    purpose: "Records first-touch and latest-touch UTM campaign parameters and referrer so enquiries can be attributed to a channel.",
+    retention: "Until cleared",
+  },
+  {
+    name: "Google Tag Manager / Analytics / ad pixels (_ga, _gcl_*, _fbp)",
+    category: "Analytics",
+    storage: "Third-party cookies",
+    purpose: "Measures visits and campaign performance. Loaded in Google Consent Mode and only set after you accept analytics.",
+    retention: "Up to 13 months (per provider)",
+  },
+  {
+    name: "Google Maps embeds",
+    category: "Third-party",
+    storage: "Third-party cookies",
+    purpose: "Displays office, community and property locations. Google may set cookies when a map loads.",
+    retention: "Per Google's policy",
   },
 ]
 
@@ -41,12 +55,15 @@ export default function CookieSettingsPage() {
   const [preferences, setPreferences] = React.useState(cookieConsent?.preferences ?? true)
   const [savedToast, setSavedToast] = React.useState(false)
 
-  React.useEffect(() => {
+  // Re-sync the form when stored consent loads (React "adjust state during render" pattern).
+  const [syncedConsent, setSyncedConsent] = React.useState(cookieConsent)
+  if (cookieConsent !== syncedConsent) {
+    setSyncedConsent(cookieConsent)
     if (cookieConsent) {
       setAnalytics(cookieConsent.analytics)
       setPreferences(cookieConsent.preferences)
     }
-  }, [cookieConsent])
+  }
 
   const handleSave = () => {
     updateCookieConsent({ analytics, preferences })
@@ -59,7 +76,7 @@ export default function CookieSettingsPage() {
       <div className="mx-auto max-w-4xl px-4 py-16 space-y-10">
         <div>
           <span className="inline-flex items-center gap-2 rounded-full border border-[#94652c]/35 bg-[#f6ead7] px-3.5 py-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-[#94652c]">
-            <Cookie className="h-3.5 w-3.5" /> Checklist §54 · Granular Consent & Tracker Inventory
+            <Cookie className="h-3.5 w-3.5" /> Granular Consent & Tracker Inventory
           </span>
           <h1 className="mt-4 font-serif text-3xl md:text-5xl font-semibold text-[#0f2244]">
             Cookie Settings & Browser Storage Inventory
@@ -106,7 +123,7 @@ export default function CookieSettingsPage() {
           <div className="flex items-start justify-between gap-4">
             <div>
               <div className="text-sm font-semibold text-[#0f2244]">
-                3. First-Party Analytics & Enquiry Attribution (`§29`)
+                3. First-Party Analytics & Enquiry Attribution
               </div>
               <p className="mt-1 text-xs text-[#39455a]">
                 Allows SWK Properties to measure search-filter usage, calculator interactions, and UTM campaign attribution without third-party ad retargeting.

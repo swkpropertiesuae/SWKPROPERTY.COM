@@ -138,7 +138,7 @@ export default async function ServiceDetailPage({
           <div className="rounded-3xl border border-[#94652c]/35 bg-[#16140f] p-6">
             <h2 className="font-serif text-2xl font-semibold text-[#0f2244] flex items-center gap-2">
               <ShieldCheck className="h-5 w-5 text-[#94652c]" />
-              Fee & Regulatory Transparency (§12)
+              Fee & Regulatory Transparency
             </h2>
             <p className="mt-4 text-xs md:text-sm text-[#39455a] leading-relaxed">
               {svc.feeTransparency}

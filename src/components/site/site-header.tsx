@@ -5,17 +5,12 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   Bot,
-  Building2,
   ChevronDown,
   Compass,
-  Heart,
   Home,
   KeyRound,
   Landmark,
   Menu,
-  MessageCircle,
-  Phone,
-  Scale,
   Search,
   ShieldCheck,
   Sparkles,
@@ -83,11 +78,7 @@ export function SiteHeader() {
     setAreaUnit,
     lang,
     setLang,
-    savedSlugs,
-    compareSlugs,
-    setDrawerOpen,
     setAssistantOpen,
-    trackEvent,
   } = usePrefs();
 
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -98,7 +89,6 @@ export function SiteHeader() {
   const lastScrollYRef = useRef(0);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const shortlistCount = savedSlugs.length + compareSlugs.length;
   const isHomePage = pathname === "/";
 
   const isActive = (href: string) => {
@@ -259,7 +249,9 @@ export function SiteHeader() {
           aria-label="SWK Properties Dubai Home"
         >
           <img
-            src="/brand/swk-horizontal-lockup.png"
+            src="/brand/swk-logo-horizontal.svg"
+            width={870}
+            height={311}
             alt="SWK Properties Dubai"
             fetchPriority="high"
             decoding="async"

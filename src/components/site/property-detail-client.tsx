@@ -15,18 +15,19 @@ import {
   Maximize2,
   MessageCircle,
   Phone,
-  QrCode,
   Scale,
   Share2,
   ShieldCheck,
 } from "lucide-react";
 import ViewfinderFlipCarousel from "@/components/ui/viewfinder-flip-carousel";
 import { NearbyWalk } from "@/components/ui/nearby-walk-menu";
-import { type PropertyListing } from "@/lib/listings";
+import { type PropertyListing, isPermitVerified, permitLabel } from "@/lib/listings";
+import { communityHref } from "@/lib/communities";
 import { EnquiryForm } from "@/components/site/enquiry-form";
 import { PropertyCard } from "@/components/site/property-card";
 import { usePrefs } from "@/lib/prefs";
 import { SITE } from "@/lib/swk";
+import { MapEmbed } from "@/components/site/map-embed";
 
 export function PropertyDetailClient({
   listing,
@@ -64,7 +65,7 @@ export function PropertyDetailClient({
   const isCompared = compareSlugs.includes(listing.slug);
 
   const waMessage = encodeURIComponent(
-    `Hello SWK Properties, I am viewing ${listing.title} (${listing.community}, Ref: ${listing.reference}, DLD Permit #${listing.dld.permitNumber}) and would like to arrange a viewing or receive the full DLD cost sheet.`
+    `Hello SWK Properties, I am viewing ${listing.title} (${listing.community}, Ref: ${listing.reference}${permitLabel(listing) ? `, ${permitLabel(listing)}` : ""}) and would like to arrange a viewing or receive the full DLD cost sheet.`
   );
 
   const handleShare = () => {
@@ -76,8 +77,11 @@ export function PropertyDetailClient({
 
   const handleReportSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    const subject = `Listing report ${listing.reference}: ${reportReason}`;
+    const bodyText = `Listing: ${listing.title} (${listing.reference})\nURL: ${window.location.href}\nReason: ${reportReason}\n\n${reportNote}`;
+    window.location.href = `mailto:${SITE.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(bodyText)}`;
     setReportSubmitted(true);
-    notify(`Compliance review logged for ${listing.reference}`);
+    notify(`Report email prepared for ${listing.reference}`);
   };
 
   return (
@@ -89,7 +93,7 @@ export function PropertyDetailClient({
           <span>/</span>
           <Link href="/properties" className="hover:text-[#94652c]">Properties</Link>
           <span>/</span>
-          <Link href={`/communities/${listing.communitySlug}`} className="hover:text-[#94652c]">
+          <Link href={communityHref(listing.communitySlug)} className="hover:text-[#94652c]">
             {listing.community}
           </Link>
           <span>/</span>
@@ -392,7 +396,7 @@ export function PropertyDetailClient({
 
             <div className="border-t border-[#e6dfd2] pt-4">
               <h3 className="text-xs font-semibold uppercase tracking-[0.2em] text-[#94652c]">
-                Step-Free & Accessibility Features (§05)
+                Step-Free & Accessibility Features
               </h3>
               <ul className="mt-2 flex flex-wrap gap-2 text-xs text-[#39455a]">
                 {listing.accessibility.map((acc) => (
@@ -413,57 +417,66 @@ export function PropertyDetailClient({
               <div className="space-y-2 max-w-xl">
                 <div className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.22em] text-emerald-600">
                   <ShieldCheck className="h-4 w-4" />
-                  Dubai Land Department (DLD) & RERA Compliance (§08)
+                  Dubai Land Department (DLD) & RERA Compliance
                 </div>
                 <h2 className="font-serif text-2xl font-semibold text-[#0f2244]">
                   Trakheesi Permit & Madmoun QR Verification
                 </h2>
-                <p className="text-xs text-[#39455a] leading-relaxed">
-                  Every Dubai property marketed by SWK Properties LLC is backed by a verified marketing permit or project escrow registration on the Dubai Land Department portal.
-                </p>
+                {isPermitVerified(listing) ? (
+                  <>
+                    <p className="text-xs text-[#39455a] leading-relaxed">
+                      This listing is advertised under the Dubai Land Department Trakheesi permit below. Scan the DLD QR code on our portal listings or verify the permit number on dubailand.gov.ae.
+                    </p>
+                    <div className="mt-4 grid grid-cols-2 sm:grid-cols-3 gap-3 pt-2 text-xs">
+                      <div className="rounded-xl border border-[#e6dfd2] bg-[#faf7f2] p-3">
+                        <span className="text-[#5f6a82] block">Trakheesi / Project Permit</span>
+                        <strong className="mt-0.5 block font-mono text-sm text-[#94652c]">
+                          #{listing.dld.permitNumber}
+                        </strong>
+                      </div>
+                      <div className="rounded-xl border border-[#e6dfd2] bg-[#faf7f2] p-3">
+                        <span className="text-[#5f6a82] block">Brokerage RERA ORN</span>
+                        <strong className="mt-0.5 block font-mono text-sm text-[#0f2244]">
+                          {listing.dld.orn}
+                        </strong>
+                      </div>
+                      <div className="rounded-xl border border-[#e6dfd2] bg-[#faf7f2] p-3">
+                        <span className="text-[#5f6a82] block">Broker BRN</span>
+                        <strong className="mt-0.5 block font-mono text-sm text-[#0f2244]">
+                          {listing.dld.brn}
+                        </strong>
+                      </div>
+                      <div className="rounded-xl border border-[#e6dfd2] bg-[#faf7f2] p-3">
+                        <span className="text-[#5f6a82] block">Permit Validity</span>
+                        <strong className="mt-0.5 block text-[#0f2244]">
+                          Until {listing.dld.permitExpiry}
+                        </strong>
+                      </div>
+                      <div className="rounded-xl border border-[#e6dfd2] bg-[#faf7f2] p-3">
+                        <span className="text-[#5f6a82] block">Last Checked Date</span>
+                        <strong className="mt-0.5 block text-emerald-700">
+                          {listing.lastChecked}
+                        </strong>
+                      </div>
+                      <div className="rounded-xl border border-[#e6dfd2] bg-[#faf7f2] p-3">
+                        <span className="text-[#5f6a82] block">Madmoun Reference</span>
+                        <strong className="mt-0.5 block font-mono text-[11px] text-[#94652c]">
+                          {listing.dld.madmounQrId}
+                        </strong>
+                      </div>
+                    </div>
 
-                <div className="mt-4 grid grid-cols-2 sm:grid-cols-3 gap-3 pt-2 text-xs">
-                  <div className="rounded-xl border border-[#e6dfd2] bg-[#faf7f2] p-3">
-                    <span className="text-[#5f6a82] block">Trakheesi / Project Permit</span>
-                    <strong className="mt-0.5 block font-mono text-sm text-[#94652c]">
-                      #{listing.dld.permitNumber}
-                    </strong>
-                  </div>
-                  <div className="rounded-xl border border-[#e6dfd2] bg-[#faf7f2] p-3">
-                    <span className="text-[#5f6a82] block">Brokerage RERA ORN</span>
-                    <strong className="mt-0.5 block font-mono text-sm text-[#0f2244]">
-                      {listing.dld.orn}
-                    </strong>
-                  </div>
-                  <div className="rounded-xl border border-[#e6dfd2] bg-[#faf7f2] p-3">
-                    <span className="text-[#5f6a82] block">Broker BRN</span>
-                    <strong className="mt-0.5 block font-mono text-sm text-[#0f2244]">
-                      {listing.dld.brn}
-                    </strong>
-                  </div>
-                  <div className="rounded-xl border border-[#e6dfd2] bg-[#faf7f2] p-3">
-                    <span className="text-[#5f6a82] block">Permit Validity</span>
-                    <strong className="mt-0.5 block text-[#0f2244]">
-                      Until {listing.dld.permitExpiry}
-                    </strong>
-                  </div>
-                  <div className="rounded-xl border border-[#e6dfd2] bg-[#faf7f2] p-3">
-                    <span className="text-[#5f6a82] block">Last Checked Date</span>
-                    <strong className="mt-0.5 block text-emerald-700">
-                      {listing.lastChecked}
-                    </strong>
-                  </div>
-                  <div className="rounded-xl border border-[#e6dfd2] bg-[#faf7f2] p-3">
-                    <span className="text-[#5f6a82] block">Madmoun Reference</span>
-                    <strong className="mt-0.5 block font-mono text-[11px] text-[#94652c]">
-                      {listing.dld.madmounQrId}
-                    </strong>
-                  </div>
-                </div>
-
-                {listing.dld.escrowBank && (
-                  <p className="pt-2 text-xs text-[#94652c]">
-                    <strong>Project Escrow Account:</strong> {listing.dld.escrowBank}
+                    {listing.dld.escrowBank && (
+                      <p className="pt-2 text-xs text-[#94652c]">
+                        <strong>Project Escrow Account:</strong> {listing.dld.escrowBank}
+                      </p>
+                    )}
+                  </>
+                ) : (
+                  <p className="rounded-xl border border-amber-300 bg-amber-50 p-3 text-xs leading-relaxed text-amber-900">
+                    The DLD Trakheesi advertising permit for this listing is being issued or re-verified. Permit number, broker BRN and
+                    Madmoun QR are shared on request, and SWK Properties (RERA ORN {SITE.reraOrn}) does not take reservations before the
+                    permit is verified.
                   </p>
                 )}
 
@@ -488,14 +501,6 @@ export function PropertyDetailClient({
                 </div>
               </div>
 
-              {/* Stylized DLD Madmoun QR Code Seal */}
-              <div className="flex flex-col items-center rounded-2xl border border-[#94652c]/35 bg-white p-4 text-black shadow-xl">
-                <QrCode className="h-24 w-24 text-white" />
-                <span className="mt-2 font-mono text-[10px] font-bold tracking-wider">
-                  {listing.dld.madmounQrId}
-                </span>
-                <span className="text-[9px] text-neutral-600">DLD Trakheesi / Madmoun</span>
-              </div>
             </div>
 
             {/* Report Incorrect Listing Form (§08) */}
@@ -503,7 +508,7 @@ export function PropertyDetailClient({
               <div className="mt-5 border-t border-[#e6dfd2] pt-4">
                 {reportSubmitted ? (
                   <p className="text-xs text-emerald-700">
-                    Thank you. Our compliance officer has logged your report for {listing.reference} and will re-verify the status within 1 business day.
+                    Thank you. Please send the email we prepared for {listing.reference}; our compliance team re-verifies reported listings within 1 business day.
                   </p>
                 ) : (
                   <form onSubmit={handleReportSubmit} className="space-y-3 text-xs">
@@ -541,6 +546,8 @@ export function PropertyDetailClient({
             )}
           </section>
 
+          <MapEmbed lat={listing.lat} lng={listing.lng} zoom={15} title={`${listing.building}, ${listing.community} — map`} />
+
           {/* §07 Neighbourhood & Transit Map */}
           <section className="overflow-hidden rounded-3xl border border-[#e6dfd2] bg-white p-6">
             <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
@@ -553,7 +560,7 @@ export function PropertyDetailClient({
                 </p>
               </div>
               <Link
-                href={`/communities/${listing.communitySlug}`}
+                href={communityHref(listing.communitySlug)}
                 className="text-xs font-semibold text-[#94652c] hover:underline"
               >
                 Open {listing.community} Guide →
@@ -583,7 +590,8 @@ export function PropertyDetailClient({
                   </Link>
                 </h3>
                 <p className="text-xs text-[#39455a]">
-                  {listing.agentRole} · BRN {listing.dld.brn} · ORN {SITE.reraOrn}
+                  {listing.agentRole}
+                  {isPermitVerified(listing) ? ` · BRN ${listing.dld.brn}` : ""} · ORN {SITE.reraOrn}
                 </p>
                 <p className="mt-1 text-[11px] text-[#5f6a82]">
                   Languages: {listing.agentLanguages.join(", ")}

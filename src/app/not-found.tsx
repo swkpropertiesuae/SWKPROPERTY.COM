@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { ArrowLeft, Building2, Compass, Phone, Search } from "lucide-react"
+import { ArrowLeft, Building2, Phone, Search } from "lucide-react"
 import { SITE, communities } from "@/lib/swk"
 import { Illustration } from "@/components/ui/not-found"
 

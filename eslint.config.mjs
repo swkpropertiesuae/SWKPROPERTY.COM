@@ -13,6 +13,8 @@ const eslintConfig = defineConfig([
     "build/**",
     "next-env.d.ts",
   ]),
+  // Images are served unoptimized on Cloudflare Workers (next.config.ts), so next/image adds nothing here.
+  { rules: { "@next/next/no-img-element": "off" } },
   // Third-party 21st.dev registry components: keep their code as published.
   {
     files: ["src/components/ui/**"],

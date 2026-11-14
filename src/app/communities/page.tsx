@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight, Compass, MapPin } from "lucide-react";
+import { ArrowRight, Compass } from "lucide-react";
 import { LivelyPageHero } from "@/components/ui/lively-page-hero";
 import { EnquiryForm } from "@/components/site/enquiry-form";
 import { JsonLd } from "@/components/seo/json-ld";

@@ -70,7 +70,7 @@ export default function DevelopersPage() {
           {
             src: "/img/hero/slides/01-dubai-horizon-desktop.webp",
             label: "Emaar · Sobha · DAMAC · Azizi",
-            sublabel: "Escrow-Verified Master Developers",
+            sublabel: "Escrow-Registered Master Developers",
           },
           {
             src: "/img/hero/slides/02-imtiaz-kore-desktop.webp",

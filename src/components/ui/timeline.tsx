@@ -44,7 +44,7 @@ function useGSAP(
       ctxRef.current?.revert();
       ctxRef.current = null;
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, []);
 
   useLayoutEffect(() => {
@@ -52,7 +52,7 @@ function useGSAP(
     cleanupRef.current?.();
     const ret = ctxRef.current.add(callback);
     cleanupRef.current = typeof ret === "function" ? ret : undefined;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, deps);
 }
 

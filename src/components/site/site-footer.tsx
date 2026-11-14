@@ -35,6 +35,18 @@ export function SectionHeading({
   );
 }
 
+const SOCIAL_LINKS: [string, string][] = [
+  ["Instagram", SITE.socials.instagram],
+  ["LinkedIn", SITE.socials.linkedin],
+  ["Facebook", SITE.socials.facebook],
+  ["YouTube", SITE.socials.youtube],
+  ["TikTok", SITE.socials.tiktok],
+  ["X", SITE.socials.x],
+  ["Google", SITE.socials.googleBusinessProfile],
+  ["Property Finder", SITE.socials.propertyFinder],
+  ["Bayut", SITE.socials.bayut],
+]
+
 export function SiteFooter() {
   const { trackEvent } = usePrefs();
 
@@ -50,11 +62,13 @@ export function SiteFooter() {
                 className="inline-flex items-center py-1 transition-transform duration-200 hover:scale-[1.02]"
               >
                 <img
-                  src="/brand/swk-horizontal-lockup.png"
+                  src="/brand/swk-logo-horizontal.svg"
+                  width={870}
+                  height={311}
                   alt="SWK Properties Dubai"
                   loading="lazy"
                   decoding="async"
-                  className="h-16 sm:h-20 md:h-24 w-auto object-contain [filter:drop-shadow(0_2px_6px_rgba(15,34,68,0.75))_drop-shadow(0_8px_18px_rgba(15,34,68,0.45))]"
+                  className="h-14 sm:h-16 md:h-20 w-auto object-contain"
                 />
               </Link>
             </div>
@@ -129,6 +143,7 @@ export function SiteFooter() {
               <li><Link href="/services/secondary-market" className="hover:text-[#dcb888]">Secondary Sales & Form F</Link></li>
               <li><Link href="/services/leasing-rental" className="hover:text-[#dcb888]">Leasing & Ejari Services</Link></li>
               <li><Link href="/services/property-management" className="hover:text-[#dcb888]">Landlord Property Management</Link></li>
+              <li><Link href="/guides" className="hover:text-[#dcb888]">All Dubai Property Guides</Link></li>
               <li><Link href="/guides/buying" className="hover:text-[#dcb888]">Dubai Buying Guide</Link></li>
               <li><Link href="/guides/renting" className="hover:text-[#dcb888]">Dubai Renting & Ejari Guide</Link></li>
               <li><Link href="/guides/selling" className="hover:text-[#dcb888]">Dubai Selling Guide</Link></li>
@@ -158,7 +173,13 @@ export function SiteFooter() {
                 DLD & RERA Compliance
               </div>
               <p className="mt-1 leading-relaxed">
-                RERA ORN: <strong>{SITE.reraOrn}</strong> · Verify permits at{" "}
+                RERA ORN: <strong>{SITE.reraOrn}</strong>
+                {SITE.tradeLicense ? (
+                  <>
+                    {" "}· Licence No: <strong>{SITE.tradeLicense}</strong>
+                  </>
+                ) : null}{" "}
+                · Verify permits at{" "}
                 <a
                   href="https://dubailand.gov.ae"
                   target="_blank"
@@ -180,6 +201,21 @@ export function SiteFooter() {
           <p>
             <strong>Developer Trademarks:</strong> Developer names, logos, and project imagery remain the property of their respective developers and are used solely to identify developments in the UAE market. SWK Properties LLC operates as an independent RERA-licensed real estate brokerage (ORN {SITE.reraOrn}) at Al Saqr Business Tower, Sheikh Zayed Road, Dubai, UAE.
           </p>
+        </div>
+
+        <div className="mt-6 flex flex-col gap-3 border-t border-white/15 pt-5 text-[11px] text-white/70 sm:flex-row sm:items-center sm:justify-between">
+          <p>
+            © {new Date().getFullYear()} {SITE.legalName}. All rights reserved. RERA ORN {SITE.reraOrn}.
+          </p>
+          <ul className="flex flex-wrap gap-x-4 gap-y-1" aria-label="SWK Properties on social media">
+            {SOCIAL_LINKS.filter(([, href]) => href).map(([label, href]) => (
+              <li key={label}>
+                <a href={href} target="_blank" rel="noopener noreferrer me" className="hover:text-[#dcb888]">
+                  {label}
+                </a>
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
     </footer>

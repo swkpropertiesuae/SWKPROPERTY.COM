@@ -1,5 +1,6 @@
 "use client"
 
+import { communityHref } from "@/lib/communities";
 import * as React from "react"
 import Link from "next/link"
 import { AnimatePresence, motion } from "framer-motion"
@@ -15,14 +16,11 @@ import {
   Home,
   KeyRound,
   Landmark,
-  Layers,
   MapPin,
   MessageCircle,
   Phone,
   ShieldCheck,
-  Sparkles,
   TrendingUp,
-  Users,
   X,
 } from "lucide-react"
 
@@ -120,7 +118,7 @@ export function Communities() {
       id: c.id,
       name: c.name,
       blurb: c.blurb,
-      href: `/communities/${c.slug}`,
+      href: communityHref(c.slug),
       image: c.image,
     })),
     ...EXTRA_UAE_COMMUNITIES.map((c) => ({
@@ -442,8 +440,8 @@ export function Aerial() {
               >
                 <div className="flex items-center gap-2 rounded-full border border-[#dcb888] bg-[#0f2244]/95 px-3 py-1.5 text-[11px] font-semibold text-white shadow-xl backdrop-blur-md transition-transform duration-300 hover:scale-105">
                   <img
-                    src="/brand/swk-map-pin.png"
-                    alt="SWK Pin"
+                    src="/brand/swk-emblem.svg"
+                    alt=""
                     className="h-4 w-3.5 object-contain shrink-0"
                   />
                   <span className="whitespace-nowrap">{spot.label}</span>
@@ -1254,7 +1252,7 @@ export function Team() {
                 <div className="sticky top-0 z-20 flex items-center justify-between border-b border-[#e6dfd2] bg-[#0f2244] px-5 sm:px-6 py-4 text-white">
                   <div className="flex items-center gap-2.5">
                     <img
-                      src="/brand/swk-portal-emblem.png"
+                      src="/brand/swk-emblem.svg"
                       alt="SWK"
                       className="h-7 w-7 object-contain"
                     />

@@ -228,7 +228,7 @@ export function ProjectInfiniteMarquee({
                   {proj.collection}
                 </span>
                 <span className="rounded-full bg-white/95 px-2.5 py-1 text-[10px] font-bold text-[#0f2244] shadow-xs">
-                  DLD Escrow Verified
+                  Escrow-Registered Launch
                 </span>
               </div>
 

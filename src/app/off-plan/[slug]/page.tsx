@@ -16,6 +16,7 @@ import { EnquiryForm } from "@/components/site/enquiry-form";
 import { JsonLd } from "@/components/seo/json-ld";
 import { breadcrumbLd, buildMeta } from "@/lib/seo";
 import { SITE } from "@/lib/swk";
+import { MapEmbed } from "@/components/site/map-embed";
 
 export function generateStaticParams() {
   return projects.map((p) => ({ slug: p.slug }));
@@ -275,11 +276,17 @@ export default async function OffPlanProjectDetailPage({
               </div>
             </section>
 
+            <MapEmbed
+              query={`${project.name}, ${project.community}, UAE`}
+              zoom={13}
+              title={`${project.name} location — ${project.community}`}
+            />
+
             {/* §09 DLD Registration, Escrow & Render Disclaimer */}
             <section className="rounded-3xl border border-[#94652c]/35 bg-[#f6ead7]/55 p-6 md:p-8 space-y-3">
               <div className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.22em] text-[#94652c]">
                 <ShieldCheck className="h-4 w-4 text-emerald-600" />
-                DLD Project Escrow & Availability Disclaimer (§09)
+                DLD Project Escrow & Availability Disclaimer
               </div>
               <p className="text-xs text-[#39455a] leading-relaxed">
                 All off-plan developments in Dubai are regulated under Dubai Law No. 8 of 2007 Concerning Escrow Accounts for Real Estate Development. Before you sign a reservation form or transfer any funds for <strong>{project.name}</strong>, your SWK Properties consultant provides the official DLD project registration sheet, escrow account IBAN details, and unit-specific floor plan.
