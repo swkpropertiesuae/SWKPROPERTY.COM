@@ -37,7 +37,7 @@ export function PropertyCard({ listing }: { listing: PropertyListing }) {
   );
 
   return (
-    <article className="group relative flex flex-col overflow-hidden rounded-3xl border border-[#e6dfd2] bg-white transition-all duration-300 hover:-translate-y-1 hover:border-[#94652c]/50 hover:shadow-[0_24px_60px_rgba(15,34,68,0.12)]">
+    <article className="group relative flex flex-col overflow-hidden rounded-3xl border border-[#e6dfd2] bg-white transition-all duration-300 hover:-translate-y-1 hover:border-[#94652c]/50 hover:shadow-[0_24px_60px_rgba(23,19,14,0.12)]">
       {/* Image Header */}
       <div className="relative h-60 w-full overflow-hidden bg-[#f4efe6]">
         <img
@@ -46,12 +46,12 @@ export function PropertyCard({ listing }: { listing: PropertyListing }) {
           loading="lazy"
           className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0f2244]/85 via-transparent to-[#0f2244]/30" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#17130e]/85 via-transparent to-[#17130e]/30" />
 
         {/* Top Badges (§06: availability, purpose, justified label, render notice) */}
         <div className="absolute top-3.5 left-3.5 right-3.5 flex items-start justify-between gap-2">
           <div className="flex flex-wrap items-center gap-1.5">
-            <span className="rounded-full bg-[#0f2244] px-3 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-white shadow-sm">
+            <span className="rounded-full bg-[#17130e] px-3 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-white shadow-sm">
               {listing.purpose === "buy"
                 ? "For Sale · Ready"
                 : listing.purpose === "rent"
@@ -64,7 +64,7 @@ export function PropertyCard({ listing }: { listing: PropertyListing }) {
               </span>
             )}
             {listing.isRender && (
-              <span className="rounded-full border border-white/30 bg-[#0f2244]/80 px-2.5 py-1 text-[10px] font-medium text-white backdrop-blur-md">
+              <span className="rounded-full border border-white/30 bg-[#17130e]/80 px-2.5 py-1 text-[10px] font-medium text-white backdrop-blur-md">
                 Developer Render
               </span>
             )}
@@ -79,7 +79,7 @@ export function PropertyCard({ listing }: { listing: PropertyListing }) {
               className={`flex h-8 w-8 items-center justify-center rounded-full border backdrop-blur-md transition ${
                 isSaved
                   ? "border-[#94652c] bg-[#94652c] text-white"
-                  : "border-white/30 bg-white/90 text-[#0f2244] hover:border-[#94652c]"
+                  : "border-white/30 bg-white/90 text-[#17130e] hover:border-[#94652c]"
               }`}
             >
               <Heart className="h-3.5 w-3.5" fill={isSaved ? "currentColor" : "none"} />
@@ -91,8 +91,8 @@ export function PropertyCard({ listing }: { listing: PropertyListing }) {
               title="Add to side-by-side comparison"
               className={`flex h-8 w-8 items-center justify-center rounded-full border backdrop-blur-md transition ${
                 isCompared
-                  ? "border-[#0f2244] bg-[#0f2244] text-white"
-                  : "border-white/30 bg-white/90 text-[#0f2244] hover:border-[#94652c]"
+                  ? "border-[#17130e] bg-[#17130e] text-white"
+                  : "border-white/30 bg-white/90 text-[#17130e] hover:border-[#94652c]"
               }`}
             >
               <Scale className="h-3.5 w-3.5" />
@@ -102,11 +102,11 @@ export function PropertyCard({ listing }: { listing: PropertyListing }) {
 
         {/* Bottom overlay: Reference & DLD Trakheesi Permit */}
         <div className="absolute bottom-3 left-3.5 right-3.5 flex items-center justify-between text-[11px] text-white">
-          <span className="inline-flex items-center gap-1 rounded-full bg-[#0f2244]/85 px-2.5 py-0.5 backdrop-blur-md">
+          <span className="inline-flex items-center gap-1 rounded-full bg-[#17130e]/85 px-2.5 py-0.5 backdrop-blur-md">
             <ShieldCheck className="h-3 w-3 text-emerald-700" />
             {permitLabel(listing) ?? "Permit details on request"}
           </span>
-          <span className="rounded-full bg-white/95 px-2.5 py-0.5 font-mono text-[10px] font-bold text-[#0f2244]">
+          <span className="rounded-full bg-white/95 px-2.5 py-0.5 font-mono text-[10px] font-bold text-[#17130e]">
             {listing.reference}
           </span>
         </div>
@@ -117,7 +117,7 @@ export function PropertyCard({ listing }: { listing: PropertyListing }) {
         <div>
           {/* Price + Rental Terms */}
           <div className="flex flex-wrap items-baseline justify-between gap-2">
-            <div className="font-serif text-2xl font-bold text-[#0f2244]">
+            <div className="font-serif text-2xl font-bold text-[#17130e]">
               {formatPrice(listing.priceAed)}
               {listing.purpose === "rent" && (
                 <span className="ml-1.5 font-sans text-xs font-semibold text-[#94652c]">
@@ -134,13 +134,13 @@ export function PropertyCard({ listing }: { listing: PropertyListing }) {
           {/* Title */}
           <Link
             href={`/properties/${listing.slug}`}
-            className="mt-2 block font-serif text-xl font-bold leading-snug text-[#0f2244] transition group-hover:text-[#94652c]"
+            className="mt-2 block font-serif text-xl font-bold leading-snug text-[#17130e] transition group-hover:text-[#94652c]"
           >
             {listing.title}
           </Link>
 
           {/* Community & Building */}
-          <div className="mt-1.5 flex items-center gap-1.5 text-xs font-medium text-[#39455a]">
+          <div className="mt-1.5 flex items-center gap-1.5 text-xs font-medium text-[#4a4237]">
             <MapPin className="h-3.5 w-3.5 shrink-0 text-[#94652c]" />
             <span className="truncate">
               {listing.building} · {listing.community}
@@ -148,7 +148,7 @@ export function PropertyCard({ listing }: { listing: PropertyListing }) {
           </div>
 
           {/* Core Specs: Property Type, Beds, Baths, Area */}
-          <div className="mt-4 grid grid-cols-3 gap-2 rounded-2xl border border-[#e6dfd2] bg-[#faf7f2] p-3 text-xs font-semibold text-[#0f2244]">
+          <div className="mt-4 grid grid-cols-3 gap-2 rounded-2xl border border-[#e6dfd2] bg-[#faf7f2] p-3 text-xs font-semibold text-[#17130e]">
             <div className="flex items-center gap-1.5">
               <BedDouble className="h-3.5 w-3.5 text-[#94652c]" />
               <span>{listing.bedrooms === 0 ? "Studio" : `${listing.bedrooms} Beds`}</span>
@@ -164,8 +164,8 @@ export function PropertyCard({ listing }: { listing: PropertyListing }) {
           </div>
 
           {/* Developer / Handover / Payment Plan */}
-          <div className="mt-3 flex flex-wrap items-center justify-between gap-2 text-[11px] font-medium text-[#5f6a82]">
-            <span className="inline-flex items-center gap-1 text-[#0f2244]">
+          <div className="mt-3 flex flex-wrap items-center justify-between gap-2 text-[11px] font-medium text-[#786e60]">
+            <span className="inline-flex items-center gap-1 text-[#17130e]">
               <Building2 className="h-3 w-3 text-[#94652c]" />
               {listing.developer} · {listing.propertyType}
             </span>
@@ -180,11 +180,11 @@ export function PropertyCard({ listing }: { listing: PropertyListing }) {
           <div className="mb-3 flex items-center justify-between text-xs">
             <Link
               href={`/agents/${listing.agentSlug}`}
-              className="text-[#39455a] hover:text-[#94652c]"
+              className="text-[#4a4237] hover:text-[#94652c]"
             >
-              Consultant: <strong className="text-[#0f2244]">{listing.agentName}</strong>
+              Consultant: <strong className="text-[#17130e]">{listing.agentName}</strong>
             </Link>
-            <span className="text-[10px] font-medium text-[#5f6a82]">
+            <span className="text-[10px] font-medium text-[#786e60]">
               Verified {listing.lastChecked}
             </span>
           </div>
@@ -192,7 +192,7 @@ export function PropertyCard({ listing }: { listing: PropertyListing }) {
           <div className="grid grid-cols-2 gap-2.5">
             <Link
               href={`/properties/${listing.slug}`}
-              className="inline-flex items-center justify-center rounded-xl bg-[#0f2244] px-4 py-2.5 text-xs font-bold uppercase tracking-[0.15em] text-white transition hover:bg-[#94652c]"
+              className="inline-flex items-center justify-center rounded-xl bg-[#17130e] px-4 py-2.5 text-xs font-bold uppercase tracking-[0.15em] text-white transition hover:bg-[#94652c]"
             >
               View Details
             </Link>

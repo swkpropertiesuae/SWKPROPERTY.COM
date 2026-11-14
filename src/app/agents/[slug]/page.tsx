@@ -104,7 +104,7 @@ export default async function AgentProfilePage({
   const displayListings = agentListings.length > 0 ? agentListings : listings.slice(0, 3)
 
   return (
-    <div className="min-h-screen bg-[#faf7f2] text-[#0f2244]">
+    <div className="min-h-screen bg-[#faf7f2] text-[#17130e]">
       <JsonLd
         id="ld-agent-breadcrumb"
         data={[
@@ -155,17 +155,17 @@ export default async function AgentProfilePage({
                 <span className="rounded-full border border-[#94652c]/35 bg-[#f6ead7] px-3.5 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-[#94652c]">
                   {member.role}
                 </span>
-                <span className="rounded-full border border-[#e6dfd2] bg-[#faf7f2] px-3.5 py-1 text-[11px] text-[#39455a]">
+                <span className="rounded-full border border-[#e6dfd2] bg-[#faf7f2] px-3.5 py-1 text-[11px] text-[#4a4237]">
                   RERA ORN {SITE.orn}
                   {member.brn ? ` · BRN ${member.brn}` : ""}
                 </span>
               </div>
 
-              <h1 className="mt-4 font-serif text-3xl md:text-5xl font-semibold text-[#0f2244]">
+              <h1 className="mt-4 font-serif text-3xl md:text-5xl font-semibold text-[#17130e]">
                 {member.name}
               </h1>
               <p className="mt-2 text-sm font-medium text-[#94652c]">{member.focus}</p>
-              <p className="mt-4 text-sm md:text-base text-[#39455a] leading-relaxed">
+              <p className="mt-4 text-sm md:text-base text-[#4a4237] leading-relaxed">
                 {details.bio}
               </p>
 
@@ -178,7 +178,7 @@ export default async function AgentProfilePage({
                     {member.languages.map((lang) => (
                       <span
                         key={lang}
-                        className="rounded-full border border-[#e6dfd2] px-3 py-1 text-xs text-[#0f2244]"
+                        className="rounded-full border border-[#e6dfd2] px-3 py-1 text-xs text-[#17130e]"
                       >
                         {lang}
                       </span>
@@ -194,7 +194,7 @@ export default async function AgentProfilePage({
                     {details.communities.map((c) => (
                       <span
                         key={c}
-                        className="rounded-full border border-[#e6dfd2] px-3 py-1 text-xs text-[#0f2244]"
+                        className="rounded-full border border-[#e6dfd2] px-3 py-1 text-xs text-[#17130e]"
                       >
                         {c}
                       </span>
@@ -209,7 +209,7 @@ export default async function AgentProfilePage({
               <div className="flex flex-wrap gap-3">
                 <a
                   href={`tel:${SITE.phoneTel}`}
-                  className="inline-flex items-center gap-2 rounded-full bg-[#0f2244] px-5 py-2.5 text-xs font-bold uppercase tracking-[0.16em] text-white"
+                  className="inline-flex items-center gap-2 rounded-full bg-[#17130e] px-5 py-2.5 text-xs font-bold uppercase tracking-[0.16em] text-white"
                 >
                   <Phone className="h-3.5 w-3.5" /> Call {SITE.phone}
                 </a>
@@ -219,22 +219,22 @@ export default async function AgentProfilePage({
                   )}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 rounded-full border border-[#2f5d3a] bg-[#2f5d3a]/25 px-5 py-2.5 text-xs font-bold uppercase tracking-[0.16em] text-[#0f2244] hover:bg-[#2f5d3a]/40"
+                  className="inline-flex items-center gap-2 rounded-full border border-[#2f5d3a] bg-[#2f5d3a]/25 px-5 py-2.5 text-xs font-bold uppercase tracking-[0.16em] text-[#17130e] hover:bg-[#2f5d3a]/40"
                 >
                   WhatsApp {member.name}
                 </a>
                 <a
                   href={`mailto:${SITE.email}?subject=${encodeURIComponent(`Consultation with ${member.name}`)}`}
-                  className="inline-flex items-center gap-2 rounded-full border border-[#e6dfd2] px-4 py-2.5 text-xs font-semibold text-[#0f2244]"
+                  className="inline-flex items-center gap-2 rounded-full border border-[#e6dfd2] px-4 py-2.5 text-xs font-semibold text-[#17130e]"
                 >
                   <Mail className="h-3.5 w-3.5 text-[#94652c]" /> {SITE.email}
                 </a>
               </div>
 
-              <div className="text-xs text-[#5f6a82] flex items-center gap-2">
+              <div className="text-xs text-[#786e60] flex items-center gap-2">
                 <UserCheck className="h-4 w-4 text-[#94652c]" />
                 <span>
-                  Backup Contact: <strong className="text-[#0f2244]">{details.backupAgent}</strong>
+                  Backup Contact: <strong className="text-[#17130e]">{details.backupAgent}</strong>
                 </span>
               </div>
             </div>
@@ -243,7 +243,7 @@ export default async function AgentProfilePage({
 
         {/* Active Listings Managed by Consultant */}
         <section className="mt-16">
-          <h2 className="font-serif text-2xl md:text-4xl font-semibold text-[#0f2244] mb-6">
+          <h2 className="font-serif text-2xl md:text-4xl font-semibold text-[#17130e] mb-6">
             Active Properties & Shortlist Managed by {member.name}
           </h2>
           <div className="grid grid-cols-1 gap-6 md:grid-cols-3">

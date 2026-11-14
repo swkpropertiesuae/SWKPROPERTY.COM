@@ -48,7 +48,7 @@ export default async function OffPlanAreaPage({ params }: { params: Promise<{ ar
   ]
 
   return (
-    <div className="mx-auto max-w-7xl space-y-12 px-4 py-12 text-[#0f2244]">
+    <div className="mx-auto max-w-7xl space-y-12 px-4 py-12 text-[#17130e]">
       <JsonLd
         data={[
           breadcrumbLd([
@@ -64,14 +64,14 @@ export default async function OffPlanAreaPage({ params }: { params: Promise<{ ar
         ]}
       />
 
-      <nav aria-label="Breadcrumb" className="text-xs text-[#5f6a82]">
+      <nav aria-label="Breadcrumb" className="text-xs text-[#786e60]">
         <Link href="/" className="hover:text-[#94652c]">Home</Link> / <Link href="/off-plan" className="hover:text-[#94652c]">Off-Plan</Link> / {area.name}
       </nav>
 
       <header className="max-w-3xl space-y-3">
         <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#94652c]">{area.projects.length} tracked launches</span>
         <h1 className="font-serif text-3xl font-semibold md:text-5xl">Off-plan projects in {area.name}</h1>
-        <p className="text-sm leading-relaxed text-[#39455a]">
+        <p className="text-sm leading-relaxed text-[#4a4237]">
           {area.name} has {area.projects.length} off-plan launches on SWK&apos;s tracker from {area.developers.join(", ")}. Each page
           below covers the developer, payment-plan structure and what to check before reserving. All buyers sign the developer SPA and
           register the unit with the Dubai Land Department (Oqood) or the relevant emirate&apos;s land registry.
@@ -90,7 +90,7 @@ export default async function OffPlanAreaPage({ params }: { params: Promise<{ ar
               href={`/off-plan/${p.slug}`}
               className="group flex h-full flex-col overflow-hidden rounded-3xl border border-[#e6dfd2] bg-white transition hover:-translate-y-1 hover:border-[#94652c] hover:shadow-lg"
             >
-              <div className="h-48 overflow-hidden bg-[#0f2244]">
+              <div className="h-48 overflow-hidden bg-[#17130e]">
                 <img src={p.thumb || p.image} alt={`${p.name} by ${p.devName}`} loading="lazy" className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
               </div>
               <div className="flex flex-1 flex-col gap-2 p-5">
@@ -102,8 +102,8 @@ export default async function OffPlanAreaPage({ params }: { params: Promise<{ ar
                   </span>
                 )}
                 <h2 className="font-serif text-xl font-semibold">{p.name}</h2>
-                <p className="line-clamp-3 text-xs leading-relaxed text-[#39455a]">{p.summary || p.blurb}</p>
-                <span className="mt-auto inline-flex items-center gap-1 text-xs text-[#5f6a82]">
+                <p className="line-clamp-3 text-xs leading-relaxed text-[#4a4237]">{p.summary || p.blurb}</p>
+                <span className="mt-auto inline-flex items-center gap-1 text-xs text-[#786e60]">
                   <MapPin className="h-3.5 w-3.5" aria-hidden /> {p.community}
                 </span>
               </div>
@@ -119,7 +119,7 @@ export default async function OffPlanAreaPage({ params }: { params: Promise<{ ar
         {faqs.map((f) => (
           <details key={f.q} className="rounded-2xl border border-[#e6dfd2] bg-white p-4">
             <summary className="cursor-pointer text-sm font-semibold">{f.q}</summary>
-            <p className="mt-2 text-sm leading-relaxed text-[#39455a]">{f.a}</p>
+            <p className="mt-2 text-sm leading-relaxed text-[#4a4237]">{f.a}</p>
           </details>
         ))}
       </section>

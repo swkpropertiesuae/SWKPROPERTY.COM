@@ -14,7 +14,7 @@ export const metadata: Metadata = buildMetadata({
 
 export default function PrivacyPolicyPage() {
   return (
-    <div className="min-h-screen bg-[#faf7f2] text-[#0f2244]">
+    <div className="min-h-screen bg-[#faf7f2] text-[#17130e]">
       <JsonLd
         id="ld-privacy-breadcrumb"
         data={breadcrumbSchema([
@@ -28,17 +28,17 @@ export default function PrivacyPolicyPage() {
           <span className="inline-flex items-center gap-2 rounded-full border border-[#94652c]/35 bg-[#f6ead7] px-3.5 py-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-[#94652c]">
             <ShieldCheck className="h-3.5 w-3.5" /> Aligned With UAE PDPL
           </span>
-          <h1 className="mt-4 font-serif text-3xl md:text-5xl font-semibold text-[#0f2244]">
+          <h1 className="mt-4 font-serif text-3xl md:text-5xl font-semibold text-[#17130e]">
             Privacy Policy & Personal Data Notice
           </h1>
-          <p className="mt-2 text-xs text-[#5f6a82]">
+          <p className="mt-2 text-xs text-[#786e60]">
             Last Updated: November 2026 · Controller: {SITE.legalName} (RERA ORN {SITE.orn}), {SITE.address.full}
           </p>
         </div>
 
-        <section className="rounded-3xl border border-[#e6dfd2] bg-white p-6 md:p-8 space-y-6 text-sm text-[#39455a] leading-relaxed">
+        <section className="rounded-3xl border border-[#e6dfd2] bg-white p-6 md:p-8 space-y-6 text-sm text-[#4a4237] leading-relaxed">
           <div>
-            <h2 className="font-serif text-2xl font-semibold text-[#0f2244]">
+            <h2 className="font-serif text-2xl font-semibold text-[#17130e]">
               1. Who We Are & Regulatory Scope
             </h2>
             <p className="mt-2">
@@ -47,18 +47,18 @@ export default function PrivacyPolicyPage() {
           </div>
 
           <div>
-            <h2 className="font-serif text-2xl font-semibold text-[#0f2244]">
+            <h2 className="font-serif text-2xl font-semibold text-[#17130e]">
               2. Personal Data We Collect
             </h2>
             <ul className="mt-2 list-disc pl-5 space-y-1.5">
               <li>
-                <strong className="text-[#0f2244]">Enquiry & Viewing Booking Data:</strong> Full name, phone/WhatsApp number, email address, preferred language, property interest, preferred viewing dates/times (GST), and optional budget or residency preferences when you submit a form on our website.
+                <strong className="text-[#17130e]">Enquiry & Viewing Booking Data:</strong> Full name, phone/WhatsApp number, email address, preferred language, property interest, preferred viewing dates/times (GST), and optional budget or residency preferences when you submit a form on our website.
               </li>
               <li>
-                <strong className="text-[#0f2244]">Regulatory Transaction Documents (Offline / Secure Channels Only):</strong> When you formally instruct SWK to buy, sell, or lease a property, Dubai Land Department (DLD) and UAE Anti-Money Laundering (AML) regulations require identity, passport, Emirates ID, or Title Deed verification through official channels. We ask that you never send passport scans or banking details through open website chat.
+                <strong className="text-[#17130e]">Regulatory Transaction Documents (Offline / Secure Channels Only):</strong> When you formally instruct SWK to buy, sell, or lease a property, Dubai Land Department (DLD) and UAE Anti-Money Laundering (AML) regulations require identity, passport, Emirates ID, or Title Deed verification through official channels. We ask that you never send passport scans or banking details through open website chat.
               </li>
               <li>
-                <strong className="text-[#0f2244]">Technical & Attribution Data:</strong> First-touch and latest-touch referral parameters (`utm_source`, `utm_medium`, `utm_campaign`), currency/unit display preferences stored in your browser, and—only where you grant consent via our{" "}
+                <strong className="text-[#17130e]">Technical & Attribution Data:</strong> First-touch and latest-touch referral parameters (`utm_source`, `utm_medium`, `utm_campaign`), currency/unit display preferences stored in your browser, and—only where you grant consent via our{" "}
                 <Link href="/cookies" className="text-[#94652c] underline">
                   Cookie Settings
                 </Link>
@@ -68,7 +68,7 @@ export default function PrivacyPolicyPage() {
           </div>
 
           <div>
-            <h2 className="font-serif text-2xl font-semibold text-[#0f2244]">
+            <h2 className="font-serif text-2xl font-semibold text-[#17130e]">
               3. Lawful Basis & Purpose of Processing
             </h2>
             <p className="mt-2">
@@ -77,7 +77,7 @@ export default function PrivacyPolicyPage() {
           </div>
 
           <div>
-            <h2 className="font-serif text-2xl font-semibold text-[#0f2244]">
+            <h2 className="font-serif text-2xl font-semibold text-[#17130e]">
               4. Data Sharing & Cross-Border Safeguards
             </h2>
             <p className="mt-2">
@@ -86,7 +86,7 @@ export default function PrivacyPolicyPage() {
           </div>
 
           <div>
-            <h2 className="font-serif text-2xl font-semibold text-[#0f2244]">
+            <h2 className="font-serif text-2xl font-semibold text-[#17130e]">
               5. Data Retention & Your Rights Under UAE PDPL
             </h2>
             <p className="mt-2">
@@ -103,18 +103,18 @@ export default function PrivacyPolicyPage() {
           </div>
 
           <div>
-            <h2 className="font-serif text-2xl font-semibold text-[#0f2244]">6. Service Providers (Processors)</h2>
+            <h2 className="font-serif text-2xl font-semibold text-[#17130e]">6. Service Providers (Processors)</h2>
             <ul className="mt-2 list-disc pl-5 space-y-1.5">
-              <li><strong className="text-[#0f2244]">Hosting & security:</strong> Cloudflare (website delivery, DDoS protection, encrypted storage of enquiry records).</li>
-              <li><strong className="text-[#0f2244]">Enquiry handling:</strong> our email and CRM providers, used only to respond to and manage your enquiry.</li>
-              <li><strong className="text-[#0f2244]">Maps:</strong> Google Maps embeds on contact, community and property pages. Google may set its own cookies when a map loads.</li>
-              <li><strong className="text-[#0f2244]">Analytics & advertising (only with your consent):</strong> Google Tag Manager, Google Analytics and advertising pixels configured through it. These stay disabled until you accept analytics cookies.</li>
-              <li><strong className="text-[#0f2244]">Messaging:</strong> WhatsApp (Meta) when you choose to contact us there; its own privacy terms apply.</li>
+              <li><strong className="text-[#17130e]">Hosting & security:</strong> Cloudflare (website delivery, DDoS protection, encrypted storage of enquiry records).</li>
+              <li><strong className="text-[#17130e]">Enquiry handling:</strong> our email and CRM providers, used only to respond to and manage your enquiry.</li>
+              <li><strong className="text-[#17130e]">Maps:</strong> Google Maps embeds on contact, community and property pages. Google may set its own cookies when a map loads.</li>
+              <li><strong className="text-[#17130e]">Analytics & advertising (only with your consent):</strong> Google Tag Manager, Google Analytics and advertising pixels configured through it. These stay disabled until you accept analytics cookies.</li>
+              <li><strong className="text-[#17130e]">Messaging:</strong> WhatsApp (Meta) when you choose to contact us there; its own privacy terms apply.</li>
             </ul>
           </div>
 
           <div>
-            <h2 className="font-serif text-2xl font-semibold text-[#0f2244]">7. Anti-Money-Laundering Records</h2>
+            <h2 className="font-serif text-2xl font-semibold text-[#17130e]">7. Anti-Money-Laundering Records</h2>
             <p className="mt-2">
               As a real estate broker we are a Designated Non-Financial Business and Profession under UAE Federal Decree-Law No. 20 of 2018 on
               anti-money laundering and counter-terrorist financing. When a transaction proceeds we must verify identity (KYC), may need to
@@ -124,7 +124,7 @@ export default function PrivacyPolicyPage() {
           </div>
 
           <div>
-            <h2 className="font-serif text-2xl font-semibold text-[#0f2244]">8. Security</h2>
+            <h2 className="font-serif text-2xl font-semibold text-[#17130e]">8. Security</h2>
             <p className="mt-2">
               Data is transmitted over HTTPS, stored with access restricted to authorised SWK staff, and never sold. Identity documents are
               collected only through secure channels, never through this website&apos;s forms.
@@ -132,12 +132,12 @@ export default function PrivacyPolicyPage() {
           </div>
 
           <div>
-            <h2 className="font-serif text-2xl font-semibold text-[#0f2244]">9. Children</h2>
+            <h2 className="font-serif text-2xl font-semibold text-[#17130e]">9. Children</h2>
             <p className="mt-2">This website is intended for adults. We do not knowingly collect personal data from anyone under 18.</p>
           </div>
 
           <div>
-            <h2 className="font-serif text-2xl font-semibold text-[#0f2244]">10. Complaints & Changes</h2>
+            <h2 className="font-serif text-2xl font-semibold text-[#17130e]">10. Complaints & Changes</h2>
             <p className="mt-2">
               If you are unhappy with how we handle your data, contact us first at{" "}
               <a href={`mailto:${SITE.email}`} className="text-[#94652c] underline">{SITE.email}</a>. You may also complain to the UAE Data

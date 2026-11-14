@@ -34,10 +34,27 @@ trademarks of their owners, used only to identify their projects (see footer not
 
 Native app icon sets (`App_Icons/…/iOS`, `…/Android/res`) are kept in the kit for future mobile apps.
 
+## Website palette — "Onyx & Champagne"
+
+| Token | Hex | Use |
+| --- | --- | --- |
+| Onyx | `#17130e` | Ink, dark surfaces, primary buttons |
+| Espresso | `#2a2219` / `#3a2e20` | Secondary dark surfaces, hover states |
+| Deep black | `#0c0a07` | Header, hero base |
+| Desert bronze | `#94652c` / `#b07a38` | Accents, links, eyebrows |
+| Champagne | `#dcb888` / `#f3dfb1` | Accents on dark, selection text |
+| Ivory / sand | `#faf7f2` / `#f4efe6` | Page background, cards |
+| Warm grey | `#4a4237` / `#786e60` | Body and muted text |
+
+Motion: Tailwind transitions default to 450 ms `cubic-bezier(0.22, 1, 0.36, 1)`; route changes play a blur
+crossfade via React `<ViewTransition>` (`src/app/template.tsx`, `::view-transition` rules in `globals.css`);
+the hero has a film grade (warm vignette, faint animated grain, 1.6 s backdrop dissolves). All motion is
+disabled under `prefers-reduced-motion`.
+
 ## Usage rules
 
-- The gold artwork is designed for dark surfaces. On the site it sits on the navy header/footer
-  (`#0b1220`, `#0f2244`). On light backgrounds use the `-charcoal` versions, which carry their own
+- The gold artwork is designed for dark surfaces. On the site it sits on the onyx header/footer
+  (`#0c0a07`, `#17130e`). On light backgrounds use the `-charcoal` versions, which carry their own
   charcoal plate.
 - Do not recolour, add shadows, stretch or rotate the logo. Keep clear space of at least the height
   of the "S" around the horizontal logo.

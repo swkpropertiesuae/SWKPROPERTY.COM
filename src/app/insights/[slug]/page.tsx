@@ -55,7 +55,7 @@ export default async function InsightArticlePage({
   const relatedListings = listings.slice(0, 3)
 
   return (
-    <div className="min-h-screen bg-[#faf7f2] text-[#0f2244]">
+    <div className="min-h-screen bg-[#faf7f2] text-[#17130e]">
       <JsonLd
         id="ld-article"
         data={articleSchema({
@@ -88,7 +88,7 @@ export default async function InsightArticlePage({
 
         {/* Header */}
         <header className="mt-6">
-          <div className="flex flex-wrap items-center gap-3 text-xs text-[#5f6a82]">
+          <div className="flex flex-wrap items-center gap-3 text-xs text-[#786e60]">
             <span className="rounded-full border border-[#94652c]/35 bg-[#f6ead7] px-3 py-1 font-semibold uppercase tracking-[0.18em] text-[#94652c]">
               {article.category}
             </span>
@@ -101,7 +101,7 @@ export default async function InsightArticlePage({
             <span>{article.readTime}</span>
           </div>
 
-          <h1 className="mt-4 font-serif text-3xl md:text-5xl font-semibold text-[#0f2244] leading-tight">
+          <h1 className="mt-4 font-serif text-3xl md:text-5xl font-semibold text-[#17130e] leading-tight">
             {article.title}
           </h1>
 
@@ -110,32 +110,32 @@ export default async function InsightArticlePage({
             <div className="flex items-start gap-3">
               <UserCheck className="h-4 w-4 shrink-0 text-[#94652c] mt-0.5" />
               <div>
-                <div className="text-[10px] uppercase tracking-[0.18em] text-[#5f6a82]">
+                <div className="text-[10px] uppercase tracking-[0.18em] text-[#786e60]">
                   Written By
                 </div>
                 {team.some((m) => m.slug === article.author.slug) ? (
                   <Link
                     href={`/agents/${article.author.slug}`}
-                    className="font-semibold text-[#0f2244] hover:text-[#94652c]"
+                    className="font-semibold text-[#17130e] hover:text-[#94652c]"
                   >
                     {article.author.name} — {article.author.role}
                   </Link>
                 ) : (
-                  <span className="font-semibold text-[#0f2244]">
+                  <span className="font-semibold text-[#17130e]">
                     {article.author.name} — {article.author.role}
                   </span>
                 )}
-                <div className="text-[#5f6a82]">{article.author.credentials}</div>
+                <div className="text-[#786e60]">{article.author.credentials}</div>
               </div>
             </div>
             <div className="flex items-start gap-3">
               <ShieldCheck className="h-4 w-4 shrink-0 text-[#94652c] mt-0.5" />
               <div>
-                <div className="text-[10px] uppercase tracking-[0.18em] text-[#5f6a82]">
+                <div className="text-[10px] uppercase tracking-[0.18em] text-[#786e60]">
                   Reviewed for Regulatory Accuracy By
                 </div>
-                <div className="font-semibold text-[#0f2244]">{article.reviewer.name}</div>
-                <div className="text-[#5f6a82]">{article.reviewer.credentials}</div>
+                <div className="font-semibold text-[#17130e]">{article.reviewer.name}</div>
+                <div className="text-[#786e60]">{article.reviewer.credentials}</div>
               </div>
             </div>
           </div>
@@ -158,10 +158,10 @@ export default async function InsightArticlePage({
           <div className="text-xs font-bold uppercase tracking-[0.22em] text-[#94652c]">
             Direct Answer Summary (AEO / GEO Verified)
           </div>
-          <p className="mt-2 font-serif text-xl md:text-2xl text-[#0f2244] leading-relaxed">
+          <p className="mt-2 font-serif text-xl md:text-2xl text-[#17130e] leading-relaxed">
             {article.directAnswer}
           </p>
-          <ul className="mt-5 grid grid-cols-1 gap-2.5 md:grid-cols-2 text-xs text-[#39455a]">
+          <ul className="mt-5 grid grid-cols-1 gap-2.5 md:grid-cols-2 text-xs text-[#4a4237]">
             {article.keyTakeaways.map((kt, idx) => (
               <li key={idx} className="flex items-start gap-2">
                 <CheckCircle2 className="h-4 w-4 shrink-0 text-[#94652c] mt-0.5" />
@@ -178,7 +178,7 @@ export default async function InsightArticlePage({
               <div className="text-xs font-bold uppercase tracking-[0.2em] text-[#94652c]">
                 Table of Contents
               </div>
-              <ol className="mt-4 space-y-2.5 text-xs text-[#39455a]">
+              <ol className="mt-4 space-y-2.5 text-xs text-[#4a4237]">
                 {article.sections.map((sec, i) => (
                   <li key={i}>
                     <a
@@ -202,7 +202,7 @@ export default async function InsightArticlePage({
                         href={src.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1.5 text-[#39455a] hover:text-[#94652c]"
+                        className="inline-flex items-center gap-1.5 text-[#4a4237] hover:text-[#94652c]"
                       >
                         <ExternalLink className="h-3.5 w-3.5 text-[#94652c]" />
                         {src.title}
@@ -224,10 +224,10 @@ export default async function InsightArticlePage({
                 <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[#94652c]">
                   Step 0{i + 1}
                 </span>
-                <h2 className="mt-1 font-serif text-2xl md:text-3xl font-semibold text-[#0f2244]">
+                <h2 className="mt-1 font-serif text-2xl md:text-3xl font-semibold text-[#17130e]">
                   {sec.title}
                 </h2>
-                <p className="mt-3 text-sm md:text-base text-[#39455a] leading-relaxed">
+                <p className="mt-3 text-sm md:text-base text-[#4a4237] leading-relaxed">
                   {sec.text}
                 </p>
               </section>
@@ -235,14 +235,14 @@ export default async function InsightArticlePage({
 
             {/* Article FAQs */}
             <section className="rounded-3xl border border-[#e6dfd2] bg-white p-6 md:p-8">
-              <h2 className="font-serif text-2xl font-semibold text-[#0f2244]">
+              <h2 className="font-serif text-2xl font-semibold text-[#17130e]">
                 Frequently Asked Questions
               </h2>
               <div className="mt-4 space-y-4">
                 {article.faqs.map((faq, i) => (
                   <div key={i} className="rounded-2xl border border-[#e6dfd2] bg-[#faf7f2] p-4">
                     <h3 className="text-sm font-semibold text-[#94652c]">{faq.q}</h3>
-                    <p className="mt-1.5 text-xs md:text-sm text-[#39455a] leading-relaxed">
+                    <p className="mt-1.5 text-xs md:text-sm text-[#4a4237] leading-relaxed">
                       {faq.a}
                     </p>
                   </div>
@@ -251,7 +251,7 @@ export default async function InsightArticlePage({
             </section>
 
             {/* Editorial Disclaimer */}
-            <div className="rounded-2xl border border-[#e6dfd2] bg-[#faf7f2] p-4 text-xs text-[#5f6a82] leading-relaxed">
+            <div className="rounded-2xl border border-[#e6dfd2] bg-[#faf7f2] p-4 text-xs text-[#786e60] leading-relaxed">
               <strong className="text-[#94652c]">Regulatory & Editorial Notice:</strong> This briefing is published by SWK Properties (RERA ORN 51517) for general educational and property-research purposes only. It does not constitute legal, tax, mortgage, or immigration advice. Always verify current fees, escrow accounts, and residency rules directly with the Dubai Land Department (DLD), RERA, or a licensed legal adviser.
             </div>
           </div>
@@ -260,7 +260,7 @@ export default async function InsightArticlePage({
 
       {/* Related Verified Listings */}
       <section className="mx-auto max-w-7xl px-4 py-14 border-t border-[#e6dfd2]">
-        <h2 className="font-serif text-2xl md:text-4xl font-semibold text-[#0f2244] mb-8">
+        <h2 className="font-serif text-2xl md:text-4xl font-semibold text-[#17130e] mb-8">
           Verified Properties to Compare Alongside This Guide
         </h2>
         <div className="grid grid-cols-1 gap-6 md:grid-cols-3">

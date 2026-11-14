@@ -150,13 +150,13 @@ export function SiteHeader() {
       } ${
         isHomePage && !isScrolled && !mobileOpen
           ? "bg-transparent shadow-none"
-          : "bg-[#0b1220]/94 backdrop-blur-2xl shadow-[0_18px_42px_rgba(0,0,0,0.42)]"
+          : "bg-[#0c0a07]/94 backdrop-blur-2xl shadow-[0_18px_42px_rgba(0,0,0,0.42)]"
       }`}
     >
       {/* Top Corporate Utility & Regulatory Bar (§02) — Single-Line Non-Overlapping Bar */}
       {!bannerDismissed && (
         <div
-          className={`border-b border-white/10 bg-[#081224]/75 backdrop-blur-md px-3 sm:px-4 text-xs text-white transition-all duration-200 overflow-hidden ${
+          className={`border-b border-white/10 bg-[#0c0a07]/75 backdrop-blur-md px-3 sm:px-4 text-xs text-white transition-all duration-200 overflow-hidden ${
             isScrolled
               ? "max-h-0 opacity-0 py-0 border-b-0 pointer-events-none"
               : "max-h-9 opacity-100 py-1"
@@ -164,7 +164,7 @@ export function SiteHeader() {
         >
           <div className="mx-auto flex h-7 max-w-7xl flex-nowrap items-center justify-between gap-2 sm:gap-3">
             <div className="flex min-w-0 flex-1 items-center gap-2 overflow-hidden">
-              <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-[#0f2244]/95 border border-white/25 px-2 py-0.5 text-[9.5px] sm:text-[10px] font-bold uppercase tracking-[0.15em] text-white">
+              <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-[#17130e]/95 border border-white/25 px-2 py-0.5 text-[9.5px] sm:text-[10px] font-bold uppercase tracking-[0.15em] text-white">
                 <ShieldCheck className="h-3 w-3 text-white" />
                 RERA ORN {SITE.reraOrn}
               </span>
@@ -194,10 +194,10 @@ export function SiteHeader() {
                 aria-label="Select display currency"
                 value={currency}
                 onChange={(e) => setCurrency(e.target.value as CurrencyCode)}
-                className="h-6 rounded-md border border-white/25 bg-[#0f2244]/90 px-1.5 text-[10px] sm:text-[11px] font-semibold text-white backdrop-blur-md focus:border-white focus:outline-none"
+                className="h-6 rounded-md border border-white/25 bg-[#17130e]/90 px-1.5 text-[10px] sm:text-[11px] font-semibold text-white backdrop-blur-md focus:border-white focus:outline-none"
               >
                 {(Object.keys(CURRENCY_RATES) as CurrencyCode[]).map((code) => (
-                  <option key={code} value={code} className="bg-[#0f2244] text-white">
+                  <option key={code} value={code} className="bg-[#17130e] text-white">
                     {code === "AED" ? "AED" : code}
                   </option>
                 ))}
@@ -207,7 +207,7 @@ export function SiteHeader() {
               <button
                 type="button"
                 onClick={() => setAreaUnit(areaUnit === "sqft" ? "sqm" : "sqft")}
-                className="h-6 rounded-md border border-white/25 bg-[#0f2244]/90 px-2 text-[10px] sm:text-[11px] font-semibold text-white backdrop-blur-md hover:bg-[#14305c]"
+                className="h-6 rounded-md border border-white/25 bg-[#17130e]/90 px-2 text-[10px] sm:text-[11px] font-semibold text-white backdrop-blur-md hover:bg-[#2a2219]"
                 title="Toggle area unit between square feet and square metres"
               >
                 {areaUnit === "sqft" ? "sq ft" : "sq m"}
@@ -217,7 +217,7 @@ export function SiteHeader() {
               <button
                 type="button"
                 onClick={() => setLang(lang === "en" ? "ar" : "en")}
-                className="h-6 rounded-md border border-white/25 bg-[#0f2244]/90 px-2 text-[10px] sm:text-[11px] font-bold text-white backdrop-blur-md hover:bg-[#14305c]"
+                className="h-6 rounded-md border border-white/25 bg-[#17130e]/90 px-2 text-[10px] sm:text-[11px] font-bold text-white backdrop-blur-md hover:bg-[#2a2219]"
                 title="Switch website language / direction"
               >
                 {lang === "en" ? "العربية" : "EN"}
@@ -266,7 +266,7 @@ export function SiteHeader() {
         {/* 2. Primary Corporate Navigation — Single-Line Navy Glass Pill Bar */}
         <nav
           aria-label="Primary navigation"
-          className="hidden xl:flex items-center gap-1 whitespace-nowrap rounded-full border border-white/20 bg-[#0f2244]/85 px-2.5 py-1.5 backdrop-blur-xl shadow-sm"
+          className="hidden xl:flex items-center gap-1 whitespace-nowrap rounded-full border border-white/20 bg-[#17130e]/85 px-2.5 py-1.5 backdrop-blur-xl shadow-sm"
         >
           {/* Home Link */}
           <Link
@@ -274,7 +274,7 @@ export function SiteHeader() {
             aria-current={isActive("/") ? "page" : undefined}
             className={`whitespace-nowrap rounded-full px-3.5 py-1.5 text-[13px] font-semibold transition ${
               isActive("/")
-                ? "bg-white text-[#0f2244] shadow-xs"
+                ? "bg-white text-[#17130e] shadow-xs"
                 : "text-white/90 hover:bg-white/15 hover:text-white"
             }`}
           >
@@ -294,7 +294,7 @@ export function SiteHeader() {
               aria-expanded={propMenuOpen}
               className={`inline-flex whitespace-nowrap items-center gap-1.5 rounded-full px-3.5 py-1.5 text-[13px] font-semibold transition ${
                 isPropertiesSectionActive
-                  ? "bg-white text-[#0f2244] shadow-xs"
+                  ? "bg-white text-[#17130e] shadow-xs"
                   : "text-white/90 hover:bg-white/15 hover:text-white"
               }`}
             >
@@ -308,7 +308,7 @@ export function SiteHeader() {
 
             {propMenuOpen && (
               <div className="absolute left-0 top-full pt-2 w-[400px] z-50 whitespace-normal">
-                <div className="overflow-hidden rounded-3xl border border-white/20 bg-[#0f2244]/96 p-3 text-white backdrop-blur-2xl shadow-[0_24px_60px_rgba(15,34,68,0.45)]">
+                <div className="overflow-hidden rounded-3xl border border-white/20 bg-[#17130e]/96 p-3 text-white backdrop-blur-2xl shadow-[0_24px_60px_rgba(23,19,14,0.45)]">
                   <div className="mb-2 border-b border-white/15 px-3 pb-2 flex items-center justify-between">
                     <span className="text-[10px] font-bold uppercase tracking-[0.22em] text-white/85">
                       Select Property Mandate
@@ -332,7 +332,7 @@ export function SiteHeader() {
                               : "hover:bg-white/10"
                           }`}
                         >
-                          <div className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-white/20 bg-white/10 text-white group-hover:bg-white group-hover:text-[#0f2244] transition">
+                          <div className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-white/20 bg-white/10 text-white group-hover:bg-white group-hover:text-[#17130e] transition">
                             <Icon className="h-4 w-4" />
                           </div>
                           <div className="min-w-0 flex-1">
@@ -367,7 +367,7 @@ export function SiteHeader() {
                 aria-current={active ? "page" : undefined}
                 className={`whitespace-nowrap rounded-full px-3.5 py-1.5 text-[13px] font-semibold transition ${
                   active
-                    ? "bg-white text-[#0f2244] shadow-xs"
+                    ? "bg-white text-[#17130e] shadow-xs"
                     : "text-white/90 hover:bg-white/15 hover:text-white"
                 }`}
               >
@@ -384,7 +384,7 @@ export function SiteHeader() {
             href="/properties"
             aria-label="Search Properties"
             title="Search Dubai Properties"
-            className="group relative inline-flex h-9 w-9 items-center justify-center overflow-hidden rounded-full border border-white/30 bg-[#0f2244]/90 text-white backdrop-blur-md shadow-[inset_0_1px_0_rgba(255,255,255,0.28)] transition-all duration-300 hover:scale-105 hover:border-white/60 hover:bg-[#163466] hover:shadow-[0_0_20px_rgba(255,255,255,0.28),inset_0_1px_0_rgba(255,255,255,0.45)]"
+            className="group relative inline-flex h-9 w-9 items-center justify-center overflow-hidden rounded-full border border-white/30 bg-[#17130e]/90 text-white backdrop-blur-md shadow-[inset_0_1px_0_rgba(255,255,255,0.28)] transition-all duration-300 hover:scale-105 hover:border-white/60 hover:bg-[#3a2e20] hover:shadow-[0_0_20px_rgba(255,255,255,0.28),inset_0_1px_0_rgba(255,255,255,0.45)]"
           >
             <Search className="h-3.5 w-3.5 transition-transform duration-300 group-hover:scale-110" />
           </Link>
@@ -392,7 +392,7 @@ export function SiteHeader() {
           {/* Compact Corporate Enquiry Button (§02) — Brand Navy Blue with Natural-Light Spotlight Hover */}
           <Link
             href="/contact"
-            className="group relative hidden sm:inline-flex h-9 shrink-0 whitespace-nowrap items-center overflow-hidden rounded-full border border-white/35 bg-[radial-gradient(120%_140%_at_50%_0%,rgba(255,255,255,0.22)_0%,rgba(15,34,68,0.96)_62%)] px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-[0.12em] text-white shadow-[0_6px_18px_rgba(0,0,0,0.28),inset_0_1px_0_rgba(255,255,255,0.35)] transition-all duration-300 hover:-translate-y-0.5 hover:border-white/65 hover:bg-[radial-gradient(120%_140%_at_50%_0%,rgba(255,255,255,0.34)_0%,rgba(22,52,102,0.98)_65%)] hover:shadow-[0_10px_24px_rgba(0,0,0,0.35),0_0_22px_rgba(255,255,255,0.22)]"
+            className="group relative hidden sm:inline-flex h-9 shrink-0 whitespace-nowrap items-center overflow-hidden rounded-full border border-white/35 bg-[radial-gradient(120%_140%_at_50%_0%,rgba(255,255,255,0.22)_0%,rgba(23,19,14,0.96)_62%)] px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-[0.12em] text-white shadow-[0_6px_18px_rgba(0,0,0,0.28),inset_0_1px_0_rgba(255,255,255,0.35)] transition-all duration-300 hover:-translate-y-0.5 hover:border-white/65 hover:bg-[radial-gradient(120%_140%_at_50%_0%,rgba(255,255,255,0.34)_0%,rgba(54,42,28,0.98)_65%)] hover:shadow-[0_10px_24px_rgba(0,0,0,0.35),0_0_22px_rgba(255,255,255,0.22)]"
           >
             <span>{lang === "ar" ? "استفسر الآن" : "Book Consultation"}</span>
           </Link>
@@ -403,7 +403,7 @@ export function SiteHeader() {
             onClick={() => setMobileOpen((prev) => !prev)}
             aria-expanded={mobileOpen}
             aria-label="Toggle mobile navigation menu"
-            className="inline-flex xl:hidden h-10 w-10 items-center justify-center rounded-full border border-white/25 bg-[#0f2244]/85 text-white backdrop-blur-md"
+            className="inline-flex xl:hidden h-10 w-10 items-center justify-center rounded-full border border-white/25 bg-[#17130e]/85 text-white backdrop-blur-md"
           >
             {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
@@ -424,7 +424,7 @@ export function SiteHeader() {
                   key={sub.href}
                   href={sub.href}
                   onClick={() => setMobileOpen(false)}
-                  className="flex min-h-[48px] items-center justify-between rounded-xl border border-[#e6dfd2] bg-white px-3.5 py-2.5 text-sm font-semibold text-[#0f2244] hover:border-[#94652c]"
+                  className="flex min-h-[48px] items-center justify-between rounded-xl border border-[#e6dfd2] bg-white px-3.5 py-2.5 text-sm font-semibold text-[#17130e] hover:border-[#94652c]"
                 >
                   <span>{lang === "ar" ? sub.labelAr : sub.labelEn}</span>
                   <span className="text-xs text-[#94652c]">→</span>
@@ -443,8 +443,8 @@ export function SiteHeader() {
                   onClick={() => setMobileOpen(false)}
                   className={`flex min-h-[48px] items-center justify-between rounded-xl px-4 py-3 text-sm font-semibold ${
                     active
-                      ? "bg-[#0f2244] text-white"
-                      : "border border-[#e6dfd2] bg-[#faf7f2] text-[#0f2244]"
+                      ? "bg-[#17130e] text-white"
+                      : "border border-[#e6dfd2] bg-[#faf7f2] text-[#17130e]"
                   }`}
                 >
                   <span>{lang === "ar" ? item.labelAr : item.labelEn}</span>
@@ -469,14 +469,14 @@ export function SiteHeader() {
             <Link
               href="/contact"
               onClick={() => setMobileOpen(false)}
-              className="flex min-h-[48px] items-center justify-center rounded-xl bg-[#0f2244] px-4 text-xs font-bold uppercase tracking-[0.14em] text-white"
+              className="flex min-h-[48px] items-center justify-center rounded-xl bg-[#17130e] px-4 text-xs font-bold uppercase tracking-[0.14em] text-white"
             >
               Book Consultation
             </Link>
           </div>
 
-          <div className="mt-4 flex flex-wrap items-center justify-between gap-2 text-xs text-[#5f6a82]">
-            <span className="inline-flex items-center gap-1.5 font-medium text-[#0f2244]">
+          <div className="mt-4 flex flex-wrap items-center justify-between gap-2 text-xs text-[#786e60]">
+            <span className="inline-flex items-center gap-1.5 font-medium text-[#17130e]">
               <ShieldCheck className="h-4 w-4 text-[#94652c]" />
               RERA ORN {SITE.reraOrn} · Sheikh Zayed Road
             </span>

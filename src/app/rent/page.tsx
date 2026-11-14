@@ -68,20 +68,20 @@ export default function RentPage() {
             <p className="text-xs font-semibold uppercase tracking-[0.26em] text-[#94652c]">
               Immediate & Upcoming Move-In · Ejari Compliant
             </p>
-            <h2 className="mt-1 font-serif text-3xl md:text-5xl font-semibold text-[#0f2244]">
+            <h2 className="mt-1 font-serif text-3xl md:text-5xl font-semibold text-[#17130e]">
               Available Properties For Rent in Dubai
             </h2>
           </div>
           <div className="flex flex-wrap gap-2">
             <Link
               href="/list-your-property"
-              className="rounded-full border border-[#e6dfd2] px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-[#0f2244] hover:border-[#94652c]"
+              className="rounded-full border border-[#e6dfd2] px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-[#17130e] hover:border-[#94652c]"
             >
               Landlords: Lease Out Your Property
             </Link>
             <Link
               href="/properties?purpose=rent"
-              className="rounded-full bg-[#0f2244] px-5 py-2 text-xs font-bold uppercase tracking-[0.16em] text-white"
+              className="rounded-full bg-[#17130e] px-5 py-2 text-xs font-bold uppercase tracking-[0.16em] text-white"
             >
               Search All Rentals →
             </Link>
@@ -102,10 +102,10 @@ export default function RentPage() {
             <span className="text-xs font-semibold uppercase tracking-[0.26em] text-[#94652c]">
               Dubai Tenancy & Ejari Checklist
             </span>
-            <h2 className="mt-2 font-serif text-3xl md:text-4xl font-semibold text-[#0f2244]">
+            <h2 className="mt-2 font-serif text-3xl md:text-4xl font-semibold text-[#17130e]">
               {rentingGuide.comparisonTable.caption}
             </h2>
-            <p className="mt-2 text-sm text-[#39455a] leading-relaxed">
+            <p className="mt-2 text-sm text-[#4a4237] leading-relaxed">
               {rentingGuide.directAnswer}
             </p>
           </div>
@@ -121,13 +121,13 @@ export default function RentPage() {
                   ))}
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[#e6dfd2] text-[#39455a]">
+              <tbody className="divide-y divide-[#e6dfd2] text-[#4a4237]">
                 {rentingGuide.comparisonTable.rows.map((row, idx) => (
                   <tr key={idx}>
                     {row.map((cell, cIdx) => (
                       <td
                         key={cIdx}
-                        className={`p-4 ${cIdx === 0 ? "font-semibold text-[#0f2244]" : ""}`}
+                        className={`p-4 ${cIdx === 0 ? "font-semibold text-[#17130e]" : ""}`}
                       >
                         {cell}
                       </td>
@@ -141,13 +141,13 @@ export default function RentPage() {
           <div className="mt-6 flex flex-wrap gap-3">
             <Link
               href="/guides/renting"
-              className="rounded-full bg-[#0f2244] px-6 py-3 text-xs font-bold uppercase tracking-[0.18em] text-white"
+              className="rounded-full bg-[#17130e] px-6 py-3 text-xs font-bold uppercase tracking-[0.18em] text-white"
             >
               Read Complete Dubai Renting & Ejari Guide
             </Link>
             <Link
               href="/calculators"
-              className="rounded-full border border-[#e6dfd2] px-6 py-3 text-xs font-semibold uppercase tracking-[0.18em] text-[#0f2244] hover:border-[#94652c]"
+              className="rounded-full border border-[#e6dfd2] px-6 py-3 text-xs font-semibold uppercase tracking-[0.18em] text-[#17130e] hover:border-[#94652c]"
             >
               Compare Buy vs Rent Calculator
             </Link>

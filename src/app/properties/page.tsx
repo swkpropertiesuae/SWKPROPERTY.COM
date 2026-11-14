@@ -197,7 +197,7 @@ function PropertiesSearchInner() {
       <div className="mx-auto max-w-7xl px-4 py-12">
         {/* Save & Share Bar */}
         <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
-          <div className="text-xs font-bold uppercase tracking-[0.2em] text-[#0f2244]">
+          <div className="text-xs font-bold uppercase tracking-[0.2em] text-[#17130e]">
             Interactive Property Filter &amp; Map Directory
           </div>
 
@@ -205,17 +205,17 @@ function PropertiesSearchInner() {
             <button
               type="button"
               onClick={handleSaveSearch}
-              className="inline-flex items-center gap-1.5 rounded-full border border-[#e6dfd2] bg-white px-4 py-2 text-xs font-semibold text-[#0f2244] shadow-sm hover:border-[#0f2244]"
+              className="inline-flex items-center gap-1.5 rounded-full border border-[#e6dfd2] bg-white px-4 py-2 text-xs font-semibold text-[#17130e] shadow-sm hover:border-[#17130e]"
             >
-              <BookmarkPlus className="h-3.5 w-3.5 text-[#0f2244]" />
+              <BookmarkPlus className="h-3.5 w-3.5 text-[#17130e]" />
               Save Search
             </button>
             <button
               type="button"
               onClick={handleCopyShareUrl}
-              className="inline-flex items-center gap-1.5 rounded-full border border-[#e6dfd2] bg-white px-4 py-2 text-xs font-semibold text-[#0f2244] shadow-sm hover:border-[#0f2244]"
+              className="inline-flex items-center gap-1.5 rounded-full border border-[#e6dfd2] bg-white px-4 py-2 text-xs font-semibold text-[#17130e] shadow-sm hover:border-[#17130e]"
             >
-              <Share2 className="h-3.5 w-3.5 text-[#0f2244]" />
+              <Share2 className="h-3.5 w-3.5 text-[#17130e]" />
               Share Search URL
             </button>
           </div>
@@ -238,8 +238,8 @@ function PropertiesSearchInner() {
                 onClick={() => setPurpose(t.id)}
                 className={`rounded-xl px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] transition ${
                   purpose === t.id
-                    ? "bg-[#0f2244] text-white"
-                    : "text-[#39455a] hover:text-[#94652c]"
+                    ? "bg-[#17130e] text-white"
+                    : "text-[#4a4237] hover:text-[#94652c]"
                 }`}
               >
                 {t.label}
@@ -259,7 +259,7 @@ function PropertiesSearchInner() {
             <button
               type="button"
               onClick={() => setShowAdvanced((prev) => !prev)}
-              className="inline-flex items-center gap-1.5 rounded-xl border border-[#e6dfd2] bg-[#faf7f2] px-3.5 py-2 text-xs font-medium text-[#0f2244] hover:border-[#94652c]"
+              className="inline-flex items-center gap-1.5 rounded-xl border border-[#e6dfd2] bg-[#faf7f2] px-3.5 py-2 text-xs font-medium text-[#17130e] hover:border-[#94652c]"
             >
               <SlidersHorizontal className="h-3.5 w-3.5 text-[#94652c]" />
               {showAdvanced ? "Hide Lifestyle Filters" : "More Filters"}
@@ -270,7 +270,7 @@ function PropertiesSearchInner() {
         {/* Core Filter Inputs */}
         <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6">
           <div className="lg:col-span-2">
-            <label className="mb-1 block text-[11px] uppercase tracking-wider text-[#5f6a82]">
+            <label className="mb-1 block text-[11px] uppercase tracking-wider text-[#786e60]">
               Keyword / Building / Ref
             </label>
             <div className="relative">
@@ -280,19 +280,19 @@ function PropertiesSearchInner() {
                 value={q}
                 onChange={(e) => setQ(e.target.value)}
                 placeholder="Burj Crown, Marina Gate, SWK-DXB..."
-                className="w-full rounded-xl border border-[#e6dfd2] bg-[#faf7f2] pl-9 pr-3 py-2.5 text-xs text-[#0f2244]"
+                className="w-full rounded-xl border border-[#e6dfd2] bg-[#faf7f2] pl-9 pr-3 py-2.5 text-xs text-[#17130e]"
               />
             </div>
           </div>
 
           <div>
-            <label className="mb-1 block text-[11px] uppercase tracking-wider text-[#5f6a82]">
+            <label className="mb-1 block text-[11px] uppercase tracking-wider text-[#786e60]">
               Community
             </label>
             <select
               value={community}
               onChange={(e) => setCommunity(e.target.value)}
-              className="w-full rounded-xl border border-[#e6dfd2] bg-[#faf7f2] px-3 py-2.5 text-xs text-[#0f2244]"
+              className="w-full rounded-xl border border-[#e6dfd2] bg-[#faf7f2] px-3 py-2.5 text-xs text-[#17130e]"
             >
               <option value="">All Communities</option>
               {communities.map((c) => (
@@ -304,13 +304,13 @@ function PropertiesSearchInner() {
           </div>
 
           <div>
-            <label className="mb-1 block text-[11px] uppercase tracking-wider text-[#5f6a82]">
+            <label className="mb-1 block text-[11px] uppercase tracking-wider text-[#786e60]">
               Property Type
             </label>
             <select
               value={propertyType}
               onChange={(e) => setPropertyType(e.target.value)}
-              className="w-full rounded-xl border border-[#e6dfd2] bg-[#faf7f2] px-3 py-2.5 text-xs text-[#0f2244]"
+              className="w-full rounded-xl border border-[#e6dfd2] bg-[#faf7f2] px-3 py-2.5 text-xs text-[#17130e]"
             >
               <option value="">All Types</option>
               <option value="Apartment">Apartment</option>
@@ -321,13 +321,13 @@ function PropertiesSearchInner() {
           </div>
 
           <div>
-            <label className="mb-1 block text-[11px] uppercase tracking-wider text-[#5f6a82]">
+            <label className="mb-1 block text-[11px] uppercase tracking-wider text-[#786e60]">
               Min Bedrooms
             </label>
             <select
               value={minBeds}
               onChange={(e) => setMinBeds(e.target.value)}
-              className="w-full rounded-xl border border-[#e6dfd2] bg-[#faf7f2] px-3 py-2.5 text-xs text-[#0f2244]"
+              className="w-full rounded-xl border border-[#e6dfd2] bg-[#faf7f2] px-3 py-2.5 text-xs text-[#17130e]"
             >
               <option value="">Any Beds</option>
               <option value="1">1+ Bedroom</option>
@@ -339,13 +339,13 @@ function PropertiesSearchInner() {
           </div>
 
           <div>
-            <label className="mb-1 block text-[11px] uppercase tracking-wider text-[#5f6a82]">
+            <label className="mb-1 block text-[11px] uppercase tracking-wider text-[#786e60]">
               Sort Results
             </label>
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
-              className="w-full rounded-xl border border-[#e6dfd2] bg-[#faf7f2] px-3 py-2.5 text-xs text-[#0f2244]"
+              className="w-full rounded-xl border border-[#e6dfd2] bg-[#faf7f2] px-3 py-2.5 text-xs text-[#17130e]"
             >
               <option value="relevance">Recommended / Verified</option>
               <option value="price-asc">Price: Low to High</option>
@@ -358,7 +358,7 @@ function PropertiesSearchInner() {
         {/* Price, Area, Furnishing & Status Row */}
         <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-6">
           <div>
-            <label className="mb-1 block text-[11px] uppercase tracking-wider text-[#5f6a82]">
+            <label className="mb-1 block text-[11px] uppercase tracking-wider text-[#786e60]">
               Min Price (AED)
             </label>
             <input
@@ -366,11 +366,11 @@ function PropertiesSearchInner() {
               placeholder="e.g. 150000"
               value={minPrice}
               onChange={(e) => setMinPrice(e.target.value)}
-              className="w-full rounded-xl border border-[#e6dfd2] bg-[#faf7f2] px-3 py-2 text-xs text-[#0f2244]"
+              className="w-full rounded-xl border border-[#e6dfd2] bg-[#faf7f2] px-3 py-2 text-xs text-[#17130e]"
             />
           </div>
           <div>
-            <label className="mb-1 block text-[11px] uppercase tracking-wider text-[#5f6a82]">
+            <label className="mb-1 block text-[11px] uppercase tracking-wider text-[#786e60]">
               Max Price (AED)
             </label>
             <input
@@ -378,11 +378,11 @@ function PropertiesSearchInner() {
               placeholder="e.g. 10000000"
               value={maxPrice}
               onChange={(e) => setMaxPrice(e.target.value)}
-              className="w-full rounded-xl border border-[#e6dfd2] bg-[#faf7f2] px-3 py-2 text-xs text-[#0f2244]"
+              className="w-full rounded-xl border border-[#e6dfd2] bg-[#faf7f2] px-3 py-2 text-xs text-[#17130e]"
             />
           </div>
           <div>
-            <label className="mb-1 block text-[11px] uppercase tracking-wider text-[#5f6a82]">
+            <label className="mb-1 block text-[11px] uppercase tracking-wider text-[#786e60]">
               Min Area (sq ft)
             </label>
             <input
@@ -390,11 +390,11 @@ function PropertiesSearchInner() {
               placeholder="e.g. 900"
               value={minArea}
               onChange={(e) => setMinArea(e.target.value)}
-              className="w-full rounded-xl border border-[#e6dfd2] bg-[#faf7f2] px-3 py-2 text-xs text-[#0f2244]"
+              className="w-full rounded-xl border border-[#e6dfd2] bg-[#faf7f2] px-3 py-2 text-xs text-[#17130e]"
             />
           </div>
           <div>
-            <label className="mb-1 block text-[11px] uppercase tracking-wider text-[#5f6a82]">
+            <label className="mb-1 block text-[11px] uppercase tracking-wider text-[#786e60]">
               Max Area (sq ft)
             </label>
             <input
@@ -402,17 +402,17 @@ function PropertiesSearchInner() {
               placeholder="e.g. 8000"
               value={maxArea}
               onChange={(e) => setMaxArea(e.target.value)}
-              className="w-full rounded-xl border border-[#e6dfd2] bg-[#faf7f2] px-3 py-2 text-xs text-[#0f2244]"
+              className="w-full rounded-xl border border-[#e6dfd2] bg-[#faf7f2] px-3 py-2 text-xs text-[#17130e]"
             />
           </div>
           <div>
-            <label className="mb-1 block text-[11px] uppercase tracking-wider text-[#5f6a82]">
+            <label className="mb-1 block text-[11px] uppercase tracking-wider text-[#786e60]">
               Furnishing
             </label>
             <select
               value={furnished}
               onChange={(e) => setFurnished(e.target.value)}
-              className="w-full rounded-xl border border-[#e6dfd2] bg-[#faf7f2] px-3 py-2 text-xs text-[#0f2244]"
+              className="w-full rounded-xl border border-[#e6dfd2] bg-[#faf7f2] px-3 py-2 text-xs text-[#17130e]"
             >
               <option value="">Any Furnishing</option>
               <option value="Furnished">Furnished</option>
@@ -421,13 +421,13 @@ function PropertiesSearchInner() {
             </select>
           </div>
           <div>
-            <label className="mb-1 block text-[11px] uppercase tracking-wider text-[#5f6a82]">
+            <label className="mb-1 block text-[11px] uppercase tracking-wider text-[#786e60]">
               Availability
             </label>
             <select
               value={status}
               onChange={(e) => setStatus(e.target.value)}
-              className="w-full rounded-xl border border-[#e6dfd2] bg-[#faf7f2] px-3 py-2 text-xs text-[#0f2244]"
+              className="w-full rounded-xl border border-[#e6dfd2] bg-[#faf7f2] px-3 py-2 text-xs text-[#17130e]"
             >
               <option value="all">All Statuses</option>
               <option value="available">Available</option>
@@ -447,13 +447,13 @@ function PropertiesSearchInner() {
             </p>
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-4">
               <div>
-                <label className="mb-1 block text-[11px] uppercase tracking-wider text-[#5f6a82]">
+                <label className="mb-1 block text-[11px] uppercase tracking-wider text-[#786e60]">
                   Developer
                 </label>
                 <select
                   value={developer}
                   onChange={(e) => setDeveloper(e.target.value)}
-                  className="w-full rounded-xl border border-[#e6dfd2] bg-[#faf7f2] px-3 py-2 text-xs text-[#0f2244]"
+                  className="w-full rounded-xl border border-[#e6dfd2] bg-[#faf7f2] px-3 py-2 text-xs text-[#17130e]"
                 >
                   <option value="">All Developers</option>
                   {developers.map((d) => (
@@ -465,13 +465,13 @@ function PropertiesSearchInner() {
               </div>
 
               <div>
-                <label className="mb-1 block text-[11px] uppercase tracking-wider text-[#5f6a82]">
+                <label className="mb-1 block text-[11px] uppercase tracking-wider text-[#786e60]">
                   Verified View
                 </label>
                 <select
                   value={viewFilter}
                   onChange={(e) => setViewFilter(e.target.value)}
-                  className="w-full rounded-xl border border-[#e6dfd2] bg-[#faf7f2] px-3 py-2 text-xs text-[#0f2244]"
+                  className="w-full rounded-xl border border-[#e6dfd2] bg-[#faf7f2] px-3 py-2 text-xs text-[#17130e]"
                 >
                   <option value="">Any View</option>
                   <option value="Waterfront">Waterfront / Sea View</option>
@@ -482,7 +482,7 @@ function PropertiesSearchInner() {
               </div>
 
               <div>
-                <label className="mb-1 block text-[11px] uppercase tracking-wider text-[#5f6a82]">
+                <label className="mb-1 block text-[11px] uppercase tracking-wider text-[#786e60]">
                   Max Service Charge (AED/sq ft)
                 </label>
                 <input
@@ -490,18 +490,18 @@ function PropertiesSearchInner() {
                   placeholder="e.g. 25"
                   value={maxServiceCharge}
                   onChange={(e) => setMaxServiceCharge(e.target.value)}
-                  className="w-full rounded-xl border border-[#e6dfd2] bg-[#faf7f2] px-3 py-2 text-xs text-[#0f2244]"
+                  className="w-full rounded-xl border border-[#e6dfd2] bg-[#faf7f2] px-3 py-2 text-xs text-[#17130e]"
                 />
               </div>
 
               <div>
-                <label className="mb-1 block text-[11px] uppercase tracking-wider text-[#5f6a82]">
+                <label className="mb-1 block text-[11px] uppercase tracking-wider text-[#786e60]">
                   Min Bathrooms
                 </label>
                 <select
                   value={minBaths}
                   onChange={(e) => setMinBaths(e.target.value)}
-                  className="w-full rounded-xl border border-[#e6dfd2] bg-[#faf7f2] px-3 py-2 text-xs text-[#0f2244]"
+                  className="w-full rounded-xl border border-[#e6dfd2] bg-[#faf7f2] px-3 py-2 text-xs text-[#17130e]"
                 >
                   <option value="">Any Bathrooms</option>
                   <option value="2">2+ Bathrooms</option>
@@ -520,8 +520,8 @@ function PropertiesSearchInner() {
                   onClick={() => toggleFeature(feat)}
                   className={`rounded-full border px-3.5 py-1.5 text-xs transition ${
                     featureFilters.includes(feat)
-                      ? "border-[#94652c] bg-[#0f2244] text-white font-semibold"
-                      : "border-[#e6dfd2] bg-[#faf7f2] text-[#39455a]"
+                      ? "border-[#94652c] bg-[#17130e] text-white font-semibold"
+                      : "border-[#e6dfd2] bg-[#faf7f2] text-[#4a4237]"
                   }`}
                 >
                   {feat}
@@ -532,8 +532,8 @@ function PropertiesSearchInner() {
                 onClick={() => setPetFriendlyOnly((v) => !v)}
                 className={`rounded-full border px-3.5 py-1.5 text-xs transition ${
                   petFriendlyOnly
-                    ? "border-[#94652c] bg-[#0f2244] text-white font-semibold"
-                    : "border-[#e6dfd2] bg-[#faf7f2] text-[#39455a]"
+                    ? "border-[#94652c] bg-[#17130e] text-white font-semibold"
+                    : "border-[#e6dfd2] bg-[#faf7f2] text-[#4a4237]"
                 }`}
               >
                 Pet-Friendly Only
@@ -543,8 +543,8 @@ function PropertiesSearchInner() {
                 onClick={() => setNearMetroOnly((v) => !v)}
                 className={`rounded-full border px-3.5 py-1.5 text-xs transition ${
                   nearMetroOnly
-                    ? "border-[#94652c] bg-[#0f2244] text-white font-semibold"
-                    : "border-[#e6dfd2] bg-[#faf7f2] text-[#39455a]"
+                    ? "border-[#94652c] bg-[#17130e] text-white font-semibold"
+                    : "border-[#e6dfd2] bg-[#faf7f2] text-[#4a4237]"
                 }`}
               >
                 Near Dubai Metro
@@ -558,10 +558,10 @@ function PropertiesSearchInner() {
           <div className="mt-5 rounded-2xl border border-[#94652c]/30 bg-[#faf7f2] p-5">
             <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
               <div>
-                <h3 className="font-serif text-xl font-semibold text-[#0f2244]">
+                <h3 className="font-serif text-xl font-semibold text-[#17130e]">
                   Interactive Dubai Corridor & Custom Area Polygon Filter
                 </h3>
-                <p className="text-xs text-[#5f6a82]">
+                <p className="text-xs text-[#786e60]">
                   Select a drawn geographical zone on the Dubai map to isolate listings within that corridor:
                 </p>
               </div>
@@ -579,8 +579,8 @@ function PropertiesSearchInner() {
                     onClick={() => setMapZone(z.id)}
                     className={`rounded-full px-3.5 py-1.5 text-xs font-medium transition ${
                       mapZone === z.id
-                        ? "bg-[#0f2244] text-white font-semibold"
-                        : "border border-[#e6dfd2] bg-[#faf7f2] text-[#39455a]"
+                        ? "bg-[#17130e] text-white font-semibold"
+                        : "border border-[#e6dfd2] bg-[#faf7f2] text-[#4a4237]"
                     }`}
                   >
                     {z.label}
@@ -602,10 +602,10 @@ function PropertiesSearchInner() {
                     </span>
                     <span>{item.reference}</span>
                   </div>
-                  <div className="mt-1 font-serif text-sm font-semibold text-[#0f2244] truncate">
+                  <div className="mt-1 font-serif text-sm font-semibold text-[#17130e] truncate">
                     {item.title}
                   </div>
-                  <div className="text-[11px] text-[#5f6a82]">{item.community}</div>
+                  <div className="text-[11px] text-[#786e60]">{item.community}</div>
                 </Link>
               ))}
             </div>
@@ -614,7 +614,7 @@ function PropertiesSearchInner() {
 
         {/* Results Count & Clear Filters Bar (§04) */}
         <div className="mt-5 flex flex-wrap items-center justify-between gap-3 border-t border-[#e6dfd2] pt-4 text-xs">
-          <div className="text-[#39455a]">
+          <div className="text-[#4a4237]">
             Showing <strong className="text-[#94652c]">{filteredListings.length}</strong> verified{" "}
             {filteredListings.length === 1 ? "property" : "properties"}
             {mapZone !== "all" ? ` in drawn zone (${mapZone})` : ""}
@@ -639,23 +639,23 @@ function PropertiesSearchInner() {
         </div>
       ) : (
         <div className="mt-10 rounded-3xl border border-[#94652c]/35 bg-white p-8 md:p-12 text-center">
-          <h2 className="font-serif text-2xl md:text-4xl font-semibold text-[#0f2244]">
+          <h2 className="font-serif text-2xl md:text-4xl font-semibold text-[#17130e]">
             No Exact Matches for Those Combined Filters
           </h2>
-          <p className="mx-auto mt-3 max-w-xl text-sm text-[#39455a] leading-relaxed">
+          <p className="mx-auto mt-3 max-w-xl text-sm text-[#4a4237] leading-relaxed">
             Many private secondary mandates and new developer allocations in Dubai are held off-portal or match slightly broader budget/bedroom criteria. Try one of the recovery options below:
           </p>
           <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
             <button
               type="button"
               onClick={clearAllFilters}
-              className="rounded-full bg-[#0f2244] px-6 py-3 text-xs font-bold uppercase tracking-[0.18em] text-white"
+              className="rounded-full bg-[#17130e] px-6 py-3 text-xs font-bold uppercase tracking-[0.18em] text-white"
             >
               Reset All Filters ({LISTINGS.length} Verified Listings)
             </button>
             <Link
               href="/off-plan"
-              className="rounded-full border border-[#e6dfd2] px-6 py-3 text-xs font-semibold uppercase tracking-[0.18em] text-[#0f2244] hover:border-[#94652c]"
+              className="rounded-full border border-[#e6dfd2] px-6 py-3 text-xs font-semibold uppercase tracking-[0.18em] text-[#17130e] hover:border-[#94652c]"
             >
               Browse All 108 Off-Plan Launches
             </Link>
@@ -691,7 +691,7 @@ export default function PropertiesPage() {
           <ul className="mx-auto grid max-w-7xl gap-2 px-4 py-12 text-sm sm:grid-cols-2">
             {LISTINGS.map((l) => (
               <li key={l.slug}>
-                <Link href={`/properties/${l.slug}`} className="text-[#0f2244] hover:text-[#94652c]">
+                <Link href={`/properties/${l.slug}`} className="text-[#17130e] hover:text-[#94652c]">
                   {l.title} — {l.community}
                 </Link>
               </li>

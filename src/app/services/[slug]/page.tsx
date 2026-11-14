@@ -69,7 +69,7 @@ export default async function ServiceDetailPage({
       />
 
       <div className="mx-auto max-w-7xl px-4 py-10 space-y-14">
-        <nav aria-label="Breadcrumb" className="flex flex-wrap items-center gap-2 text-xs text-[#5f6a82]">
+        <nav aria-label="Breadcrumb" className="flex flex-wrap items-center gap-2 text-xs text-[#786e60]">
           <Link href="/" className="hover:text-[#94652c]">Home</Link>
           <span>/</span>
           <Link href="/services" className="hover:text-[#94652c]">Services</Link>
@@ -85,11 +85,11 @@ export default async function ServiceDetailPage({
                 <ShieldCheck className="h-4 w-4" />
                 SWK Practice Area · RERA ORN {SITE.reraOrn}
               </span>
-              <h1 className="font-serif text-3xl md:text-5xl font-semibold text-[#0f2244]">
+              <h1 className="font-serif text-3xl md:text-5xl font-semibold text-[#17130e]">
                 {svc.title}
               </h1>
               <p className="text-base md:text-lg font-medium text-[#94652c]">{svc.tagline}</p>
-              <p className="text-sm md:text-base text-[#39455a] leading-relaxed">
+              <p className="text-sm md:text-base text-[#4a4237] leading-relaxed">
                 {svc.description}
               </p>
             </div>
@@ -106,14 +106,14 @@ export default async function ServiceDetailPage({
         {/* §12 Who It Is For + What Is Included + Fee Transparency */}
         <section className="grid grid-cols-1 gap-6 lg:grid-cols-3">
           <div className="rounded-3xl border border-[#e6dfd2] bg-white p-6">
-            <h2 className="font-serif text-2xl font-semibold text-[#0f2244] flex items-center gap-2">
+            <h2 className="font-serif text-2xl font-semibold text-[#17130e] flex items-center gap-2">
               <Users className="h-5 w-5 text-[#94652c]" />
               Who This Service Is For
             </h2>
-            <ul className="mt-4 space-y-3 text-xs md:text-sm text-[#39455a]">
+            <ul className="mt-4 space-y-3 text-xs md:text-sm text-[#4a4237]">
               {svc.whoItIsFor.map((item) => (
                 <li key={item} className="flex items-start gap-2">
-                  <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-[#0f2244]" />
+                  <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-[#17130e]" />
                   <span>{item}</span>
                 </li>
               ))}
@@ -121,11 +121,11 @@ export default async function ServiceDetailPage({
           </div>
 
           <div className="rounded-3xl border border-[#e6dfd2] bg-white p-6">
-            <h2 className="font-serif text-2xl font-semibold text-[#0f2244] flex items-center gap-2">
+            <h2 className="font-serif text-2xl font-semibold text-[#17130e] flex items-center gap-2">
               <CheckCircle2 className="h-5 w-5 text-emerald-600" />
               What Is Included
             </h2>
-            <ul className="mt-4 space-y-3 text-xs md:text-sm text-[#39455a]">
+            <ul className="mt-4 space-y-3 text-xs md:text-sm text-[#4a4237]">
               {svc.whatIsIncluded.map((item) => (
                 <li key={item} className="flex items-start gap-2">
                   <CheckCircle2 className="h-4 w-4 shrink-0 text-[#94652c] mt-0.5" />
@@ -136,11 +136,11 @@ export default async function ServiceDetailPage({
           </div>
 
           <div className="rounded-3xl border border-[#94652c]/35 bg-[#16140f] p-6">
-            <h2 className="font-serif text-2xl font-semibold text-[#0f2244] flex items-center gap-2">
+            <h2 className="font-serif text-2xl font-semibold text-[#17130e] flex items-center gap-2">
               <ShieldCheck className="h-5 w-5 text-[#94652c]" />
               Fee & Regulatory Transparency
             </h2>
-            <p className="mt-4 text-xs md:text-sm text-[#39455a] leading-relaxed">
+            <p className="mt-4 text-xs md:text-sm text-[#4a4237] leading-relaxed">
               {svc.feeTransparency}
             </p>
             <div className="mt-5 rounded-2xl border border-[#e6dfd2] bg-[#faf7f2] p-3.5 text-xs text-[#94652c]">
@@ -154,7 +154,7 @@ export default async function ServiceDetailPage({
           <p className="text-xs font-semibold uppercase tracking-[0.26em] text-[#94652c]">
             Documented Workflow
           </p>
-          <h2 className="mt-1 font-serif text-3xl md:text-4xl font-semibold text-[#0f2244]">
+          <h2 className="mt-1 font-serif text-3xl md:text-4xl font-semibold text-[#17130e]">
             Step-by-Step {svc.shortTitle} Process
           </h2>
 
@@ -165,13 +165,13 @@ export default async function ServiceDetailPage({
                 className="rounded-2xl border border-[#e6dfd2] bg-[#faf7f2] p-5 flex flex-col justify-between"
               >
                 <div>
-                  <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-[#0f2244] text-xs font-bold text-white">
+                  <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-[#17130e] text-xs font-bold text-white">
                     0{idx + 1}
                   </span>
-                  <h3 className="mt-3 font-serif text-xl font-semibold text-[#0f2244]">
+                  <h3 className="mt-3 font-serif text-xl font-semibold text-[#17130e]">
                     {st.title}
                   </h3>
-                  <p className="mt-2 text-xs text-[#39455a] leading-relaxed">{st.body}</p>
+                  <p className="mt-2 text-xs text-[#4a4237] leading-relaxed">{st.body}</p>
                 </div>
               </div>
             ))}
@@ -180,14 +180,14 @@ export default async function ServiceDetailPage({
 
         {/* §12 Service FAQs */}
         <section className="rounded-3xl border border-[#e6dfd2] bg-white p-6 md:p-10">
-          <h2 className="font-serif text-2xl md:text-3xl font-semibold text-[#0f2244]">
+          <h2 className="font-serif text-2xl md:text-3xl font-semibold text-[#17130e]">
             Frequently Asked Questions: {svc.shortTitle}
           </h2>
           <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2">
             {svc.faqs.map((f) => (
               <div key={f.q} className="rounded-2xl border border-[#e6dfd2] bg-[#faf7f2] p-5">
                 <h3 className="font-serif text-lg font-semibold text-[#94652c]">{f.q}</h3>
-                <p className="mt-2 text-xs md:text-sm text-[#39455a] leading-relaxed">{f.a}</p>
+                <p className="mt-2 text-xs md:text-sm text-[#4a4237] leading-relaxed">{f.a}</p>
               </div>
             ))}
           </div>

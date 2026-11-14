@@ -19,7 +19,7 @@ export const metadata: Metadata = buildMeta({
 
 export default function CommunitiesPage() {
   return (
-    <div className="min-h-screen bg-[#faf7f2] text-[#0f2244]">
+    <div className="min-h-screen bg-[#faf7f2] text-[#17130e]">
       <JsonLd
         data={[
           breadcrumbLd([
@@ -64,10 +64,10 @@ export default function CommunitiesPage() {
           <p className="text-xs font-semibold uppercase tracking-[0.26em] text-[#94652c]">
             Balanced Neighbourhood Evaluations
           </p>
-          <h2 className="mt-2 font-serif text-3xl md:text-5xl font-semibold text-[#0f2244]">
+          <h2 className="mt-2 font-serif text-3xl md:text-5xl font-semibold text-[#17130e]">
             8 Core Dubai Freehold &amp; Leasing Districts
           </h2>
-          <p className="mt-2 text-sm text-[#39455a] leading-relaxed">
+          <p className="mt-2 text-sm text-[#4a4237] leading-relaxed">
             Select any neighbourhood below to inspect service-charge benchmarks, transport links, and available properties.
           </p>
         </div>
@@ -80,13 +80,13 @@ export default function CommunitiesPage() {
               className="group flex flex-col justify-between overflow-hidden rounded-3xl border border-[#e6dfd2] bg-white shadow-sm transition hover:-translate-y-1 hover:border-[#94652c]"
             >
               <div>
-                <div className="relative h-64 w-full overflow-hidden bg-[#0f2244]">
+                <div className="relative h-64 w-full overflow-hidden bg-[#17130e]">
                   <img
                     src={comm.image}
                     alt={comm.name}
                     className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#0f2244]/95 via-[#0f2244]/30 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#17130e]/95 via-[#17130e]/30 to-transparent" />
                   <div className="absolute bottom-4 left-5 right-5 flex items-end justify-between gap-2">
                     <div>
                       <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[#dcb888]">
@@ -96,14 +96,14 @@ export default function CommunitiesPage() {
                         {comm.name}
                       </h3>
                     </div>
-                    <span className="rounded-full border border-white/25 bg-white/95 px-3 py-1 font-mono text-[10px] font-bold text-[#0f2244]">
+                    <span className="rounded-full border border-white/25 bg-white/95 px-3 py-1 font-mono text-[10px] font-bold text-[#17130e]">
                       {comm.coordinates.lat.toFixed(2)}°N, {comm.coordinates.lng.toFixed(2)}°E
                     </span>
                   </div>
                 </div>
 
                 <div className="p-6 space-y-4">
-                  <p className="text-xs md:text-sm text-[#39455a] leading-relaxed">
+                  <p className="text-xs md:text-sm text-[#4a4237] leading-relaxed">
                     {comm.blurb}
                   </p>
 
@@ -111,7 +111,7 @@ export default function CommunitiesPage() {
                     {comm.propertyTypes.map((pt) => (
                       <span
                         key={pt}
-                        className="rounded-full border border-[#e6dfd2] bg-[#faf7f2] px-3 py-1 text-[11px] font-medium text-[#0f2244]"
+                        className="rounded-full border border-[#e6dfd2] bg-[#faf7f2] px-3 py-1 text-[11px] font-medium text-[#17130e]"
                       >
                         {pt}
                       </span>
@@ -123,19 +123,19 @@ export default function CommunitiesPage() {
                       <span className="text-emerald-700 font-bold block mb-1">
                         Key Advantage:
                       </span>
-                      <span className="text-[#39455a] line-clamp-2">{comm.pros[0]}</span>
+                      <span className="text-[#4a4237] line-clamp-2">{comm.pros[0]}</span>
                     </div>
                     <div>
                       <span className="text-[#94652c] font-bold block mb-1">
                         Practical Trade-Off:
                       </span>
-                      <span className="text-[#39455a] line-clamp-2">{comm.considerations[0]}</span>
+                      <span className="text-[#4a4237] line-clamp-2">{comm.considerations[0]}</span>
                     </div>
                   </div>
                 </div>
               </div>
 
-              <div className="flex items-center justify-between border-t border-[#e6dfd2] bg-[#faf7f2] px-6 py-4 text-xs font-bold text-[#0f2244] group-hover:text-[#94652c]">
+              <div className="flex items-center justify-between border-t border-[#e6dfd2] bg-[#faf7f2] px-6 py-4 text-xs font-bold text-[#17130e] group-hover:text-[#94652c]">
                 <span className="inline-flex items-center gap-1.5">
                   <Compass className="h-4 w-4 text-[#94652c]" />
                   Read Full {comm.name} Neighbourhood Guide

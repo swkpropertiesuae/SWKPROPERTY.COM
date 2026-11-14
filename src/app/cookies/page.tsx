@@ -72,16 +72,16 @@ export default function CookieSettingsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#faf7f2] text-[#0f2244]">
+    <div className="min-h-screen bg-[#faf7f2] text-[#17130e]">
       <div className="mx-auto max-w-4xl px-4 py-16 space-y-10">
         <div>
           <span className="inline-flex items-center gap-2 rounded-full border border-[#94652c]/35 bg-[#f6ead7] px-3.5 py-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-[#94652c]">
             <Cookie className="h-3.5 w-3.5" /> Granular Consent & Tracker Inventory
           </span>
-          <h1 className="mt-4 font-serif text-3xl md:text-5xl font-semibold text-[#0f2244]">
+          <h1 className="mt-4 font-serif text-3xl md:text-5xl font-semibold text-[#17130e]">
             Cookie Settings & Browser Storage Inventory
           </h1>
-          <p className="mt-3 text-sm md:text-base text-[#39455a] leading-relaxed">
+          <p className="mt-3 text-sm md:text-base text-[#4a4237] leading-relaxed">
             Control how SWK Properties uses browser storage and analytics events. Essential storage is required for basic site security and consent memory; you can toggle Preferences and Analytics at any time.
           </p>
         </div>
@@ -90,10 +90,10 @@ export default function CookieSettingsPage() {
         <section className="rounded-3xl border border-[#e6dfd2] bg-white p-6 md:p-8 space-y-6">
           <div className="flex items-start justify-between gap-4 border-b border-[#e6dfd2] pb-5">
             <div>
-              <div className="text-sm font-semibold text-[#0f2244]">
+              <div className="text-sm font-semibold text-[#17130e]">
                 1. Strictly Necessary & Security Storage (Always Active)
               </div>
-              <p className="mt-1 text-xs text-[#39455a]">
+              <p className="mt-1 text-xs text-[#4a4237]">
                 Required for form spam protection, duplicate-submission prevention, and saving your privacy consent state.
               </p>
             </div>
@@ -104,10 +104,10 @@ export default function CookieSettingsPage() {
 
           <div className="flex items-start justify-between gap-4 border-b border-[#e6dfd2] pb-5">
             <div>
-              <div className="text-sm font-semibold text-[#0f2244]">
+              <div className="text-sm font-semibold text-[#17130e]">
                 2. Functional Preferences (Currency, sq ft/sq m & Saved Shortlist)
               </div>
-              <p className="mt-1 text-xs text-[#39455a]">
+              <p className="mt-1 text-xs text-[#4a4237]">
                 Remembers your preferred reference currency, area unit, and shortlisted properties across page visits.
               </p>
             </div>
@@ -122,10 +122,10 @@ export default function CookieSettingsPage() {
 
           <div className="flex items-start justify-between gap-4">
             <div>
-              <div className="text-sm font-semibold text-[#0f2244]">
+              <div className="text-sm font-semibold text-[#17130e]">
                 3. First-Party Analytics & Enquiry Attribution
               </div>
-              <p className="mt-1 text-xs text-[#39455a]">
+              <p className="mt-1 text-xs text-[#4a4237]">
                 Allows SWK Properties to measure search-filter usage, calculator interactions, and UTM campaign attribution without third-party ad retargeting.
               </p>
             </div>
@@ -142,7 +142,7 @@ export default function CookieSettingsPage() {
             <button
               type="button"
               onClick={handleSave}
-              className="rounded-full bg-[#0f2244] px-6 py-2.5 text-xs font-bold uppercase tracking-[0.18em] text-white hover:bg-[#f3dfb1]"
+              className="rounded-full bg-[#17130e] px-6 py-2.5 text-xs font-bold uppercase tracking-[0.18em] text-white hover:bg-[#f3dfb1]"
             >
               Save My Preferences
             </button>
@@ -155,7 +155,7 @@ export default function CookieSettingsPage() {
                 setSavedToast(true)
                 setTimeout(() => setSavedToast(false), 3000)
               }}
-              className="rounded-full border border-[#e6dfd2] px-5 py-2.5 text-xs font-semibold text-[#0f2244] hover:border-[#94652c]"
+              className="rounded-full border border-[#e6dfd2] px-5 py-2.5 text-xs font-semibold text-[#17130e] hover:border-[#94652c]"
             >
               Accept All
             </button>
@@ -168,7 +168,7 @@ export default function CookieSettingsPage() {
                 setSavedToast(true)
                 setTimeout(() => setSavedToast(false), 3000)
               }}
-              className="rounded-full border border-[#e6dfd2] px-5 py-2.5 text-xs font-semibold text-[#39455a] hover:border-white/40"
+              className="rounded-full border border-[#e6dfd2] px-5 py-2.5 text-xs font-semibold text-[#4a4237] hover:border-white/40"
             >
               Essential Only
             </button>
@@ -182,7 +182,7 @@ export default function CookieSettingsPage() {
 
         {/* Full Tracker & Storage Inventory Table (§54) */}
         <section className="rounded-3xl border border-[#e6dfd2] bg-white p-6 md:p-8 overflow-x-auto">
-          <h2 className="font-serif text-2xl font-semibold text-[#0f2244]">
+          <h2 className="font-serif text-2xl font-semibold text-[#17130e]">
             Complete Cookie & LocalStorage Inventory
           </h2>
           <table className="mt-4 w-full text-left border-collapse text-xs">
@@ -195,7 +195,7 @@ export default function CookieSettingsPage() {
                 <th className="py-3">Retention</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#e6dfd2] text-[#39455a]">
+            <tbody className="divide-y divide-[#e6dfd2] text-[#4a4237]">
               {TRACKER_INVENTORY.map((row) => (
                 <tr key={row.name}>
                   <td className="py-3 pr-4 font-mono text-[#94652c]">{row.name}</td>

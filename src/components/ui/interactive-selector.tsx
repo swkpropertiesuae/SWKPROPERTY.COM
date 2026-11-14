@@ -61,15 +61,15 @@ const InteractiveSelector = ({
   };
 
   return (
-    <div className="relative flex flex-col items-center justify-center py-12 bg-transparent font-sans text-[#0f2244]">
+    <div className="relative flex flex-col items-center justify-center py-12 bg-transparent font-sans text-[#17130e]">
       <div className="w-full max-w-3xl px-6 mb-8 text-center">
-        <p className="mb-2 text-xs font-bold uppercase tracking-[0.26em] text-[#0f2244]">
+        <p className="mb-2 text-xs font-bold uppercase tracking-[0.26em] text-[#17130e]">
           SWK Advisory Segments · RERA ORN 51517
         </p>
-        <h2 className="font-serif text-3xl md:text-5xl font-bold text-[#0f2244] mb-3 tracking-tight">
+        <h2 className="font-serif text-3xl md:text-5xl font-bold text-[#17130e] mb-3 tracking-tight">
           {heading}
         </h2>
-        <p className="text-base md:text-lg text-[#39455a] max-w-2xl mx-auto">
+        <p className="text-base md:text-lg text-[#4a4237] max-w-2xl mx-auto">
           {subheading}
         </p>
       </div>
@@ -88,14 +88,14 @@ const InteractiveSelector = ({
               borderStyle: "solid",
               borderColor:
                 activeIndex === index
-                  ? "rgba(15, 34, 68, 0.85)"
-                  : "rgba(15, 34, 68, 0.18)",
+                  ? "rgba(23,19,14, 0.85)"
+                  : "rgba(23,19,14, 0.18)",
               cursor: "pointer",
-              backgroundColor: "#0f2244",
+              backgroundColor: "#17130e",
               boxShadow:
                 activeIndex === index
-                  ? "0 20px 60px rgba(15,34,68,0.35)"
-                  : "0 10px 30px rgba(15,34,68,0.18)",
+                  ? "0 20px 60px rgba(23,19,14,0.35)"
+                  : "0 10px 30px rgba(23,19,14,0.18)",
               flex: activeIndex === index ? "6 1 0%" : "1 1 0%",
               zIndex: activeIndex === index ? 10 : 1,
             }}
@@ -117,13 +117,13 @@ const InteractiveSelector = ({
               style={{
                 background:
                   activeIndex === index
-                    ? "linear-gradient(to top, rgba(11,21,40,0.92) 0%, rgba(11,21,40,0.28) 55%, transparent 100%)"
-                    : "linear-gradient(to top, rgba(11,21,40,0.82) 0%, rgba(11,21,40,0.38) 100%)",
+                    ? "linear-gradient(to top, rgba(15,12,9,0.92) 0%, rgba(15,12,9,0.28) 55%, transparent 100%)"
+                    : "linear-gradient(to top, rgba(15,12,9,0.82) 0%, rgba(15,12,9,0.38) 100%)",
               }}
             />
 
             <div className="label absolute left-0 right-0 bottom-5 flex items-center justify-start h-14 z-10 pointer-events-none px-4 gap-3 w-full">
-              <div className="icon min-w-[44px] max-w-[44px] h-[44px] flex items-center justify-center rounded-full bg-[#0f2244]/90 backdrop-blur-md border border-white/35 flex-shrink-0">
+              <div className="icon min-w-[44px] max-w-[44px] h-[44px] flex items-center justify-center rounded-full bg-[#17130e]/90 backdrop-blur-md border border-white/35 flex-shrink-0">
                 {option.icon}
               </div>
               <div className="info text-white overflow-hidden">

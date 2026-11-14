@@ -293,7 +293,7 @@ export function FloatingChrome() {
         <div
           role="status"
           aria-live="polite"
-          className="fixed top-24 right-4 z-[85] flex items-center gap-2 rounded-full border border-[#94652c]/40 bg-white px-4 py-2.5 text-xs font-semibold text-[#0f2244] shadow-xl"
+          className="fixed top-24 right-4 z-[85] flex items-center gap-2 rounded-full border border-[#94652c]/40 bg-white px-4 py-2.5 text-xs font-semibold text-[#17130e] shadow-xl"
         >
           <CheckCircle2 className="h-4 w-4 text-[#2f5d3a]" />
           <span>{toastMessage}</span>
@@ -311,7 +311,7 @@ export function FloatingChrome() {
             animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
             exit={{ opacity: 0, y: -20, scale: 0.94, filter: "blur(4px)" }}
             transition={{ type: "spring", stiffness: 320, damping: 24 }}
-            className="fixed top-20 right-3 sm:right-5 z-[75] flex max-w-[calc(100vw-1.5rem)] sm:max-w-md items-center gap-3.5 overflow-hidden rounded-2xl border border-[#E0C1A3]/65 bg-[#0f2244]/95 p-3.5 text-white shadow-[0_22px_55px_rgba(15,34,68,0.65)] backdrop-blur-xl"
+            className="fixed top-20 right-3 sm:right-5 z-[75] flex max-w-[calc(100vw-1.5rem)] sm:max-w-md items-center gap-3.5 overflow-hidden rounded-2xl border border-[#E0C1A3]/65 bg-[#17130e]/95 p-3.5 text-white shadow-[0_22px_55px_rgba(23,19,14,0.65)] backdrop-blur-xl"
           >
             {/* Animated Shimmer Accent Bar */}
             <motion.div
@@ -374,12 +374,12 @@ export function FloatingChrome() {
 
       {/* 3. Cookie Consent Banner (§54 — Compact & Mobile Safe) */}
       {!cookieConsent.decided && (
-        <div className="fixed bottom-20 left-3 right-3 md:left-6 md:right-auto md:max-w-md z-50 rounded-3xl border border-[#e6dfd2] bg-white p-4 sm:p-5 text-[#0f2244] shadow-[0_24px_60px_rgba(15,34,68,0.18)]">
+        <div className="fixed bottom-20 left-3 right-3 md:left-6 md:right-auto md:max-w-md z-50 rounded-3xl border border-[#e6dfd2] bg-white p-4 sm:p-5 text-[#17130e] shadow-[0_24px_60px_rgba(23,19,14,0.18)]">
           <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-[#94652c]">
             <Cookie className="h-4 w-4" />
             Privacy &amp; Cookie Controls (UAE PDPL)
           </div>
-          <p className="mt-1.5 text-xs text-[#39455a] leading-relaxed">
+          <p className="mt-1.5 text-xs text-[#4a4237] leading-relaxed">
             We use essential cookies to keep your shortlist, currency, and language working. Read our{" "}
             <Link href="/cookies" className="font-semibold text-[#94652c] underline">
               Cookie Inventory
@@ -394,14 +394,14 @@ export function FloatingChrome() {
             <button
               type="button"
               onClick={() => updateCookieConsent({ analytics: true, preferences: true })}
-              className="rounded-full bg-[#0f2244] px-4 py-2 text-[11px] font-bold uppercase tracking-[0.16em] text-white hover:bg-[#94652c]"
+              className="rounded-full bg-[#17130e] px-4 py-2 text-[11px] font-bold uppercase tracking-[0.16em] text-white hover:bg-[#94652c]"
             >
               Accept All
             </button>
             <button
               type="button"
               onClick={() => updateCookieConsent({ analytics: false, preferences: true })}
-              className="rounded-full border border-[#e6dfd2] bg-[#faf7f2] px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.16em] text-[#0f2244] hover:border-[#94652c]"
+              className="rounded-full border border-[#e6dfd2] bg-[#faf7f2] px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.16em] text-[#17130e] hover:border-[#94652c]"
             >
               Essential Only
             </button>
@@ -418,7 +418,7 @@ export function FloatingChrome() {
           type="button"
           onClick={() => setAssistantOpen(!assistantOpen)}
           aria-label="Open SWK Property Concierge"
-          className="inline-flex h-11 items-center gap-2 rounded-full border border-[#e6dfd2] bg-white/95 px-3.5 sm:px-4 text-xs font-bold text-[#0f2244] shadow-lg backdrop-blur-md transition hover:border-[#94652c] hover:text-[#94652c]"
+          className="inline-flex h-11 items-center gap-2 rounded-full border border-[#e6dfd2] bg-white/95 px-3.5 sm:px-4 text-xs font-bold text-[#17130e] shadow-lg backdrop-blur-md transition hover:border-[#94652c] hover:text-[#94652c]"
         >
           <img
             src="/brand/swk-emblem-charcoal.svg"
@@ -443,9 +443,9 @@ export function FloatingChrome() {
 
       {/* 7. SWK AI Property Assistant & Live Handover Modal (§24) */}
       {assistantOpen && (
-        <div className="fixed bottom-20 right-3 sm:right-5 z-[80] flex h-[72dvh] max-h-[520px] w-[calc(100vw-1.5rem)] max-w-md flex-col overflow-hidden rounded-3xl border border-[#e6dfd2] bg-white text-[#0f2244] shadow-[0_24px_70px_rgba(15,34,68,0.28)]">
+        <div className="fixed bottom-20 right-3 sm:right-5 z-[80] flex h-[72dvh] max-h-[520px] w-[calc(100vw-1.5rem)] max-w-md flex-col overflow-hidden rounded-3xl border border-[#e6dfd2] bg-white text-[#17130e] shadow-[0_24px_70px_rgba(23,19,14,0.28)]">
           {/* Header with Official Brand Emblem */}
-          <div className="flex items-center justify-between border-b border-[#e6dfd2] bg-[#0f2244] px-5 py-4 text-white">
+          <div className="flex items-center justify-between border-b border-[#e6dfd2] bg-[#17130e] px-5 py-4 text-white">
             <div>
               <div className="flex items-center gap-2">
                 <img
@@ -486,8 +486,8 @@ export function FloatingChrome() {
                 <div
                   className={`max-w-[88%] whitespace-pre-line rounded-2xl px-4 py-3 leading-relaxed ${
                     m.role === "user"
-                      ? "bg-[#0f2244] text-white font-medium"
-                      : "border border-[#e6dfd2] bg-white text-[#0f2244] shadow-xs"
+                      ? "bg-[#17130e] text-white font-medium"
+                      : "border border-[#e6dfd2] bg-white text-[#17130e] shadow-xs"
                   }`}
                 >
                   {m.text}
@@ -511,7 +511,7 @@ export function FloatingChrome() {
 
             {/* Quick Prompt Chips */}
             <div className="pt-2">
-              <p className="mb-1.5 text-[10px] font-bold uppercase tracking-wider text-[#5f6a82]">
+              <p className="mb-1.5 text-[10px] font-bold uppercase tracking-wider text-[#786e60]">
                 Quick Priority Queries:
               </p>
               <div className="flex flex-wrap gap-1.5">
@@ -525,7 +525,7 @@ export function FloatingChrome() {
                     key={chip}
                     type="button"
                     onClick={() => setChatInput(chip)}
-                    className="rounded-full border border-[#e6dfd2] bg-white px-2.5 py-1 text-[11px] font-medium text-[#0f2244] hover:border-[#94652c]"
+                    className="rounded-full border border-[#e6dfd2] bg-white px-2.5 py-1 text-[11px] font-medium text-[#17130e] hover:border-[#94652c]"
                   >
                     {chip}
                   </button>
@@ -536,7 +536,7 @@ export function FloatingChrome() {
 
           {/* Human Handover Bar */}
           <div className="flex items-center justify-between border-t border-[#e6dfd2] bg-[#f4efe6] px-4 py-2 text-[11px]">
-            <span className="text-[#39455a] font-medium">Need a human consultant?</span>
+            <span className="text-[#4a4237] font-medium">Need a human consultant?</span>
             <div className="flex items-center gap-2">
               <a
                 href={SITE.whatsappUrl}
@@ -548,7 +548,7 @@ export function FloatingChrome() {
                 <MessageCircle className="h-3.5 w-3.5" />
                 WhatsApp
               </a>
-              <span className="text-[#5f6a82]">·</span>
+              <span className="text-[#786e60]">·</span>
               <a
                 href={`tel:${SITE.phoneRaw}`}
                 onClick={() => trackEvent("phone_click", { location: "ai_assistant_handover" })}
@@ -567,12 +567,12 @@ export function FloatingChrome() {
               value={chatInput}
               onChange={(e) => setChatInput(e.target.value)}
               placeholder="Ask about Imtiaz Kore, Azizi Florence, or DLD fees..."
-              className="flex-1 rounded-xl border border-[#e6dfd2] bg-[#faf7f2] px-3.5 py-2 text-xs text-[#0f2244] placeholder:text-[#5f6a82] focus:border-[#94652c] focus:outline-none"
+              className="flex-1 rounded-xl border border-[#e6dfd2] bg-[#faf7f2] px-3.5 py-2 text-xs text-[#17130e] placeholder:text-[#786e60] focus:border-[#94652c] focus:outline-none"
             />
             <button
               type="submit"
               aria-label="Send message"
-              className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-[#0f2244] text-white hover:bg-[#94652c]"
+              className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-[#17130e] text-white hover:bg-[#94652c]"
             >
               <Send className="h-4 w-4" />
             </button>
@@ -582,21 +582,21 @@ export function FloatingChrome() {
 
       {/* 8. Saved Shortlist & Side-by-Side Comparison Drawer (§46) */}
       {drawerOpen && (
-        <div className="fixed inset-0 z-[90] flex justify-end bg-[#0f2244]/50 backdrop-blur-xs">
-          <div className="flex h-full w-full max-w-3xl flex-col bg-white text-[#0f2244] border-l border-[#e6dfd2] shadow-2xl">
+        <div className="fixed inset-0 z-[90] flex justify-end bg-[#17130e]/50 backdrop-blur-xs">
+          <div className="flex h-full w-full max-w-3xl flex-col bg-white text-[#17130e] border-l border-[#e6dfd2] shadow-2xl">
             <div className="flex items-center justify-between border-b border-[#e6dfd2] bg-[#faf7f2] px-5 sm:px-6 py-4 sm:py-5">
               <div>
                 <p className="text-[11px] font-bold uppercase tracking-[0.24em] text-[#94652c]">
                   SWK Investor Workspace
                 </p>
-                <h3 className="font-serif text-xl sm:text-2xl font-bold text-[#0f2244]">
+                <h3 className="font-serif text-xl sm:text-2xl font-bold text-[#17130e]">
                   Saved Shortlist ({savedListings.length}) &amp; Comparison ({comparedListings.length}/4)
                 </h3>
               </div>
               <button
                 type="button"
                 onClick={() => setDrawerOpen(false)}
-                className="rounded-full border border-[#e6dfd2] bg-white p-2 text-[#39455a] hover:text-[#0f2244]"
+                className="rounded-full border border-[#e6dfd2] bg-white p-2 text-[#4a4237] hover:text-[#17130e]"
               >
                 <X className="h-5 w-5" />
               </button>
@@ -622,13 +622,13 @@ export function FloatingChrome() {
                 </div>
 
                 {comparedListings.length === 0 ? (
-                  <div className="rounded-2xl border border-[#e6dfd2] bg-[#faf7f2] p-6 text-center text-xs text-[#39455a]">
+                  <div className="rounded-2xl border border-[#e6dfd2] bg-[#faf7f2] p-6 text-center text-xs text-[#4a4237]">
                     Click the scale icon on any property card to compare prices, service charges, payment plans, and DLD permit numbers side by side.
                   </div>
                 ) : (
                   <div className="overflow-x-auto rounded-2xl border border-[#e6dfd2]">
                     <table className="w-full text-left text-xs">
-                      <thead className="bg-[#faf7f2] text-[#0f2244]">
+                      <thead className="bg-[#faf7f2] text-[#17130e]">
                         <tr>
                           <th className="p-3 font-bold">Metric</th>
                           {comparedListings.map((item) => (
@@ -644,7 +644,7 @@ export function FloatingChrome() {
                                 <button
                                   type="button"
                                   onClick={() => toggleCompare(item.slug)}
-                                  className="text-[#5f6a82] hover:text-[#0f2244]"
+                                  className="text-[#786e60] hover:text-[#17130e]"
                                 >
                                   <X className="h-3.5 w-3.5" />
                                 </button>
@@ -655,15 +655,15 @@ export function FloatingChrome() {
                       </thead>
                       <tbody className="divide-y divide-[#e6dfd2]">
                         <tr>
-                          <td className="p-3 text-[#5f6a82] font-medium">Price</td>
+                          <td className="p-3 text-[#786e60] font-medium">Price</td>
                           {comparedListings.map((item) => (
-                            <td key={item.slug} className="p-3 font-bold text-[#0f2244]">
+                            <td key={item.slug} className="p-3 font-bold text-[#17130e]">
                               {formatPrice(item.priceAed)}
                             </td>
                           ))}
                         </tr>
                         <tr>
-                          <td className="p-3 text-[#5f6a82] font-medium">Community &amp; Developer</td>
+                          <td className="p-3 text-[#786e60] font-medium">Community &amp; Developer</td>
                           {comparedListings.map((item) => (
                             <td key={item.slug} className="p-3">
                               {item.community} · {item.developer}
@@ -671,7 +671,7 @@ export function FloatingChrome() {
                           ))}
                         </tr>
                         <tr>
-                          <td className="p-3 text-[#5f6a82] font-medium">Beds / Baths / Area</td>
+                          <td className="p-3 text-[#786e60] font-medium">Beds / Baths / Area</td>
                           {comparedListings.map((item) => (
                             <td key={item.slug} className="p-3">
                               {item.bedrooms} BR · {item.bathrooms} Bath · {formatArea(item.areaSqFt)}
@@ -679,7 +679,7 @@ export function FloatingChrome() {
                           ))}
                         </tr>
                         <tr>
-                          <td className="p-3 text-[#5f6a82] font-medium">Handover / Plan</td>
+                          <td className="p-3 text-[#786e60] font-medium">Handover / Plan</td>
                           {comparedListings.map((item) => (
                             <td key={item.slug} className="p-3">
                               {item.paymentPlan || item.handover}
@@ -698,7 +698,7 @@ export function FloatingChrome() {
                   Saved Properties Shortlist
                 </h4>
                 {savedListings.length === 0 ? (
-                  <div className="rounded-2xl border border-[#e6dfd2] bg-[#faf7f2] p-6 text-center text-xs text-[#39455a]">
+                  <div className="rounded-2xl border border-[#e6dfd2] bg-[#faf7f2] p-6 text-center text-xs text-[#4a4237]">
                     No properties saved yet. Tap the heart icon on any listing to save it here.
                   </div>
                 ) : (
@@ -712,19 +712,19 @@ export function FloatingChrome() {
                           <Link
                             href={`/properties/${item.slug}`}
                             onClick={() => setDrawerOpen(false)}
-                            className="block truncate font-serif text-base font-bold text-[#0f2244] hover:text-[#94652c]"
+                            className="block truncate font-serif text-base font-bold text-[#17130e] hover:text-[#94652c]"
                           >
                             {item.title}
                           </Link>
                           <p className="text-xs font-semibold text-[#94652c]">{formatPrice(item.priceAed)}</p>
-                          <p className="text-[11px] text-[#5f6a82]">
+                          <p className="text-[11px] text-[#786e60]">
                             {item.community} · Ref {item.reference}
                           </p>
                         </div>
                         <button
                           type="button"
                           onClick={() => toggleSaved(item.slug)}
-                          className="rounded-full p-2 text-[#5f6a82] hover:text-[#a52437]"
+                          className="rounded-full p-2 text-[#786e60] hover:text-[#a52437]"
                           title="Remove"
                         >
                           <Trash2 className="h-4 w-4" />
@@ -737,14 +737,14 @@ export function FloatingChrome() {
             </div>
 
             <div className="flex flex-wrap items-center justify-between gap-3 border-t border-[#e6dfd2] bg-[#faf7f2] px-5 sm:px-6 py-4">
-              <span className="text-xs text-[#39455a] flex items-center gap-1.5 font-medium">
+              <span className="text-xs text-[#4a4237] flex items-center gap-1.5 font-medium">
                 <ShieldCheck className="h-4 w-4 text-[#94652c]" />
                 Send your shortlist to an SWK specialist for DLD cost sheets
               </span>
               <Link
                 href="/contact"
                 onClick={() => setDrawerOpen(false)}
-                className="rounded-full bg-[#0f2244] px-5 py-2.5 text-xs font-bold uppercase tracking-[0.16em] text-white hover:bg-[#94652c]"
+                className="rounded-full bg-[#17130e] px-5 py-2.5 text-xs font-bold uppercase tracking-[0.16em] text-white hover:bg-[#94652c]"
               >
                 Request Shortlist Pack
               </Link>
