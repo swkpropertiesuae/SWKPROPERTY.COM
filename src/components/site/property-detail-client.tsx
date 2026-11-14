@@ -87,7 +87,7 @@ export function PropertyDetailClient({
   return (
     <div className="mx-auto max-w-7xl px-4 py-10">
       {/* Breadcrumb & Top Utility Bar */}
-      <div className="mb-6 flex flex-wrap items-center justify-between gap-3 text-xs text-[#5f6a82]">
+      <div className="mb-6 flex flex-wrap items-center justify-between gap-3 text-xs text-[#786e60]">
         <nav aria-label="Breadcrumb" className="flex flex-wrap items-center gap-2">
           <Link href="/" className="hover:text-[#94652c]">Home</Link>
           <span>/</span>
@@ -106,8 +106,8 @@ export function PropertyDetailClient({
             onClick={() => toggleSaved(listing.slug)}
             className={`inline-flex items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-xs font-medium ${
               isSaved
-                ? "border-[#94652c] bg-[#0f2244] text-white"
-                : "border-[#e6dfd2] bg-[#faf7f2] text-[#0f2244]"
+                ? "border-[#94652c] bg-[#17130e] text-white"
+                : "border-[#e6dfd2] bg-[#faf7f2] text-[#17130e]"
             }`}
           >
             <Heart className="h-3.5 w-3.5" fill={isSaved ? "currentColor" : "none"} />
@@ -118,8 +118,8 @@ export function PropertyDetailClient({
             onClick={() => toggleCompare(listing.slug)}
             className={`inline-flex items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-xs font-medium ${
               isCompared
-                ? "border-[#94652c] bg-[#0f2244] text-white"
-                : "border-[#e6dfd2] bg-[#faf7f2] text-[#0f2244]"
+                ? "border-[#94652c] bg-[#17130e] text-white"
+                : "border-[#e6dfd2] bg-[#faf7f2] text-[#17130e]"
             }`}
           >
             <Scale className="h-3.5 w-3.5" />
@@ -128,7 +128,7 @@ export function PropertyDetailClient({
           <button
             type="button"
             onClick={handleShare}
-            className="inline-flex items-center gap-1.5 rounded-full border border-[#e6dfd2] bg-[#faf7f2] px-3.5 py-1.5 text-xs font-medium text-[#0f2244] hover:border-[#94652c]"
+            className="inline-flex items-center gap-1.5 rounded-full border border-[#e6dfd2] bg-[#faf7f2] px-3.5 py-1.5 text-xs font-medium text-[#17130e] hover:border-[#94652c]"
           >
             <Share2 className="h-3.5 w-3.5 text-[#94652c]" />
             Share Link
@@ -141,7 +141,7 @@ export function PropertyDetailClient({
         <div className="flex flex-wrap items-start justify-between gap-6">
           <div className="max-w-3xl space-y-2.5">
             <div className="flex flex-wrap items-center gap-2">
-              <span className="rounded-full bg-[#0f2244] px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-white">
+              <span className="rounded-full bg-[#17130e] px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-white">
                 {listing.purpose === "buy"
                   ? "For Sale · Secondary Market"
                   : listing.purpose === "rent"
@@ -162,12 +162,12 @@ export function PropertyDetailClient({
               )}
             </div>
 
-            <h1 className="font-serif text-3xl md:text-5xl font-semibold text-[#0f2244]">
+            <h1 className="font-serif text-3xl md:text-5xl font-semibold text-[#17130e]">
               {listing.title}
             </h1>
-            <p className="text-sm md:text-base text-[#39455a]">{listing.subtitle}</p>
+            <p className="text-sm md:text-base text-[#4a4237]">{listing.subtitle}</p>
 
-            <div className="flex flex-wrap items-center gap-4 pt-1 text-xs text-[#39455a]">
+            <div className="flex flex-wrap items-center gap-4 pt-1 text-xs text-[#4a4237]">
               <span className="inline-flex items-center gap-1.5">
                 <MapPin className="h-4 w-4 text-[#94652c]" />
                 {listing.building} · {listing.community}, Dubai
@@ -188,10 +188,10 @@ export function PropertyDetailClient({
                 ? "Indicative Launch Price"
                 : "Asking Price"}
             </div>
-            <div className="mt-1 font-serif text-3xl font-bold text-[#0f2244]">
+            <div className="mt-1 font-serif text-3xl font-bold text-[#17130e]">
               {formatPrice(listing.priceAed)}
             </div>
-            <div className="mt-1 text-xs text-[#5f6a82]">
+            <div className="mt-1 text-xs text-[#786e60]">
               AED {Math.round(listing.priceAed / listing.areaSqFt).toLocaleString("en-US")} per sq ft · Service Charge ~AED {listing.serviceChargePerSqFt}/sq ft
             </div>
           </div>
@@ -200,36 +200,36 @@ export function PropertyDetailClient({
         {/* Key Specs Bar */}
         <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-6 border-t border-[#e6dfd2] pt-5 text-xs">
           <div className="rounded-2xl border border-[#e6dfd2] bg-[#faf7f2] p-3">
-            <span className="text-[#5f6a82] block">Property Type</span>
-            <strong className="mt-1 block text-sm text-[#0f2244]">{listing.propertyType}</strong>
+            <span className="text-[#786e60] block">Property Type</span>
+            <strong className="mt-1 block text-sm text-[#17130e]">{listing.propertyType}</strong>
           </div>
           <div className="rounded-2xl border border-[#e6dfd2] bg-[#faf7f2] p-3">
-            <span className="text-[#5f6a82] block">Bedrooms</span>
-            <strong className="mt-1 flex items-center gap-1.5 text-sm text-[#0f2244]">
+            <span className="text-[#786e60] block">Bedrooms</span>
+            <strong className="mt-1 flex items-center gap-1.5 text-sm text-[#17130e]">
               <BedDouble className="h-4 w-4 text-[#94652c]" />
               {listing.bedrooms === 0 ? "Studio" : `${listing.bedrooms} Bedrooms`}
             </strong>
           </div>
           <div className="rounded-2xl border border-[#e6dfd2] bg-[#faf7f2] p-3">
-            <span className="text-[#5f6a82] block">Bathrooms</span>
-            <strong className="mt-1 flex items-center gap-1.5 text-sm text-[#0f2244]">
+            <span className="text-[#786e60] block">Bathrooms</span>
+            <strong className="mt-1 flex items-center gap-1.5 text-sm text-[#17130e]">
               <Bath className="h-4 w-4 text-[#94652c]" />
               {listing.bathrooms} Bathrooms
             </strong>
           </div>
           <div className="rounded-2xl border border-[#e6dfd2] bg-[#faf7f2] p-3">
-            <span className="text-[#5f6a82] block">Built-Up Area</span>
-            <strong className="mt-1 flex items-center gap-1.5 text-sm text-[#0f2244]">
+            <span className="text-[#786e60] block">Built-Up Area</span>
+            <strong className="mt-1 flex items-center gap-1.5 text-sm text-[#17130e]">
               <Maximize2 className="h-4 w-4 text-[#94652c]" />
               {formatArea(listing.areaSqFt)}
             </strong>
           </div>
           <div className="rounded-2xl border border-[#e6dfd2] bg-[#faf7f2] p-3">
-            <span className="text-[#5f6a82] block">Furnishing</span>
-            <strong className="mt-1 block text-sm text-[#0f2244]">{listing.furnished}</strong>
+            <span className="text-[#786e60] block">Furnishing</span>
+            <strong className="mt-1 block text-sm text-[#17130e]">{listing.furnished}</strong>
           </div>
           <div className="rounded-2xl border border-[#e6dfd2] bg-[#faf7f2] p-3">
-            <span className="text-[#5f6a82] block">Completion / Handover</span>
+            <span className="text-[#786e60] block">Completion / Handover</span>
             <strong className="mt-1 flex items-center gap-1 text-sm text-[#94652c]">
               <Calendar className="h-3.5 w-3.5" />
               {listing.completion}
@@ -277,10 +277,10 @@ export function PropertyDetailClient({
         <div className="lg:col-span-7 space-y-8">
           {/* Honest Description */}
           <section className="rounded-3xl border border-[#e6dfd2] bg-white p-6 md:p-8">
-            <h2 className="font-serif text-2xl md:text-3xl font-semibold text-[#0f2244]">
+            <h2 className="font-serif text-2xl md:text-3xl font-semibold text-[#17130e]">
               Property Overview & Verification Notes
             </h2>
-            <div className="mt-4 space-y-4 text-sm md:text-base text-[#39455a] leading-relaxed">
+            <div className="mt-4 space-y-4 text-sm md:text-base text-[#4a4237] leading-relaxed">
               {listing.description.map((para, idx) => (
                 <p key={idx}>{para}</p>
               ))}
@@ -288,31 +288,31 @@ export function PropertyDetailClient({
 
             <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-3 border-t border-[#e6dfd2] pt-5 text-xs">
               <div>
-                <span className="text-[#5f6a82]">Handover / Availability:</span>{" "}
-                <strong className="text-[#0f2244]">{listing.handover}</strong>
+                <span className="text-[#786e60]">Handover / Availability:</span>{" "}
+                <strong className="text-[#17130e]">{listing.handover}</strong>
               </div>
               {listing.paymentPlan && (
                 <div>
-                  <span className="text-[#5f6a82]">Payment Plan:</span>{" "}
+                  <span className="text-[#786e60]">Payment Plan:</span>{" "}
                   <strong className="text-[#94652c]">{listing.paymentPlan}</strong>
                 </div>
               )}
               <div>
-                <span className="text-[#5f6a82]">Parking Allocation:</span>{" "}
-                <strong className="text-[#0f2244]">{listing.parkingSpaces} Covered Spaces</strong>
+                <span className="text-[#786e60]">Parking Allocation:</span>{" "}
+                <strong className="text-[#17130e]">{listing.parkingSpaces} Covered Spaces</strong>
               </div>
               <div>
-                <span className="text-[#5f6a82]">Pet Policy:</span>{" "}
-                <strong className="text-[#0f2244]">{listing.petPolicy}</strong>
+                <span className="text-[#786e60]">Pet Policy:</span>{" "}
+                <strong className="text-[#17130e]">{listing.petPolicy}</strong>
               </div>
               <div>
-                <span className="text-[#5f6a82]">Verified Views:</span>{" "}
+                <span className="text-[#786e60]">Verified Views:</span>{" "}
                 <strong className="text-[#94652c]">{listing.views.join(" · ")}</strong>
               </div>
               {listing.metroStation && (
                 <div>
-                  <span className="text-[#5f6a82]">Nearest Rail / Metro:</span>{" "}
-                  <strong className="text-[#0f2244]">{listing.metroStation}</strong>
+                  <span className="text-[#786e60]">Nearest Rail / Metro:</span>{" "}
+                  <strong className="text-[#17130e]">{listing.metroStation}</strong>
                 </div>
               )}
             </div>
@@ -325,7 +325,7 @@ export function PropertyDetailClient({
                 <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#94652c]">
                   Architectural Layout & Suite Dimensions
                 </p>
-                <h2 className="mt-1 font-serif text-2xl font-semibold text-[#0f2244]">
+                <h2 className="mt-1 font-serif text-2xl font-semibold text-[#17130e]">
                   Floor Plan: {listing.floorPlan.label}
                 </h2>
               </div>
@@ -336,19 +336,19 @@ export function PropertyDetailClient({
 
             <div className="mt-5 grid grid-cols-3 gap-3 text-center text-xs">
               <div className="rounded-2xl border border-[#e6dfd2] bg-[#faf7f2] p-3">
-                <span className="text-[#5f6a82] block">Internal Suite Area</span>
-                <strong className="mt-1 block text-sm text-[#0f2244]">
+                <span className="text-[#786e60] block">Internal Suite Area</span>
+                <strong className="mt-1 block text-sm text-[#17130e]">
                   {formatArea(listing.floorPlan.internalSqFt)}
                 </strong>
               </div>
               <div className="rounded-2xl border border-[#e6dfd2] bg-[#faf7f2] p-3">
-                <span className="text-[#5f6a82] block">Balcony / Terrace</span>
-                <strong className="mt-1 block text-sm text-[#0f2244]">
+                <span className="text-[#786e60] block">Balcony / Terrace</span>
+                <strong className="mt-1 block text-sm text-[#17130e]">
                   {formatArea(listing.floorPlan.balconySqFt)}
                 </strong>
               </div>
               <div className="rounded-2xl border border-[#e6dfd2] bg-[#faf7f2] p-3">
-                <span className="text-[#5f6a82] block">Floor Level</span>
+                <span className="text-[#786e60] block">Floor Level</span>
                 <strong className="mt-1 block text-sm text-[#94652c]">
                   {listing.floorLevel || "Mid-High"}
                 </strong>
@@ -366,8 +366,8 @@ export function PropertyDetailClient({
                 <tbody className="divide-y divide-[#e6dfd2]">
                   {listing.floorPlan.rooms.map((rm) => (
                     <tr key={rm.name}>
-                      <td className="p-3 font-medium text-[#0f2244]">{rm.name}</td>
-                      <td className="p-3 font-mono text-[#39455a]">{rm.dimensions}</td>
+                      <td className="p-3 font-medium text-[#17130e]">{rm.name}</td>
+                      <td className="p-3 font-mono text-[#4a4237]">{rm.dimensions}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -378,14 +378,14 @@ export function PropertyDetailClient({
           {/* §07 Amenities, Features & Accessibility */}
           <section className="rounded-3xl border border-[#e6dfd2] bg-white p-6 md:p-8 space-y-6">
             <div>
-              <h2 className="font-serif text-2xl font-semibold text-[#0f2244]">
+              <h2 className="font-serif text-2xl font-semibold text-[#17130e]">
                 Key Features, Building Amenities & Accessibility
               </h2>
               <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs">
                 {[...listing.features, ...listing.amenities].map((item) => (
                   <div
                     key={item}
-                    className="flex items-center gap-2 rounded-xl border border-[#e6dfd2] bg-[#faf7f2] px-3.5 py-2.5 text-[#39455a]"
+                    className="flex items-center gap-2 rounded-xl border border-[#e6dfd2] bg-[#faf7f2] px-3.5 py-2.5 text-[#4a4237]"
                   >
                     <CheckCircle2 className="h-4 w-4 shrink-0 text-[#94652c]" />
                     <span>{item}</span>
@@ -398,7 +398,7 @@ export function PropertyDetailClient({
               <h3 className="text-xs font-semibold uppercase tracking-[0.2em] text-[#94652c]">
                 Step-Free & Accessibility Features
               </h3>
-              <ul className="mt-2 flex flex-wrap gap-2 text-xs text-[#39455a]">
+              <ul className="mt-2 flex flex-wrap gap-2 text-xs text-[#4a4237]">
                 {listing.accessibility.map((acc) => (
                   <li
                     key={acc}
@@ -419,47 +419,47 @@ export function PropertyDetailClient({
                   <ShieldCheck className="h-4 w-4" />
                   Dubai Land Department (DLD) & RERA Compliance
                 </div>
-                <h2 className="font-serif text-2xl font-semibold text-[#0f2244]">
+                <h2 className="font-serif text-2xl font-semibold text-[#17130e]">
                   Trakheesi Permit & Madmoun QR Verification
                 </h2>
                 {isPermitVerified(listing) ? (
                   <>
-                    <p className="text-xs text-[#39455a] leading-relaxed">
+                    <p className="text-xs text-[#4a4237] leading-relaxed">
                       This listing is advertised under the Dubai Land Department Trakheesi permit below. Scan the DLD QR code on our portal listings or verify the permit number on dubailand.gov.ae.
                     </p>
                     <div className="mt-4 grid grid-cols-2 sm:grid-cols-3 gap-3 pt-2 text-xs">
                       <div className="rounded-xl border border-[#e6dfd2] bg-[#faf7f2] p-3">
-                        <span className="text-[#5f6a82] block">Trakheesi / Project Permit</span>
+                        <span className="text-[#786e60] block">Trakheesi / Project Permit</span>
                         <strong className="mt-0.5 block font-mono text-sm text-[#94652c]">
                           #{listing.dld.permitNumber}
                         </strong>
                       </div>
                       <div className="rounded-xl border border-[#e6dfd2] bg-[#faf7f2] p-3">
-                        <span className="text-[#5f6a82] block">Brokerage RERA ORN</span>
-                        <strong className="mt-0.5 block font-mono text-sm text-[#0f2244]">
+                        <span className="text-[#786e60] block">Brokerage RERA ORN</span>
+                        <strong className="mt-0.5 block font-mono text-sm text-[#17130e]">
                           {listing.dld.orn}
                         </strong>
                       </div>
                       <div className="rounded-xl border border-[#e6dfd2] bg-[#faf7f2] p-3">
-                        <span className="text-[#5f6a82] block">Broker BRN</span>
-                        <strong className="mt-0.5 block font-mono text-sm text-[#0f2244]">
+                        <span className="text-[#786e60] block">Broker BRN</span>
+                        <strong className="mt-0.5 block font-mono text-sm text-[#17130e]">
                           {listing.dld.brn}
                         </strong>
                       </div>
                       <div className="rounded-xl border border-[#e6dfd2] bg-[#faf7f2] p-3">
-                        <span className="text-[#5f6a82] block">Permit Validity</span>
-                        <strong className="mt-0.5 block text-[#0f2244]">
+                        <span className="text-[#786e60] block">Permit Validity</span>
+                        <strong className="mt-0.5 block text-[#17130e]">
                           Until {listing.dld.permitExpiry}
                         </strong>
                       </div>
                       <div className="rounded-xl border border-[#e6dfd2] bg-[#faf7f2] p-3">
-                        <span className="text-[#5f6a82] block">Last Checked Date</span>
+                        <span className="text-[#786e60] block">Last Checked Date</span>
                         <strong className="mt-0.5 block text-emerald-700">
                           {listing.lastChecked}
                         </strong>
                       </div>
                       <div className="rounded-xl border border-[#e6dfd2] bg-[#faf7f2] p-3">
-                        <span className="text-[#5f6a82] block">Madmoun Reference</span>
+                        <span className="text-[#786e60] block">Madmoun Reference</span>
                         <strong className="mt-0.5 block font-mono text-[11px] text-[#94652c]">
                           {listing.dld.madmounQrId}
                         </strong>
@@ -493,7 +493,7 @@ export function PropertyDetailClient({
                   <button
                     type="button"
                     onClick={() => setReportOpen((v) => !v)}
-                    className="inline-flex items-center gap-1.5 text-[#39455a] hover:text-amber-800"
+                    className="inline-flex items-center gap-1.5 text-[#4a4237] hover:text-amber-800"
                   >
                     <AlertTriangle className="h-3.5 w-3.5 text-amber-700" />
                     Report an Incorrect Listing
@@ -519,7 +519,7 @@ export function PropertyDetailClient({
                       <select
                         value={reportReason}
                         onChange={(e) => setReportReason(e.target.value)}
-                        className="rounded-xl border border-[#e6dfd2] bg-[#faf7f2] px-3 py-2 text-[#0f2244]"
+                        className="rounded-xl border border-[#e6dfd2] bg-[#faf7f2] px-3 py-2 text-[#17130e]"
                       >
                         <option>Price or availability update needed</option>
                         <option>Property has been sold or leased</option>
@@ -531,12 +531,12 @@ export function PropertyDetailClient({
                         placeholder="Optional note or your contact email..."
                         value={reportNote}
                         onChange={(e) => setReportNote(e.target.value)}
-                        className="rounded-xl border border-[#e6dfd2] bg-[#faf7f2] px-3 py-2 text-[#0f2244]"
+                        className="rounded-xl border border-[#e6dfd2] bg-[#faf7f2] px-3 py-2 text-[#17130e]"
                       />
                     </div>
                     <button
                       type="submit"
-                      className="rounded-full bg-[#0f2244] px-4 py-2 text-[11px] font-bold uppercase tracking-wider text-white"
+                      className="rounded-full bg-[#17130e] px-4 py-2 text-[11px] font-bold uppercase tracking-wider text-white"
                     >
                       Submit Compliance Report
                     </button>
@@ -552,10 +552,10 @@ export function PropertyDetailClient({
           <section className="overflow-hidden rounded-3xl border border-[#e6dfd2] bg-white p-6">
             <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
               <div>
-                <h2 className="font-serif text-2xl font-semibold text-[#0f2244]">
+                <h2 className="font-serif text-2xl font-semibold text-[#17130e]">
                   Location & Neighbourhood Connectivity: {listing.community}
                 </h2>
-                <p className="text-xs text-[#5f6a82]">
+                <p className="text-xs text-[#786e60]">
                   Coordinates: {listing.lat.toFixed(4)}° N, {listing.lng.toFixed(4)}° E
                 </p>
               </div>
@@ -584,16 +584,16 @@ export function PropertyDetailClient({
                 <span className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#94652c]">
                   Assigned Mandate Specialist
                 </span>
-                <h3 className="mt-1 font-serif text-2xl font-semibold text-[#0f2244]">
+                <h3 className="mt-1 font-serif text-2xl font-semibold text-[#17130e]">
                   <Link href={`/agents/${listing.agentSlug}`} className="hover:text-[#94652c]">
                     {listing.agentName}
                   </Link>
                 </h3>
-                <p className="text-xs text-[#39455a]">
+                <p className="text-xs text-[#4a4237]">
                   {listing.agentRole}
                   {isPermitVerified(listing) ? ` · BRN ${listing.dld.brn}` : ""} · ORN {SITE.reraOrn}
                 </p>
-                <p className="mt-1 text-[11px] text-[#5f6a82]">
+                <p className="mt-1 text-[11px] text-[#786e60]">
                   Languages: {listing.agentLanguages.join(", ")}
                 </p>
               </div>
@@ -629,7 +629,7 @@ export function PropertyDetailClient({
                     propertyRef: listing.reference,
                   })
                 }
-                className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#e6dfd2] bg-[#faf7f2] px-4 py-3 text-xs font-semibold uppercase tracking-[0.14em] text-[#0f2244] hover:border-[#94652c]"
+                className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#e6dfd2] bg-[#faf7f2] px-4 py-3 text-xs font-semibold uppercase tracking-[0.14em] text-[#17130e] hover:border-[#94652c]"
               >
                 <Phone className="h-4 w-4 text-[#94652c]" />
                 Call Direct
@@ -661,7 +661,7 @@ export function PropertyDetailClient({
               <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#94652c]">
                 Related Verified Inventory
               </p>
-              <h2 className="mt-1 font-serif text-3xl font-semibold text-[#0f2244]">
+              <h2 className="mt-1 font-serif text-3xl font-semibold text-[#17130e]">
                 Similar Properties in Dubai
               </h2>
             </div>

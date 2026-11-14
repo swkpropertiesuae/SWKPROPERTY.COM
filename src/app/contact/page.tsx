@@ -31,7 +31,7 @@ const CORRIDOR_DRIVE_TIMES = [
 
 export default function ContactPage() {
   return (
-    <div className="min-h-screen bg-[#faf7f2] text-[#0f2244]">
+    <div className="min-h-screen bg-[#faf7f2] text-[#17130e]">
       <JsonLd
         id="ld-contact-breadcrumb"
         data={breadcrumbSchema([
@@ -77,7 +77,7 @@ export default function ContactPage() {
                   <span className="text-xs font-bold uppercase tracking-[0.2em] text-[#94652c] block">
                     Private Consultation Suite · Office No 54
                   </span>
-                  <span className="text-sm font-semibold text-[#0f2244]">
+                  <span className="text-sm font-semibold text-[#17130e]">
                     27th Floor, Al Saqr Business Tower, Sheikh Zayed Road
                   </span>
                 </div>
@@ -88,7 +88,7 @@ export default function ContactPage() {
             </div>
 
             <div className="rounded-3xl border border-[#e6dfd2] bg-white p-7 space-y-5 shadow-sm">
-              <h2 className="font-serif text-2xl md:text-3xl font-semibold text-[#0f2244]">
+              <h2 className="font-serif text-2xl md:text-3xl font-semibold text-[#17130e]">
                 Direct Office Coordinates
               </h2>
 
@@ -98,7 +98,7 @@ export default function ContactPage() {
                   <div className="text-xs font-bold uppercase tracking-[0.18em] text-[#94652c]">
                     Dubai Headquarters
                   </div>
-                  <div className="mt-1 font-medium text-[#0f2244]">{SITE.address.full}</div>
+                  <div className="mt-1 font-medium text-[#17130e]">{SITE.address.full}</div>
                 </div>
               </div>
 
@@ -111,7 +111,7 @@ export default function ContactPage() {
                   <div className="mt-1 flex flex-wrap gap-3">
                     <a
                       href={`tel:${SITE.phoneTel}`}
-                      className="font-semibold text-[#0f2244] hover:text-[#94652c]"
+                      className="font-semibold text-[#17130e] hover:text-[#94652c]"
                     >
                       {SITE.phone}
                     </a>
@@ -136,7 +136,7 @@ export default function ContactPage() {
                   </div>
                   <a
                     href={`mailto:${SITE.email}`}
-                    className="mt-1 block font-semibold text-[#0f2244] hover:text-[#94652c]"
+                    className="mt-1 block font-semibold text-[#17130e] hover:text-[#94652c]"
                   >
                     {SITE.email}
                   </a>
@@ -149,8 +149,8 @@ export default function ContactPage() {
                   <div className="text-xs font-bold uppercase tracking-[0.18em] text-[#94652c]">
                     Business Hours (Asia/Dubai · GST / UTC+4)
                   </div>
-                  <div className="mt-1 text-[#39455a]">{SITE.hours.full}</div>
-                  <div className="text-xs text-[#5f6a82]">
+                  <div className="mt-1 text-[#4a4237]">{SITE.hours.full}</div>
+                  <div className="text-xs text-[#786e60]">
                     Private weekend viewings available by advance appointment.
                   </div>
                 </div>
@@ -166,7 +166,7 @@ export default function ContactPage() {
                   <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#94652c]">
                     Central Dubai Location
                   </span>
-                  <h3 className="font-serif text-xl font-semibold text-[#0f2244]">
+                  <h3 className="font-serif text-xl font-semibold text-[#17130e]">
                     Travel Times From Al Saqr Business Tower
                   </h3>
                 </div>
@@ -182,9 +182,9 @@ export default function ContactPage() {
               <div className="divide-y divide-[#e6dfd2]">
                 {CORRIDOR_DRIVE_TIMES.map((row) => (
                   <div key={row.destination} className="flex items-center justify-between py-2.5 text-xs">
-                    <span className="font-medium text-[#0f2244]">{row.destination}</span>
+                    <span className="font-medium text-[#17130e]">{row.destination}</span>
                     <div className="flex items-center gap-2 shrink-0">
-                      <span className="text-[#5f6a82]">{row.mode}</span>
+                      <span className="text-[#786e60]">{row.mode}</span>
                       <span className="rounded-full bg-[#faf7f2] border border-[#e6dfd2] px-2.5 py-0.5 font-bold text-[#94652c]">
                         {row.time}
                       </span>

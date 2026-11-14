@@ -23,7 +23,7 @@ export const metadata: Metadata = buildMetadata({
 
 export default function InsightsPage() {
   return (
-    <div className="min-h-screen bg-[#faf7f2] text-[#0f2244]">
+    <div className="min-h-screen bg-[#faf7f2] text-[#17130e]">
       <JsonLd
         id="ld-insights-breadcrumb"
         data={breadcrumbSchema([
@@ -61,13 +61,13 @@ export default function InsightsPage() {
             <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#94652c]">
               Cornerstone Pillar Guides &amp; Financial Tools
             </p>
-            <h2 className="mt-1 font-serif text-2xl md:text-4xl font-semibold text-[#0f2244]">
+            <h2 className="mt-1 font-serif text-2xl md:text-4xl font-semibold text-[#17130e]">
               Step-by-Step UAE Property Handbooks
             </h2>
           </div>
           <Link
             href="/calculators"
-            className="inline-flex items-center gap-2 rounded-xl bg-[#0f2244] px-5 py-3 text-xs font-bold uppercase tracking-[0.16em] text-white transition hover:bg-[#94652c]"
+            className="inline-flex items-center gap-2 rounded-xl bg-[#17130e] px-5 py-3 text-xs font-bold uppercase tracking-[0.16em] text-white transition hover:bg-[#94652c]"
           >
             <Calculator className="h-4 w-4 text-[#dcb888]" /> Open DLD 4%, Mortgage &amp; Yield Calculators →
           </Link>
@@ -84,10 +84,10 @@ export default function InsightsPage() {
                 <span className="inline-flex items-center gap-1.5 rounded-full border border-[#94652c]/30 bg-[#f6ead7] px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#94652c]">
                   <BookOpen className="h-3 w-3" /> {g.eyebrow}
                 </span>
-                <h3 className="mt-4 font-serif text-xl font-semibold text-[#0f2244] group-hover:text-[#94652c]">
+                <h3 className="mt-4 font-serif text-xl font-semibold text-[#17130e] group-hover:text-[#94652c]">
                   {g.title}
                 </h3>
-                <p className="mt-2 line-clamp-3 text-xs text-[#39455a] leading-relaxed">
+                <p className="mt-2 line-clamp-3 text-xs text-[#4a4237] leading-relaxed">
                   {g.directAnswer}
                 </p>
               </div>
@@ -106,7 +106,7 @@ export default function InsightsPage() {
           <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#94652c]">
             10 Research Briefings
           </p>
-          <h2 className="mt-2 font-serif text-3xl md:text-5xl font-semibold text-[#0f2244]">
+          <h2 className="mt-2 font-serif text-3xl md:text-5xl font-semibold text-[#17130e]">
             Latest Market Briefings &amp; Regulatory Updates
           </h2>
         </div>
@@ -125,25 +125,25 @@ export default function InsightsPage() {
                     alt={art.title}
                     className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />
-                  <span className="absolute top-3 left-3 rounded-full bg-[#0f2244]/90 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#dcb888]">
+                  <span className="absolute top-3 left-3 rounded-full bg-[#17130e]/90 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#dcb888]">
                     {art.category}
                   </span>
                 </div>
                 <div className="p-6">
-                  <div className="flex items-center gap-2 text-[11px] text-[#5f6a82]">
+                  <div className="flex items-center gap-2 text-[11px] text-[#786e60]">
                     <span>{art.date}</span>
                     <span>·</span>
                     <span>{art.readTime}</span>
                   </div>
-                  <h3 className="mt-2 font-serif text-xl font-semibold text-[#0f2244] group-hover:text-[#94652c]">
+                  <h3 className="mt-2 font-serif text-xl font-semibold text-[#17130e] group-hover:text-[#94652c]">
                     {art.title}
                   </h3>
-                  <p className="mt-2 line-clamp-3 text-xs text-[#39455a] leading-relaxed">
+                  <p className="mt-2 line-clamp-3 text-xs text-[#4a4237] leading-relaxed">
                     {art.excerpt}
                   </p>
                 </div>
               </div>
-              <div className="border-t border-[#e6dfd2] bg-[#faf7f2] px-6 py-4 text-xs font-bold text-[#0f2244] group-hover:text-[#94652c] flex items-center justify-between">
+              <div className="border-t border-[#e6dfd2] bg-[#faf7f2] px-6 py-4 text-xs font-bold text-[#17130e] group-hover:text-[#94652c] flex items-center justify-between">
                 <span>Read Full Briefing</span>
                 <ArrowRight className="h-4 w-4" />
               </div>

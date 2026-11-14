@@ -56,7 +56,7 @@ export default async function DeveloperDetailPage({
   const devListings = getListingsByDeveloper(dev.slug);
 
   return (
-    <div className="min-h-screen bg-[#faf7f2] text-[#0f2244]">
+    <div className="min-h-screen bg-[#faf7f2] text-[#17130e]">
       <JsonLd
         data={breadcrumbLd([
           { name: "Home", path: "/" },
@@ -67,10 +67,10 @@ export default async function DeveloperDetailPage({
 
       <div className="mx-auto max-w-7xl px-4 py-12 space-y-14 md:px-6">
         {/* Breadcrumb */}
-        <nav aria-label="Breadcrumb" className="flex flex-wrap items-center gap-2 text-xs text-[#5f6a82]">
-          <Link href="/" className="hover:text-[#0f2244]">Home</Link>
+        <nav aria-label="Breadcrumb" className="flex flex-wrap items-center gap-2 text-xs text-[#786e60]">
+          <Link href="/" className="hover:text-[#17130e]">Home</Link>
           <span>/</span>
-          <Link href="/developers" className="hover:text-[#0f2244]">UAE Developers</Link>
+          <Link href="/developers" className="hover:text-[#17130e]">UAE Developers</Link>
           <span>/</span>
           <span className="font-semibold text-[#94652c]">{dev.name}</span>
         </nav>
@@ -89,11 +89,11 @@ export default async function DeveloperDetailPage({
                     />
                   </div>
                 )}
-                <span className="rounded-full bg-[#0f2244] px-3.5 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-[#dcb888]">
+                <span className="rounded-full bg-[#17130e] px-3.5 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-[#dcb888]">
                   UAE Master Developer Profile
                 </span>
                 {dev.founded && (
-                  <span className="rounded-full border border-[#e6dfd2] bg-[#faf7f2] px-3 py-1 text-[11px] font-medium text-[#39455a]">
+                  <span className="rounded-full border border-[#e6dfd2] bg-[#faf7f2] px-3 py-1 text-[11px] font-medium text-[#4a4237]">
                     Established {dev.founded}
                   </span>
                 )}
@@ -104,11 +104,11 @@ export default async function DeveloperDetailPage({
                 )}
               </div>
 
-              <h1 className="font-serif text-4xl md:text-6xl font-semibold text-[#0f2244] leading-[1.08]">
+              <h1 className="font-serif text-4xl md:text-6xl font-semibold text-[#17130e] leading-[1.08]">
                 {dev.name}
               </h1>
               <p className="text-base md:text-lg font-semibold text-[#94652c]">{dev.tagline}</p>
-              <p className="text-sm md:text-base text-[#39455a] leading-relaxed">
+              <p className="text-sm md:text-base text-[#4a4237] leading-relaxed">
                 {dev.description}
               </p>
 
@@ -121,7 +121,7 @@ export default async function DeveloperDetailPage({
                     {dev.flagshipAreas.map((area) => (
                       <span
                         key={area}
-                        className="inline-flex items-center gap-1.5 rounded-full border border-[#e6dfd2] bg-[#faf7f2] px-3.5 py-1.5 text-xs font-medium text-[#0f2244]"
+                        className="inline-flex items-center gap-1.5 rounded-full border border-[#e6dfd2] bg-[#faf7f2] px-3.5 py-1.5 text-xs font-medium text-[#17130e]"
                       >
                         <MapPin className="h-3.5 w-3.5 text-[#94652c]" />
                         {area}
@@ -134,25 +134,25 @@ export default async function DeveloperDetailPage({
 
             {/* Factual Delivery & Escrow Summary Card (§10) */}
             <div className="lg:col-span-4 rounded-2xl border border-[#e6dfd2] bg-[#faf7f2] p-6 space-y-4">
-              <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-[#0f2244]">
+              <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-[#17130e]">
                 <ShieldCheck className="h-4 w-4 text-emerald-600" />
                 SWK Due Diligence Summary
               </div>
               <div className="grid grid-cols-2 gap-3 text-xs">
                 <div className="rounded-xl border border-[#e6dfd2] bg-white p-3.5">
-                  <span className="text-[#5f6a82] block">Curated Releases</span>
-                  <strong className="mt-1 block font-serif text-2xl text-[#0f2244]">
+                  <span className="text-[#786e60] block">Curated Releases</span>
+                  <strong className="mt-1 block font-serif text-2xl text-[#17130e]">
                     {dev.projectCount}
                   </strong>
                 </div>
                 <div className="rounded-xl border border-[#e6dfd2] bg-white p-3.5">
-                  <span className="text-[#5f6a82] block">Escrow Status</span>
+                  <span className="text-[#786e60] block">Escrow Status</span>
                   <strong className="mt-1 block text-emerald-700">
                     DLD Verified
                   </strong>
                 </div>
               </div>
-              <ul className="space-y-2 text-xs text-[#39455a]">
+              <ul className="space-y-2 text-xs text-[#4a4237]">
                 <li className="flex items-start gap-2">
                   <CheckCircle2 className="h-4 w-4 shrink-0 text-[#94652c] mt-0.5" />
                   <span>Compare floor plates & service charges across {dev.name} buildings</span>
@@ -162,7 +162,7 @@ export default async function DeveloperDetailPage({
                   <span>0% agency commission on direct off-plan developer bookings</span>
                 </li>
               </ul>
-              <p className="border-t border-[#e6dfd2] pt-3 text-[11px] text-[#5f6a82] leading-relaxed">
+              <p className="border-t border-[#e6dfd2] pt-3 text-[11px] text-[#786e60] leading-relaxed">
                 Independent Advisory Notice: SWK Properties LLC (RERA ORN {SITE.reraOrn}) represents buyers and landlords independently and does not claim exclusive developer ownership.
               </p>
             </div>
@@ -176,7 +176,7 @@ export default async function DeveloperDetailPage({
               <p className="text-xs font-bold uppercase tracking-[0.24em] text-[#94652c]">
                 Immediate Inventory
               </p>
-              <h2 className="mt-1 font-serif text-3xl font-semibold text-[#0f2244]">
+              <h2 className="mt-1 font-serif text-3xl font-semibold text-[#17130e]">
                 Featured {dev.name} Listings With Full Floor Plans
               </h2>
             </div>
@@ -195,11 +195,11 @@ export default async function DeveloperDetailPage({
               <p className="text-xs font-bold uppercase tracking-[0.24em] text-[#94652c]">
                 Current, Upcoming & Delivered Portfolio
               </p>
-              <h2 className="mt-1 font-serif text-3xl md:text-4xl font-semibold text-[#0f2244]">
+              <h2 className="mt-1 font-serif text-3xl md:text-4xl font-semibold text-[#17130e]">
                 {dev.name} Developments ({dev.projects.length})
               </h2>
             </div>
-            <Link href="/off-plan" className="text-xs font-bold uppercase tracking-[0.18em] text-[#94652c] hover:text-[#0f2244]">
+            <Link href="/off-plan" className="text-xs font-bold uppercase tracking-[0.18em] text-[#94652c] hover:text-[#17130e]">
               Browse All 108 UAE Projects →
             </Link>
           </div>
@@ -218,10 +218,10 @@ export default async function DeveloperDetailPage({
                       alt={proj.name}
                       className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                     />
-                    <span className="absolute top-3 left-3 rounded-full bg-[#0f2244] px-3 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-[#dcb888]">
+                    <span className="absolute top-3 left-3 rounded-full bg-[#17130e] px-3 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-[#dcb888]">
                       {proj.collection}
                     </span>
-                    <span className="absolute bottom-3 right-3 rounded-full bg-white/95 px-2.5 py-0.5 text-[10px] font-semibold text-[#0f2244] shadow-sm">
+                    <span className="absolute bottom-3 right-3 rounded-full bg-white/95 px-2.5 py-0.5 text-[10px] font-semibold text-[#17130e] shadow-sm">
                       Developer Visualisation
                     </span>
                   </div>
@@ -230,15 +230,15 @@ export default async function DeveloperDetailPage({
                       <Building2 className="h-3.5 w-3.5" />
                       <span>{proj.community}</span>
                     </div>
-                    <h3 className="mt-1 font-serif text-2xl font-semibold text-[#0f2244] group-hover:text-[#94652c]">
+                    <h3 className="mt-1 font-serif text-2xl font-semibold text-[#17130e] group-hover:text-[#94652c]">
                       {proj.name}
                     </h3>
-                    <p className="mt-2 line-clamp-3 text-xs md:text-sm text-[#39455a] leading-relaxed">
+                    <p className="mt-2 line-clamp-3 text-xs md:text-sm text-[#4a4237] leading-relaxed">
                       {proj.summary}
                     </p>
                   </div>
                 </div>
-                <div className="border-t border-[#e6dfd2] bg-[#faf7f2] px-5 py-3.5 text-xs font-bold uppercase tracking-[0.16em] text-[#0f2244] group-hover:text-[#94652c]">
+                <div className="border-t border-[#e6dfd2] bg-[#faf7f2] px-5 py-3.5 text-xs font-bold uppercase tracking-[0.16em] text-[#17130e] group-hover:text-[#94652c]">
                   Inspect Project & Payment Plan →
                 </div>
               </Link>

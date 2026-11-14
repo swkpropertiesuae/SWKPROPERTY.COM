@@ -88,7 +88,7 @@ export default async function OffPlanProjectDetailPage({
 
       <div className="mx-auto max-w-7xl px-4 py-10">
         {/* Breadcrumb */}
-        <nav aria-label="Breadcrumb" className="mb-6 flex flex-wrap items-center gap-2 text-xs text-[#5f6a82]">
+        <nav aria-label="Breadcrumb" className="mb-6 flex flex-wrap items-center gap-2 text-xs text-[#786e60]">
           <Link href="/" className="hover:text-[#94652c]">Home</Link>
           <span>/</span>
           <Link href="/off-plan" className="hover:text-[#94652c]">Off-Plan Launches</Link>
@@ -105,7 +105,7 @@ export default async function OffPlanProjectDetailPage({
           <div className="flex flex-wrap items-start justify-between gap-6">
             <div className="max-w-3xl space-y-3">
               <div className="flex flex-wrap items-center gap-2">
-                <span className="rounded-full bg-[#0f2244] px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-white">
+                <span className="rounded-full bg-[#17130e] px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-white">
                   Off-Plan · {project.collection}
                 </span>
                 <span className="rounded-full border border-emerald-500/35 bg-emerald-500/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-wider text-emerald-700">
@@ -116,16 +116,22 @@ export default async function OffPlanProjectDetailPage({
                 </span>
               </div>
 
-              <h1 className="font-serif text-3xl md:text-5xl font-semibold text-[#0f2244]">
+              <h1 className="font-serif text-3xl md:text-5xl font-semibold text-[#17130e]">
                 {project.name}
               </h1>
 
-              <div className="flex flex-wrap items-center gap-4 text-xs text-[#39455a]">
+              <div className="flex flex-wrap items-center gap-4 text-xs text-[#4a4237]">
                 <Link
                   href={`/developers/${project.developerSlug}`}
                   className="inline-flex items-center gap-1.5 font-semibold text-[#94652c] hover:underline"
                 >
-                  <Building2 className="h-4 w-4" />
+                  {dev?.logo ? (
+                    <span className="inline-flex h-9 items-center rounded-lg border border-[#e6dfd2] bg-white px-3">
+                      <img src={dev.logo} alt={project.developer} className="h-5 w-auto max-w-[130px] object-contain" />
+                    </span>
+                  ) : (
+                    <Building2 className="h-4 w-4" />
+                  )}
                   Developer: {project.developer}
                 </Link>
                 <span className="inline-flex items-center gap-1.5">
@@ -139,10 +145,10 @@ export default async function OffPlanProjectDetailPage({
               <div className="text-[11px] uppercase tracking-[0.2em] text-[#94652c]">
                 Starting Price & Allocations
               </div>
-              <div className="mt-1 font-serif text-2xl font-bold text-[#0f2244]">
+              <div className="mt-1 font-serif text-2xl font-bold text-[#17130e]">
                 Indicative · On Request
               </div>
-              <p className="mt-1 text-[11px] text-[#5f6a82]">
+              <p className="mt-1 text-[11px] text-[#786e60]">
                 Confirmed live from {project.developer} inventory sheet + 4% DLD Oqood fee
               </p>
               <a
@@ -167,7 +173,7 @@ export default async function OffPlanProjectDetailPage({
                 alt={`${project.name} by ${project.developer} — Developer Render ${i + 1}`}
                 className="h-[340px] md:h-[420px] w-full object-cover"
               />
-              <span className="absolute bottom-3 left-3 rounded-full bg-[#0f2244]/90 px-3 py-1 text-[11px] text-white backdrop-blur-md">
+              <span className="absolute bottom-3 left-3 rounded-full bg-[#17130e]/90 px-3 py-1 text-[11px] text-white backdrop-blur-md">
                 {project.name} · Developer Architectural Render {i + 1}
               </span>
             </div>
@@ -178,13 +184,13 @@ export default async function OffPlanProjectDetailPage({
         <div className="mt-10 grid grid-cols-1 gap-10 lg:grid-cols-12 items-start">
           <div className="lg:col-span-7 space-y-8">
             <section className="rounded-3xl border border-[#e6dfd2] bg-white p-6 md:p-8">
-              <h2 className="font-serif text-2xl md:text-3xl font-semibold text-[#0f2244]">
+              <h2 className="font-serif text-2xl md:text-3xl font-semibold text-[#17130e]">
                 Development Overview & Masterplan Context
               </h2>
-              <p className="mt-4 text-sm md:text-base text-[#39455a] leading-relaxed">
+              <p className="mt-4 text-sm md:text-base text-[#4a4237] leading-relaxed">
                 {project.summary}
               </p>
-              <p className="mt-4 text-sm text-[#39455a] leading-relaxed">
+              <p className="mt-4 text-sm text-[#4a4237] leading-relaxed">
                 Positioned within <strong>{project.community}</strong> and delivered by{" "}
                 <Link
                   href={`/developers/${project.developerSlug}`}
@@ -199,27 +205,27 @@ export default async function OffPlanProjectDetailPage({
               {/* Key Off-Plan Checkpoints (§09) */}
               <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-3 border-t border-[#e6dfd2] pt-5 text-xs">
                 <div className="rounded-2xl border border-[#e6dfd2] bg-[#faf7f2] p-4">
-                  <span className="text-[#5f6a82] block">Construction & Booking Status</span>
+                  <span className="text-[#786e60] block">Construction & Booking Status</span>
                   <strong className="mt-1 flex items-center gap-1.5 text-sm text-emerald-700">
                     <CheckCircle2 className="h-4 w-4" />
                     Off-Plan Release · Allocations Checked on Request
                   </strong>
                 </div>
                 <div className="rounded-2xl border border-[#e6dfd2] bg-[#faf7f2] p-4">
-                  <span className="text-[#5f6a82] block">Handover Date & Source</span>
+                  <span className="text-[#786e60] block">Handover Date & Source</span>
                   <strong className="mt-1 flex items-center gap-1.5 text-sm text-[#94652c]">
                     <Calendar className="h-4 w-4" />
                     Per Official {project.developer} SPA Schedule
                   </strong>
                 </div>
                 <div className="rounded-2xl border border-[#e6dfd2] bg-[#faf7f2] p-4">
-                  <span className="text-[#5f6a82] block">Payment Plan Structure</span>
-                  <strong className="mt-1 block text-sm text-[#0f2244]">
+                  <span className="text-[#786e60] block">Payment Plan Structure</span>
+                  <strong className="mt-1 block text-sm text-[#17130e]">
                     Construction-Linked Milestone Schedule (+ 4% DLD Fee)
                   </strong>
                 </div>
                 <div className="rounded-2xl border border-[#e6dfd2] bg-[#faf7f2] p-4">
-                  <span className="text-[#5f6a82] block">Buyer Agency Commission</span>
+                  <span className="text-[#786e60] block">Buyer Agency Commission</span>
                   <strong className="mt-1 block text-sm text-emerald-700">
                     0% Commission on Direct Developer Allocations
                   </strong>
@@ -234,7 +240,7 @@ export default async function OffPlanProjectDetailPage({
                   <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#94652c]">
                     Escrow-Linked Instalment Structure
                   </p>
-                  <h2 className="mt-1 font-serif text-2xl font-semibold text-[#0f2244]">
+                  <h2 className="mt-1 font-serif text-2xl font-semibold text-[#17130e]">
                     How Payments Work for {project.name}
                   </h2>
                 </div>
@@ -255,19 +261,19 @@ export default async function OffPlanProjectDetailPage({
                       <th className="p-3.5 font-semibold">Regulatory Safeguard</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-[#e6dfd2] text-[#39455a]">
+                  <tbody className="divide-y divide-[#e6dfd2] text-[#4a4237]">
                     <tr>
-                      <td className="p-3.5 font-medium text-[#0f2244]">1. Reservation & SPA Signing</td>
+                      <td className="p-3.5 font-medium text-[#17130e]">1. Reservation & SPA Signing</td>
                       <td className="p-3.5">10% – 20% Down Payment + 4% DLD Oqood Fee</td>
                       <td className="p-3.5">Paid to {project.developer} DLD RERA Project Escrow Account</td>
                     </tr>
                     <tr>
-                      <td className="p-3.5 font-medium text-[#0f2244]">2. Construction Instalments</td>
+                      <td className="p-3.5 font-medium text-[#17130e]">2. Construction Instalments</td>
                       <td className="p-3.5">40% – 60% across certified build stages</td>
                       <td className="p-3.5">Released only against DLD engineer progress certification</td>
                     </tr>
                     <tr>
-                      <td className="p-3.5 font-medium text-[#0f2244]">3. Completion & Key Handover</td>
+                      <td className="p-3.5 font-medium text-[#17130e]">3. Completion & Key Handover</td>
                       <td className="p-3.5">20% – 40% on Building Completion Certificate (BCC)</td>
                       <td className="p-3.5">Includes pre-handover snagging inspection & Title Deed issuance</td>
                     </tr>
@@ -288,10 +294,10 @@ export default async function OffPlanProjectDetailPage({
                 <ShieldCheck className="h-4 w-4 text-emerald-600" />
                 DLD Project Escrow & Availability Disclaimer
               </div>
-              <p className="text-xs text-[#39455a] leading-relaxed">
+              <p className="text-xs text-[#4a4237] leading-relaxed">
                 All off-plan developments in Dubai are regulated under Dubai Law No. 8 of 2007 Concerning Escrow Accounts for Real Estate Development. Before you sign a reservation form or transfer any funds for <strong>{project.name}</strong>, your SWK Properties consultant provides the official DLD project registration sheet, escrow account IBAN details, and unit-specific floor plan.
               </p>
-              <p className="text-xs text-[#5f6a82] leading-relaxed">
+              <p className="text-xs text-[#786e60] leading-relaxed">
                 <strong>Render & Specification Notice:</strong> Visuals on this page are artistic impressions and architectural renders supplied by {project.developer}. Final layouts, unit areas, views, service charges, and completion dates are governed exclusively by the executed Sales & Purchase Agreement (SPA).
               </p>
               <div className="pt-2 flex flex-wrap gap-4 text-xs">
@@ -307,7 +313,7 @@ export default async function OffPlanProjectDetailPage({
                 {dev && (
                   <Link
                     href={`/developers/${dev.slug}`}
-                    className="inline-flex items-center gap-1.5 font-semibold text-[#0f2244] hover:text-[#94652c]"
+                    className="inline-flex items-center gap-1.5 font-semibold text-[#17130e] hover:text-[#94652c]"
                   >
                     <FileText className="h-3.5 w-3.5 text-[#94652c]" />
                     Inspect {dev.name} Track Record ({dev.projectCount} Projects)
@@ -339,7 +345,7 @@ export default async function OffPlanProjectDetailPage({
                 <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#94652c]">
                   Compare Alternative Releases
                 </p>
-                <h2 className="mt-1 font-serif text-3xl font-semibold text-[#0f2244]">
+                <h2 className="mt-1 font-serif text-3xl font-semibold text-[#17130e]">
                   Related Projects by {project.developer} & in {project.community}
                 </h2>
               </div>
@@ -361,16 +367,16 @@ export default async function OffPlanProjectDetailPage({
                       alt={rel.name}
                       className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                     />
-                    <span className="absolute top-3 left-3 rounded-full bg-[#0f2244]/90 px-3 py-1 text-[10px] font-semibold uppercase tracking-wider text-[#dcb888]">
+                    <span className="absolute top-3 left-3 rounded-full bg-[#17130e]/90 px-3 py-1 text-[10px] font-semibold uppercase tracking-wider text-[#dcb888]">
                       {rel.developer}
                     </span>
                   </div>
                   <div className="p-5">
-                    <h3 className="font-serif text-xl font-semibold text-[#0f2244] group-hover:text-[#94652c]">
+                    <h3 className="font-serif text-xl font-semibold text-[#17130e] group-hover:text-[#94652c]">
                       {rel.name}
                     </h3>
-                    <p className="mt-1 text-xs text-[#5f6a82]">{rel.community}</p>
-                    <p className="mt-2 line-clamp-2 text-xs text-[#39455a]">{rel.summary}</p>
+                    <p className="mt-1 text-xs text-[#786e60]">{rel.community}</p>
+                    <p className="mt-2 line-clamp-2 text-xs text-[#4a4237]">{rel.summary}</p>
                   </div>
                 </Link>
               ))}

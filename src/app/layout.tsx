@@ -29,7 +29,7 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 5,
   viewportFit: "cover",
-  themeColor: "#0f2244",
+  themeColor: "#17130e",
 };
 
 export const metadata: Metadata = {
@@ -66,7 +66,7 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: "/favicon.ico", sizes: "48x48" },
+      { url: "/favicon.ico", sizes: "16x16 32x32 48x48 64x64 128x128 256x256" },
       { url: "/favicon.svg", type: "image/svg+xml" },
       { url: "/favicon-16.png", sizes: "16x16", type: "image/png" },
       { url: "/favicon-32.png", sizes: "32x32", type: "image/png" },
@@ -107,7 +107,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className="overflow-x-clip">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${serif.variable} ${raleway.variable} min-h-screen overflow-x-clip bg-[#faf7f2] text-[#0f2244] antialiased selection:bg-[#0f2244] selection:text-white`}
+        className={`${geistSans.variable} ${geistMono.variable} ${serif.variable} ${raleway.variable} min-h-screen overflow-x-clip bg-[#faf7f2] text-[#17130e] antialiased selection:bg-[#17130e] selection:text-white`}
       >
         {process.env.NEXT_PUBLIC_GTM_ID ? (
           <Script id="consent-default" strategy="beforeInteractive">
@@ -118,7 +118,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <PrefsProvider>
           <a
             href="#main-content"
-            className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] focus:rounded-full focus:bg-[#0f2244] focus:px-4 focus:py-2 focus:text-xs focus:font-bold focus:text-white"
+            className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] focus:rounded-full focus:bg-[#17130e] focus:px-4 focus:py-2 focus:text-xs focus:font-bold focus:text-white"
           >
             Skip to main content
           </a>

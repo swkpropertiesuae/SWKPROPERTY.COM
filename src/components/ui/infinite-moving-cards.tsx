@@ -109,11 +109,11 @@ export function DeveloperInfiniteMarquee({
         <Link
           key={dev.slug}
           href={`/developers/${dev.slug}`}
-          className="group relative flex w-[320px] shrink-0 flex-col justify-between overflow-hidden rounded-3xl border border-[#e6dfd2] bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#94652c] hover:shadow-[0_20px_50px_rgba(15,34,68,0.14)]"
+          className="group relative flex w-[320px] shrink-0 flex-col justify-between overflow-hidden rounded-3xl border border-[#e6dfd2] bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#94652c] hover:shadow-[0_20px_50px_rgba(23,19,14,0.14)]"
         >
           <div>
             {/* Project Cover Visual + Official Developer Logo Plate */}
-            <div className="relative h-40 w-full overflow-hidden bg-[#0f2244]">
+            <div className="relative h-40 w-full overflow-hidden bg-[#17130e]">
               {dev.coverImage && (
                 <img
                   src={dev.coverImage}
@@ -121,12 +121,12 @@ export function DeveloperInfiniteMarquee({
                   className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                 />
               )}
-              <div className="absolute inset-0 bg-gradient-to-t from-[#0f2244]/85 via-[#0f2244]/25 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#17130e]/85 via-[#17130e]/25 to-transparent" />
               <div className="absolute top-3 left-3 right-3 flex items-center justify-between gap-2">
-                <span className="rounded-full bg-[#0f2244]/90 backdrop-blur-md px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-[#dcb888]">
+                <span className="rounded-full bg-[#17130e]/90 backdrop-blur-md px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-[#dcb888]">
                   {dev.headquarters || "Dubai, UAE"}
                 </span>
-                <span className="rounded-full bg-white/95 px-2.5 py-1 text-[10px] font-bold text-[#0f2244] shadow-xs">
+                <span className="rounded-full bg-white/95 px-2.5 py-1 text-[10px] font-bold text-[#17130e] shadow-xs">
                   {dev.projectCount} Projects
                 </span>
               </div>
@@ -141,7 +141,7 @@ export function DeveloperInfiniteMarquee({
                       className="max-h-7 max-w-[130px] object-contain"
                     />
                   ) : (
-                    <span className="font-serif text-sm font-bold text-[#0f2244]">
+                    <span className="font-serif text-sm font-bold text-[#17130e]">
                       {dev.name}
                     </span>
                   )}
@@ -154,10 +154,10 @@ export function DeveloperInfiniteMarquee({
 
             {/* Developer Info Body */}
             <div className="p-5">
-              <h3 className="font-serif text-xl font-semibold text-[#0f2244] group-hover:text-[#94652c]">
+              <h3 className="font-serif text-xl font-semibold text-[#17130e] group-hover:text-[#94652c]">
                 {dev.name}
               </h3>
-              <p className="mt-1 line-clamp-2 text-xs text-[#39455a] leading-relaxed">
+              <p className="mt-1 line-clamp-2 text-xs text-[#4a4237] leading-relaxed">
                 {dev.tagline}
               </p>
               {dev.flagshipAreas && dev.flagshipAreas.length > 0 && (
@@ -165,7 +165,7 @@ export function DeveloperInfiniteMarquee({
                   {dev.flagshipAreas.slice(0, 2).map((area) => (
                     <span
                       key={area}
-                      className="inline-flex items-center gap-1 rounded-full border border-[#e6dfd2] bg-[#faf7f2] px-2.5 py-0.5 text-[10px] font-medium text-[#39455a]"
+                      className="inline-flex items-center gap-1 rounded-full border border-[#e6dfd2] bg-[#faf7f2] px-2.5 py-0.5 text-[10px] font-medium text-[#4a4237]"
                     >
                       <MapPin className="h-2.5 w-2.5 text-[#94652c]" />
                       {area}
@@ -176,7 +176,7 @@ export function DeveloperInfiniteMarquee({
             </div>
           </div>
 
-          <div className="flex items-center justify-between border-t border-[#e6dfd2] bg-[#faf7f2] px-5 py-3 text-[11px] font-bold uppercase tracking-[0.16em] text-[#0f2244] group-hover:text-[#94652c]">
+          <div className="flex items-center justify-between border-t border-[#e6dfd2] bg-[#faf7f2] px-5 py-3 text-[11px] font-bold uppercase tracking-[0.16em] text-[#17130e] group-hover:text-[#94652c]">
             <span>Inspect Master Profile</span>
             <span>→</span>
           </div>
@@ -213,21 +213,21 @@ export function ProjectInfiniteMarquee({
         <Link
           key={proj.slug}
           href={`/off-plan/${proj.slug}`}
-          className="group relative flex w-[350px] shrink-0 flex-col justify-between overflow-hidden rounded-3xl border border-[#e6dfd2] bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#94652c] hover:shadow-[0_20px_50px_rgba(15,34,68,0.14)]"
+          className="group relative flex w-[350px] shrink-0 flex-col justify-between overflow-hidden rounded-3xl border border-[#e6dfd2] bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#94652c] hover:shadow-[0_20px_50px_rgba(23,19,14,0.14)]"
         >
           <div>
-            <div className="relative h-48 w-full overflow-hidden bg-[#0f2244]">
+            <div className="relative h-48 w-full overflow-hidden bg-[#17130e]">
               <img
                 src={proj.image}
                 alt={`${proj.name} by ${proj.developer}`}
                 className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#0f2244]/85 via-transparent to-black/25" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#17130e]/85 via-transparent to-black/25" />
               <div className="absolute top-3 left-3 right-3 flex items-center justify-between gap-2">
-                <span className="rounded-full bg-[#0f2244]/90 backdrop-blur-md px-3 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-[#dcb888]">
+                <span className="rounded-full bg-[#17130e]/90 backdrop-blur-md px-3 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-[#dcb888]">
                   {proj.collection}
                 </span>
-                <span className="rounded-full bg-white/95 px-2.5 py-1 text-[10px] font-bold text-[#0f2244] shadow-xs">
+                <span className="rounded-full bg-white/95 px-2.5 py-1 text-[10px] font-bold text-[#17130e] shadow-xs">
                   Escrow-Registered Launch
                 </span>
               </div>
@@ -254,16 +254,16 @@ export function ProjectInfiniteMarquee({
                 <Building2 className="h-3.5 w-3.5" />
                 <span>{proj.developer}</span>
               </div>
-              <h3 className="mt-1 truncate font-serif text-xl font-semibold text-[#0f2244] group-hover:text-[#94652c]">
+              <h3 className="mt-1 truncate font-serif text-xl font-semibold text-[#17130e] group-hover:text-[#94652c]">
                 {proj.name}
               </h3>
-              <p className="mt-1.5 line-clamp-2 text-xs text-[#39455a] leading-relaxed">
+              <p className="mt-1.5 line-clamp-2 text-xs text-[#4a4237] leading-relaxed">
                 {proj.summary}
               </p>
             </div>
           </div>
 
-          <div className="flex items-center justify-between border-t border-[#e6dfd2] bg-[#faf7f2] px-5 py-3 text-[11px] font-bold uppercase tracking-[0.16em] text-[#0f2244] group-hover:text-[#94652c]">
+          <div className="flex items-center justify-between border-t border-[#e6dfd2] bg-[#faf7f2] px-5 py-3 text-[11px] font-bold uppercase tracking-[0.16em] text-[#17130e] group-hover:text-[#94652c]">
             <span>Payment Plan & Brochure</span>
             <span>→</span>
           </div>
@@ -311,7 +311,7 @@ export function TestimonialInfiniteMarquee({
                 {client.city}
               </span>
             </div>
-            <p className="mt-4 text-sm text-[#39455a] leading-relaxed">
+            <p className="mt-4 text-sm text-[#4a4237] leading-relaxed">
               &ldquo;{client.quote}&rdquo;
             </p>
           </div>
@@ -324,12 +324,12 @@ export function TestimonialInfiniteMarquee({
             />
             <div className="min-w-0">
               <div className="flex items-center gap-1.5">
-                <h4 className="truncate font-serif text-base font-semibold text-[#0f2244]">
+                <h4 className="truncate font-serif text-base font-semibold text-[#17130e]">
                   {client.name}
                 </h4>
                 <CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-emerald-600" />
               </div>
-              <p className="truncate text-xs text-[#5f6a82]">
+              <p className="truncate text-xs text-[#786e60]">
                 {client.role} · {client.city}
               </p>
             </div>

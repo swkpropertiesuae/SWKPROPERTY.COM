@@ -101,7 +101,25 @@ export default function Home() {
     };
   };
 
-  const offPlanMarqueeProjects = priorityProjects.map(mapProjectForMarquee);
+  // Flagship launches from the largest master developers lead the marquee.
+  const FLAGSHIP_SLUGS = [
+    "palm-jebel-ali",
+    "emaar-the-oasis",
+    "bugatti-residences-by-binghatti",
+    "como-residences",
+    "rashid-yachts-and-marina",
+    "burj-binghatti-jacob-and-co-residences",
+    "mercedes-benz-places",
+    "dubai-islands",
+    "creek-haven",
+  ];
+  const flagships = FLAGSHIP_SLUGS.map((slug) => projects.find((p) => p.slug === slug)).filter(
+    (p): p is (typeof projects)[number] => Boolean(p)
+  );
+  const offPlanMarqueeProjects = [
+    ...flagships,
+    ...priorityProjects.filter((p) => !FLAGSHIP_SLUGS.includes(p.slug)),
+  ].map(mapProjectForMarquee);
   const developerSignatureProjects = developers
     .map((d) => projects.find((p) => p.developerSlug === d.slug))
     .filter((p): p is (typeof projects)[number] => Boolean(p))
@@ -113,21 +131,21 @@ export default function Home() {
       <link
         rel="preload"
         as="image"
-        href="/img/hero/slides/04-azizi-venice-mobile.webp"
+        href="/img/hero/slides/07-nakheel-palm-jebel-ali-mobile.webp"
         media="(max-width: 767px)"
         fetchPriority="high"
       />
       <link
         rel="preload"
         as="image"
-        href="/img/hero/slides/04-azizi-venice-desktop.webp"
+        href="/img/hero/slides/07-nakheel-palm-jebel-ali-desktop.webp"
         media="(min-width: 768px)"
         fetchPriority="high"
       />
       <link
         rel="preload"
         as="image"
-        href="/img/hero/slides/04-azizi-venice-thumb.webp"
+        href="/img/hero/slides/07-nakheel-palm-jebel-ali-thumb.webp"
         fetchPriority="high"
       />
 
@@ -149,16 +167,16 @@ export default function Home() {
             <p className="text-xs font-bold uppercase tracking-[0.26em] text-[#94652c]">
               01 · Ready Secondary &amp; Annual Leasing Inventory
             </p>
-            <h2 className="mt-2 font-serif text-3xl md:text-5xl font-semibold text-[#0f2244] leading-[1.08]">
+            <h2 className="mt-2 font-serif text-3xl md:text-5xl font-semibold text-[#17130e] leading-[1.08]">
               Featured Dubai Properties
             </h2>
-            <p className="mt-2.5 max-w-2xl text-sm md:text-base text-[#39455a] leading-relaxed">
+            <p className="mt-2.5 max-w-2xl text-sm md:text-base text-[#4a4237] leading-relaxed">
               Hand-picked villas, penthouses, and apartments available for immediate transfer or annual lease across Downtown Dubai, Palm Jumeirah, Dubai Marina, and Dubai Hills Estate.
             </p>
           </div>
           <Link
             href="/properties"
-            className="inline-flex whitespace-nowrap items-center gap-2.5 rounded-full bg-[#0f2244] px-7 py-3.5 text-xs font-bold uppercase tracking-[0.18em] text-white shadow-sm transition hover:bg-[#14305c]"
+            className="inline-flex whitespace-nowrap items-center gap-2.5 rounded-full bg-[#17130e] px-7 py-3.5 text-xs font-bold uppercase tracking-[0.18em] text-white shadow-sm transition hover:bg-[#2a2219]"
           >
             Explore All Properties
             <ArrowRight className="h-4 w-4 text-[#dcb888]" />
@@ -180,16 +198,16 @@ export default function Home() {
               <p className="text-xs font-bold uppercase tracking-[0.26em] text-[#94652c]">
                 02 · Priority Developer Allocations Across 5 Emirates
               </p>
-              <h2 className="mt-2 font-serif text-3xl md:text-5xl font-semibold text-[#0f2244] leading-[1.08]">
+              <h2 className="mt-2 font-serif text-3xl md:text-5xl font-semibold text-[#17130e] leading-[1.08]">
                 Latest Verified Off-Plan Launches
               </h2>
-              <p className="mt-2.5 max-w-2xl text-sm md:text-base text-[#39455a] leading-relaxed">
+              <p className="mt-2.5 max-w-2xl text-sm md:text-base text-[#4a4237] leading-relaxed">
                 Direct developer allocations across our most requested launches—including Azizi Venice, Emaar The Oasis, DAMAC Islands, Sobha Century, Binghatti Maybach, and The Meriva on Dubai Islands.
               </p>
             </div>
             <Link
               href="/off-plan"
-              className="inline-flex whitespace-nowrap items-center gap-2 rounded-full bg-[#0f2244] px-7 py-3.5 text-xs font-bold uppercase tracking-[0.18em] text-white shadow-sm transition hover:bg-[#14305c]"
+              className="inline-flex whitespace-nowrap items-center gap-2 rounded-full bg-[#17130e] px-7 py-3.5 text-xs font-bold uppercase tracking-[0.18em] text-white shadow-sm transition hover:bg-[#2a2219]"
             >
               Explore All 108+ Off-Plan Projects
               <ArrowRight className="h-4 w-4 text-[#dcb888]" />
@@ -211,16 +229,16 @@ export default function Home() {
                   <Sparkles className="h-3.5 w-3.5" />
                   SWK 2026 Priority Mandate Desk
                 </span>
-                <h3 className="mt-2 font-serif text-2xl md:text-4xl font-semibold text-[#0f2244]">
+                <h3 className="mt-2 font-serif text-2xl md:text-4xl font-semibold text-[#17130e]">
                   The Projects We Target Most Across Dubai &amp; The UAE
                 </h3>
-                <p className="mt-1.5 max-w-2xl text-xs md:text-sm text-[#39455a]">
+                <p className="mt-1.5 max-w-2xl text-xs md:text-sm text-[#4a4237]">
                   Our advisory team holds active buyer mandates and floor-plate intelligence across these 26 high-growth developments in Dubai, Abu Dhabi, Sharjah, Ras Al Khaimah, and Umm Al Quwain.
                 </p>
               </div>
               <Link
                 href="/contact"
-                className="inline-flex items-center gap-2 rounded-xl bg-[#0f2244] px-6 py-3 text-xs font-bold uppercase tracking-[0.16em] text-white transition hover:bg-[#94652c]"
+                className="inline-flex items-center gap-2 rounded-xl bg-[#17130e] px-6 py-3 text-xs font-bold uppercase tracking-[0.16em] text-white transition hover:bg-[#94652c]"
               >
                 <span>Request Priority Availability</span>
                 <ArrowUpRight className="h-4 w-4 text-[#dcb888]" />
@@ -234,13 +252,13 @@ export default function Home() {
                   className="flex flex-col justify-between overflow-hidden rounded-2xl border border-[#e6dfd2] bg-[#faf7f2]"
                 >
                   <div>
-                    <div className="relative h-48 w-full overflow-hidden bg-[#0f2244]">
+                    <div className="relative h-48 w-full overflow-hidden bg-[#17130e]">
                       <img
                         src={corridor.image}
                         alt={corridor.headline}
                         className="h-full w-full object-cover"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-[#0f2244]/90 via-[#0f2244]/30 to-transparent" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#17130e]/90 via-[#17130e]/30 to-transparent" />
                       <div className="absolute bottom-3.5 left-4 right-4 text-white">
                         <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#dcb888]">
                           {corridor.region}
@@ -252,7 +270,7 @@ export default function Home() {
                     </div>
 
                     <div className="p-5">
-                      <p className="text-xs text-[#39455a] leading-relaxed mb-4">
+                      <p className="text-xs text-[#4a4237] leading-relaxed mb-4">
                         {corridor.description}
                       </p>
 
@@ -264,10 +282,10 @@ export default function Home() {
                             className="group flex items-center justify-between gap-2 rounded-xl border border-[#e6dfd2] bg-white px-3.5 py-2.5 text-xs transition hover:border-[#94652c]"
                           >
                             <div className="min-w-0">
-                              <span className="block truncate font-bold text-[#0f2244] group-hover:text-[#94652c]">
+                              <span className="block truncate font-bold text-[#17130e] group-hover:text-[#94652c]">
                                 {item.name}
                               </span>
-                              <span className="block truncate text-[10px] text-[#5f6a82]">
+                              <span className="block truncate text-[10px] text-[#786e60]">
                                 {item.location}
                               </span>
                             </div>
@@ -283,7 +301,7 @@ export default function Home() {
                   <div className="border-t border-[#e6dfd2] bg-white px-5 py-3 text-right">
                     <Link
                       href="/off-plan"
-                      className="inline-flex items-center gap-1 text-xs font-bold text-[#0f2244] hover:text-[#94652c]"
+                      className="inline-flex items-center gap-1 text-xs font-bold text-[#17130e] hover:text-[#94652c]"
                     >
                       <span>Compare Floor Plans &amp; Prices</span>
                       <ArrowRight className="h-3.5 w-3.5" />
@@ -302,7 +320,7 @@ export default function Home() {
               </span>
               <Link
                 href="/off-plan"
-                className="text-xs font-bold text-[#0f2244] hover:text-[#94652c]"
+                className="text-xs font-bold text-[#17130e] hover:text-[#94652c]"
               >
                 View All 108+ Projects →
               </Link>
@@ -331,16 +349,16 @@ export default function Home() {
               <p className="text-xs font-bold uppercase tracking-[0.26em] text-[#94652c]">
                 04 · 27+ Master Developers · 108+ Verified Projects
               </p>
-              <h2 className="mt-2 font-serif text-3xl md:text-5xl font-semibold text-[#0f2244] leading-[1.08]">
+              <h2 className="mt-2 font-serif text-3xl md:text-5xl font-semibold text-[#17130e] leading-[1.08]">
                 Explore Dubai &amp; UAE Master Developers
               </h2>
-              <p className="mt-2.5 max-w-2xl text-sm md:text-base text-[#39455a] leading-relaxed">
+              <p className="mt-2.5 max-w-2xl text-sm md:text-base text-[#4a4237] leading-relaxed">
                 Compare delivery history, flagship master communities, and active off-plan &amp; ready releases across 27+ leading UAE developers in our dual continuous showcase below.
               </p>
             </div>
             <Link
               href="/developers"
-              className="inline-flex whitespace-nowrap items-center gap-2 rounded-full bg-[#0f2244] px-7 py-3.5 text-xs font-bold uppercase tracking-[0.18em] text-white shadow-sm transition hover:bg-[#14305c]"
+              className="inline-flex whitespace-nowrap items-center gap-2 rounded-full bg-[#17130e] px-7 py-3.5 text-xs font-bold uppercase tracking-[0.18em] text-white shadow-sm transition hover:bg-[#2a2219]"
             >
               All 27+ Developer Profiles
               <ArrowRight className="h-4 w-4 text-[#dcb888]" />
@@ -349,10 +367,10 @@ export default function Home() {
 
           {/* Row 1: Infinite Horizontal Moving Marquee of 27+ UAE Master Developers */}
           <div className="mb-3 flex items-center justify-between">
-            <span className="text-xs font-bold uppercase tracking-[0.22em] text-[#0f2244]">
+            <span className="text-xs font-bold uppercase tracking-[0.22em] text-[#17130e]">
               Row 01 · 27+ UAE Master Developers (Official Logos &amp; Flagship Communities)
             </span>
-            <span className="text-xs font-medium text-[#5f6a82]">
+            <span className="text-xs font-medium text-[#786e60]">
               Hover any card to pause
             </span>
           </div>
@@ -369,7 +387,7 @@ export default function Home() {
             </span>
             <Link
               href="/off-plan"
-              className="text-xs font-bold text-[#0f2244] hover:text-[#94652c]"
+              className="text-xs font-bold text-[#17130e] hover:text-[#94652c]"
             >
               Browse All 108+ Projects →
             </Link>
@@ -402,26 +420,26 @@ export default function Home() {
             <p className="text-xs font-bold uppercase tracking-[0.26em] text-[#94652c]">
               09 · Market Briefings &amp; Buyer Guides
             </p>
-            <h2 className="mt-2 font-serif text-3xl md:text-5xl font-semibold text-[#0f2244]">
+            <h2 className="mt-2 font-serif text-3xl md:text-5xl font-semibold text-[#17130e]">
               Latest Dubai &amp; UAE Real Estate Insights
             </h2>
           </div>
           <div className="flex flex-wrap gap-2.5">
             <Link
               href="/guides/buying"
-              className="rounded-full border border-[#e6dfd2] bg-white px-5 py-2.5 text-xs font-bold uppercase tracking-[0.16em] text-[#0f2244] transition hover:border-[#94652c] hover:text-[#94652c]"
+              className="rounded-full border border-[#e6dfd2] bg-white px-5 py-2.5 text-xs font-bold uppercase tracking-[0.16em] text-[#17130e] transition hover:border-[#94652c] hover:text-[#94652c]"
             >
               Buying Guide
             </Link>
             <Link
               href="/guides/investing"
-              className="rounded-full border border-[#e6dfd2] bg-white px-5 py-2.5 text-xs font-bold uppercase tracking-[0.16em] text-[#0f2244] transition hover:border-[#94652c] hover:text-[#94652c]"
+              className="rounded-full border border-[#e6dfd2] bg-white px-5 py-2.5 text-xs font-bold uppercase tracking-[0.16em] text-[#17130e] transition hover:border-[#94652c] hover:text-[#94652c]"
             >
               Investor Guide
             </Link>
             <Link
               href="/insights"
-              className="inline-flex items-center gap-2 rounded-full bg-[#0f2244] px-6 py-2.5 text-xs font-bold uppercase tracking-[0.16em] text-white transition hover:bg-[#14305c]"
+              className="inline-flex items-center gap-2 rounded-full bg-[#17130e] px-6 py-2.5 text-xs font-bold uppercase tracking-[0.16em] text-white transition hover:bg-[#2a2219]"
             >
               All 10 Briefings →
             </Link>
@@ -442,23 +460,23 @@ export default function Home() {
                     alt={art.title}
                     className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />
-                  <span className="absolute top-3 left-3 rounded-full bg-[#0f2244]/90 px-3.5 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-[#dcb888]">
+                  <span className="absolute top-3 left-3 rounded-full bg-[#17130e]/90 px-3.5 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-[#dcb888]">
                     {art.category}
                   </span>
                 </div>
                 <div className="p-6">
-                  <div className="text-[11px] font-medium text-[#5f6a82]">
+                  <div className="text-[11px] font-medium text-[#786e60]">
                     {art.date} · {art.readTime}
                   </div>
-                  <h3 className="mt-2 font-serif text-xl font-semibold text-[#0f2244] group-hover:text-[#94652c]">
+                  <h3 className="mt-2 font-serif text-xl font-semibold text-[#17130e] group-hover:text-[#94652c]">
                     {art.title}
                   </h3>
-                  <p className="mt-2 line-clamp-3 text-xs md:text-sm text-[#39455a] leading-relaxed">
+                  <p className="mt-2 line-clamp-3 text-xs md:text-sm text-[#4a4237] leading-relaxed">
                     {art.excerpt}
                   </p>
                 </div>
               </div>
-              <div className="border-t border-[#e6dfd2] bg-[#faf7f2] px-6 py-3.5 text-xs font-bold uppercase tracking-[0.16em] text-[#0f2244] group-hover:text-[#94652c]">
+              <div className="border-t border-[#e6dfd2] bg-[#faf7f2] px-6 py-3.5 text-xs font-bold uppercase tracking-[0.16em] text-[#17130e] group-hover:text-[#94652c]">
                 Read Briefing →
               </div>
             </Link>
@@ -478,10 +496,10 @@ export default function Home() {
                 <ShieldCheck className="h-3.5 w-3.5" />
                 Private Consultation · 27th Floor, Sheikh Zayed Road
               </span>
-              <h2 className="font-serif text-3xl md:text-5xl font-semibold text-[#0f2244] leading-[1.08]">
+              <h2 className="font-serif text-3xl md:text-5xl font-semibold text-[#17130e] leading-[1.08]">
                 Visit Our Advisory Suite or Request a Custom Shortlist
               </h2>
-              <p className="text-sm md:text-base text-[#39455a] leading-relaxed">
+              <p className="text-sm md:text-base text-[#4a4237] leading-relaxed">
                 Whether you are comparing off-plan launches, acquiring a ready home, arranging an annual lease, or listing a property for sale, our team prepares a clear side-by-side comparison and cost breakdown within one business day.
               </p>
 
@@ -493,7 +511,7 @@ export default function Home() {
                   className="h-64 w-full object-cover"
                 />
                 <div className="border-t border-[#e6dfd2] bg-white px-5 py-3.5 flex items-center justify-between text-xs">
-                  <span className="font-semibold text-[#0f2244]">
+                  <span className="font-semibold text-[#17130e]">
                     SWK Private Advisory Suite · Office 54, 27th Floor
                   </span>
                   <span className="font-bold uppercase tracking-[0.16em] text-[#94652c]">
@@ -502,18 +520,18 @@ export default function Home() {
                 </div>
               </div>
 
-              <div className="rounded-3xl border border-[#e6dfd2] bg-white p-6 space-y-4 text-xs text-[#39455a] shadow-sm">
+              <div className="rounded-3xl border border-[#e6dfd2] bg-white p-6 space-y-4 text-xs text-[#4a4237] shadow-sm">
                 <div className="flex items-start gap-3">
                   <MapPin className="h-4 w-4 shrink-0 text-[#94652c] mt-0.5" />
                   <div>
-                    <strong className="block text-[#0f2244]">Headquarters Address</strong>
+                    <strong className="block text-[#17130e]">Headquarters Address</strong>
                     <span>{SITE.address.full}</span>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
                   <Phone className="h-4 w-4 shrink-0 text-[#94652c] mt-0.5" />
                   <div>
-                    <strong className="block text-[#0f2244]">Direct Telephone &amp; WhatsApp</strong>
+                    <strong className="block text-[#17130e]">Direct Telephone &amp; WhatsApp</strong>
                     <a href={`tel:${SITE.phoneRaw}`} className="font-semibold text-[#94652c] hover:underline">
                       {SITE.phone}
                     </a>{" "}
@@ -526,7 +544,7 @@ export default function Home() {
                 <div className="flex items-start gap-3">
                   <Clock className="h-4 w-4 shrink-0 text-[#94652c] mt-0.5" />
                   <div>
-                    <strong className="block text-[#0f2244]">Dubai GST Business Hours</strong>
+                    <strong className="block text-[#17130e]">Dubai GST Business Hours</strong>
                     <span>
                       {SITE.hours.weekdays} · {SITE.hours.saturday}
                     </span>
@@ -535,7 +553,7 @@ export default function Home() {
                 <div className="flex items-start gap-3">
                   <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-600 mt-0.5" />
                   <div>
-                    <strong className="block text-[#0f2244]">Experience &amp; Coverage</strong>
+                    <strong className="block text-[#17130e]">Experience &amp; Coverage</strong>
                     <span>18+ Years Experience · 27+ Developers · 108+ Verified Projects</span>
                   </div>
                 </div>

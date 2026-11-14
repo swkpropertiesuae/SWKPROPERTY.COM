@@ -1,19 +1,22 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
-/* Official SWK Properties (swkpropertiesuae.com) Light Corporate Palette:
- * Warm Ivory Paper (#faf7f2), Crisp White Surface (#ffffff), Soft Sand (#f4efe6),
- * Deep Corporate Navy Ink (#0f2244 / #1b3a6b), Rich Architectural Bronze-Gold (#94652c / #b07a38)
+/* SWK Properties palette — "Onyx & Champagne" (matches the Matte Gold brand kit):
+ * Warm Ivory Paper (#faf7f2), Crisp White (#ffffff), Soft Sand (#f4efe6),
+ * Onyx (#17130e) and Espresso (#2a2219 / #3a2e20) for ink and dark surfaces,
+ * Desert Bronze (#94652c / #b07a38) and Champagne (#dcb888) as accents.
  */
 :root {
   --paper-0: #ffffff;
   --paper-50: #faf7f2;
   --paper-100: #f4efe6;
   --paper-200: #ebe3d5;
-  --navy-950: #0f2244;
-  --navy-900: #14305c;
-  --navy-800: #1b3a6b;
-  --navy-700: #2a4a7d;
+  --onyx-950: #17130e;
+  --onyx-900: #2a2219;
+  --onyx-800: #3a2e20;
+  --onyx-700: #4a3b28;
+  --ease-cinematic: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-film: cubic-bezier(0.65, 0, 0.35, 1);
   --gold-700: #94652c;
   --gold-600: #b07a38;
   --gold-500: #c99a63;
@@ -21,28 +24,28 @@
   --gold-100: #f6ead7;
 
   --background: #faf7f2;
-  --foreground: #0f2244;
+  --foreground: #17130e;
   --card: #ffffff;
-  --card-foreground: #0f2244;
+  --card-foreground: #17130e;
   --popover: #ffffff;
-  --popover-foreground: #0f2244;
-  --primary: #0f2244;
+  --popover-foreground: #17130e;
+  --primary: #17130e;
   --primary-foreground: #ffffff;
   --secondary: #f4efe6;
-  --secondary-foreground: #0f2244;
+  --secondary-foreground: #17130e;
   --muted: #f4efe6;
-  --muted-foreground: #5f6a82;
+  --muted-foreground: #786e60;
   --accent: #f6ead7;
   --accent-foreground: #94652c;
   --destructive: #a52437;
   --border: #e6dfd2;
   --input: #e6dfd2;
   --ring: #94652c;
-  --chart-1: #0f2244;
+  --chart-1: #17130e;
   --chart-2: #94652c;
   --chart-3: #2f5d3a;
   --chart-4: #b07a38;
-  --chart-5: #1b3a6b;
+  --chart-5: #3a2e20;
   --swk-gold: #94652c;
   --swk-gold-deep: #7a4f1d;
   --swk-red: #a52437;
@@ -85,6 +88,9 @@
   --font-serif: var(--font-serif-display);
   --font-mono: var(--font-geist-mono);
   --font-raleway: var(--font-raleway);
+  /* Slower, film-style easing for every Tailwind transition utility. */
+  --default-transition-duration: 450ms;
+  --default-transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .font-hero-raleway {
@@ -143,10 +149,11 @@ h4,
 /* Natural-Light Spotlight Card & Interactive Hover System */
 button,
 a[class*="rounded-"] {
-  transition: transform 0.24s cubic-bezier(0.22, 1, 0.36, 1),
-    box-shadow 0.24s cubic-bezier(0.22, 1, 0.36, 1),
-    border-color 0.24s ease,
-    background-color 0.24s ease;
+  transition: transform 0.5s var(--ease-cinematic),
+    box-shadow 0.5s var(--ease-cinematic),
+    border-color 0.45s var(--ease-cinematic),
+    background-color 0.45s var(--ease-cinematic),
+    color 0.45s var(--ease-cinematic);
 }
 
 button:hover:not(:disabled),
@@ -157,10 +164,54 @@ a[class*="rounded-2xl"]:hover {
 }
 
 div[class*="rounded-3xl"] {
-  box-shadow: 0 14px 36px rgba(15, 34, 68, 0.08),
+  box-shadow: 0 14px 36px rgba(23,19,14, 0.08),
     inset 0 1px 0 rgba(255, 255, 255, 0.55);
-  transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1),
-    box-shadow 0.32s cubic-bezier(0.22, 1, 0.36, 1),
-    border-color 0.32s ease;
+  transition: transform 0.7s var(--ease-cinematic),
+    box-shadow 0.7s var(--ease-cinematic),
+    border-color 0.5s var(--ease-cinematic);
 }
 
+
+/* ---- Cinematic page transitions (React <ViewTransition> in app/template.tsx) ---- */
+::view-transition {
+  pointer-events: none;
+}
+/* The persistent header/footer stay put; only page content transitions. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+}
+::view-transition-old(.cine-out) {
+  animation: cine-out 420ms var(--ease-film) both;
+}
+::view-transition-new(.cine-in) {
+  animation: cine-in 900ms var(--ease-cinematic) 120ms both;
+}
+@keyframes cine-out {
+  to {
+    opacity: 0;
+    filter: blur(6px) brightness(0.85);
+    transform: scale(0.985);
+  }
+}
+@keyframes cine-in {
+  from {
+    opacity: 0;
+    filter: blur(10px) brightness(1.12);
+    transform: scale(1.015);
+  }
+}
+
+::selection {
+  background: #17130e;
+  color: #f3dfb1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(*),
+  ::view-transition-new(*),
+  ::view-transition-group(*) {
+    animation-duration: 0s !important;
+    animation-delay: 0s !important;
+  }
+}

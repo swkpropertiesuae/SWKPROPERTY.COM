@@ -14,8 +14,8 @@ import { developers } from "@/lib/developers";
 
 const StatItem = ({ value, label }: { value: string; label: string }) => (
   <div className="flex flex-col items-center justify-center transition-transform hover:-translate-y-1 cursor-default">
-    <span className="font-serif text-2xl font-bold text-[#0f2244] sm:text-3xl">{value}</span>
-    <span className="text-[10px] uppercase tracking-wider text-[#5f6a82] font-bold sm:text-xs">
+    <span className="font-serif text-2xl font-bold text-[#17130e] sm:text-3xl">{value}</span>
+    <span className="text-[10px] uppercase tracking-wider text-[#786e60] font-bold sm:text-xs">
       {label}
     </span>
   </div>
@@ -45,7 +45,7 @@ export default function GlassmorphismTrustHero({
   const logoPartners = developers.filter((d) => d.logo);
 
   return (
-    <div className="relative w-full rounded-3xl border border-[#e6dfd2] bg-white text-[#0f2244] overflow-hidden font-sans shadow-[0_24px_60px_rgba(15,34,68,0.08)]">
+    <div className="relative w-full rounded-3xl border border-[#e6dfd2] bg-white text-[#17130e] overflow-hidden font-sans shadow-[0_24px_60px_rgba(23,19,14,0.08)]">
       <style>{`
         @keyframes swkFadeSlideIn {
           from { opacity: 0; transform: translateY(16px); }
@@ -80,7 +80,7 @@ export default function GlassmorphismTrustHero({
               </div>
             </div>
 
-            <h2 className="swk-animate-fade-in font-serif text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-[#0f2244] leading-[1.04]">
+            <h2 className="swk-animate-fade-in font-serif text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-[#17130e] leading-[1.04]">
               {titleLine1}{" "}
               <span className="text-[#94652c] italic">
                 {titleHighlight}
@@ -88,14 +88,14 @@ export default function GlassmorphismTrustHero({
               {titleLine2}
             </h2>
 
-            <p className="swk-animate-fade-in max-w-xl text-base md:text-lg text-[#39455a] leading-relaxed">
+            <p className="swk-animate-fade-in max-w-xl text-base md:text-lg text-[#4a4237] leading-relaxed">
               {description}
             </p>
 
             <div className="swk-animate-fade-in flex flex-col sm:flex-row gap-3.5">
               <Link
                 href={primaryHref}
-                className="group inline-flex items-center justify-center gap-2 rounded-full bg-[#0f2244] px-7 py-3.5 text-xs uppercase tracking-[0.18em] font-bold text-white transition-all hover:bg-[#94652c]"
+                className="group inline-flex items-center justify-center gap-2 rounded-full bg-[#17130e] px-7 py-3.5 text-xs uppercase tracking-[0.18em] font-bold text-white transition-all hover:bg-[#94652c]"
               >
                 {primaryLabel}
                 <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
@@ -103,7 +103,7 @@ export default function GlassmorphismTrustHero({
 
               <Link
                 href={secondaryHref}
-                className="group inline-flex items-center justify-center gap-2 rounded-full border border-[#e6dfd2] bg-[#faf7f2] px-7 py-3.5 text-xs uppercase tracking-[0.18em] font-bold text-[#0f2244] transition-colors hover:border-[#94652c]"
+                className="group inline-flex items-center justify-center gap-2 rounded-full border border-[#e6dfd2] bg-[#faf7f2] px-7 py-3.5 text-xs uppercase tracking-[0.18em] font-bold text-[#17130e] transition-colors hover:border-[#94652c]"
               >
                 <FileCheck2 className="w-4 h-4 text-[#94652c]" />
                 {secondaryLabel}
@@ -116,11 +116,11 @@ export default function GlassmorphismTrustHero({
             <div className="swk-animate-fade-in relative overflow-hidden rounded-3xl border border-[#e6dfd2] bg-[#faf7f2] p-7 shadow-sm">
               <div className="relative z-10">
                 <div className="flex items-center gap-4 mb-6">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#0f2244] text-white">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#17130e] text-white">
                     <Target className="h-6 w-6 text-[#dcb888]" />
                   </div>
                   <div>
-                    <div className="text-2xl font-serif font-bold tracking-tight text-[#0f2244]">
+                    <div className="text-2xl font-serif font-bold tracking-tight text-[#17130e]">
                       ORN 51517
                     </div>
                     <div className="text-xs font-bold uppercase tracking-widest text-[#94652c]">
@@ -131,11 +131,11 @@ export default function GlassmorphismTrustHero({
 
                 <div className="space-y-2 mb-6">
                   <div className="flex justify-between text-xs font-bold uppercase tracking-wider">
-                    <span className="text-[#39455a]">Permit & Escrow Verification</span>
+                    <span className="text-[#4a4237]">Permit & Escrow Verification</span>
                     <span className="text-[#94652c]">100% Mandatory</span>
                   </div>
                   <div className="h-2 w-full overflow-hidden rounded-full bg-[#e6dfd2]">
-                    <div className="h-full w-full rounded-full bg-gradient-to-r from-[#0f2244] via-[#1b3a6b] to-[#94652c]" />
+                    <div className="h-full w-full rounded-full bg-gradient-to-r from-[#17130e] via-[#3a2e20] to-[#94652c]" />
                   </div>
                 </div>
 
@@ -186,7 +186,7 @@ export default function GlassmorphismTrustHero({
                           className="h-5 w-auto max-w-[90px] object-contain"
                         />
                       ) : null}
-                      <span className="text-xs font-bold text-[#0f2244]">
+                      <span className="text-xs font-bold text-[#17130e]">
                         {dev.name}
                       </span>
                     </Link>

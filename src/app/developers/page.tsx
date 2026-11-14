@@ -41,7 +41,7 @@ export default function DevelopersPage() {
     });
 
   return (
-    <div className="bg-[#faf7f2] text-[#0f2244]">
+    <div className="bg-[#faf7f2] text-[#17130e]">
       <JsonLd
         data={[
           breadcrumbLd([
@@ -100,10 +100,10 @@ export default function DevelopersPage() {
             <ShieldCheck className="h-4 w-4" />
             UAE Developer Directory · 18+ Years Advisory Experience
           </span>
-          <h2 className="mt-2 font-serif text-3xl md:text-5xl font-semibold text-[#0f2244]">
+          <h2 className="mt-2 font-serif text-3xl md:text-5xl font-semibold text-[#17130e]">
             UAE Master Developers Directory
           </h2>
-          <p className="mt-2 text-sm md:text-base text-[#39455a] leading-relaxed">
+          <p className="mt-2 text-sm md:text-base text-[#4a4237] leading-relaxed">
             Inspect each developer&apos;s background, flagship master communities, delivery history, and current off-plan &amp; ready projects.
           </p>
         </div>
@@ -116,7 +116,7 @@ export default function DevelopersPage() {
               className="group flex flex-col justify-between overflow-hidden rounded-3xl border border-[#e6dfd2] bg-white shadow-sm transition hover:-translate-y-1 hover:border-[#94652c] hover:shadow-lg"
             >
               <div>
-                <div className="relative h-48 w-full overflow-hidden bg-[#0f2244]">
+                <div className="relative h-48 w-full overflow-hidden bg-[#17130e]">
                   {dev.coverImage && (
                     <img
                       src={dev.coverImage}
@@ -124,12 +124,12 @@ export default function DevelopersPage() {
                       className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                     />
                   )}
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#0f2244]/85 via-[#0f2244]/25 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#17130e]/85 via-[#17130e]/25 to-transparent" />
                   <div className="absolute top-3 left-3 right-3 flex items-center justify-between gap-2">
-                    <span className="rounded-full bg-[#0f2244]/90 backdrop-blur-md px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-[#dcb888]">
+                    <span className="rounded-full bg-[#17130e]/90 backdrop-blur-md px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-[#dcb888]">
                       {dev.headquarters || "Dubai, UAE"}
                     </span>
-                    <span className="rounded-full bg-white/95 px-3 py-1 text-xs font-bold text-[#0f2244] shadow-xs">
+                    <span className="rounded-full bg-white/95 px-3 py-1 text-xs font-bold text-[#17130e] shadow-xs">
                       {dev.projectCount} Projects
                     </span>
                   </div>
@@ -141,7 +141,7 @@ export default function DevelopersPage() {
                         className="max-h-7 max-w-[140px] object-contain"
                       />
                     ) : (
-                      <span className="font-serif text-base font-bold text-[#0f2244]">
+                      <span className="font-serif text-base font-bold text-[#17130e]">
                         {dev.name}
                       </span>
                     )}
@@ -149,11 +149,11 @@ export default function DevelopersPage() {
                 </div>
 
                 <div className="p-6">
-                  <h3 className="font-serif text-2xl font-semibold text-[#0f2244] group-hover:text-[#94652c]">
+                  <h3 className="font-serif text-2xl font-semibold text-[#17130e] group-hover:text-[#94652c]">
                     {dev.name}
                   </h3>
                   <p className="mt-1.5 text-xs font-semibold text-[#94652c]">{dev.tagline}</p>
-                  <p className="mt-3 line-clamp-3 text-xs md:text-sm text-[#39455a] leading-relaxed">
+                  <p className="mt-3 line-clamp-3 text-xs md:text-sm text-[#4a4237] leading-relaxed">
                     {dev.description}
                   </p>
 
@@ -162,7 +162,7 @@ export default function DevelopersPage() {
                       {dev.flagshipAreas.slice(0, 4).map((area) => (
                         <span
                           key={area}
-                          className="inline-flex items-center gap-1 rounded-full border border-[#e6dfd2] bg-[#faf7f2] px-2.5 py-0.5 text-[10px] font-medium text-[#39455a]"
+                          className="inline-flex items-center gap-1 rounded-full border border-[#e6dfd2] bg-[#faf7f2] px-2.5 py-0.5 text-[10px] font-medium text-[#4a4237]"
                         >
                           <MapPin className="h-2.5 w-2.5 text-[#94652c]" />
                           {area}
@@ -173,7 +173,7 @@ export default function DevelopersPage() {
                 </div>
               </div>
 
-              <div className="flex items-center justify-between border-t border-[#e6dfd2] bg-[#faf7f2] px-6 py-4 text-xs font-bold uppercase tracking-[0.16em] text-[#0f2244] group-hover:text-[#94652c]">
+              <div className="flex items-center justify-between border-t border-[#e6dfd2] bg-[#faf7f2] px-6 py-4 text-xs font-bold uppercase tracking-[0.16em] text-[#17130e] group-hover:text-[#94652c]">
                 <span className="inline-flex items-center gap-1.5">
                   <Building2 className="h-3.5 w-3.5 text-[#94652c]" />
                   Inspect Profile &amp; {dev.projectCount} Releases

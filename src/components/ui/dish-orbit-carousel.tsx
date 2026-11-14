@@ -17,7 +17,7 @@ gsap.registerPlugin(ScrollTrigger)
  * - Two-weight title wipes out and back in (Raleway Light thin line from the right,
  *   highlighted heavy line from the left).
  * - Developer & Payment Plan card cross-fades with staggered rows.
- * - Orbital arc morphs along the orbit in Brand Navy Blue tones (#0f2244 / #14305c).
+ * - Orbital arc morphs along the orbit in onyx and desert-bronze tones (#17130e / #2a2219).
  */
 
 export type Dish = {
@@ -37,6 +37,8 @@ export type Dish = {
   /** Two-line label under the thumbnail. Defaults to title + subtitle. */
   label?: string
   rating: number
+  /** Official developer brandmark shown on the slide card. */
+  developerLogo?: string
   chef: string
   /** Community & payment plan line under the developer's name. */
   kitchen?: string
@@ -73,91 +75,34 @@ export type DishOrbitCarouselProps = {
 
 export const SWK_HERO_DISHES: Dish[] = [
   {
-    title: "Azizi Venice",
-    subtitle: "Crystal Lagoon",
-    label: "Azizi Venice",
-    eyebrow: "DUBAI SOUTH · 10% DOWN · 50/50 PAYMENT PLAN",
-    image: "/img/hero/slides/04-azizi-venice-thumb.webp",
-    backdropImage: "/img/hero/slides/04-azizi-venice-desktop.webp",
-    mobileBackdropImage: "/img/hero/slides/04-azizi-venice-mobile.webp",
-    alt: "Azizi Venice Crystal Lagoon Waterfront Community in Dubai South",
-    rating: 4.9,
-    chef: "Azizi Developments",
-    kitchen: "Dubai South · Handover 2026–2028 · From AED 690K",
-    description:
-      "Swimmable crystal lagoon boulevard, climate-controlled retail promenade, and cultural opera district next to Al Maktoum International Airport.",
-    likes: 184,
-    ingredients: [
-      "10% Down Payment",
-      "50/50 Payment Plan",
-      "Swimmable Lagoon",
-      "Studios to Villas",
-      "DLD Escrow Registered",
-    ],
-    accent: "#1e4b8f",
-    href: "/off-plan/azizi-venice",
-    primaryLabel: "Explore Azizi Venice",
-    secondaryLabel: "Price List",
-    whatsappText:
-      "Hello SWK Properties, please share the floor plans and DLD cost sheet for Azizi Venice.",
-  },
-  {
-    title: "Sobha Century",
-    subtitle: "Sky Sanctuary",
-    label: "Sobha Century",
-    eyebrow: "SOBHA HARTLAND & MBR CITY · 60/40 PAYMENT PLAN",
-    image: "/img/hero/slides/05-sobha-century-thumb.webp",
-    backdropImage: "/img/hero/slides/05-sobha-century-desktop.webp",
-    mobileBackdropImage: "/img/hero/slides/05-sobha-century-mobile.webp",
-    alt: "Sobha Century & Sobha One Golf & Lagoon Residences",
+    title: "Palm Jebel Ali",
+    subtitle: "The Next Palm",
+    label: "Nakheel Palm Jebel Ali",
+    eyebrow: "NAKHEEL FLAGSHIP · ISLAND VILLAS & BEACH RESIDENCES",
+    image: "/img/hero/slides/07-nakheel-palm-jebel-ali-thumb.webp",
+    backdropImage: "/img/hero/slides/07-nakheel-palm-jebel-ali-desktop.webp",
+    mobileBackdropImage: "/img/hero/slides/07-nakheel-palm-jebel-ali-mobile.webp",
+    alt: "Nakheel Palm Jebel Ali island masterplan off the Jebel Ali coast",
     rating: 5.0,
-    chef: "Sobha Realty",
-    kitchen: "MBR City & Ras Al Khor · Handover Q4 2026 · From AED 1.55M",
+    developerLogo: "/img/developers/nakheel.svg",
+    chef: "Nakheel",
+    kitchen: "Palm Jebel Ali · Off-plan · Payment plan on request",
     description:
-      "Backward-integrated construction quality overlooking an 18-hole pitch & putt golf course, sky-linked courtyard towers, and wildlife sanctuary views.",
-    likes: 212,
+      "The next palm: a man-made island off the Jebel Ali coast with beaches, marinas and a mix of frond villas and beach apartments by the developer of Palm Jumeirah.",
+    likes: 0,
     ingredients: [
-      "60/40 Payment Plan",
-      "18-Hole Golf Course",
-      "12 Mins to DIFC",
-      "1–4 BR & Duplexes",
-      "In-House Sobha Build",
+      "Freehold Island Living",
+      "Frond Villas",
+      "Beach Residences",
+      "Marinas & Beaches",
+      "Golden Visa Route (AED 2M+)",
     ],
-    accent: "#0f2244",
-    href: "/off-plan/sobha-century",
-    primaryLabel: "Explore Sobha Releases",
+    accent: "#4b3a24",
+    href: "/off-plan/palm-jebel-ali",
+    primaryLabel: "Explore Palm Jebel Ali",
     secondaryLabel: "Price List",
     whatsappText:
-      "Hello SWK Properties, please share available units and payment plan details for Sobha Century & Sobha One.",
-  },
-  {
-    title: "DAMAC Islands",
-    subtitle: "Lagoon Villas",
-    label: "DAMAC Islands",
-    eyebrow: "DUBAILAND WATERFRONT · 75/25 PAYMENT PLAN",
-    image: "/img/hero/slides/06-damac-islands-thumb.webp",
-    backdropImage: "/img/hero/slides/06-damac-islands-desktop.webp",
-    mobileBackdropImage: "/img/hero/slides/06-damac-islands-mobile.webp",
-    alt: "DAMAC Islands Tropical Lagoon Townhouses and Villas",
-    rating: 4.9,
-    chef: "DAMAC Properties",
-    kitchen: "Dubailand Master Corridor · Handover Q4 2028 · From AED 2.25M",
-    description:
-      "Master-planned island clusters with private white-sand beaches, aqua domes, lagoon waterfalls, and family townhouses & 6-bedroom waterfront villas.",
-    likes: 176,
-    ingredients: [
-      "75/25 Payment Plan",
-      "4–5 BR Townhouses",
-      "6–7 BR Island Villas",
-      "Golden Visa Eligible",
-      "Private Lagoon Beach",
-    ],
-    accent: "#163a70",
-    href: "/off-plan/damac-islands",
-    primaryLabel: "Explore DAMAC Islands",
-    secondaryLabel: "Price List",
-    whatsappText:
-      "Hello SWK Properties, please send the masterplan and villa availability for DAMAC Islands.",
+      "Hello SWK Properties, please share Palm Jebel Ali availability, prices and the Nakheel payment plan.",
   },
   {
     title: "Emaar Oasis",
@@ -169,6 +114,7 @@ export const SWK_HERO_DISHES: Dish[] = [
     mobileBackdropImage: "/img/hero/slides/05-emaar-the-oasis-mobile.webp",
     alt: "Emaar The Oasis & Dubai Hills Estate Waterfront Villas",
     rating: 5.0,
+    developerLogo: "/img/developers/emaar.svg",
     chef: "Emaar Properties",
     kitchen: "Dubailand & Dubai Hills · Handover 2028 · From AED 8.5M",
     description:
@@ -181,7 +127,7 @@ export const SWK_HERO_DISHES: Dish[] = [
       "25% Water & Parks",
       "AED 2M+ Golden Visa",
     ],
-    accent: "#1b437e",
+    accent: "#33392c",
     href: "/off-plan/emaar-the-oasis",
     primaryLabel: "Explore Emaar Oasis",
     secondaryLabel: "Price List",
@@ -189,62 +135,184 @@ export const SWK_HERO_DISHES: Dish[] = [
       "Hello SWK Properties, please share the floor plans and availability for Emaar The Oasis & Dubai Hills Estate.",
   },
   {
-    title: "Imtiaz Kore",
-    subtitle: "Dubai Islands",
-    label: "Imtiaz Kore",
-    eyebrow: "NEW LAUNCH ALERT · 60/40 FLEXIBLE PAYMENT PLAN",
-    image: "/img/hero/slides/02-imtiaz-kore-thumb.webp",
-    backdropImage: "/img/hero/slides/02-imtiaz-kore-desktop.webp",
-    mobileBackdropImage: "/img/hero/slides/02-imtiaz-kore-mobile.webp",
-    alt: "Imtiaz Kore & Wynwood Horizon Waterfront Residences",
-    rating: 4.8,
-    chef: "Imtiaz Developments",
-    kitchen: "Dubai Islands & Meydan · Handover 2027 · From AED 1.05M",
+    title: "Bugatti Residences",
+    subtitle: "By Binghatti",
+    label: "Bugatti Residences by Binghatti",
+    eyebrow: "BINGHATTI × BUGATTI · BRANDED HYPER-LUXURY",
+    image: "/img/hero/slides/08-binghatti-bugatti-thumb.webp",
+    backdropImage: "/img/hero/slides/08-binghatti-bugatti-desktop.webp",
+    mobileBackdropImage: "/img/hero/slides/08-binghatti-bugatti-mobile.webp",
+    alt: "Bugatti Residences by Binghatti tower in Business Bay",
+    rating: 5.0,
+    developerLogo: "/img/developers/binghatti.png",
+    chef: "Binghatti",
+    kitchen: "Business Bay · Branded residences · Payment plan on request",
     description:
-      "Fully furnished smart-home residences with rooftop infinity pools, private plunge-pool terraces, and direct marina & island beach access.",
-    likes: 163,
+      "A Business Bay tower carrying the Bugatti name and design cues, aimed at collectors of the marque and of Dubai skyline addresses.",
+    likes: 0,
     ingredients: [
-      "60/40 Payment Plan",
-      "Fully Furnished",
-      "Smart Home Automation",
-      "Private Pool Terraces",
-      "High Rental Yield",
+      "Branded Bugatti Design",
+      "Business Bay Waterfront",
+      "Penthouses & Mansions",
+      "Canal & Skyline Views",
+      "Collector Asset",
     ],
-    accent: "#13315c",
-    href: "/off-plan/imtiaz-kore",
-    primaryLabel: "Explore Imtiaz Kore",
+    accent: "#2b2420",
+    href: "/off-plan/bugatti-residences-by-binghatti",
+    primaryLabel: "Explore Bugatti Residences",
     secondaryLabel: "Price List",
     whatsappText:
-      "Hello SWK Properties, please share the launch brochure and price list for Imtiaz Kore.",
+      "Hello SWK Properties, please share availability and prices for Bugatti Residences by Binghatti.",
   },
   {
-    title: "Azizi Florence",
-    subtitle: "Riviera Living",
-    label: "Azizi Florence",
-    eyebrow: "METRO-CONNECTED · AL FURJAN & MEYDAN · 50/50 PLAN",
-    image: "/img/hero/slides/03-azizi-florence-thumb.webp",
-    backdropImage: "/img/hero/slides/03-azizi-florence-desktop.webp",
-    mobileBackdropImage: "/img/hero/slides/03-azizi-florence-mobile.webp",
-    alt: "Azizi Florence Italian-Inspired Waterfront Residences",
-    rating: 4.8,
-    chef: "Azizi Developments",
-    kitchen: "Al Furjan & Meydan · Handover 2027 · From AED 740K",
+    title: "Como Residences",
+    subtitle: "Palm Jumeirah",
+    label: "Nakheel Como Residences",
+    eyebrow: "NAKHEEL · BRANDED TOWER ON PALM JUMEIRAH",
+    image: "/img/hero/slides/09-nakheel-como-thumb.webp",
+    backdropImage: "/img/hero/slides/09-nakheel-como-desktop.webp",
+    mobileBackdropImage: "/img/hero/slides/09-nakheel-como-mobile.webp",
+    alt: "Como Residences by Nakheel on Palm Jumeirah",
+    rating: 5.0,
+    developerLogo: "/img/developers/nakheel.svg",
+    chef: "Nakheel",
+    kitchen: "Palm Jumeirah · Branded residences · Payment plan on request",
     description:
-      "Italian-inspired architectural facades, landscaped podium pools, and walkable Dubai Metro Route 2020 connectivity built for high-yield leasing.",
-    likes: 158,
+      "A branded residential tower on Palm Jumeirah with wellness and hospitality design from the COMO group and sea views across the Gulf.",
+    likes: 0,
     ingredients: [
-      "10% Booking",
-      "50/50 Payment Plan",
-      "Walk to Metro",
-      "7%–8.5% Est. Gross ROI",
-      "0% Buyer Commission",
+      "Palm Jumeirah Address",
+      "COMO Wellness Design",
+      "Sea-View Residences",
+      "Branded Services",
+      "Freehold Ownership",
     ],
-    accent: "#214f94",
-    href: "/off-plan/azizi-florence",
-    primaryLabel: "Explore Azizi Florence",
+    accent: "#2f3a33",
+    href: "/off-plan/como-residences",
+    primaryLabel: "Explore Como Residences",
     secondaryLabel: "Price List",
     whatsappText:
-      "Hello SWK Properties, please share available units and payment schedule for Azizi Florence.",
+      "Hello SWK Properties, please share availability and prices for Como Residences by Nakheel.",
+  },
+  {
+    title: "Rashid Yachts",
+    subtitle: "& Marina",
+    label: "Emaar Rashid Yachts & Marina",
+    eyebrow: "EMAAR · WATERFRONT MARINA DISTRICT",
+    image: "/img/hero/slides/10-emaar-rashid-yachts-thumb.webp",
+    backdropImage: "/img/hero/slides/10-emaar-rashid-yachts-desktop.webp",
+    mobileBackdropImage: "/img/hero/slides/10-emaar-rashid-yachts-mobile.webp",
+    alt: "Emaar Rashid Yachts and Marina waterfront district",
+    rating: 5.0,
+    developerLogo: "/img/developers/emaar.svg",
+    chef: "Emaar Properties",
+    kitchen: "Mina Rashid · Waterfront · Payment plan on request",
+    description:
+      "A marina district with a working yacht harbour, where Emaar residences sit beside the waterline minutes from Downtown and the old city.",
+    likes: 0,
+    ingredients: [
+      "Waterfront Marina Living",
+      "Yacht Harbour",
+      "Emaar Quality",
+      "Sea & Marina Views",
+      "Freehold Ownership",
+    ],
+    accent: "#5a4426",
+    href: "/off-plan/rashid-yachts-and-marina",
+    primaryLabel: "Explore Rashid Yachts",
+    secondaryLabel: "Price List",
+    whatsappText:
+      "Hello SWK Properties, please share availability and prices for Emaar Rashid Yachts & Marina.",
+  },
+  {
+    title: "Burj Binghatti",
+    subtitle: "Jacob & Co",
+    label: "Burj Binghatti Jacob & Co Residences",
+    eyebrow: "BINGHATTI × JACOB & CO · SUPER-TALL RESIDENCES",
+    image: "/img/hero/slides/11-binghatti-jacob-co-thumb.webp",
+    backdropImage: "/img/hero/slides/11-binghatti-jacob-co-desktop.webp",
+    mobileBackdropImage: "/img/hero/slides/11-binghatti-jacob-co-mobile.webp",
+    alt: "Burj Binghatti Jacob and Co Residences super-tall tower in Business Bay",
+    rating: 5.0,
+    developerLogo: "/img/developers/binghatti.png",
+    chef: "Binghatti",
+    kitchen: "Business Bay · Branded super-tall · Payment plan on request",
+    description:
+      "A super-tall residential tower in Business Bay created with watch and jewellery house Jacob & Co, among the tallest residential buildings planned in the world.",
+    likes: 0,
+    ingredients: [
+      "Super-Tall Landmark",
+      "Jacob & Co Branding",
+      "Business Bay",
+      "Skyline Penthouses",
+      "Collector Asset",
+    ],
+    accent: "#3b2a24",
+    href: "/off-plan/burj-binghatti-jacob-and-co-residences",
+    primaryLabel: "Explore Burj Binghatti",
+    secondaryLabel: "Price List",
+    whatsappText:
+      "Hello SWK Properties, please share availability and prices for Burj Binghatti Jacob & Co Residences.",
+  },
+  {
+    title: "DAMAC Islands",
+    subtitle: "Lagoon Villas",
+    label: "DAMAC Islands",
+    eyebrow: "DUBAILAND WATERFRONT · 75/25 PAYMENT PLAN",
+    image: "/img/hero/slides/06-damac-islands-thumb.webp",
+    backdropImage: "/img/hero/slides/06-damac-islands-desktop.webp",
+    mobileBackdropImage: "/img/hero/slides/06-damac-islands-mobile.webp",
+    alt: "DAMAC Islands Tropical Lagoon Townhouses and Villas",
+    rating: 4.9,
+    developerLogo: "/img/developers/damac.png",
+    chef: "DAMAC Properties",
+    kitchen: "Dubailand Master Corridor · Handover Q4 2028 · From AED 2.25M",
+    description:
+      "Master-planned island clusters with private white-sand beaches, aqua domes, lagoon waterfalls, and family townhouses & 6-bedroom waterfront villas.",
+    likes: 176,
+    ingredients: [
+      "75/25 Payment Plan",
+      "4–5 BR Townhouses",
+      "6–7 BR Island Villas",
+      "Golden Visa Eligible",
+      "Private Lagoon Beach",
+    ],
+    accent: "#4a2c26",
+    href: "/off-plan/damac-islands",
+    primaryLabel: "Explore DAMAC Islands",
+    secondaryLabel: "Price List",
+    whatsappText:
+      "Hello SWK Properties, please send the masterplan and villa availability for DAMAC Islands.",
+  },
+  {
+    title: "Sobha Century",
+    subtitle: "Sky Sanctuary",
+    label: "Sobha Century",
+    eyebrow: "SOBHA HARTLAND & MBR CITY · 60/40 PAYMENT PLAN",
+    image: "/img/hero/slides/05-sobha-century-thumb.webp",
+    backdropImage: "/img/hero/slides/05-sobha-century-desktop.webp",
+    mobileBackdropImage: "/img/hero/slides/05-sobha-century-mobile.webp",
+    alt: "Sobha Century & Sobha One Golf & Lagoon Residences",
+    rating: 5.0,
+    developerLogo: "/img/developers/sobha.png",
+    chef: "Sobha Realty",
+    kitchen: "MBR City & Ras Al Khor · Handover Q4 2026 · From AED 1.55M",
+    description:
+      "Backward-integrated construction quality overlooking an 18-hole pitch & putt golf course, sky-linked courtyard towers, and wildlife sanctuary views.",
+    likes: 212,
+    ingredients: [
+      "60/40 Payment Plan",
+      "18-Hole Golf Course",
+      "12 Mins to DIFC",
+      "1–4 BR & Duplexes",
+      "In-House Sobha Build",
+    ],
+    accent: "#17130e",
+    href: "/off-plan/sobha-century",
+    primaryLabel: "Explore Sobha Releases",
+    secondaryLabel: "Price List",
+    whatsappText:
+      "Hello SWK Properties, please share available units and payment plan details for Sobha Century & Sobha One.",
   },
 ]
 
@@ -321,13 +389,19 @@ const CSS =
   "@keyframes dsh-sun-pulse{0%,100%{opacity:.78;transform:scale(1) translate(0,0)}50%{opacity:1;transform:scale(1.06) translate(-12px,8px)}}" +
   "@keyframes dsh-float-slow{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}" +
   ".dsh-trk{position:relative;width:100%}" +
-  ".dsh-root{position:sticky;top:0;overflow:hidden;width:100%;background:#0b1528;color:#ffffff;" +
+  ".dsh-root{position:sticky;top:0;overflow:hidden;width:100%;background:#0e0b08;color:#ffffff;" +
   "font-family:var(--font-raleway),ui-sans-serif,system-ui,sans-serif;container-type:inline-size;-webkit-tap-highlight-color:transparent}" +
   ".dsh-root *{box-sizing:border-box}" +
-  ".dsh-bd{position:absolute;inset:0;width:100%;height:100%;max-width:none;object-fit:cover;object-position:center;pointer-events:none;transition:opacity .7s cubic-bezier(.22,1,.36,1),transform 6s ease-out;filter:brightness(1.05) contrast(1.04)}" +
+  ".dsh-bd{position:absolute;inset:0;width:100%;height:100%;max-width:none;object-fit:cover;object-position:center;pointer-events:none;transition:opacity 1.6s cubic-bezier(.65,0,.35,1),transform 9s cubic-bezier(.22,1,.36,1),filter 1.6s cubic-bezier(.65,0,.35,1);filter:brightness(1.02) contrast(1.08) saturate(.9) sepia(.08)}" +
+  // Cinematic grade: warm vignette plus a faint animated film grain over the backdrop.
+  ".dsh-scrim::before{content:'';position:absolute;inset:0;background:radial-gradient(120% 90% at 50% 45%,transparent 55%,rgba(8,6,4,.55) 100%)}" +
+  ".dsh-scrim::after{content:'';position:absolute;inset:-50%;opacity:.07;mix-blend-mode:overlay;animation:dsh-grain 1.2s steps(6) infinite;" +
+  "background-image:url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>\")}" +
+  "@keyframes dsh-grain{0%{transform:translate(0,0)}20%{transform:translate(-3%,2%)}40%{transform:translate(2%,-3%)}60%{transform:translate(-2%,3%)}80%{transform:translate(3%,1%)}100%{transform:translate(0,0)}}" +
+  "@media (prefers-reduced-motion:reduce){.dsh-scrim::after{animation:none}}" +
   ".dsh-scrim{position:absolute;inset:0;pointer-events:none;" +
-  "background:linear-gradient(90deg,rgba(8,18,36,.72) 0%,rgba(8,18,36,.48) 52%,rgba(8,18,36,.28) 100%)," +
-  "linear-gradient(180deg,rgba(8,18,36,.58) 0%,rgba(8,18,36,.08) 32%,rgba(8,18,36,.16) 68%,rgba(8,18,36,.72) 100%)}" +
+  "background:linear-gradient(90deg,rgba(12,10,7,.72) 0%,rgba(12,10,7,.48) 52%,rgba(12,10,7,.28) 100%)," +
+  "linear-gradient(180deg,rgba(12,10,7,.58) 0%,rgba(12,10,7,.08) 32%,rgba(12,10,7,.16) 68%,rgba(12,10,7,.72) 100%)}" +
   ".dsh-sunlight{position:absolute;inset:0;pointer-events:none;z-index:1;animation:dsh-sun-pulse 9s ease-in-out infinite;" +
   "background:radial-gradient(62% 52% at 64% 16%,rgba(255,250,236,.26) 0%,rgba(255,255,255,.08) 42%,transparent 74%)," +
   "radial-gradient(520px circle at var(--spot-x,50%) var(--spot-y,32%),rgba(255,252,242,.16) 0%,transparent 70%)}" +
@@ -347,44 +421,44 @@ const CSS =
   ".dsh-plates{position:absolute;left:64px;top:52px;width:244px;height:244px;touch-action:pan-y;z-index:4}" +
   ".dsh-orbit{position:absolute;inset:0;transform-origin:69% -217%;will-change:transform}" +
   ".dsh-medallion{position:relative;width:244px;height:244px;border-radius:9999px;padding:6px;" +
-  "background:linear-gradient(135deg,rgba(255,255,255,.98) 0%,rgba(22,52,102,.92) 52%,rgba(255,250,240,.92) 100%);" +
+  "background:linear-gradient(135deg,rgba(255,255,255,.98) 0%,rgba(54,42,28,.92) 52%,rgba(255,250,240,.92) 100%);" +
   "box-shadow:0 24px 52px rgba(0,0,0,.46),0 0 28px rgba(255,250,240,.22),inset 0 1.5px 0 rgba(255,255,255,.75);" +
   "transition:transform .4s cubic-bezier(.22,1,.36,1),box-shadow .4s}" +
   ".dsh-medallion:hover{transform:scale(1.03) translateY(-2px);box-shadow:0 28px 60px rgba(0,0,0,.52),0 0 38px rgba(255,252,240,.38)}" +
   ".dsh-medallion>img{display:block;width:100%;height:100%;border-radius:9999px;object-fit:cover;user-select:none;-webkit-user-drag:none}" +
   ".dsh-medallion-tag{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);white-space:nowrap;" +
-  "background:radial-gradient(120% 140% at 50% 0%,rgba(255,255,255,.26) 0%,rgba(15,34,68,.96) 65%);" +
+  "background:radial-gradient(120% 140% at 50% 0%,rgba(255,255,255,.26) 0%,rgba(23,19,14,.96) 65%);" +
   "color:#ffffff;border:1px solid rgba(255,255,255,.48);border-radius:9999px;padding:4px 12px;" +
   "font-size:9.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;box-shadow:0 8px 20px rgba(0,0,0,.38),inset 0 1px 0 rgba(255,255,255,.35)}" +
   ".dsh-head{position:absolute;left:336px;top:52px;width:384px;height:178px;z-index:4}" +
   ".dsh-hd{position:absolute;inset:0}" +
   ".dsh-eye{display:inline-flex;align-items:center;gap:6px;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" +
   "font-size:9.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;" +
-  "background:radial-gradient(120% 150% at 50% 0%,rgba(255,252,242,.24) 0%,rgba(15,34,68,.94) 68%);" +
+  "background:radial-gradient(120% 150% at 50% 0%,rgba(255,252,242,.24) 0%,rgba(23,19,14,.94) 68%);" +
   "color:#ffffff;border:1px solid rgba(255,255,255,.45);border-radius:9999px;padding:5px 13px;margin:0 0 8px 0;" +
   "box-shadow:0 8px 24px rgba(0,0,0,.32),inset 0 1px 0 rgba(255,255,255,.4)}" +
   ".dsh-t1,.dsh-t2{display:block;white-space:nowrap;line-height:1.04;text-transform:uppercase;margin:0}" +
   ".dsh-t1{font-weight:300;letter-spacing:.035em;margin-top:2px;color:#ffffff;text-shadow:0 4px 22px rgba(0,0,0,.55)}" +
   ".dsh-t2{font-weight:800;letter-spacing:.01em;margin-top:6px;color:#ffffff;" +
-  "background:radial-gradient(130% 160% at 30% 0%,rgba(255,252,240,.26) 0%,rgba(27,63,122,.96) 50%,rgba(15,34,68,.98) 100%);" +
+  "background:radial-gradient(130% 160% at 30% 0%,rgba(255,252,240,.26) 0%,rgba(64,50,33,.96) 50%,rgba(23,19,14,.98) 100%);" +
   "border:1px solid rgba(255,255,255,.45);" +
   "display:inline-block;padding:4px 14px 5px;border-radius:14px;box-shadow:0 12px 30px rgba(0,0,0,.38),inset 0 1px 0 rgba(255,255,255,.42)}" +
   ".dsh-kpis{display:flex;gap:6px;margin-top:10px;flex-wrap:nowrap;align-items:center}" +
   ".dsh-kpi{font-size:9.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#ffffff;white-space:nowrap;" +
-  "background:radial-gradient(120% 140% at 50% 0%,rgba(255,255,255,.22) 0%,rgba(15,34,68,.88) 70%);" +
+  "background:radial-gradient(120% 140% at 50% 0%,rgba(255,255,255,.22) 0%,rgba(23,19,14,.88) 70%);" +
   "border:1px solid rgba(255,255,255,.34);border-radius:9999px;padding:4px 9px;backdrop-filter:blur(10px);" +
   "box-shadow:inset 0 1px 0 rgba(255,255,255,.3);transition:transform .25s,border-color .25s,box-shadow .25s}" +
   ".dsh-kpi:hover{transform:translateY(-1.5px);border-color:rgba(255,255,255,.65);box-shadow:0 6px 16px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.5)}" +
   ".dsh-acts{position:absolute;left:336px;top:244px;width:384px;display:flex;align-items:center;gap:10px;flex-wrap:nowrap;font-size:10.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;z-index:5}" +
   ".dsh-act-primary{display:inline-flex;align-items:center;gap:7px;padding:10px 15px;border-radius:9999px;white-space:nowrap;flex-shrink:0;" +
-  "background:radial-gradient(120% 150% at 50% 0%,rgba(255,252,240,.28) 0%,rgba(15,34,68,.98) 65%);" +
+  "background:radial-gradient(120% 150% at 50% 0%,rgba(255,252,240,.28) 0%,rgba(23,19,14,.98) 65%);" +
   "color:#ffffff;border:1px solid rgba(255,255,255,.5);box-shadow:0 12px 28px rgba(0,0,0,.38),inset 0 1px 0 rgba(255,255,255,.45);" +
   "transition:all .28s cubic-bezier(.22,1,.36,1)}" +
-  ".dsh-act-primary:hover{background:radial-gradient(120% 150% at 50% 0%,rgba(255,252,240,.4) 0%,rgba(24,56,110,1) 68%);" +
+  ".dsh-act-primary:hover{background:radial-gradient(120% 150% at 50% 0%,rgba(255,252,240,.4) 0%,rgba(58,45,30,1) 68%);" +
   "transform:translateY(-2px) scale(1.02);border-color:#ffffff;box-shadow:0 16px 34px rgba(0,0,0,.46),0 0 24px rgba(255,252,240,.28),inset 0 1px 0 rgba(255,255,255,.65)}" +
   ".dsh-act-secondary{display:inline-flex;align-items:center;gap:7px;padding:10px 14px;border-radius:9999px;white-space:nowrap;flex-shrink:0;" +
   "background:radial-gradient(120% 140% at 50% 0%,#ffffff 0%,#f5f0e6 100%);" +
-  "color:#0f2244;border:1px solid #ffffff;box-shadow:0 12px 28px rgba(0,0,0,.32),inset 0 1px 0 #ffffff;" +
+  "color:#17130e;border:1px solid #ffffff;box-shadow:0 12px 28px rgba(0,0,0,.32),inset 0 1px 0 #ffffff;" +
   "transition:all .28s cubic-bezier(.22,1,.36,1)}" +
   ".dsh-act-secondary:hover{background:#ffffff;transform:translateY(-2px) scale(1.02);box-shadow:0 16px 34px rgba(0,0,0,.42),0 0 24px rgba(255,255,255,.42)}" +
   ".dsh-acts .dsh-ico{width:13px;height:13px;flex-shrink:0;transition:transform .25s}" +
@@ -392,7 +466,7 @@ const CSS =
   ".dsh-acts .dsh-fill{fill:currentColor;stroke:none}" +
   ".dsh-card{position:absolute;left:742px;top:52px;width:280px;padding:18px 20px 20px;border-radius:24px;z-index:5;overflow:hidden;" +
   "background:radial-gradient(260px circle at var(--card-x,50%) var(--card-y,12%),rgba(255,251,238,.25) 0%,rgba(255,255,255,.06) 48%,transparent 80%)," +
-  "linear-gradient(165deg,rgba(20,45,88,.94) 0%,rgba(12,26,54,.95) 100%);" +
+  "linear-gradient(165deg,rgba(46,36,25,.94) 0%,rgba(30,24,17,.95) 100%);" +
   "color:#ffffff;-webkit-backdrop-filter:blur(22px);backdrop-filter:blur(22px);" +
   "border:1px solid rgba(255,255,255,.42);box-shadow:0 24px 56px rgba(0,0,0,.48),0 0 32px rgba(255,250,240,.12),inset 0 1.5px 0 rgba(255,255,255,.55);" +
   "transition:transform .35s cubic-bezier(.22,1,.36,1),border-color .35s,box-shadow .35s}" +
@@ -400,7 +474,7 @@ const CSS =
   ".dsh-tabs{display:flex;justify-content:space-between;padding:4px;border-radius:9999px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);font-size:11px;margin-bottom:14px}" +
   ".dsh-tab{color:rgba(255,255,255,.78);font-weight:600;padding:5px 14px;border-radius:9999px;transition:all .25s}" +
   ".dsh-tab:hover{color:#ffffff;background:rgba(255,255,255,.1)}" +
-  ".dsh-tab[aria-selected=true]{background:#ffffff;color:#0f2244;font-weight:700;box-shadow:0 4px 12px rgba(0,0,0,.22)}" +
+  ".dsh-tab[aria-selected=true]{background:#ffffff;color:#17130e;font-weight:700;box-shadow:0 4px 12px rgba(0,0,0,.22)}" +
   ".dsh-bodies{display:grid}" +
   ".dsh-body{grid-area:1/1}" +
   ".dsh-rate{position:relative;height:56px;margin:0 0 10px 2px;display:flex;align-items:center;gap:12px}" +
@@ -409,6 +483,8 @@ const CSS =
   ".dsh-badge svg{width:14px;height:14px;fill:#ffffff}" +
   ".dsh-num{font-size:30px;font-weight:800;letter-spacing:-.03em;line-height:1;color:#ffffff}" +
   ".dsh-rate-lbl{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.11em;color:rgba(255,255,255,.85);line-height:1.3}" +
+  ".dsh-devlogo{display:inline-flex;align-items:center;height:34px;padding:6px 12px;margin:0 0 4px;border-radius:10px;background:#ffffff;box-shadow:0 4px 14px rgba(0,0,0,.25)}" +
+  ".dsh-devlogo img{height:100%;width:auto;max-width:150px;object-fit:contain;image-rendering:-webkit-optimize-contrast}" +
   ".dsh-chef{font-size:17px;font-weight:700;letter-spacing:-.01em;margin:0;color:#ffffff}" +
   ".dsh-kit{font-size:11px;font-weight:600;color:rgba(255,255,255,.85);margin:4px 0 8px;line-height:1.35}" +
   ".dsh-desc{font-size:12px;line-height:1.45;margin:0;min-height:68px;color:rgba(255,255,255,.94)}" +
@@ -420,13 +496,13 @@ const CSS =
   "background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.32);color:#ffffff;box-shadow:inset 0 1px 0 rgba(255,255,255,.25);transition:all .25s}" +
   ".dsh-like:hover{background:rgba(255,255,255,.26);transform:translateY(-1.5px);border-color:rgba(255,255,255,.55)}" +
   ".dsh-meh{height:34px;padding:0 13px;display:inline-flex;align-items:center;gap:4px;border-radius:99px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;white-space:nowrap;flex-shrink:0;" +
-  "background:#ffffff;color:#0f2244;box-shadow:0 6px 16px rgba(0,0,0,.22);transition:all .25s}" +
+  "background:#ffffff;color:#17130e;box-shadow:0 6px 16px rgba(0,0,0,.22);transition:all .25s}" +
   ".dsh-meh:hover{background:#f5f0e6;transform:translateY(-1.5px) scale(1.03);box-shadow:0 10px 22px rgba(0,0,0,.3)}" +
   ".dsh-react .dsh-ico{width:14px;height:14px;flex-shrink:0}" +
   ".dsh-react [aria-pressed=true] .dsh-ico{fill:currentColor}" +
   ".dsh-strip{position:absolute;left:64px;top:340px;width:654px;height:132px;display:flex;align-items:center;justify-content:space-between;z-index:5;overflow:hidden;" +
   "background:radial-gradient(280px circle at var(--strip-x,50%) var(--strip-y,10%),rgba(255,251,238,.22) 0%,transparent 75%)," +
-  "linear-gradient(165deg,rgba(18,40,80,.9) 0%,rgba(12,26,54,.92) 100%);" +
+  "linear-gradient(165deg,rgba(42,33,23,.9) 0%,rgba(30,24,17,.92) 100%);" +
   "border:1px solid rgba(255,255,255,.38);border-radius:24px;padding:0 10px;-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);" +
   "box-shadow:0 20px 46px rgba(0,0,0,.42),inset 0 1.5px 0 rgba(255,255,255,.48);transition:border-color .3s,box-shadow .3s}" +
   ".dsh-strip:hover{border-color:rgba(255,255,255,.58);box-shadow:0 24px 52px rgba(0,0,0,.48),0 0 30px rgba(255,251,238,.16),inset 0 1.5px 0 rgba(255,255,255,.65)}" +
@@ -1010,7 +1086,13 @@ export function DishOrbitCarousel({
                       <div className="dsh-rate-lbl">{(d.ingredients?.[0] ?? "").split(" ").slice(1).join(" ")}</div>
                     </div>
                   </div>
-                  <p className="dsh-chef">{d.chef}</p>
+                  {d.developerLogo ? (
+                    <span className="dsh-devlogo">
+                      <img src={d.developerLogo} alt={d.chef} decoding="async" />
+                    </span>
+                  ) : (
+                    <p className="dsh-chef">{d.chef}</p>
+                  )}
                   <p className="dsh-kit">{d.kitchen ?? "\u00a0"}</p>
                   {tab === "overview" || !d.ingredients?.length ? (
                     <p className="dsh-desc">{d.description}</p>

@@ -89,7 +89,7 @@ export default async function CommunityDetailPage({
 
       <div className="mx-auto max-w-7xl px-4 py-10 space-y-14">
         {/* Breadcrumb */}
-        <nav aria-label="Breadcrumb" className="flex flex-wrap items-center gap-2 text-xs text-[#5f6a82]">
+        <nav aria-label="Breadcrumb" className="flex flex-wrap items-center gap-2 text-xs text-[#786e60]">
           <Link href="/" className="hover:text-[#94652c]">Home</Link>
           <span>/</span>
           <Link href="/communities" className="hover:text-[#94652c]">Dubai Communities</Link>
@@ -108,15 +108,15 @@ export default async function CommunityDetailPage({
             <div className="absolute inset-0 bg-gradient-to-t from-[#faf7f2] via-[#faf7f2]/65 to-transparent" />
             <div className="absolute bottom-6 left-6 right-6 md:bottom-10 md:left-10 md:right-10 flex flex-wrap items-end justify-between gap-4">
               <div className="max-w-3xl space-y-2">
-                <span className="rounded-full bg-[#0f2244] px-3.5 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-white">
+                <span className="rounded-full bg-[#17130e] px-3.5 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-white">
                   SWK Neighbourhood Guide · {comm.tagline}
                 </span>
-                <h1 className="font-serif text-4xl md:text-6xl font-semibold text-[#0f2244]">
+                <h1 className="font-serif text-4xl md:text-6xl font-semibold text-[#17130e]">
                   {comm.name}
                 </h1>
-                <p className="text-sm md:text-base text-[#39455a]">{comm.blurb}</p>
+                <p className="text-sm md:text-base text-[#4a4237]">{comm.blurb}</p>
               </div>
-              <div className="rounded-2xl border border-[#e6dfd2] bg-[#0f2244]/90 p-4 text-xs text-white backdrop-blur-md">
+              <div className="rounded-2xl border border-[#e6dfd2] bg-[#17130e]/90 p-4 text-xs text-white backdrop-blur-md">
                 <div className="text-[#94652c] font-semibold">Geo Coordinates</div>
                 <div className="font-mono mt-0.5">
                   {comm.coordinates.lat.toFixed(4)}° N, {comm.coordinates.lng.toFixed(4)}° E
@@ -126,13 +126,13 @@ export default async function CommunityDetailPage({
           </div>
 
           <div className="p-6 md:p-10 space-y-6">
-            <h2 className="font-serif text-2xl md:text-3xl font-semibold text-[#0f2244]">
+            <h2 className="font-serif text-2xl md:text-3xl font-semibold text-[#17130e]">
               District Overview & Lifestyle Character
             </h2>
-            <p className="text-sm md:text-base text-[#39455a] leading-relaxed">
+            <p className="text-sm md:text-base text-[#4a4237] leading-relaxed">
               {comm.overview}
             </p>
-            <p className="text-sm md:text-base text-[#39455a] leading-relaxed">
+            <p className="text-sm md:text-base text-[#4a4237] leading-relaxed">
               <strong className="text-[#94652c]">Lifestyle & Resident Profile:</strong>{" "}
               {comm.lifestyle}
             </p>
@@ -143,7 +143,7 @@ export default async function CommunityDetailPage({
                   <Train className="h-4 w-4" />
                   Transport & Connectivity (Peak vs Off-Peak)
                 </div>
-                <ul className="space-y-1.5 text-[#39455a]">
+                <ul className="space-y-1.5 text-[#4a4237]">
                   {comm.connectivity.map((item) => (
                     <li key={item}>• {item}</li>
                   ))}
@@ -155,7 +155,7 @@ export default async function CommunityDetailPage({
                   <GraduationCap className="h-4 w-4" />
                   Nearby Schools & Healthcare
                 </div>
-                <ul className="space-y-1.5 text-[#39455a]">
+                <ul className="space-y-1.5 text-[#4a4237]">
                   {comm.nearbySchoolsHealthcare.map((item) => (
                     <li key={item}>• {item}</li>
                   ))}
@@ -170,7 +170,7 @@ export default async function CommunityDetailPage({
                 <p className="text-[#94652c] font-medium mb-1.5">
                   {comm.propertyTypes.join(" · ")}
                 </p>
-                <ul className="space-y-1 text-[#39455a]">
+                <ul className="space-y-1 text-[#4a4237]">
                   {comm.amenities.map((item) => (
                     <li key={item}>• {item}</li>
                   ))}
@@ -183,11 +183,11 @@ export default async function CommunityDetailPage({
         {/* §11 Balanced Assessment: Advantages AND Practical Drawbacks */}
         <section className="grid grid-cols-1 gap-6 md:grid-cols-2">
           <div className="rounded-3xl border border-emerald-500/30 bg-emerald-50/75 p-6 md:p-8">
-            <h2 className="font-serif text-2xl font-semibold text-[#0f2244] flex items-center gap-2.5">
+            <h2 className="font-serif text-2xl font-semibold text-[#17130e] flex items-center gap-2.5">
               <CheckCircle2 className="h-5 w-5 text-emerald-600" />
               Why Buyers & Tenants Choose {comm.name}
             </h2>
-            <ul className="mt-4 space-y-3 text-xs md:text-sm text-[#39455a]">
+            <ul className="mt-4 space-y-3 text-xs md:text-sm text-[#4a4237]">
               {comm.pros.map((pro) => (
                 <li key={pro} className="flex items-start gap-2.5">
                   <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-400" />
@@ -198,11 +198,11 @@ export default async function CommunityDetailPage({
           </div>
 
           <div className="rounded-3xl border border-amber-400/30 bg-amber-50/75 p-6 md:p-8">
-            <h2 className="font-serif text-2xl font-semibold text-[#0f2244] flex items-center gap-2.5">
+            <h2 className="font-serif text-2xl font-semibold text-[#17130e] flex items-center gap-2.5">
               <AlertCircle className="h-5 w-5 text-amber-700" />
               Practical Considerations & Trade-Offs
             </h2>
-            <ul className="mt-4 space-y-3 text-xs md:text-sm text-[#39455a]">
+            <ul className="mt-4 space-y-3 text-xs md:text-sm text-[#4a4237]">
               {comm.considerations.map((con) => (
                 <li key={con} className="flex items-start gap-2.5">
                   <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-amber-400" />
@@ -221,7 +221,7 @@ export default async function CommunityDetailPage({
                 <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#94652c]">
                   Verified Listings in {comm.name}
                 </p>
-                <h2 className="mt-1 font-serif text-3xl font-semibold text-[#0f2244]">
+                <h2 className="mt-1 font-serif text-3xl font-semibold text-[#17130e]">
                   Available Properties for Sale & Rent
                 </h2>
               </div>
@@ -243,7 +243,7 @@ export default async function CommunityDetailPage({
         {/* Off-Plan Projects in this Community */}
         {commProjects.length > 0 && (
           <section>
-            <h2 className="mb-6 font-serif text-3xl font-semibold text-[#0f2244]">
+            <h2 className="mb-6 font-serif text-3xl font-semibold text-[#17130e]">
               Off-Plan & Developer Releases in {comm.name}
             </h2>
             <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
@@ -262,10 +262,10 @@ export default async function CommunityDetailPage({
                     <span className="text-[10px] font-semibold uppercase tracking-wider text-[#94652c]">
                       {proj.developer}
                     </span>
-                    <h3 className="truncate font-serif text-lg font-semibold text-[#0f2244] group-hover:text-[#94652c]">
+                    <h3 className="truncate font-serif text-lg font-semibold text-[#17130e] group-hover:text-[#94652c]">
                       {proj.name}
                     </h3>
-                    <p className="truncate text-xs text-[#5f6a82]">{proj.collection}</p>
+                    <p className="truncate text-xs text-[#786e60]">{proj.collection}</p>
                   </div>
                 </Link>
               ))}

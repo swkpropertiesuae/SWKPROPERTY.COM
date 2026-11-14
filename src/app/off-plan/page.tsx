@@ -71,7 +71,7 @@ export default function OffPlanHubPage() {
               <ShieldCheck className="h-4 w-4" />
               Featured Allocations With Full Floor Plan & Escrow Data
             </span>
-            <h2 className="mt-1 font-serif text-3xl md:text-4xl font-semibold text-[#0f2244]">
+            <h2 className="mt-1 font-serif text-3xl md:text-4xl font-semibold text-[#17130e]">
               Highlighted Off-Plan Unit Allocations
             </h2>
           </div>
@@ -98,7 +98,7 @@ export default function OffPlanHubPage() {
               <p className="text-xs font-semibold uppercase tracking-[0.26em] text-[#94652c]">
                 Complete UAE Developer Directory · {filteredProjects.length} of {projects.length} Projects
               </p>
-              <h2 className="mt-1 font-serif text-3xl md:text-5xl font-semibold text-[#0f2244]">
+              <h2 className="mt-1 font-serif text-3xl md:text-5xl font-semibold text-[#17130e]">
                 Filter Off-Plan & New Launch Developments
               </h2>
             </div>
@@ -127,14 +127,14 @@ export default function OffPlanHubPage() {
                 placeholder="Search project, tower or area..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full rounded-xl border border-[#e6dfd2] bg-[#faf7f2] pl-10 pr-3.5 py-2.5 text-xs text-[#0f2244]"
+                className="w-full rounded-xl border border-[#e6dfd2] bg-[#faf7f2] pl-10 pr-3.5 py-2.5 text-xs text-[#17130e]"
               />
             </div>
 
             <select
               value={selectedDeveloper}
               onChange={(e) => setSelectedDeveloper(e.target.value)}
-              className="rounded-xl border border-[#e6dfd2] bg-[#faf7f2] px-3.5 py-2.5 text-xs text-[#0f2244]"
+              className="rounded-xl border border-[#e6dfd2] bg-[#faf7f2] px-3.5 py-2.5 text-xs text-[#17130e]"
             >
               <option value="">All {developers.length} UAE Developers</option>
               {developers.map((d) => (
@@ -147,7 +147,7 @@ export default function OffPlanHubPage() {
             <select
               value={selectedCollection}
               onChange={(e) => setSelectedCollection(e.target.value)}
-              className="rounded-xl border border-[#e6dfd2] bg-[#faf7f2] px-3.5 py-2.5 text-xs text-[#0f2244]"
+              className="rounded-xl border border-[#e6dfd2] bg-[#faf7f2] px-3.5 py-2.5 text-xs text-[#17130e]"
             >
               <option value="">All Collections</option>
               {collections.map((c) => (
@@ -160,7 +160,7 @@ export default function OffPlanHubPage() {
             <select
               value={selectedCommunity}
               onChange={(e) => setSelectedCommunity(e.target.value)}
-              className="rounded-xl border border-[#e6dfd2] bg-[#faf7f2] px-3.5 py-2.5 text-xs text-[#0f2244]"
+              className="rounded-xl border border-[#e6dfd2] bg-[#faf7f2] px-3.5 py-2.5 text-xs text-[#17130e]"
             >
               <option value="">All Project Communities</option>
               {projectCommunities.map((c) => (
@@ -177,7 +177,7 @@ export default function OffPlanHubPage() {
               <Link
                 key={a.slug}
                 href={`/off-plan/in/${a.slug}`}
-                className="rounded-full border border-[#e6dfd2] bg-white px-3 py-1.5 text-[#0f2244] hover:border-[#94652c] hover:text-[#94652c]"
+                className="rounded-full border border-[#e6dfd2] bg-white px-3 py-1.5 text-[#17130e] hover:border-[#94652c] hover:text-[#94652c]"
               >
                 {a.name} ({a.projects.length})
               </Link>
@@ -185,7 +185,7 @@ export default function OffPlanHubPage() {
           </nav>
 
           {/* Render Notice Banner (§09) */}
-          <div className="mt-5 rounded-2xl border border-[#94652c]/25 bg-[#faf7f2] px-4 py-3 text-xs text-[#39455a]">
+          <div className="mt-5 rounded-2xl border border-[#94652c]/25 bg-[#faf7f2] px-4 py-3 text-xs text-[#4a4237]">
             <strong className="text-[#94652c]">Transparency & Render Notice:</strong> Project visuals shown below are official developer architectural renders for illustrative purposes. Unit prices, payment schedules, and handover dates are confirmed from live developer inventory upon enquiry.
           </div>
 
@@ -200,19 +200,19 @@ export default function OffPlanHubPage() {
                   className="group flex flex-col justify-between overflow-hidden rounded-3xl border border-[#e6dfd2] bg-white shadow-sm transition hover:-translate-y-1 hover:border-[#94652c] hover:shadow-lg"
                 >
                   <div>
-                    <div className="relative h-56 w-full overflow-hidden bg-[#0f2244]">
+                    <div className="relative h-56 w-full overflow-hidden bg-[#17130e]">
                       <img
                         src={proj.images[0]}
                         alt={proj.name}
                         loading="lazy"
                         className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-[#0f2244]/85 via-transparent to-black/30" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#17130e]/85 via-transparent to-black/30" />
                       <div className="absolute top-3 left-3 right-3 flex items-center justify-between gap-2">
-                        <span className="rounded-full bg-[#0f2244] px-3 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-[#dcb888]">
+                        <span className="rounded-full bg-[#17130e] px-3 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-[#dcb888]">
                           {proj.collection}
                         </span>
-                        <span className="rounded-full border border-white/25 bg-white/95 px-2.5 py-1 text-[10px] font-bold text-[#0f2244] shadow-xs">
+                        <span className="rounded-full border border-white/25 bg-white/95 px-2.5 py-1 text-[10px] font-bold text-[#17130e] shadow-xs">
                           Off-Plan Launch
                         </span>
                       </div>
@@ -232,20 +232,20 @@ export default function OffPlanHubPage() {
                         <Building2 className="h-3.5 w-3.5" />
                         <span>{proj.developer}</span>
                       </div>
-                      <h3 className="mt-1.5 font-serif text-2xl font-semibold text-[#0f2244] group-hover:text-[#94652c]">
+                      <h3 className="mt-1.5 font-serif text-2xl font-semibold text-[#17130e] group-hover:text-[#94652c]">
                         {proj.name}
                       </h3>
-                      <div className="mt-1 flex items-center gap-1.5 text-xs text-[#5f6a82]">
+                      <div className="mt-1 flex items-center gap-1.5 text-xs text-[#786e60]">
                         <MapPin className="h-3.5 w-3.5 text-[#94652c]" />
                         <span>{proj.community}</span>
                       </div>
-                      <p className="mt-3 line-clamp-3 text-xs text-[#39455a] leading-relaxed">
+                      <p className="mt-3 line-clamp-3 text-xs text-[#4a4237] leading-relaxed">
                         {proj.summary}
                       </p>
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-between border-t border-[#e6dfd2] bg-[#faf7f2] px-5 py-3.5 text-xs font-bold uppercase tracking-[0.14em] text-[#0f2244] group-hover:text-[#94652c]">
+                  <div className="flex items-center justify-between border-t border-[#e6dfd2] bg-[#faf7f2] px-5 py-3.5 text-xs font-bold uppercase tracking-[0.14em] text-[#17130e] group-hover:text-[#94652c]">
                     <span>View Payment Plan &amp; Brochure</span>
                     <span>→</span>
                   </div>

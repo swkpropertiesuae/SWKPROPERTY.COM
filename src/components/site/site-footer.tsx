@@ -27,10 +27,10 @@ export function SectionHeading({
   return (
     <div className={align === "center" ? "mx-auto max-w-3xl text-center" : "max-w-3xl"}>
       <p className="text-xs font-bold tracking-[0.24em] text-[#94652c] uppercase">{eyebrow}</p>
-      <h2 className="mt-3 font-serif text-3xl leading-[1.12] font-semibold tracking-tight text-[#0f2244] md:text-5xl">
+      <h2 className="mt-3 font-serif text-3xl leading-[1.12] font-semibold tracking-tight text-[#17130e] md:text-5xl">
         {title}
       </h2>
-      {lead && <p className="mt-4 text-base md:text-lg leading-relaxed text-[#39455a]">{lead}</p>}
+      {lead && <p className="mt-4 text-base md:text-lg leading-relaxed text-[#4a4237]">{lead}</p>}
     </div>
   );
 }
@@ -51,7 +51,7 @@ export function SiteFooter() {
   const { trackEvent } = usePrefs();
 
   return (
-    <footer className="w-full border-t border-[#e6dfd2] bg-[#0f2244] text-white">
+    <footer className="w-full border-t border-[#e6dfd2] bg-[#17130e] text-white">
       <div className="mx-auto max-w-7xl px-4 py-16 md:px-6">
         <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-5">
           {/* Brand & Advisory Credentials */}
@@ -167,7 +167,7 @@ export function SiteFooter() {
               <li><Link href="/cookies" className="hover:text-[#dcb888]">Cookie Settings & Tracker Inventory</Link></li>
             </ul>
 
-            <div className="mt-5 rounded-2xl border border-white/15 bg-[#14305c] p-3.5 text-[11px] text-white/85">
+            <div className="mt-5 rounded-2xl border border-white/15 bg-[#2a2219] p-3.5 text-[11px] text-white/85">
               <div className="flex items-center gap-1.5 font-bold text-[#dcb888]">
                 <ShieldCheck className="h-3.5 w-3.5" />
                 DLD & RERA Compliance

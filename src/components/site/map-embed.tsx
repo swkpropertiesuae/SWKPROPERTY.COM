@@ -25,7 +25,7 @@ export function MapEmbed({ query, lat, lng, zoom = 15, title, className = "" }: 
         className="block h-72 w-full border-0 md:h-96"
         allowFullScreen
       />
-      <figcaption className="flex items-center justify-between gap-3 px-4 py-3 text-xs text-[#39455a]">
+      <figcaption className="flex items-center justify-between gap-3 px-4 py-3 text-xs text-[#4a4237]">
         <span className="inline-flex items-center gap-1.5">
           <MapPin className="h-3.5 w-3.5 text-[#94652c]" aria-hidden />
           {title}

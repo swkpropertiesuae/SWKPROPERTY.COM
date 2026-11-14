@@ -72,7 +72,7 @@ export default function CalculatorsPage() {
   const fiveYearPrincipalRepaid = Math.round(loanAmountAed * 0.14)
 
   return (
-    <div className="min-h-screen bg-[#faf7f2] text-[#0f2244]">
+    <div className="min-h-screen bg-[#faf7f2] text-[#17130e]">
       <LivelyPageHero
         badge="Interactive Dubai Property Calculators"
         title="Mortgage, DLD 4% Purchase Cost,"
@@ -100,7 +100,7 @@ export default function CalculatorsPage() {
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-12">
           <div className="lg:col-span-5 rounded-3xl border border-[#e6dfd2] bg-white p-6 md:p-8 space-y-6">
             <div className="flex items-center justify-between">
-              <h2 className="font-serif text-2xl font-semibold text-[#0f2244]">
+              <h2 className="font-serif text-2xl font-semibold text-[#17130e]">
                 1. Property & Financing Inputs
               </h2>
               <div className="inline-flex rounded-full border border-[#e6dfd2] bg-[#faf7f2] p-1 text-xs">
@@ -108,7 +108,7 @@ export default function CalculatorsPage() {
                   type="button"
                   onClick={() => setIsReady(true)}
                   className={`rounded-full px-3 py-1 font-semibold transition ${
-                    isReady ? "bg-[#0f2244] text-white" : "text-[#39455a]"
+                    isReady ? "bg-[#17130e] text-white" : "text-[#4a4237]"
                   }`}
                 >
                   Ready Property
@@ -117,7 +117,7 @@ export default function CalculatorsPage() {
                   type="button"
                   onClick={() => setIsReady(false)}
                   className={`rounded-full px-3 py-1 font-semibold transition ${
-                    !isReady ? "bg-[#0f2244] text-white" : "text-[#39455a]"
+                    !isReady ? "bg-[#17130e] text-white" : "text-[#4a4237]"
                   }`}
                 >
                   Off-Plan
@@ -127,7 +127,7 @@ export default function CalculatorsPage() {
 
             <div>
               <div className="flex justify-between text-xs mb-2">
-                <span className="text-[#39455a]">Purchase Price</span>
+                <span className="text-[#4a4237]">Purchase Price</span>
                 <span className="font-semibold text-[#94652c]">{formatPrice(price)}</span>
               </div>
               <input
@@ -143,7 +143,7 @@ export default function CalculatorsPage() {
 
             <div>
               <div className="flex justify-between text-xs mb-2">
-                <span className="text-[#39455a]">Down Payment ({downPct}%)</span>
+                <span className="text-[#4a4237]">Down Payment ({downPct}%)</span>
                 <span className="font-semibold text-[#94652c]">{formatPrice(downPaymentAed)}</span>
               </div>
               <input
@@ -155,7 +155,7 @@ export default function CalculatorsPage() {
                 onChange={(e) => setDownPct(Number(e.target.value))}
                 className="w-full accent-[#e6cf9c]"
               />
-              <p className="mt-1 text-[11px] text-[#5f6a82]">
+              <p className="mt-1 text-[11px] text-[#786e60]">
                 UAE Central Bank LTV guideline: typically 20% minimum deposit for UAE residents (first home ≤ AED 5M) and 40%+ for non-resident borrowers.
               </p>
             </div>
@@ -163,7 +163,7 @@ export default function CalculatorsPage() {
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <div className="flex justify-between text-xs mb-2">
-                  <span className="text-[#39455a]">Interest Rate</span>
+                  <span className="text-[#4a4237]">Interest Rate</span>
                   <span className="font-semibold text-[#94652c]">{ratePct.toFixed(2)}%</span>
                 </div>
                 <input
@@ -178,7 +178,7 @@ export default function CalculatorsPage() {
               </div>
               <div>
                 <div className="flex justify-between text-xs mb-2">
-                  <span className="text-[#39455a]">Mortgage Term</span>
+                  <span className="text-[#4a4237]">Mortgage Term</span>
                   <span className="font-semibold text-[#94652c]">{years} Years</span>
                 </div>
                 <input
@@ -202,27 +202,27 @@ export default function CalculatorsPage() {
                 <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-[#94652c]">
                   <Building2 className="h-4 w-4" /> Estimated Monthly Mortgage
                 </div>
-                <div className="mt-3 font-serif text-3xl md:text-4xl font-semibold text-[#0f2244]">
+                <div className="mt-3 font-serif text-3xl md:text-4xl font-semibold text-[#17130e]">
                   {formatPrice(monthlyPaymentAed)}
-                  <span className="text-sm font-sans text-[#5f6a82]"> / month</span>
+                  <span className="text-sm font-sans text-[#786e60]"> / month</span>
                 </div>
 
                 <dl className="mt-6 space-y-2.5 text-xs border-t border-[#e6dfd2] pt-4">
                   <div className="flex justify-between">
-                    <dt className="text-[#5f6a82]">Loan Principal ({100 - downPct}%)</dt>
-                    <dd className="font-semibold text-[#0f2244]">{formatPrice(loanAmountAed)}</dd>
+                    <dt className="text-[#786e60]">Loan Principal ({100 - downPct}%)</dt>
+                    <dd className="font-semibold text-[#17130e]">{formatPrice(loanAmountAed)}</dd>
                   </div>
                   <div className="flex justify-between">
-                    <dt className="text-[#5f6a82]">Down Payment ({downPct}%)</dt>
-                    <dd className="font-semibold text-[#0f2244]">{formatPrice(downPaymentAed)}</dd>
+                    <dt className="text-[#786e60]">Down Payment ({downPct}%)</dt>
+                    <dd className="font-semibold text-[#17130e]">{formatPrice(downPaymentAed)}</dd>
                   </div>
                   <div className="flex justify-between">
-                    <dt className="text-[#5f6a82]">Total Interest Over {years} Yrs</dt>
-                    <dd className="font-semibold text-[#0f2244]">{formatPrice(totalInterestAed)}</dd>
+                    <dt className="text-[#786e60]">Total Interest Over {years} Yrs</dt>
+                    <dd className="font-semibold text-[#17130e]">{formatPrice(totalInterestAed)}</dd>
                   </div>
                 </dl>
               </div>
-              <p className="mt-4 text-[11px] text-[#5f6a82]">
+              <p className="mt-4 text-[11px] text-[#786e60]">
                 Indicative repayment only. Final rate, bank valuation fee (approx. AED 2,500–3,150), and life insurance depend on the UAE lender.
               </p>
             </div>
@@ -233,37 +233,37 @@ export default function CalculatorsPage() {
                 <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-[#94652c]">
                   <Wallet className="h-4 w-4" /> DLD 4% & Upfront Purchase Costs
                 </div>
-                <div className="mt-3 font-serif text-3xl font-semibold text-[#0f2244]">
+                <div className="mt-3 font-serif text-3xl font-semibold text-[#17130e]">
                   {formatPrice(totalUpfrontFeesAed)}
                 </div>
-                <div className="text-xs text-[#5f6a82]">
+                <div className="text-xs text-[#786e60]">
                   Total estimated government & transaction fees
                 </div>
 
                 <dl className="mt-5 space-y-2 text-xs border-t border-[#e6dfd2] pt-4">
                   <div className="flex justify-between">
-                    <dt className="text-[#39455a]">DLD Transfer / Oqood Fee (4%)</dt>
-                    <dd className="font-semibold text-[#0f2244]">{formatPrice(dldFeeAed)}</dd>
+                    <dt className="text-[#4a4237]">DLD Transfer / Oqood Fee (4%)</dt>
+                    <dd className="font-semibold text-[#17130e]">{formatPrice(dldFeeAed)}</dd>
                   </div>
                   <div className="flex justify-between">
-                    <dt className="text-[#39455a]">
+                    <dt className="text-[#4a4237]">
                       {isReady ? "DLD Trustee Office Fee" : "Oqood Admin Fee"}
                     </dt>
-                    <dd className="font-semibold text-[#0f2244]">{formatPrice(trusteeOrOqoodAed)}</dd>
+                    <dd className="font-semibold text-[#17130e]">{formatPrice(trusteeOrOqoodAed)}</dd>
                   </div>
                   <div className="flex justify-between">
-                    <dt className="text-[#39455a]">Title Deed / Certificate Admin</dt>
-                    <dd className="font-semibold text-[#0f2244]">{formatPrice(titleDeedFeeAed)}</dd>
+                    <dt className="text-[#4a4237]">Title Deed / Certificate Admin</dt>
+                    <dd className="font-semibold text-[#17130e]">{formatPrice(titleDeedFeeAed)}</dd>
                   </div>
                   {isReady && (
                     <>
                       <div className="flex justify-between">
-                        <dt className="text-[#39455a]">Mortgage Reg (0.25% + AED 290)</dt>
-                        <dd className="font-semibold text-[#0f2244]">{formatPrice(mortgageRegAed)}</dd>
+                        <dt className="text-[#4a4237]">Mortgage Reg (0.25% + AED 290)</dt>
+                        <dd className="font-semibold text-[#17130e]">{formatPrice(mortgageRegAed)}</dd>
                       </div>
                       <div className="flex justify-between">
-                        <dt className="text-[#39455a]">Brokerage Fee (2% + 5% VAT)</dt>
-                        <dd className="font-semibold text-[#0f2244]">{formatPrice(agencyFeeAed)}</dd>
+                        <dt className="text-[#4a4237]">Brokerage Fee (2% + 5% VAT)</dt>
+                        <dd className="font-semibold text-[#17130e]">{formatPrice(agencyFeeAed)}</dd>
                       </div>
                     </>
                   )}
@@ -283,13 +283,13 @@ export default function CalculatorsPage() {
             <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-[#94652c]">
               <Percent className="h-4 w-4" /> 2. Gross vs True Net Rental Yield Worksheet
             </div>
-            <h2 className="font-serif text-2xl font-semibold text-[#0f2244]">
+            <h2 className="font-serif text-2xl font-semibold text-[#17130e]">
               Deduct Service Charges, Maintenance & Vacancy
             </h2>
 
             <div>
               <div className="flex justify-between text-xs mb-1.5">
-                <span className="text-[#39455a]">Expected Annual Rent</span>
+                <span className="text-[#4a4237]">Expected Annual Rent</span>
                 <span className="font-semibold text-[#94652c]">{formatPrice(annualRent)} / yr</span>
               </div>
               <input
@@ -305,43 +305,43 @@ export default function CalculatorsPage() {
 
             <div className="grid grid-cols-3 gap-3">
               <div>
-                <label className="block text-[11px] text-[#5f6a82] mb-1">Unit Area (sq ft)</label>
+                <label className="block text-[11px] text-[#786e60] mb-1">Unit Area (sq ft)</label>
                 <input
                   type="number"
                   value={areaSqft}
                   onChange={(e) => setAreaSqft(Math.max(300, Number(e.target.value)))}
-                  className="w-full rounded-xl border border-[#e6dfd2] bg-[#faf7f2] px-3 py-2 text-xs text-[#0f2244]"
+                  className="w-full rounded-xl border border-[#e6dfd2] bg-[#faf7f2] px-3 py-2 text-xs text-[#17130e]"
                 />
               </div>
               <div>
-                <label className="block text-[11px] text-[#5f6a82] mb-1">Service Charge / sq ft</label>
+                <label className="block text-[11px] text-[#786e60] mb-1">Service Charge / sq ft</label>
                 <input
                   type="number"
                   value={serviceChargePerSqft}
                   onChange={(e) => setServiceChargePerSqft(Math.max(5, Number(e.target.value)))}
-                  className="w-full rounded-xl border border-[#e6dfd2] bg-[#faf7f2] px-3 py-2 text-xs text-[#0f2244]"
+                  className="w-full rounded-xl border border-[#e6dfd2] bg-[#faf7f2] px-3 py-2 text-xs text-[#17130e]"
                 />
               </div>
               <div>
-                <label className="block text-[11px] text-[#5f6a82] mb-1">Vacancy Buffer (%)</label>
+                <label className="block text-[11px] text-[#786e60] mb-1">Vacancy Buffer (%)</label>
                 <input
                   type="number"
                   value={vacancyPct}
                   onChange={(e) => setVacancyPct(Math.max(0, Math.min(30, Number(e.target.value))))}
-                  className="w-full rounded-xl border border-[#e6dfd2] bg-[#faf7f2] px-3 py-2 text-xs text-[#0f2244]"
+                  className="w-full rounded-xl border border-[#e6dfd2] bg-[#faf7f2] px-3 py-2 text-xs text-[#17130e]"
                 />
               </div>
             </div>
 
             <div className="grid grid-cols-2 gap-4 rounded-2xl border border-[#94652c]/30 bg-[#faf7f2] p-4">
               <div>
-                <div className="text-[11px] uppercase tracking-[0.16em] text-[#5f6a82]">
+                <div className="text-[11px] uppercase tracking-[0.16em] text-[#786e60]">
                   Gross Rental Yield
                 </div>
-                <div className="mt-1 font-serif text-3xl font-semibold text-[#0f2244]">
+                <div className="mt-1 font-serif text-3xl font-semibold text-[#17130e]">
                   {grossYieldPct.toFixed(2)}%
                 </div>
-                <div className="text-[11px] text-[#5f6a82]">Before operating deductions</div>
+                <div className="text-[11px] text-[#786e60]">Before operating deductions</div>
               </div>
               <div>
                 <div className="text-[11px] uppercase tracking-[0.16em] text-[#94652c]">
@@ -350,20 +350,20 @@ export default function CalculatorsPage() {
                 <div className="mt-1 font-serif text-3xl font-semibold text-[#94652c]">
                   {netYieldPct.toFixed(2)}%
                 </div>
-                <div className="text-[11px] text-[#39455a]">
+                <div className="text-[11px] text-[#4a4237]">
                   Net: {formatPrice(netAnnualIncomeAed)} / yr
                 </div>
               </div>
             </div>
 
-            <div className="text-xs text-[#5f6a82] space-y-1">
+            <div className="text-xs text-[#786e60] space-y-1">
               <div>
                 • Annual Service Charges ({areaSqft} sq ft × AED {serviceChargePerSqft}):{" "}
-                <strong className="text-[#0f2244]">{formatPrice(annualServiceCharges)}</strong>
+                <strong className="text-[#17130e]">{formatPrice(annualServiceCharges)}</strong>
               </div>
               <div>
                 • 5-Year Rent Outflow vs Buying Comparison: Paying{" "}
-                <strong className="text-[#0f2244]">{formatPrice(fiveYearRentOutflow)}</strong> in rent over 5 years vs amortising approx.{" "}
+                <strong className="text-[#17130e]">{formatPrice(fiveYearRentOutflow)}</strong> in rent over 5 years vs amortising approx.{" "}
                 <strong className="text-[#94652c]">{formatPrice(fiveYearPrincipalRepaid)}</strong> of loan principal.
               </div>
             </div>
@@ -383,8 +383,8 @@ export default function CalculatorsPage() {
                     onClick={() => setOffPlanStructure(plan)}
                     className={`rounded-full px-3 py-1 text-xs font-semibold ${
                       offPlanStructure === plan
-                        ? "bg-[#0f2244] text-white"
-                        : "border border-[#e6dfd2] text-[#39455a]"
+                        ? "bg-[#17130e] text-white"
+                        : "border border-[#e6dfd2] text-[#4a4237]"
                     }`}
                   >
                     {plan}
@@ -393,7 +393,7 @@ export default function CalculatorsPage() {
               </div>
             </div>
 
-            <h2 className="font-serif text-2xl font-semibold text-[#0f2244]">
+            <h2 className="font-serif text-2xl font-semibold text-[#17130e]">
               Escrow Milestone Cash-Flow Breakdown ({offPlanStructure} Plan)
             </h2>
 
@@ -403,11 +403,11 @@ export default function CalculatorsPage() {
                   <strong className="text-[#94652c] block">
                     Stage 1: Reservation & SPA Signing ({bookingPct}% + 4% DLD Oqood)
                   </strong>
-                  <span className="text-[#5f6a82]">
+                  <span className="text-[#786e60]">
                     Paid into the DLD-registered project escrow account
                   </span>
                 </div>
-                <div className="text-right font-semibold text-[#0f2244]">
+                <div className="text-right font-semibold text-[#17130e]">
                   {formatPrice(Math.round(price * (bookingPct / 100)) + dldFeeAed)}
                 </div>
               </div>
@@ -417,11 +417,11 @@ export default function CalculatorsPage() {
                   <strong className="text-[#94652c] block">
                     Stage 2: Construction Milestones ({constructionPct}% across 4 instalments)
                   </strong>
-                  <span className="text-[#5f6a82]">
+                  <span className="text-[#786e60]">
                     Approx. {formatPrice(Math.round((price * (constructionPct / 100)) / 4))} per certified construction milestone
                   </span>
                 </div>
-                <div className="text-right font-semibold text-[#0f2244]">
+                <div className="text-right font-semibold text-[#17130e]">
                   {formatPrice(Math.round(price * (constructionPct / 100)))}
                 </div>
               </div>
@@ -431,7 +431,7 @@ export default function CalculatorsPage() {
                   <strong className="text-[#94652c] block">
                     Stage 3: Completion & Key Handover ({handoverPct}%)
                   </strong>
-                  <span className="text-[#39455a]">
+                  <span className="text-[#4a4237]">
                     Payable via cash or UAE bank handover mortgage upon BCC completion
                   </span>
                 </div>
@@ -444,7 +444,7 @@ export default function CalculatorsPage() {
         </div>
 
         {/* Mandatory Regulatory & Assumptions Disclaimer (§45) */}
-        <div className="rounded-2xl border border-[#e6dfd2] bg-[#faf7f2] p-5 text-xs text-[#39455a] flex items-start gap-3">
+        <div className="rounded-2xl border border-[#e6dfd2] bg-[#faf7f2] p-5 text-xs text-[#4a4237] flex items-start gap-3">
           <AlertCircle className="h-5 w-5 shrink-0 text-[#94652c] mt-0.5" />
           <div>
             <strong className="text-[#94652c] block mb-1">

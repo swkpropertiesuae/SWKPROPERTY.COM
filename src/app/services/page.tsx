@@ -19,7 +19,7 @@ export const metadata: Metadata = buildMeta({
 
 export default function ServicesPage() {
   return (
-    <div className="min-h-screen bg-[#faf7f2] text-[#0f2244]">
+    <div className="min-h-screen bg-[#faf7f2] text-[#17130e]">
       <JsonLd
         data={breadcrumbLd([
           { name: "Home", path: "/" },
@@ -55,7 +55,7 @@ export default function ServicesPage() {
           <p className="text-xs font-semibold uppercase tracking-[0.26em] text-[#94652c]">
             8 Specialized Practice Areas
           </p>
-          <h2 className="mt-1 font-serif text-3xl md:text-5xl font-semibold text-[#0f2244]">
+          <h2 className="mt-1 font-serif text-3xl md:text-5xl font-semibold text-[#17130e]">
             Explore Our Real Estate Services
           </h2>
         </div>
@@ -72,20 +72,20 @@ export default function ServicesPage() {
                   <span className="text-xs font-bold uppercase tracking-[0.22em] text-[#94652c]">
                     Service 0{idx + 1} · {svc.shortTitle}
                   </span>
-                  <span className="rounded-full border border-[#e6dfd2] bg-[#faf7f2] px-3 py-1 text-[10px] font-semibold text-[#39455a]">
+                  <span className="rounded-full border border-[#e6dfd2] bg-[#faf7f2] px-3 py-1 text-[10px] font-semibold text-[#4a4237]">
                     {svc.steps.length}-Step Process
                   </span>
                 </div>
 
-                <h3 className="mt-2 font-serif text-2xl md:text-3xl font-semibold text-[#0f2244] group-hover:text-[#94652c]">
+                <h3 className="mt-2 font-serif text-2xl md:text-3xl font-semibold text-[#17130e] group-hover:text-[#94652c]">
                   {svc.title}
                 </h3>
                 <p className="mt-2 text-xs md:text-sm font-semibold text-[#94652c]">{svc.tagline}</p>
-                <p className="mt-3 text-xs md:text-sm text-[#39455a] leading-relaxed">
+                <p className="mt-3 text-xs md:text-sm text-[#4a4237] leading-relaxed">
                   {svc.description}
                 </p>
 
-                <ul className="mt-5 space-y-2 border-t border-[#e6dfd2] pt-4 text-xs text-[#39455a]">
+                <ul className="mt-5 space-y-2 border-t border-[#e6dfd2] pt-4 text-xs text-[#4a4237]">
                   {svc.whatIsIncluded.slice(0, 3).map((inc) => (
                     <li key={inc} className="flex items-start gap-2">
                       <CheckCircle2 className="h-4 w-4 shrink-0 text-[#94652c] mt-0.5" />
@@ -95,7 +95,7 @@ export default function ServicesPage() {
                 </ul>
               </div>
 
-              <div className="mt-6 flex items-center justify-between border-t border-[#e6dfd2] pt-4 text-xs font-bold text-[#0f2244] group-hover:text-[#94652c]">
+              <div className="mt-6 flex items-center justify-between border-t border-[#e6dfd2] pt-4 text-xs font-bold text-[#17130e] group-hover:text-[#94652c]">
                 <span>Inspect Scope, Process &amp; Fee Clarity</span>
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
               </div>

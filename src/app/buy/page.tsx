@@ -70,7 +70,7 @@ export default function BuyPage() {
             <p className="text-xs font-semibold uppercase tracking-[0.26em] text-[#94652c]">
               Secondary Market · Title Deed Ready
             </p>
-            <h2 className="mt-1 font-serif text-3xl md:text-5xl font-semibold text-[#0f2244]">
+            <h2 className="mt-1 font-serif text-3xl md:text-5xl font-semibold text-[#17130e]">
               Verified Properties For Sale in Dubai
             </h2>
           </div>
@@ -96,10 +96,10 @@ export default function BuyPage() {
             <span className="text-xs font-semibold uppercase tracking-[0.26em] text-[#94652c]">
               Transparent Fee Schedule · RERA ORN {SITE.reraOrn}
             </span>
-            <h2 className="mt-2 font-serif text-3xl md:text-4xl font-semibold text-[#0f2244]">
+            <h2 className="mt-2 font-serif text-3xl md:text-4xl font-semibold text-[#17130e]">
               {buyingGuide.comparisonTable.caption}
             </h2>
-            <p className="mt-2 text-sm text-[#39455a] leading-relaxed">
+            <p className="mt-2 text-sm text-[#4a4237] leading-relaxed">
               {buyingGuide.directAnswer}
             </p>
           </div>
@@ -115,13 +115,13 @@ export default function BuyPage() {
                   ))}
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[#e6dfd2] text-[#39455a]">
+              <tbody className="divide-y divide-[#e6dfd2] text-[#4a4237]">
                 {buyingGuide.comparisonTable.rows.map((row, idx) => (
                   <tr key={idx}>
                     {row.map((cell, cIdx) => (
                       <td
                         key={cIdx}
-                        className={`p-4 ${cIdx === 0 ? "font-semibold text-[#0f2244]" : ""}`}
+                        className={`p-4 ${cIdx === 0 ? "font-semibold text-[#17130e]" : ""}`}
                       >
                         {cell}
                       </td>
@@ -135,13 +135,13 @@ export default function BuyPage() {
           <div className="mt-6 flex flex-wrap gap-3">
             <Link
               href="/calculators"
-              className="rounded-full bg-[#0f2244] px-6 py-3 text-xs font-bold uppercase tracking-[0.18em] text-white"
+              className="rounded-full bg-[#17130e] px-6 py-3 text-xs font-bold uppercase tracking-[0.18em] text-white"
             >
               Calculate Exact DLD 4% & Mortgage Repayments
             </Link>
             <Link
               href="/guides/buying"
-              className="rounded-full border border-[#e6dfd2] px-6 py-3 text-xs font-semibold uppercase tracking-[0.18em] text-[#0f2244] hover:border-[#94652c]"
+              className="rounded-full border border-[#e6dfd2] px-6 py-3 text-xs font-semibold uppercase tracking-[0.18em] text-[#17130e] hover:border-[#94652c]"
             >
               Read Full Step-by-Step Buying Guide
             </Link>

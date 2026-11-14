@@ -27,7 +27,7 @@ export default function FaqPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-[#faf7f2] text-[#0f2244]">
+    <div className="min-h-screen bg-[#faf7f2] text-[#17130e]">
       <JsonLd id="ld-faq-page" data={faqSchema(combinedFaqs)} />
       <JsonLd
         id="ld-faq-breadcrumb"
@@ -42,10 +42,10 @@ export default function FaqPage() {
           <span className="inline-flex items-center gap-2 rounded-full border border-[#94652c]/35 bg-[#f6ead7] px-4 py-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-[#94652c]">
             <HelpCircle className="h-3.5 w-3.5" /> Answer-First AEO Knowledge Base · RERA ORN 51517
           </span>
-          <h1 className="mt-4 font-hero-raleway text-3xl md:text-5xl font-light uppercase tracking-[0.08em] text-[#0f2244]">
+          <h1 className="mt-4 font-hero-raleway text-3xl md:text-5xl font-light uppercase tracking-[0.08em] text-[#17130e]">
             Frequently Asked Questions About Dubai & UAE Real Estate
           </h1>
-          <p className="mt-3 text-sm md:text-base text-[#39455a] leading-relaxed">
+          <p className="mt-3 text-sm md:text-base text-[#4a4237] leading-relaxed">
             Plain-language answers covering off-plan escrow accounts, Oqood interim registration, secondary-market Form F transfers, Ejari tenancy rules, and RERA Form A seller onboarding.
           </p>
         </div>
@@ -60,8 +60,8 @@ export default function FaqPage() {
           <div className="space-y-4">
             {faqs.map((f, i) => (
               <div key={i} className="rounded-3xl border border-[#e6dfd2] bg-white p-6">
-                <h3 className="text-base font-semibold text-[#0f2244]">{f.q}</h3>
-                <p className="mt-2 text-xs md:text-sm text-[#39455a] leading-relaxed">{f.a}</p>
+                <h3 className="text-base font-semibold text-[#17130e]">{f.q}</h3>
+                <p className="mt-2 text-xs md:text-sm text-[#4a4237] leading-relaxed">{f.a}</p>
               </div>
             ))}
           </div>
@@ -84,8 +84,8 @@ export default function FaqPage() {
             <div className="space-y-4">
               {guide.faqs.map((f, i) => (
                 <div key={i} className="rounded-3xl border border-[#e6dfd2] bg-white p-6">
-                  <h3 className="text-base font-semibold text-[#0f2244]">{f.q}</h3>
-                  <p className="mt-2 text-xs md:text-sm text-[#39455a] leading-relaxed">{f.a}</p>
+                  <h3 className="text-base font-semibold text-[#17130e]">{f.q}</h3>
+                  <p className="mt-2 text-xs md:text-sm text-[#4a4237] leading-relaxed">{f.a}</p>
                 </div>
               ))}
             </div>

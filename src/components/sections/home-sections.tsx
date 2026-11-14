@@ -41,7 +41,7 @@ import {
 /* ------------------------------------------------------------------ Dish Orbit Carousel Dubai Real Estate Hero (21st.dev kedhareswer/dish-orbit-carousel) */
 export function Hero() {
   return (
-    <div className="relative bg-[#0b1528]">
+    <div className="relative bg-[#0e0b08]">
       <DishOrbitCarousel />
     </div>
   )
@@ -60,7 +60,7 @@ export function TrustBar() {
       <div className="mx-auto grid max-w-7xl grid-cols-2 gap-y-8 px-4 py-10 md:grid-cols-4 md:px-6">
         {items.map(([n, l]) => (
           <div key={l} className="text-center">
-            <div className="font-hero-raleway font-light text-4xl text-[#0f2244] md:text-5xl">
+            <div className="font-hero-raleway font-light text-4xl text-[#17130e] md:text-5xl">
               {n}
             </div>
             <div className="mt-2 text-xs font-bold tracking-[0.22em] text-[#94652c] uppercase">
@@ -140,16 +140,16 @@ export function Communities() {
           <p className="text-xs font-bold uppercase tracking-[0.26em] text-[#94652c]">
             03 · Freehold Neighbourhoods &amp; Island Masterplans
           </p>
-          <h2 className="mt-2 font-serif text-3xl md:text-5xl font-semibold text-[#0f2244] leading-[1.08]">
+          <h2 className="mt-2 font-serif text-3xl md:text-5xl font-semibold text-[#17130e] leading-[1.08]">
             Explore Dubai &amp; UAE Communities
           </h2>
-          <p className="mt-2.5 max-w-2xl text-sm md:text-base text-[#39455a] leading-relaxed">
+          <p className="mt-2.5 max-w-2xl text-sm md:text-base text-[#4a4237] leading-relaxed">
             From Downtown Dubai, Dubai Hills Estate, and Dubai South to Yas Island, Masaar in Sharjah, Siniya Island, and Al Marjan Island—inspect the districts our team advises on daily.
           </p>
         </div>
         <Link
           href="/communities"
-          className="inline-flex items-center gap-2 rounded-full bg-[#0f2244] px-7 py-3.5 text-xs font-bold uppercase tracking-[0.18em] text-white transition hover:bg-[#94652c]"
+          className="inline-flex items-center gap-2 rounded-full bg-[#17130e] px-7 py-3.5 text-xs font-bold uppercase tracking-[0.18em] text-white transition hover:bg-[#94652c]"
         >
           <span>All Community Guides</span>
           <ArrowRight className="h-4 w-4 text-[#dcb888]" />
@@ -188,14 +188,14 @@ export function Communities() {
             <Link
               key={`${item.id}-r1-${idx}`}
               href={item.href}
-              className="group relative flex h-[320px] w-[360px] shrink-0 flex-col justify-end overflow-hidden rounded-3xl border border-[#e6dfd2] bg-[#0f2244] p-6 text-white shadow-md transition-all duration-300 hover:-translate-y-1 hover:border-[#94652c]"
+              className="group relative flex h-[320px] w-[360px] shrink-0 flex-col justify-end overflow-hidden rounded-3xl border border-[#e6dfd2] bg-[#17130e] p-6 text-white shadow-md transition-all duration-300 hover:-translate-y-1 hover:border-[#94652c]"
             >
               <img
                 src={item.image}
                 alt={item.name}
                 className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#0f2244]/95 via-[#0f2244]/40 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#17130e]/95 via-[#17130e]/40 to-transparent" />
               <div className="relative z-10">
                 <span className="inline-flex items-center gap-1.5 rounded-full bg-[#dcb888]/20 border border-[#dcb888]/40 px-3 py-0.5 text-[10px] font-bold uppercase tracking-[0.18em] text-[#dcb888]">
                   <MapPin className="h-3 w-3" />
@@ -229,12 +229,12 @@ export function Communities() {
               />
               <div className="min-w-0 flex-1">
                 <div className="flex items-center justify-between gap-2">
-                  <h4 className="truncate font-serif text-lg font-semibold text-[#0f2244] group-hover:text-[#94652c]">
+                  <h4 className="truncate font-serif text-lg font-semibold text-[#17130e] group-hover:text-[#94652c]">
                     {item.name}
                   </h4>
                   <ArrowUpRight className="h-4 w-4 shrink-0 text-[#94652c]" />
                 </div>
-                <p className="mt-1 line-clamp-2 text-xs text-[#39455a]">
+                <p className="mt-1 line-clamp-2 text-xs text-[#4a4237]">
                   {item.blurb}
                 </p>
               </div>
@@ -389,8 +389,8 @@ export function Aerial() {
                   onClick={() => setActiveZoneIdx(idx)}
                   className={`rounded-full border px-4 py-2 text-xs font-bold uppercase tracking-[0.14em] transition-all ${
                     selected
-                      ? "border-[#0f2244] bg-[#0f2244] text-white shadow-sm"
-                      : "border-[#e6dfd2] bg-white text-[#0f2244] hover:border-[#94652c] hover:text-[#94652c]"
+                      ? "border-[#17130e] bg-[#17130e] text-white shadow-sm"
+                      : "border-[#e6dfd2] bg-white text-[#17130e] hover:border-[#94652c] hover:text-[#94652c]"
                   }`}
                 >
                   {zone.emirate} · 0{idx + 1}
@@ -403,7 +403,7 @@ export function Aerial() {
         {/* Interactive Aerial Viewport + Telemetry Panel */}
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-12 items-stretch">
           {/* Left: Interactive Aerial Map Viewport with Animated Hotspot Pins */}
-          <div className="lg:col-span-7 relative min-h-[420px] md:min-h-[500px] overflow-hidden rounded-3xl border border-[#e6dfd2] bg-[#0f2244] shadow-lg">
+          <div className="lg:col-span-7 relative min-h-[420px] md:min-h-[500px] overflow-hidden rounded-3xl border border-[#e6dfd2] bg-[#17130e] shadow-lg">
             <AnimatePresence initial={false} mode="wait">
               <motion.img
                 key={activeZone.image}
@@ -418,15 +418,15 @@ export function Aerial() {
                 className="absolute inset-0 h-full w-full object-cover"
               />
             </AnimatePresence>
-            <div className="absolute inset-0 bg-gradient-to-t from-[#0f2244]/90 via-[#0f2244]/25 to-[#0f2244]/30" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#17130e]/90 via-[#17130e]/25 to-[#17130e]/30" />
 
             {/* Top Radar Bar */}
             <div className="absolute top-4 left-4 right-4 flex flex-wrap items-center justify-between gap-2 z-10">
-              <span className="inline-flex items-center gap-2 rounded-full bg-[#0f2244]/90 border border-[#dcb888]/40 px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-[#dcb888] backdrop-blur-md">
+              <span className="inline-flex items-center gap-2 rounded-full bg-[#17130e]/90 border border-[#dcb888]/40 px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-[#dcb888] backdrop-blur-md">
                 <Compass className="h-3.5 w-3.5 animate-spin" style={{ animationDuration: "12s" }} />
                 {activeZone.badge}
               </span>
-              <span className="rounded-full bg-white/95 px-3.5 py-1.5 text-xs font-bold text-[#0f2244] shadow-sm">
+              <span className="rounded-full bg-white/95 px-3.5 py-1.5 text-xs font-bold text-[#17130e] shadow-sm">
                 {activeZone.priceBand}
               </span>
             </div>
@@ -438,7 +438,7 @@ export function Aerial() {
                 style={{ left: spot.x, top: spot.y }}
                 className="absolute -translate-x-1/2 -translate-y-1/2 z-20 group"
               >
-                <div className="flex items-center gap-2 rounded-full border border-[#dcb888] bg-[#0f2244]/95 px-3 py-1.5 text-[11px] font-semibold text-white shadow-xl backdrop-blur-md transition-transform duration-300 hover:scale-105">
+                <div className="flex items-center gap-2 rounded-full border border-[#dcb888] bg-[#17130e]/95 px-3 py-1.5 text-[11px] font-semibold text-white shadow-xl backdrop-blur-md transition-transform duration-300 hover:scale-105">
                   <img
                     src="/brand/swk-emblem.svg"
                     alt=""
@@ -461,7 +461,7 @@ export function Aerial() {
               </div>
               <Link
                 href="/off-plan"
-                className="inline-flex items-center gap-2 rounded-full bg-[#dcb888] px-5 py-2.5 text-xs font-bold uppercase tracking-[0.16em] text-[#0f2244] transition hover:bg-white"
+                className="inline-flex items-center gap-2 rounded-full bg-[#dcb888] px-5 py-2.5 text-xs font-bold uppercase tracking-[0.16em] text-[#17130e] transition hover:bg-white"
               >
                 <span>Inspect Corridor Releases</span>
                 <ArrowUpRight className="h-4 w-4" />
@@ -477,7 +477,7 @@ export function Aerial() {
                   <span className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#94652c]">
                     Corridor Briefing
                   </span>
-                  <h4 className="mt-1 font-serif text-2xl font-semibold text-[#0f2244]">
+                  <h4 className="mt-1 font-serif text-2xl font-semibold text-[#17130e]">
                     {activeZone.emirate} Growth Matrix
                   </h4>
                 </div>
@@ -486,12 +486,12 @@ export function Aerial() {
                 </span>
               </div>
 
-              <p className="mt-4 text-sm text-[#39455a] leading-relaxed">
+              <p className="mt-4 text-sm text-[#4a4237] leading-relaxed">
                 {activeZone.summary}
               </p>
 
               <div className="mt-6">
-                <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#0f2244] mb-3">
+                <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#17130e] mb-3">
                   Priority Target Projects in This Corridor:
                 </p>
                 <div className="space-y-2.5">
@@ -499,7 +499,7 @@ export function Aerial() {
                     <Link
                       key={launch}
                       href="/off-plan"
-                      className="flex items-center justify-between rounded-2xl border border-[#e6dfd2] bg-[#faf7f2] px-4 py-3 text-xs font-semibold text-[#0f2244] transition hover:border-[#94652c] hover:bg-white"
+                      className="flex items-center justify-between rounded-2xl border border-[#e6dfd2] bg-[#faf7f2] px-4 py-3 text-xs font-semibold text-[#17130e] transition hover:border-[#94652c] hover:bg-white"
                     >
                       <span className="flex items-center gap-2">
                         <CheckCircle2 className="h-4 w-4 text-[#94652c]" />
@@ -515,7 +515,7 @@ export function Aerial() {
             <div className="mt-6 flex flex-wrap items-center justify-between gap-3 border-t border-[#e6dfd2] pt-5">
               <Link
                 href="/contact"
-                className="inline-flex items-center gap-2 rounded-full bg-[#0f2244] px-6 py-3 text-xs font-bold uppercase tracking-[0.16em] text-white transition hover:bg-[#94652c]"
+                className="inline-flex items-center gap-2 rounded-full bg-[#17130e] px-6 py-3 text-xs font-bold uppercase tracking-[0.16em] text-white transition hover:bg-[#94652c]"
               >
                 <span>Request Corridor Price Sheet</span>
                 <ArrowRight className="h-4 w-4 text-[#dcb888]" />
@@ -619,7 +619,7 @@ export function Residences() {
         />
         <Link
           href="/off-plan"
-          className="inline-flex items-center gap-2 rounded-full border border-[#0f2244] bg-white px-6 py-3 text-xs font-bold uppercase tracking-[0.18em] text-[#0f2244] transition hover:bg-[#0f2244] hover:text-white"
+          className="inline-flex items-center gap-2 rounded-full border border-[#17130e] bg-white px-6 py-3 text-xs font-bold uppercase tracking-[0.18em] text-[#17130e] transition hover:bg-[#17130e] hover:text-white"
         >
           <span>View All 108+ Projects</span>
           <ArrowRight className="h-4 w-4" />
@@ -633,20 +633,20 @@ export function Residences() {
             <Link
               key={`${item.title}-${idx}`}
               href="/off-plan"
-              className="group relative flex h-[400px] w-[440px] shrink-0 flex-col justify-between overflow-hidden rounded-3xl border border-[#e6dfd2] bg-[#0f2244] p-6 text-white shadow-lg transition-all duration-300 hover:-translate-y-1.5 hover:border-[#94652c]"
+              className="group relative flex h-[400px] w-[440px] shrink-0 flex-col justify-between overflow-hidden rounded-3xl border border-[#e6dfd2] bg-[#17130e] p-6 text-white shadow-lg transition-all duration-300 hover:-translate-y-1.5 hover:border-[#94652c]"
             >
               <img
                 src={item.src}
                 alt={item.title}
                 className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#0f2244]/95 via-[#0f2244]/25 to-[#0f2244]/35" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#17130e]/95 via-[#17130e]/25 to-[#17130e]/35" />
 
               <div className="relative z-10 flex items-center justify-between gap-2">
-                <span className="rounded-full bg-[#0f2244]/85 border border-[#dcb888]/40 px-3.5 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-[#dcb888] backdrop-blur-md">
+                <span className="rounded-full bg-[#17130e]/85 border border-[#dcb888]/40 px-3.5 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-[#dcb888] backdrop-blur-md">
                   {item.location}
                 </span>
-                <span className="rounded-full bg-white/95 px-3 py-1 text-[10px] font-bold text-[#0f2244]">
+                <span className="rounded-full bg-white/95 px-3 py-1 text-[10px] font-bold text-[#17130e]">
                   {item.tag}
                 </span>
               </div>
@@ -730,7 +730,7 @@ export function Services() {
 
           <Link
             href="/services"
-            className="inline-flex items-center gap-2.5 rounded-xl bg-[#0f2244] px-6 py-3.5 text-xs font-bold uppercase tracking-[0.16em] text-white shadow-sm transition hover:bg-[#94652c]"
+            className="inline-flex items-center gap-2.5 rounded-xl bg-[#17130e] px-6 py-3.5 text-xs font-bold uppercase tracking-[0.16em] text-white shadow-sm transition hover:bg-[#94652c]"
           >
             <span>Explore All 6 Advisory Divisions</span>
             <ArrowRight className="h-4 w-4 text-[#dcb888]" />
@@ -751,8 +751,8 @@ export function Services() {
                   onClick={() => setActiveServiceIdx(idx)}
                   className={`group flex items-center justify-between gap-4 rounded-2xl border p-4 text-left transition-all ${
                     isSelected
-                      ? "border-[#0f2244] bg-[#0f2244] text-white shadow-md"
-                      : "border-[#e6dfd2] bg-[#faf7f2] text-[#0f2244] hover:border-[#94652c] hover:bg-white"
+                      ? "border-[#17130e] bg-[#17130e] text-white shadow-md"
+                      : "border-[#e6dfd2] bg-[#faf7f2] text-[#17130e] hover:border-[#94652c] hover:bg-white"
                   }`}
                 >
                   <div className="flex items-center gap-3.5 min-w-0">
@@ -780,7 +780,7 @@ export function Services() {
                   </div>
                   <ArrowRight
                     className={`h-4 w-4 shrink-0 transition-transform ${
-                      isSelected ? "translate-x-1 text-[#dcb888]" : "text-[#5f6a82] group-hover:translate-x-1"
+                      isSelected ? "translate-x-1 text-[#dcb888]" : "text-[#786e60] group-hover:translate-x-1"
                     }`}
                   />
                 </button>
@@ -790,7 +790,7 @@ export function Services() {
 
           {/* Right: Active Service Spotlight Panel with Architectural Photography & Clean Tactile Buttons */}
           <div className="lg:col-span-7 flex flex-col justify-between overflow-hidden rounded-3xl border border-[#e6dfd2] bg-[#faf7f2] shadow-sm">
-            <div className="relative h-64 md:h-72 w-full overflow-hidden bg-[#0f2244]">
+            <div className="relative h-64 md:h-72 w-full overflow-hidden bg-[#17130e]">
               <AnimatePresence initial={false} mode="wait">
                 <motion.img
                   key={activeImage}
@@ -805,7 +805,7 @@ export function Services() {
                   className="h-full w-full object-cover"
                 />
               </AnimatePresence>
-              <div className="absolute inset-0 bg-gradient-to-t from-[#0f2244]/90 via-[#0f2244]/35 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#17130e]/90 via-[#17130e]/35 to-transparent" />
               <div className="absolute bottom-5 left-6 right-6 flex items-end justify-between gap-4 text-white">
                 <div>
                   <span className="inline-flex items-center gap-1.5 rounded-full bg-[#dcb888]/20 border border-[#dcb888]/40 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-[#dcb888]">
@@ -820,7 +820,7 @@ export function Services() {
             </div>
 
             <div className="p-6 md:p-8 space-y-6">
-              <p className="text-sm md:text-base text-[#39455a] leading-relaxed">
+              <p className="text-sm md:text-base text-[#4a4237] leading-relaxed">
                 {activeService.description}
               </p>
 
@@ -829,7 +829,7 @@ export function Services() {
                   What Our Team Delivers For You:
                 </p>
                 {deliverables.map((item) => (
-                  <div key={item} className="flex items-start gap-2.5 text-xs md:text-sm text-[#0f2244]">
+                  <div key={item} className="flex items-start gap-2.5 text-xs md:text-sm text-[#17130e]">
                     <CheckCircle2 className="h-4 w-4 shrink-0 text-[#94652c] mt-0.5" />
                     <span>{item}</span>
                   </div>
@@ -840,7 +840,7 @@ export function Services() {
               <div className="flex flex-wrap items-center gap-3 pt-2">
                 <Link
                   href="/services"
-                  className="inline-flex items-center gap-2 rounded-xl bg-[#0f2244] px-6 py-3.5 text-xs font-bold uppercase tracking-[0.16em] text-white shadow-sm transition hover:bg-[#14305c]"
+                  className="inline-flex items-center gap-2 rounded-xl bg-[#17130e] px-6 py-3.5 text-xs font-bold uppercase tracking-[0.16em] text-white shadow-sm transition hover:bg-[#2a2219]"
                 >
                   <span>View Service Mandate</span>
                   <ArrowRight className="h-4 w-4 text-[#dcb888]" />
@@ -947,14 +947,14 @@ export function Journey() {
             <button
               type="button"
               onClick={() => setActiveStep((prev) => (prev - 1 + JOURNEY_STAGES.length) % JOURNEY_STAGES.length)}
-              className="rounded-xl border border-[#e6dfd2] bg-[#faf7f2] px-4 py-2.5 text-xs font-bold text-[#0f2244] transition hover:border-[#94652c]"
+              className="rounded-xl border border-[#e6dfd2] bg-[#faf7f2] px-4 py-2.5 text-xs font-bold text-[#17130e] transition hover:border-[#94652c]"
             >
               ← Previous Step
             </button>
             <button
               type="button"
               onClick={() => setActiveStep((prev) => (prev + 1) % JOURNEY_STAGES.length)}
-              className="rounded-xl bg-[#0f2244] px-4 py-2.5 text-xs font-bold text-white transition hover:bg-[#94652c]"
+              className="rounded-xl bg-[#17130e] px-4 py-2.5 text-xs font-bold text-white transition hover:bg-[#94652c]"
             >
               Next Step →
             </button>
@@ -973,10 +973,10 @@ export function Journey() {
                 onClick={() => setActiveStep(idx)}
                 className={`group relative flex flex-col justify-between rounded-2xl border p-4 text-left transition-all ${
                   active
-                    ? "border-[#0f2244] bg-[#0f2244] text-white shadow-md -translate-y-0.5"
+                    ? "border-[#17130e] bg-[#17130e] text-white shadow-md -translate-y-0.5"
                     : completed
-                    ? "border-[#94652c]/50 bg-[#f6ead7]/55 text-[#0f2244]"
-                    : "border-[#e6dfd2] bg-[#faf7f2] text-[#0f2244] hover:border-[#94652c] hover:bg-white"
+                    ? "border-[#94652c]/50 bg-[#f6ead7]/55 text-[#17130e]"
+                    : "border-[#e6dfd2] bg-[#faf7f2] text-[#17130e] hover:border-[#94652c] hover:bg-white"
                 }`}
               >
                 <div className="flex items-center justify-between gap-2">
@@ -991,7 +991,7 @@ export function Journey() {
                     className={`rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${
                       active
                         ? "bg-white/15 text-[#dcb888]"
-                        : "bg-white text-[#5f6a82] border border-[#e6dfd2]"
+                        : "bg-white text-[#786e60] border border-[#e6dfd2]"
                     }`}
                   >
                     {item.timing}
@@ -1031,11 +1031,11 @@ export function Journey() {
                 <span>{current.timing}</span>
               </div>
 
-              <h3 className="font-serif text-2xl md:text-4xl font-semibold text-[#0f2244]">
+              <h3 className="font-serif text-2xl md:text-4xl font-semibold text-[#17130e]">
                 {current.title}
               </h3>
 
-              <p className="text-sm md:text-base text-[#39455a] leading-relaxed">
+              <p className="text-sm md:text-base text-[#4a4237] leading-relaxed">
                 {current.description}
               </p>
 
@@ -1045,7 +1045,7 @@ export function Journey() {
                   <span className="block text-[10px] font-bold uppercase tracking-[0.2em] text-[#94652c]">
                     Key Client Deliverable
                   </span>
-                  <span className="text-xs md:text-sm font-semibold text-[#0f2244]">
+                  <span className="text-xs md:text-sm font-semibold text-[#17130e]">
                     {current.deliverable}
                   </span>
                 </div>
@@ -1054,14 +1054,14 @@ export function Journey() {
               <div className="flex flex-wrap items-center gap-3 pt-1">
                 <Link
                   href="/guides/buying"
-                  className="inline-flex items-center gap-2 rounded-xl bg-[#0f2244] px-6 py-3 text-xs font-bold uppercase tracking-[0.16em] text-white transition hover:bg-[#94652c]"
+                  className="inline-flex items-center gap-2 rounded-xl bg-[#17130e] px-6 py-3 text-xs font-bold uppercase tracking-[0.16em] text-white transition hover:bg-[#94652c]"
                 >
                   <span>Read Full Acquisition Guide</span>
                   <ArrowRight className="h-4 w-4 text-[#dcb888]" />
                 </Link>
                 <Link
                   href="/calculators"
-                  className="inline-flex items-center gap-2 rounded-xl border border-[#e6dfd2] bg-white px-5 py-3 text-xs font-bold uppercase tracking-[0.16em] text-[#0f2244] transition hover:border-[#94652c]"
+                  className="inline-flex items-center gap-2 rounded-xl border border-[#e6dfd2] bg-white px-5 py-3 text-xs font-bold uppercase tracking-[0.16em] text-[#17130e] transition hover:border-[#94652c]"
                 >
                   <span>Open Fee &amp; Yield Calculators</span>
                 </Link>
@@ -1092,10 +1092,10 @@ export function OurNote() {
             <ShieldCheck className="h-3.5 w-3.5" />
             07 · Our Promise · The SWK Advisory Charter
           </span>
-          <h2 className="mt-4 font-serif text-3xl md:text-5xl font-semibold text-[#0f2244] leading-[1.08]">
+          <h2 className="mt-4 font-serif text-3xl md:text-5xl font-semibold text-[#17130e] leading-[1.08]">
             Clarity Before <em className="text-[#94652c] not-italic">Commitment.</em>
           </h2>
-          <p className="mt-3 max-w-2xl text-sm md:text-base text-[#39455a] leading-relaxed">
+          <p className="mt-3 max-w-2xl text-sm md:text-base text-[#4a4237] leading-relaxed">
             Buying or leasing property in the UAE should be led by clear paperwork, verified developer track records, and written cost sheets. Explore our interactive charter pillars below.
           </p>
         </div>
@@ -1127,21 +1127,21 @@ export function Team() {
       <div className="mx-auto max-w-7xl px-4 md:px-6">
         <div className="flex flex-wrap items-end justify-between gap-6 mb-10 md:mb-12">
           <div>
-            <p className="text-xs font-bold uppercase tracking-[0.26em] text-[#0f2244]">
+            <p className="text-xs font-bold uppercase tracking-[0.26em] text-[#17130e]">
               25+ Real Estate Professionals · Sheikh Zayed Road, Dubai
             </p>
-            <h2 className="mt-2 font-serif text-3xl md:text-5xl font-semibold text-[#0f2244]">
+            <h2 className="mt-2 font-serif text-3xl md:text-5xl font-semibold text-[#17130e]">
               Leadership &amp; Key Advisory Specialists
             </h2>
-            <p className="mt-2.5 max-w-2xl text-sm md:text-base text-[#39455a] leading-relaxed">
+            <p className="mt-2.5 max-w-2xl text-sm md:text-base text-[#4a4237] leading-relaxed">
               Backed by a team of 25+ dedicated real estate professionals on Sheikh Zayed Road. Click any senior advisor below to inspect their track-record dossier—including years of experience, verified transactions, developer partnerships, and direct WhatsApp contact.
             </p>
           </div>
           <div className="rounded-2xl border border-[#e6dfd2] bg-[#faf7f2] px-5 py-3 text-left sm:text-right">
-            <div className="font-hero-raleway font-light text-2xl font-bold text-[#0f2244]">
+            <div className="font-hero-raleway font-light text-2xl font-bold text-[#17130e]">
               25+ Professionals
             </div>
-            <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#0f2244]/75">
+            <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#17130e]/75">
               18+ Years Combined UAE Leadership
             </div>
           </div>
@@ -1155,11 +1155,11 @@ export function Team() {
               whileHover={{ y: -5 }}
               transition={{ type: "spring", stiffness: 300, damping: 24 }}
               onClick={() => setSelectedMember(member)}
-              className="group cursor-pointer flex flex-col justify-between overflow-hidden rounded-3xl border border-[#e6dfd2] bg-[#faf7f2] shadow-sm transition-colors hover:border-[#0f2244] hover:bg-white hover:shadow-xl"
+              className="group cursor-pointer flex flex-col justify-between overflow-hidden rounded-3xl border border-[#e6dfd2] bg-[#faf7f2] shadow-sm transition-colors hover:border-[#17130e] hover:bg-white hover:shadow-xl"
             >
               <div>
                 {/* High-Resolution 4:5 Centered Portrait — Zero Overlapping Badges */}
-                <div className="relative aspect-[4/5] w-full overflow-hidden bg-[#0f2244]">
+                <div className="relative aspect-[4/5] w-full overflow-hidden bg-[#17130e]">
                   <img
                     src={member.photo}
                     alt={member.name}
@@ -1167,7 +1167,7 @@ export function Team() {
                     decoding="sync"
                     className="h-full w-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#0f2244]/90 via-transparent to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#17130e]/90 via-transparent to-transparent" />
 
                   <div className="absolute bottom-4 left-4 right-4 text-white">
                     <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-white/80">
@@ -1183,31 +1183,31 @@ export function Team() {
                 <div className="p-5 space-y-3.5">
                   <div className="flex flex-wrap items-center gap-1.5">
                     {member.experienceYears && (
-                      <span className="rounded-full bg-[#0f2244] px-3 py-1 text-[10px] font-bold uppercase tracking-[0.1em] text-white">
+                      <span className="rounded-full bg-[#17130e] px-3 py-1 text-[10px] font-bold uppercase tracking-[0.1em] text-white">
                         {member.experienceYears}
                       </span>
                     )}
                     {member.dealsCount && (
-                      <span className="rounded-full border border-[#0f2244]/20 bg-white px-3 py-1 text-[10px] font-bold text-[#0f2244]">
+                      <span className="rounded-full border border-[#17130e]/20 bg-white px-3 py-1 text-[10px] font-bold text-[#17130e]">
                         {member.dealsCount}
                       </span>
                     )}
                   </div>
 
-                  <p className="line-clamp-3 text-xs text-[#39455a] leading-relaxed">
+                  <p className="line-clamp-3 text-xs text-[#4a4237] leading-relaxed">
                     {member.bio}
                   </p>
 
                   {member.topDevelopers && member.topDevelopers.length > 0 && (
                     <div>
-                      <span className="block text-[10px] font-bold uppercase tracking-[0.18em] text-[#0f2244] mb-1.5">
+                      <span className="block text-[10px] font-bold uppercase tracking-[0.18em] text-[#17130e] mb-1.5">
                         Key Developer Track Record:
                       </span>
                       <div className="flex flex-wrap gap-1.5">
                         {member.topDevelopers.map((dev) => (
                           <span
                             key={dev}
-                            className="rounded-full border border-[#e6dfd2] bg-white px-2.5 py-0.5 text-[10px] font-semibold text-[#0f2244]"
+                            className="rounded-full border border-[#e6dfd2] bg-white px-2.5 py-0.5 text-[10px] font-semibold text-[#17130e]"
                           >
                             {dev}
                           </span>
@@ -1218,7 +1218,7 @@ export function Team() {
                 </div>
               </div>
 
-              <div className="flex items-center justify-between border-t border-[#e6dfd2] bg-white px-5 py-3.5 text-xs font-bold text-[#0f2244] group-hover:bg-[#0f2244] group-hover:text-white transition-colors">
+              <div className="flex items-center justify-between border-t border-[#e6dfd2] bg-white px-5 py-3.5 text-xs font-bold text-[#17130e] group-hover:bg-[#17130e] group-hover:text-white transition-colors">
                 <span className="uppercase tracking-[0.14em]">
                   View Experience &amp; Track Record
                 </span>
@@ -1238,7 +1238,7 @@ export function Team() {
               onClick={() => setSelectedMember(null)}
               role="dialog"
               aria-modal="true"
-              className="fixed inset-0 z-[90] flex items-center justify-center bg-[#0f2244]/75 p-3 sm:p-4 backdrop-blur-md"
+              className="fixed inset-0 z-[90] flex items-center justify-center bg-[#17130e]/75 p-3 sm:p-4 backdrop-blur-md"
             >
               <motion.div
                 initial={{ opacity: 0, scale: 0.92, y: 24 }}
@@ -1246,10 +1246,10 @@ export function Team() {
                 exit={{ opacity: 0, scale: 0.92, y: 24 }}
                 transition={{ type: "spring", stiffness: 320, damping: 28 }}
                 onClick={(e) => e.stopPropagation()}
-                className="relative max-h-[90dvh] w-full max-w-3xl overflow-y-auto rounded-3xl border border-[#e6dfd2] bg-white text-[#0f2244] shadow-[0_32px_90px_rgba(15,34,68,0.45)]"
+                className="relative max-h-[90dvh] w-full max-w-3xl overflow-y-auto rounded-3xl border border-[#e6dfd2] bg-white text-[#17130e] shadow-[0_32px_90px_rgba(23,19,14,0.45)]"
               >
                 {/* Modal Top Header Bar */}
-                <div className="sticky top-0 z-20 flex items-center justify-between border-b border-[#e6dfd2] bg-[#0f2244] px-5 sm:px-6 py-4 text-white">
+                <div className="sticky top-0 z-20 flex items-center justify-between border-b border-[#e6dfd2] bg-[#17130e] px-5 sm:px-6 py-4 text-white">
                   <div className="flex items-center gap-2.5">
                     <img
                       src="/brand/swk-emblem.svg"
@@ -1273,7 +1273,7 @@ export function Team() {
                 {/* Modal Body */}
                 <div className="p-5 sm:p-8 space-y-6">
                   <div className="grid grid-cols-1 gap-6 md:grid-cols-12 items-center">
-                    <div className="md:col-span-5 overflow-hidden rounded-2xl border border-[#e6dfd2] bg-[#0f2244] shadow-md">
+                    <div className="md:col-span-5 overflow-hidden rounded-2xl border border-[#e6dfd2] bg-[#17130e] shadow-md">
                       <img
                         src={selectedMember.photo}
                         alt={selectedMember.name}
@@ -1284,7 +1284,7 @@ export function Team() {
                     <div className="md:col-span-7 space-y-4">
                       <div className="flex flex-wrap items-center gap-2">
                         {selectedMember.experienceYears && (
-                          <span className="inline-flex items-center gap-1.5 rounded-full bg-[#0f2244] px-3.5 py-1 text-[11px] font-bold uppercase tracking-[0.14em] text-[#dcb888]">
+                          <span className="inline-flex items-center gap-1.5 rounded-full bg-[#17130e] px-3.5 py-1 text-[11px] font-bold uppercase tracking-[0.14em] text-[#dcb888]">
                             <Award className="h-3.5 w-3.5" />
                             {selectedMember.experienceYears}
                           </span>
@@ -1297,7 +1297,7 @@ export function Team() {
                       </div>
 
                       <div>
-                        <h3 className="font-serif text-2xl sm:text-3xl font-semibold text-[#0f2244]">
+                        <h3 className="font-serif text-2xl sm:text-3xl font-semibold text-[#17130e]">
                           {selectedMember.name}
                         </h3>
                         <p className="mt-1 text-xs font-bold uppercase tracking-[0.2em] text-[#94652c]">
@@ -1305,18 +1305,18 @@ export function Team() {
                         </p>
                       </div>
 
-                      <p className="text-sm text-[#39455a] leading-relaxed">
+                      <p className="text-sm text-[#4a4237] leading-relaxed">
                         {selectedMember.bio}
                       </p>
 
                       <div className="flex flex-wrap items-center gap-1.5 pt-1">
-                        <span className="text-xs font-bold text-[#0f2244] mr-1">
+                        <span className="text-xs font-bold text-[#17130e] mr-1">
                           Languages:
                         </span>
                         {selectedMember.languages.map((lang) => (
                           <span
                             key={lang}
-                            className="rounded-full border border-[#e6dfd2] bg-[#faf7f2] px-2.5 py-0.5 text-[11px] font-semibold text-[#39455a]"
+                            className="rounded-full border border-[#e6dfd2] bg-[#faf7f2] px-2.5 py-0.5 text-[11px] font-semibold text-[#4a4237]"
                           >
                             {lang}
                           </span>
@@ -1331,7 +1331,7 @@ export function Team() {
                       <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#94652c]">
                         Market Experience
                       </span>
-                      <div className="mt-1 font-serif text-xl font-bold text-[#0f2244]">
+                      <div className="mt-1 font-serif text-xl font-bold text-[#17130e]">
                         {selectedMember.experienceYears ?? "10+ Years"}
                       </div>
                     </div>
@@ -1339,7 +1339,7 @@ export function Team() {
                       <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#94652c]">
                         Completed Transactions
                       </span>
-                      <div className="mt-1 font-serif text-xl font-bold text-[#0f2244]">
+                      <div className="mt-1 font-serif text-xl font-bold text-[#17130e]">
                         {selectedMember.dealsCount ?? "100+ Transactions"}
                       </div>
                     </div>
@@ -1347,7 +1347,7 @@ export function Team() {
                       <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#94652c]">
                         Advisory Base
                       </span>
-                      <div className="mt-1 font-serif text-xl font-bold text-[#0f2244]">
+                      <div className="mt-1 font-serif text-xl font-bold text-[#17130e]">
                         Sheikh Zayed Road
                       </div>
                     </div>
@@ -1364,7 +1364,7 @@ export function Team() {
                           {selectedMember.topDevelopers.map((dev) => (
                             <span
                               key={dev}
-                              className="rounded-lg bg-[#0f2244] px-3 py-1 text-xs font-semibold text-white"
+                              className="rounded-lg bg-[#17130e] px-3 py-1 text-xs font-semibold text-white"
                             >
                               {dev}
                             </span>
@@ -1382,7 +1382,7 @@ export function Team() {
                           {selectedMember.keyProjects.map((proj) => (
                             <span
                               key={proj}
-                              className="rounded-lg border border-[#94652c]/35 bg-[#f6ead7] px-2.5 py-1 text-xs font-semibold text-[#0f2244]"
+                              className="rounded-lg border border-[#94652c]/35 bg-[#f6ead7] px-2.5 py-1 text-xs font-semibold text-[#17130e]"
                             >
                               {proj}
                             </span>
@@ -1408,7 +1408,7 @@ export function Team() {
                       </a>
                       <a
                         href={`tel:${SITE.phoneRaw}`}
-                        className="inline-flex items-center gap-2 rounded-xl border border-[#e6dfd2] bg-[#faf7f2] px-5 py-3 text-xs font-bold uppercase tracking-[0.16em] text-[#0f2244] transition hover:border-[#94652c]"
+                        className="inline-flex items-center gap-2 rounded-xl border border-[#e6dfd2] bg-[#faf7f2] px-5 py-3 text-xs font-bold uppercase tracking-[0.16em] text-[#17130e] transition hover:border-[#94652c]"
                       >
                         <Phone className="h-4 w-4 text-[#94652c]" />
                         {SITE.phone}
@@ -1418,7 +1418,7 @@ export function Team() {
                     <Link
                       href={`/agents/${selectedMember.slug}`}
                       onClick={() => setSelectedMember(null)}
-                      className="inline-flex items-center gap-2 rounded-xl bg-[#0f2244] px-5 py-3 text-xs font-bold uppercase tracking-[0.16em] text-white transition hover:bg-[#94652c]"
+                      className="inline-flex items-center gap-2 rounded-xl bg-[#17130e] px-5 py-3 text-xs font-bold uppercase tracking-[0.16em] text-white transition hover:bg-[#94652c]"
                     >
                       <span>Full Advisor Page</span>
                       <ArrowRight className="h-4 w-4 text-[#dcb888]" />
@@ -1466,8 +1466,8 @@ export function Voices() {
                   onClick={() => setActiveStoryIdx(idx)}
                   className={`inline-flex items-center gap-2 rounded-full border px-3.5 py-1.5 text-xs font-semibold transition-all ${
                     selected
-                      ? "border-[#0f2244] bg-[#0f2244] text-white shadow-sm"
-                      : "border-[#e6dfd2] bg-[#faf7f2] text-[#0f2244] hover:border-[#94652c]"
+                      ? "border-[#17130e] bg-[#17130e] text-white shadow-sm"
+                      : "border-[#e6dfd2] bg-[#faf7f2] text-[#17130e] hover:border-[#94652c]"
                   }`}
                 >
                   <img
@@ -1492,7 +1492,7 @@ export function Voices() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -12 }}
               transition={{ duration: 0.35 }}
-              className="mb-14 grid grid-cols-1 gap-8 lg:grid-cols-12 items-center rounded-3xl border border-[#e6dfd2] bg-[#0f2244] p-6 md:p-10 text-white shadow-xl"
+              className="mb-14 grid grid-cols-1 gap-8 lg:grid-cols-12 items-center rounded-3xl border border-[#e6dfd2] bg-[#17130e] p-6 md:p-10 text-white shadow-xl"
             >
               <div className="lg:col-span-4 flex flex-col sm:flex-row lg:flex-col items-center sm:items-start gap-5">
                 <img
@@ -1530,7 +1530,7 @@ export function Voices() {
                   </span>
                   <Link
                     href="/contact"
-                    className="inline-flex items-center gap-2 rounded-full bg-[#dcb888] px-5 py-2.5 text-xs font-bold uppercase tracking-[0.16em] text-[#0f2244] transition hover:bg-white"
+                    className="inline-flex items-center gap-2 rounded-full bg-[#dcb888] px-5 py-2.5 text-xs font-bold uppercase tracking-[0.16em] text-[#17130e] transition hover:bg-white"
                   >
                     <span>Start Your Shortlist</span>
                     <ArrowRight className="h-3.5 w-3.5" />
@@ -1548,7 +1548,7 @@ export function Voices() {
               <span className="text-xs font-bold uppercase tracking-[0.22em] text-[#94652c]">
                 Stream 01 · International &amp; Regional Investor Feedback
               </span>
-              <span className="text-xs font-medium text-[#5f6a82]">
+              <span className="text-xs font-medium text-[#786e60]">
                 Hover any review card to pause
               </span>
             </div>
@@ -1570,7 +1570,7 @@ export function Voices() {
 
           <div>
             <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
-              <span className="text-xs font-bold uppercase tracking-[0.22em] text-[#0f2244]">
+              <span className="text-xs font-bold uppercase tracking-[0.22em] text-[#17130e]">
                 Stream 02 · End-User Family &amp; Landlord Reviews
               </span>
             </div>

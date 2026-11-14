@@ -11,24 +11,50 @@ The previous rose-gold "portal" identity (`public/brand/*` lockups, crest, map p
 
 | File in `public/` | Kit source | Used for |
 | --- | --- | --- |
-| `brand/swk-logo-horizontal.svg` | `Logos/SWK_Properties_Horizontal_Logo_Transparent.svg` (viewBox cropped to artwork) | Site header, footer |
+| `brand/swk-logo-horizontal.svg` | `Logos/SWK_Properties_Horizontal_Logo_Transparent.svg` (viewBox cropped to artwork) | Site header, footer (vector, sharp at any size) |
 | `brand/swk-logo-horizontal-charcoal.svg` | `Logos/SWK_Properties_Horizontal_Logo.svg` | Light backgrounds, press |
-| `brand/swk-logo-horizontal-1024.png` / `-charcoal-1024.png` | matching 1024 px PNGs | Email, third-party profiles |
-| `brand/swk-logo-stacked.svg` | `Logos/SWK_Properties_Stacked_Logo_Transparent.svg` (cropped) | Available for hero / print layouts |
-| `brand/swk-logo-stacked-charcoal-1024.png` | `Logos/SWK_Properties_Stacked_Logo_1024.png` | Social profile cover art |
-| `brand/swk-wordmark.svg` | `Logos/SWK_Properties_Wordmark_Logo_Transparent.svg` | Compact placements |
-| `brand/swk-emblem.svg` | `Icon/SWK_Emblem_Transparent.svg` (cropped) | Map pins, dark modal headers, concierge header |
-| `brand/swk-emblem-charcoal.svg` | `Icon/SWK_Emblem.svg` | Emblem on light surfaces (concierge button) |
-| `brand/swk-emblem-512.png` / `swk-emblem-charcoal-512.png` | `Icon/SWK_Emblem_*512.png` | schema.org `logo` (square, 512 px) |
-| `favicon.ico`, `favicon.svg`, `favicon-16/32/48/96/192/512.png`, `favicon-16.svg`, `apple-touch-icon.png` | `Favicon/*` | Browser tabs, PWA manifest, iOS home screen |
-| `og-default.jpg` | Generated: skyline + horizontal logo, 1200×630 | Default Open Graph / Twitter / WhatsApp preview |
+| `brand/swk-logo-horizontal-4096.png` / `-charcoal-4096.png` | highest-resolution horizontal PNGs | Email, portals, print |
+| `brand/swk-logo-stacked.svg` / `-charcoal.svg`, `swk-logo-stacked-4096.png` / `-charcoal-4096.png` | stacked logo, vector + 4096 px | Social profile art, print |
+| `brand/swk-wordmark.svg` / `-charcoal.svg` | wordmark logo | Compact placements |
+| `brand/swk-emblem.svg` / `-charcoal.svg` | `Icon/SWK_Emblem*.svg` | Map pins, modal headers, concierge |
+| `brand/swk-emblem-2048.png` / `-charcoal-2048.png` | 2048 px emblem | Avatars, print |
+| `brand/swk-emblem-charcoal-1024.png` | `Icon/SWK_Emblem_1024.png` | schema.org `logo` |
+| `favicon.svg`, `favicon-16.svg`, `favicon-16…512.png`, `apple-touch-icon.png` | `Favicon/*` | Browser tabs, iOS home screen |
+| `favicon.ico` | 16/32/48 from kit + 64/128/256 downscaled from kit 512 | Legacy browsers, Windows, Google SERP favicon |
+| `app-icon-1024.png`, `app-icon-512.png` | `App_Icons/Emblem_and_SWK` iOS 1024 / Google Play 512 | PWA manifest (any + maskable) |
+| `og-default.jpg` | Generated: skyline + vector logo at 600 dpi, 1200×630, JPEG q92 4:4:4 | Default Open Graph / WhatsApp preview |
+
+## Developer logos
+
+`public/img/developers/` holds official brandmarks only (Emaar, Nakheel, Binghatti, DAMAC, Sobha, Aldar, Azizi,
+Danube, Arada, Samana, Empire, Dubai Properties, Imtiaz, Omniyat, HH Development). Twelve invented placeholder
+marks were removed; those developers show their name as text until an official logo file is added to
+`public/img/developers/` and mapped in `LOGOS` in `src/lib/developers.ts`. Developer names and logos are
+trademarks of their owners, used only to identify their projects (see footer notice).
 
 Native app icon sets (`App_Icons/…/iOS`, `…/Android/res`) are kept in the kit for future mobile apps.
 
+## Website palette — "Onyx & Champagne"
+
+| Token | Hex | Use |
+| --- | --- | --- |
+| Onyx | `#17130e` | Ink, dark surfaces, primary buttons |
+| Espresso | `#2a2219` / `#3a2e20` | Secondary dark surfaces, hover states |
+| Deep black | `#0c0a07` | Header, hero base |
+| Desert bronze | `#94652c` / `#b07a38` | Accents, links, eyebrows |
+| Champagne | `#dcb888` / `#f3dfb1` | Accents on dark, selection text |
+| Ivory / sand | `#faf7f2` / `#f4efe6` | Page background, cards |
+| Warm grey | `#4a4237` / `#786e60` | Body and muted text |
+
+Motion: Tailwind transitions default to 450 ms `cubic-bezier(0.22, 1, 0.36, 1)`; route changes play a blur
+crossfade via React `<ViewTransition>` (`src/app/template.tsx`, `::view-transition` rules in `globals.css`);
+the hero has a film grade (warm vignette, faint animated grain, 1.6 s backdrop dissolves). All motion is
+disabled under `prefers-reduced-motion`.
+
 ## Usage rules
 
-- The gold artwork is designed for dark surfaces. On the site it sits on the navy header/footer
-  (`#0b1220`, `#0f2244`). On light backgrounds use the `-charcoal` versions, which carry their own
+- The gold artwork is designed for dark surfaces. On the site it sits on the onyx header/footer
+  (`#0c0a07`, `#17130e`). On light backgrounds use the `-charcoal` versions, which carry their own
   charcoal plate.
 - Do not recolour, add shadows, stretch or rotate the logo. Keep clear space of at least the height
   of the "S" around the horizontal logo.

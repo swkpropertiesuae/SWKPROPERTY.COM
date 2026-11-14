@@ -58,6 +58,7 @@ export const slugify = (s: string) =>
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-|-$/g, "")
 
+// Official developer brandmarks only. Developers without a supplied logo render their name as text.
 const LOGOS: Record<string, string> = {
   emaar: "emaar.svg",
   damac: "damac.png",
@@ -74,18 +75,6 @@ const LOGOS: Record<string, string> = {
   nakheel: "nakheel.svg",
   aldar: "aldar.png",
   "hh-development": "hh-development.svg",
-  meraas: "meraas.svg",
-  ellington: "ellington.svg",
-  "select-group": "select-group.svg",
-  deyaar: "deyaar.svg",
-  mag: "mag.svg",
-  dugasta: "dugasta.svg",
-  lunaya: "lunaya.svg",
-  marjan: "marjan.svg",
-  "rak-properties": "rak-properties.svg",
-  "al-hamra": "al-hamra.svg",
-  taraf: "taraf.svg",
-  beyond: "beyond.svg",
 }
 
 const EMIRATE: Record<string, Developer["emirate"]> = {
@@ -690,7 +679,7 @@ const fromJson: Developer[] = (
     headquarters: `${emirate}, UAE`,
     flagshipAreas: Array.from(new Set(combinedRaw.map((p) => p.community))).slice(0, 5),
     projectCount: mappedProjects.length,
-    logo: `/img/developers/${LOGOS[d.slug]}`,
+    logo: LOGOS[d.slug] ? `/img/developers/${LOGOS[d.slug]}` : "",
     coverImage: mappedProjects[0]?.image || "/img/hero/dubai-skyline-hero.webp",
     verify: true,
     projects: mappedProjects,
@@ -733,7 +722,7 @@ const fromExtras: Developer[] = EXTRAS.map((e, eIdx) => {
     headquarters: `${emirate}, UAE`,
     flagshipAreas: Array.from(new Set(e.projects.map((p) => p.community))).slice(0, 5),
     projectCount: mappedProjects.length,
-    logo: `/img/developers/${LOGOS[e.slug]}`,
+    logo: LOGOS[e.slug] ? `/img/developers/${LOGOS[e.slug]}` : "",
     coverImage: mappedProjects[0]?.image || "/img/hero/dubai-skyline-hero.webp",
     verify: true,
     projects: mappedProjects,
