@@ -125,7 +125,13 @@ export default async function OffPlanProjectDetailPage({
                   href={`/developers/${project.developerSlug}`}
                   className="inline-flex items-center gap-1.5 font-semibold text-[#94652c] hover:underline"
                 >
-                  <Building2 className="h-4 w-4" />
+                  {dev?.logo ? (
+                    <span className="inline-flex h-9 items-center rounded-lg border border-[#e6dfd2] bg-white px-3">
+                      <img src={dev.logo} alt={project.developer} className="h-5 w-auto max-w-[130px] object-contain" />
+                    </span>
+                  ) : (
+                    <Building2 className="h-4 w-4" />
+                  )}
                   Developer: {project.developer}
                 </Link>
                 <span className="inline-flex items-center gap-1.5">

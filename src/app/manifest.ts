@@ -21,7 +21,9 @@ export default function manifest(): MetadataRoute.Manifest {
       { src: "/favicon.svg", sizes: "any", type: "image/svg+xml" },
       { src: "/favicon-192.png", sizes: "192x192", type: "image/png", purpose: "any" },
       { src: "/favicon-512.png", sizes: "512x512", type: "image/png", purpose: "any" },
-      { src: "/favicon-512.png", sizes: "512x512", type: "image/png", purpose: "maskable" },
+      { src: "/app-icon-512.png", sizes: "512x512", type: "image/png", purpose: "maskable" },
+      { src: "/app-icon-1024.png", sizes: "1024x1024", type: "image/png", purpose: "any" },
+      { src: "/app-icon-1024.png", sizes: "1024x1024", type: "image/png", purpose: "maskable" },
     ],
     shortcuts: [
       { name: "Off-plan projects", url: "/off-plan" },

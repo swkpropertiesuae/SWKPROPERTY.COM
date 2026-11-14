@@ -101,7 +101,25 @@ export default function Home() {
     };
   };
 
-  const offPlanMarqueeProjects = priorityProjects.map(mapProjectForMarquee);
+  // Flagship launches from the largest master developers lead the marquee.
+  const FLAGSHIP_SLUGS = [
+    "palm-jebel-ali",
+    "emaar-the-oasis",
+    "bugatti-residences-by-binghatti",
+    "como-residences",
+    "rashid-yachts-and-marina",
+    "burj-binghatti-jacob-and-co-residences",
+    "mercedes-benz-places",
+    "dubai-islands",
+    "creek-haven",
+  ];
+  const flagships = FLAGSHIP_SLUGS.map((slug) => projects.find((p) => p.slug === slug)).filter(
+    (p): p is (typeof projects)[number] => Boolean(p)
+  );
+  const offPlanMarqueeProjects = [
+    ...flagships,
+    ...priorityProjects.filter((p) => !FLAGSHIP_SLUGS.includes(p.slug)),
+  ].map(mapProjectForMarquee);
   const developerSignatureProjects = developers
     .map((d) => projects.find((p) => p.developerSlug === d.slug))
     .filter((p): p is (typeof projects)[number] => Boolean(p))
@@ -113,21 +131,21 @@ export default function Home() {
       <link
         rel="preload"
         as="image"
-        href="/img/hero/slides/04-azizi-venice-mobile.webp"
+        href="/img/hero/slides/07-nakheel-palm-jebel-ali-mobile.webp"
         media="(max-width: 767px)"
         fetchPriority="high"
       />
       <link
         rel="preload"
         as="image"
-        href="/img/hero/slides/04-azizi-venice-desktop.webp"
+        href="/img/hero/slides/07-nakheel-palm-jebel-ali-desktop.webp"
         media="(min-width: 768px)"
         fetchPriority="high"
       />
       <link
         rel="preload"
         as="image"
-        href="/img/hero/slides/04-azizi-venice-thumb.webp"
+        href="/img/hero/slides/07-nakheel-palm-jebel-ali-thumb.webp"
         fetchPriority="high"
       />
 

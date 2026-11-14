@@ -37,6 +37,8 @@ export type Dish = {
   /** Two-line label under the thumbnail. Defaults to title + subtitle. */
   label?: string
   rating: number
+  /** Official developer brandmark shown on the slide card. */
+  developerLogo?: string
   chef: string
   /** Community & payment plan line under the developer's name. */
   kitchen?: string
@@ -73,91 +75,34 @@ export type DishOrbitCarouselProps = {
 
 export const SWK_HERO_DISHES: Dish[] = [
   {
-    title: "Azizi Venice",
-    subtitle: "Crystal Lagoon",
-    label: "Azizi Venice",
-    eyebrow: "DUBAI SOUTH · 10% DOWN · 50/50 PAYMENT PLAN",
-    image: "/img/hero/slides/04-azizi-venice-thumb.webp",
-    backdropImage: "/img/hero/slides/04-azizi-venice-desktop.webp",
-    mobileBackdropImage: "/img/hero/slides/04-azizi-venice-mobile.webp",
-    alt: "Azizi Venice Crystal Lagoon Waterfront Community in Dubai South",
-    rating: 4.9,
-    chef: "Azizi Developments",
-    kitchen: "Dubai South · Handover 2026–2028 · From AED 690K",
-    description:
-      "Swimmable crystal lagoon boulevard, climate-controlled retail promenade, and cultural opera district next to Al Maktoum International Airport.",
-    likes: 184,
-    ingredients: [
-      "10% Down Payment",
-      "50/50 Payment Plan",
-      "Swimmable Lagoon",
-      "Studios to Villas",
-      "DLD Escrow Registered",
-    ],
-    accent: "#1e4b8f",
-    href: "/off-plan/azizi-venice",
-    primaryLabel: "Explore Azizi Venice",
-    secondaryLabel: "Price List",
-    whatsappText:
-      "Hello SWK Properties, please share the floor plans and DLD cost sheet for Azizi Venice.",
-  },
-  {
-    title: "Sobha Century",
-    subtitle: "Sky Sanctuary",
-    label: "Sobha Century",
-    eyebrow: "SOBHA HARTLAND & MBR CITY · 60/40 PAYMENT PLAN",
-    image: "/img/hero/slides/05-sobha-century-thumb.webp",
-    backdropImage: "/img/hero/slides/05-sobha-century-desktop.webp",
-    mobileBackdropImage: "/img/hero/slides/05-sobha-century-mobile.webp",
-    alt: "Sobha Century & Sobha One Golf & Lagoon Residences",
+    title: "Palm Jebel Ali",
+    subtitle: "The Next Palm",
+    label: "Nakheel Palm Jebel Ali",
+    eyebrow: "NAKHEEL FLAGSHIP · ISLAND VILLAS & BEACH RESIDENCES",
+    image: "/img/hero/slides/07-nakheel-palm-jebel-ali-thumb.webp",
+    backdropImage: "/img/hero/slides/07-nakheel-palm-jebel-ali-desktop.webp",
+    mobileBackdropImage: "/img/hero/slides/07-nakheel-palm-jebel-ali-mobile.webp",
+    alt: "Nakheel Palm Jebel Ali island masterplan off the Jebel Ali coast",
     rating: 5.0,
-    chef: "Sobha Realty",
-    kitchen: "MBR City & Ras Al Khor · Handover Q4 2026 · From AED 1.55M",
+    developerLogo: "/img/developers/nakheel.svg",
+    chef: "Nakheel",
+    kitchen: "Palm Jebel Ali · Off-plan · Payment plan on request",
     description:
-      "Backward-integrated construction quality overlooking an 18-hole pitch & putt golf course, sky-linked courtyard towers, and wildlife sanctuary views.",
-    likes: 212,
+      "The next palm: a man-made island off the Jebel Ali coast with beaches, marinas and a mix of frond villas and beach apartments by the developer of Palm Jumeirah.",
+    likes: 0,
     ingredients: [
-      "60/40 Payment Plan",
-      "18-Hole Golf Course",
-      "12 Mins to DIFC",
-      "1–4 BR & Duplexes",
-      "In-House Sobha Build",
+      "Freehold Island Living",
+      "Frond Villas",
+      "Beach Residences",
+      "Marinas & Beaches",
+      "Golden Visa Route (AED 2M+)",
     ],
-    accent: "#0f2244",
-    href: "/off-plan/sobha-century",
-    primaryLabel: "Explore Sobha Releases",
+    accent: "#123c6b",
+    href: "/off-plan/palm-jebel-ali",
+    primaryLabel: "Explore Palm Jebel Ali",
     secondaryLabel: "Price List",
     whatsappText:
-      "Hello SWK Properties, please share available units and payment plan details for Sobha Century & Sobha One.",
-  },
-  {
-    title: "DAMAC Islands",
-    subtitle: "Lagoon Villas",
-    label: "DAMAC Islands",
-    eyebrow: "DUBAILAND WATERFRONT · 75/25 PAYMENT PLAN",
-    image: "/img/hero/slides/06-damac-islands-thumb.webp",
-    backdropImage: "/img/hero/slides/06-damac-islands-desktop.webp",
-    mobileBackdropImage: "/img/hero/slides/06-damac-islands-mobile.webp",
-    alt: "DAMAC Islands Tropical Lagoon Townhouses and Villas",
-    rating: 4.9,
-    chef: "DAMAC Properties",
-    kitchen: "Dubailand Master Corridor · Handover Q4 2028 · From AED 2.25M",
-    description:
-      "Master-planned island clusters with private white-sand beaches, aqua domes, lagoon waterfalls, and family townhouses & 6-bedroom waterfront villas.",
-    likes: 176,
-    ingredients: [
-      "75/25 Payment Plan",
-      "4–5 BR Townhouses",
-      "6–7 BR Island Villas",
-      "Golden Visa Eligible",
-      "Private Lagoon Beach",
-    ],
-    accent: "#163a70",
-    href: "/off-plan/damac-islands",
-    primaryLabel: "Explore DAMAC Islands",
-    secondaryLabel: "Price List",
-    whatsappText:
-      "Hello SWK Properties, please send the masterplan and villa availability for DAMAC Islands.",
+      "Hello SWK Properties, please share Palm Jebel Ali availability, prices and the Nakheel payment plan.",
   },
   {
     title: "Emaar Oasis",
@@ -169,6 +114,7 @@ export const SWK_HERO_DISHES: Dish[] = [
     mobileBackdropImage: "/img/hero/slides/05-emaar-the-oasis-mobile.webp",
     alt: "Emaar The Oasis & Dubai Hills Estate Waterfront Villas",
     rating: 5.0,
+    developerLogo: "/img/developers/emaar.svg",
     chef: "Emaar Properties",
     kitchen: "Dubailand & Dubai Hills · Handover 2028 · From AED 8.5M",
     description:
@@ -189,62 +135,184 @@ export const SWK_HERO_DISHES: Dish[] = [
       "Hello SWK Properties, please share the floor plans and availability for Emaar The Oasis & Dubai Hills Estate.",
   },
   {
-    title: "Imtiaz Kore",
-    subtitle: "Dubai Islands",
-    label: "Imtiaz Kore",
-    eyebrow: "NEW LAUNCH ALERT · 60/40 FLEXIBLE PAYMENT PLAN",
-    image: "/img/hero/slides/02-imtiaz-kore-thumb.webp",
-    backdropImage: "/img/hero/slides/02-imtiaz-kore-desktop.webp",
-    mobileBackdropImage: "/img/hero/slides/02-imtiaz-kore-mobile.webp",
-    alt: "Imtiaz Kore & Wynwood Horizon Waterfront Residences",
-    rating: 4.8,
-    chef: "Imtiaz Developments",
-    kitchen: "Dubai Islands & Meydan · Handover 2027 · From AED 1.05M",
+    title: "Bugatti Residences",
+    subtitle: "By Binghatti",
+    label: "Bugatti Residences by Binghatti",
+    eyebrow: "BINGHATTI × BUGATTI · BRANDED HYPER-LUXURY",
+    image: "/img/hero/slides/08-binghatti-bugatti-thumb.webp",
+    backdropImage: "/img/hero/slides/08-binghatti-bugatti-desktop.webp",
+    mobileBackdropImage: "/img/hero/slides/08-binghatti-bugatti-mobile.webp",
+    alt: "Bugatti Residences by Binghatti tower in Business Bay",
+    rating: 5.0,
+    developerLogo: "/img/developers/binghatti.png",
+    chef: "Binghatti",
+    kitchen: "Business Bay · Branded residences · Payment plan on request",
     description:
-      "Fully furnished smart-home residences with rooftop infinity pools, private plunge-pool terraces, and direct marina & island beach access.",
-    likes: 163,
+      "A Business Bay tower carrying the Bugatti name and design cues, aimed at collectors of the marque and of Dubai skyline addresses.",
+    likes: 0,
     ingredients: [
-      "60/40 Payment Plan",
-      "Fully Furnished",
-      "Smart Home Automation",
-      "Private Pool Terraces",
-      "High Rental Yield",
+      "Branded Bugatti Design",
+      "Business Bay Waterfront",
+      "Penthouses & Mansions",
+      "Canal & Skyline Views",
+      "Collector Asset",
     ],
-    accent: "#13315c",
-    href: "/off-plan/imtiaz-kore",
-    primaryLabel: "Explore Imtiaz Kore",
+    accent: "#1c2b4a",
+    href: "/off-plan/bugatti-residences-by-binghatti",
+    primaryLabel: "Explore Bugatti Residences",
     secondaryLabel: "Price List",
     whatsappText:
-      "Hello SWK Properties, please share the launch brochure and price list for Imtiaz Kore.",
+      "Hello SWK Properties, please share availability and prices for Bugatti Residences by Binghatti.",
   },
   {
-    title: "Azizi Florence",
-    subtitle: "Riviera Living",
-    label: "Azizi Florence",
-    eyebrow: "METRO-CONNECTED · AL FURJAN & MEYDAN · 50/50 PLAN",
-    image: "/img/hero/slides/03-azizi-florence-thumb.webp",
-    backdropImage: "/img/hero/slides/03-azizi-florence-desktop.webp",
-    mobileBackdropImage: "/img/hero/slides/03-azizi-florence-mobile.webp",
-    alt: "Azizi Florence Italian-Inspired Waterfront Residences",
-    rating: 4.8,
-    chef: "Azizi Developments",
-    kitchen: "Al Furjan & Meydan · Handover 2027 · From AED 740K",
+    title: "Como Residences",
+    subtitle: "Palm Jumeirah",
+    label: "Nakheel Como Residences",
+    eyebrow: "NAKHEEL · BRANDED TOWER ON PALM JUMEIRAH",
+    image: "/img/hero/slides/09-nakheel-como-thumb.webp",
+    backdropImage: "/img/hero/slides/09-nakheel-como-desktop.webp",
+    mobileBackdropImage: "/img/hero/slides/09-nakheel-como-mobile.webp",
+    alt: "Como Residences by Nakheel on Palm Jumeirah",
+    rating: 5.0,
+    developerLogo: "/img/developers/nakheel.svg",
+    chef: "Nakheel",
+    kitchen: "Palm Jumeirah · Branded residences · Payment plan on request",
     description:
-      "Italian-inspired architectural facades, landscaped podium pools, and walkable Dubai Metro Route 2020 connectivity built for high-yield leasing.",
-    likes: 158,
+      "A branded residential tower on Palm Jumeirah with wellness and hospitality design from the COMO group and sea views across the Gulf.",
+    likes: 0,
     ingredients: [
-      "10% Booking",
-      "50/50 Payment Plan",
-      "Walk to Metro",
-      "7%–8.5% Est. Gross ROI",
-      "0% Buyer Commission",
+      "Palm Jumeirah Address",
+      "COMO Wellness Design",
+      "Sea-View Residences",
+      "Branded Services",
+      "Freehold Ownership",
     ],
-    accent: "#214f94",
-    href: "/off-plan/azizi-florence",
-    primaryLabel: "Explore Azizi Florence",
+    accent: "#0f4a5c",
+    href: "/off-plan/como-residences",
+    primaryLabel: "Explore Como Residences",
     secondaryLabel: "Price List",
     whatsappText:
-      "Hello SWK Properties, please share available units and payment schedule for Azizi Florence.",
+      "Hello SWK Properties, please share availability and prices for Como Residences by Nakheel.",
+  },
+  {
+    title: "Rashid Yachts",
+    subtitle: "& Marina",
+    label: "Emaar Rashid Yachts & Marina",
+    eyebrow: "EMAAR · WATERFRONT MARINA DISTRICT",
+    image: "/img/hero/slides/10-emaar-rashid-yachts-thumb.webp",
+    backdropImage: "/img/hero/slides/10-emaar-rashid-yachts-desktop.webp",
+    mobileBackdropImage: "/img/hero/slides/10-emaar-rashid-yachts-mobile.webp",
+    alt: "Emaar Rashid Yachts and Marina waterfront district",
+    rating: 5.0,
+    developerLogo: "/img/developers/emaar.svg",
+    chef: "Emaar Properties",
+    kitchen: "Mina Rashid · Waterfront · Payment plan on request",
+    description:
+      "A marina district with a working yacht harbour, where Emaar residences sit beside the waterline minutes from Downtown and the old city.",
+    likes: 0,
+    ingredients: [
+      "Waterfront Marina Living",
+      "Yacht Harbour",
+      "Emaar Quality",
+      "Sea & Marina Views",
+      "Freehold Ownership",
+    ],
+    accent: "#1b437e",
+    href: "/off-plan/rashid-yachts-and-marina",
+    primaryLabel: "Explore Rashid Yachts",
+    secondaryLabel: "Price List",
+    whatsappText:
+      "Hello SWK Properties, please share availability and prices for Emaar Rashid Yachts & Marina.",
+  },
+  {
+    title: "Burj Binghatti",
+    subtitle: "Jacob & Co",
+    label: "Burj Binghatti Jacob & Co Residences",
+    eyebrow: "BINGHATTI × JACOB & CO · SUPER-TALL RESIDENCES",
+    image: "/img/hero/slides/11-binghatti-jacob-co-thumb.webp",
+    backdropImage: "/img/hero/slides/11-binghatti-jacob-co-desktop.webp",
+    mobileBackdropImage: "/img/hero/slides/11-binghatti-jacob-co-mobile.webp",
+    alt: "Burj Binghatti Jacob and Co Residences super-tall tower in Business Bay",
+    rating: 5.0,
+    developerLogo: "/img/developers/binghatti.png",
+    chef: "Binghatti",
+    kitchen: "Business Bay · Branded super-tall · Payment plan on request",
+    description:
+      "A super-tall residential tower in Business Bay created with watch and jewellery house Jacob & Co, among the tallest residential buildings planned in the world.",
+    likes: 0,
+    ingredients: [
+      "Super-Tall Landmark",
+      "Jacob & Co Branding",
+      "Business Bay",
+      "Skyline Penthouses",
+      "Collector Asset",
+    ],
+    accent: "#2a2140",
+    href: "/off-plan/burj-binghatti-jacob-and-co-residences",
+    primaryLabel: "Explore Burj Binghatti",
+    secondaryLabel: "Price List",
+    whatsappText:
+      "Hello SWK Properties, please share availability and prices for Burj Binghatti Jacob & Co Residences.",
+  },
+  {
+    title: "DAMAC Islands",
+    subtitle: "Lagoon Villas",
+    label: "DAMAC Islands",
+    eyebrow: "DUBAILAND WATERFRONT · 75/25 PAYMENT PLAN",
+    image: "/img/hero/slides/06-damac-islands-thumb.webp",
+    backdropImage: "/img/hero/slides/06-damac-islands-desktop.webp",
+    mobileBackdropImage: "/img/hero/slides/06-damac-islands-mobile.webp",
+    alt: "DAMAC Islands Tropical Lagoon Townhouses and Villas",
+    rating: 4.9,
+    developerLogo: "/img/developers/damac.png",
+    chef: "DAMAC Properties",
+    kitchen: "Dubailand Master Corridor · Handover Q4 2028 · From AED 2.25M",
+    description:
+      "Master-planned island clusters with private white-sand beaches, aqua domes, lagoon waterfalls, and family townhouses & 6-bedroom waterfront villas.",
+    likes: 176,
+    ingredients: [
+      "75/25 Payment Plan",
+      "4–5 BR Townhouses",
+      "6–7 BR Island Villas",
+      "Golden Visa Eligible",
+      "Private Lagoon Beach",
+    ],
+    accent: "#163a70",
+    href: "/off-plan/damac-islands",
+    primaryLabel: "Explore DAMAC Islands",
+    secondaryLabel: "Price List",
+    whatsappText:
+      "Hello SWK Properties, please send the masterplan and villa availability for DAMAC Islands.",
+  },
+  {
+    title: "Sobha Century",
+    subtitle: "Sky Sanctuary",
+    label: "Sobha Century",
+    eyebrow: "SOBHA HARTLAND & MBR CITY · 60/40 PAYMENT PLAN",
+    image: "/img/hero/slides/05-sobha-century-thumb.webp",
+    backdropImage: "/img/hero/slides/05-sobha-century-desktop.webp",
+    mobileBackdropImage: "/img/hero/slides/05-sobha-century-mobile.webp",
+    alt: "Sobha Century & Sobha One Golf & Lagoon Residences",
+    rating: 5.0,
+    developerLogo: "/img/developers/sobha.png",
+    chef: "Sobha Realty",
+    kitchen: "MBR City & Ras Al Khor · Handover Q4 2026 · From AED 1.55M",
+    description:
+      "Backward-integrated construction quality overlooking an 18-hole pitch & putt golf course, sky-linked courtyard towers, and wildlife sanctuary views.",
+    likes: 212,
+    ingredients: [
+      "60/40 Payment Plan",
+      "18-Hole Golf Course",
+      "12 Mins to DIFC",
+      "1–4 BR & Duplexes",
+      "In-House Sobha Build",
+    ],
+    accent: "#0f2244",
+    href: "/off-plan/sobha-century",
+    primaryLabel: "Explore Sobha Releases",
+    secondaryLabel: "Price List",
+    whatsappText:
+      "Hello SWK Properties, please share available units and payment plan details for Sobha Century & Sobha One.",
   },
 ]
 
@@ -409,6 +477,8 @@ const CSS =
   ".dsh-badge svg{width:14px;height:14px;fill:#ffffff}" +
   ".dsh-num{font-size:30px;font-weight:800;letter-spacing:-.03em;line-height:1;color:#ffffff}" +
   ".dsh-rate-lbl{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.11em;color:rgba(255,255,255,.85);line-height:1.3}" +
+  ".dsh-devlogo{display:inline-flex;align-items:center;height:34px;padding:6px 12px;margin:0 0 4px;border-radius:10px;background:#ffffff;box-shadow:0 4px 14px rgba(0,0,0,.25)}" +
+  ".dsh-devlogo img{height:100%;width:auto;max-width:150px;object-fit:contain;image-rendering:-webkit-optimize-contrast}" +
   ".dsh-chef{font-size:17px;font-weight:700;letter-spacing:-.01em;margin:0;color:#ffffff}" +
   ".dsh-kit{font-size:11px;font-weight:600;color:rgba(255,255,255,.85);margin:4px 0 8px;line-height:1.35}" +
   ".dsh-desc{font-size:12px;line-height:1.45;margin:0;min-height:68px;color:rgba(255,255,255,.94)}" +
@@ -1010,7 +1080,13 @@ export function DishOrbitCarousel({
                       <div className="dsh-rate-lbl">{(d.ingredients?.[0] ?? "").split(" ").slice(1).join(" ")}</div>
                     </div>
                   </div>
-                  <p className="dsh-chef">{d.chef}</p>
+                  {d.developerLogo ? (
+                    <span className="dsh-devlogo">
+                      <img src={d.developerLogo} alt={d.chef} decoding="async" />
+                    </span>
+                  ) : (
+                    <p className="dsh-chef">{d.chef}</p>
+                  )}
                   <p className="dsh-kit">{d.kitchen ?? "\u00a0"}</p>
                   {tab === "overview" || !d.ingredients?.length ? (
                     <p className="dsh-desc">{d.description}</p>

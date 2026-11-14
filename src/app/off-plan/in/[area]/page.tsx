@@ -3,6 +3,7 @@ import Link from "next/link"
 import { notFound } from "next/navigation"
 import { ArrowRight, Building2, MapPin } from "lucide-react"
 import { offPlanAreas, getOffPlanArea } from "@/lib/areas"
+import { getDeveloper } from "@/lib/developers"
 import { SITE } from "@/lib/swk"
 import { buildMeta, breadcrumbLd, itemListLd, faqLd } from "@/lib/seo"
 import { JsonLd } from "@/components/seo/json-ld"
@@ -93,9 +94,13 @@ export default async function OffPlanAreaPage({ params }: { params: Promise<{ ar
                 <img src={p.thumb || p.image} alt={`${p.name} by ${p.devName}`} loading="lazy" className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
               </div>
               <div className="flex flex-1 flex-col gap-2 p-5">
-                <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[#94652c]">
-                  <Building2 className="h-3.5 w-3.5" aria-hidden /> {p.devName}
-                </span>
+                {getDeveloper(p.developerSlug)?.logo ? (
+                  <img src={getDeveloper(p.developerSlug)!.logo} alt={p.devName} className="h-5 w-auto max-w-[120px] object-contain object-left" />
+                ) : (
+                  <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[#94652c]">
+                    <Building2 className="h-3.5 w-3.5" aria-hidden /> {p.devName}
+                  </span>
+                )}
                 <h2 className="font-serif text-xl font-semibold">{p.name}</h2>
                 <p className="line-clamp-3 text-xs leading-relaxed text-[#39455a]">{p.summary || p.blurb}</p>
                 <span className="mt-auto inline-flex items-center gap-1 text-xs text-[#5f6a82]">
