@@ -9,7 +9,6 @@ import {
   ChevronRight,
   Cookie,
   Heart,
-  MessageCircle,
   Phone,
   Scale,
   Send,
@@ -21,6 +20,7 @@ import { LISTINGS, permitLabel } from "@/lib/listings";
 import { projects } from "@/lib/developers";
 import { faqs, SITE } from "@/lib/swk";
 import { usePrefs } from "@/lib/prefs";
+import { WhatsAppIcon } from "@/components/site/whatsapp-icon";
 
 interface ChatMessage {
   id: string;
@@ -311,7 +311,7 @@ export function FloatingChrome() {
             animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
             exit={{ opacity: 0, y: -20, scale: 0.94, filter: "blur(4px)" }}
             transition={{ type: "spring", stiffness: 320, damping: 24 }}
-            className="fixed top-20 right-3 sm:right-5 z-[75] flex max-w-[calc(100vw-1.5rem)] sm:max-w-md items-center gap-3.5 overflow-hidden rounded-2xl border border-[#E0C1A3]/65 bg-[#17130e]/95 p-3.5 text-white shadow-[0_22px_55px_rgba(23,19,14,0.65)] backdrop-blur-xl"
+            className="fixed top-20 right-3 sm:right-5 z-[75] hidden sm:flex max-w-[calc(100vw-1.5rem)] sm:max-w-md items-center gap-3.5 overflow-hidden rounded-2xl border border-[#E0C1A3]/65 bg-[#17130e]/95 p-3.5 text-white shadow-[0_22px_55px_rgba(23,19,14,0.65)] backdrop-blur-xl"
           >
             {/* Animated Shimmer Accent Bar */}
             <motion.div
@@ -435,9 +435,9 @@ export function FloatingChrome() {
           rel="noopener noreferrer"
           onClick={() => trackEvent("whatsapp_click", { location: "floating_corner" })}
           aria-label="Chat on WhatsApp"
-          className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-emerald-600 text-white shadow-lg transition hover:bg-emerald-700"
+          className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-[#25D366] text-white shadow-[0_10px_28px_rgba(37,211,102,0.45)] transition hover:bg-[#1ebe5a]"
         >
-          <MessageCircle className="h-5 w-5" />
+          <WhatsAppIcon className="h-6 w-6" />
         </a>
       </div>
 
@@ -545,7 +545,7 @@ export function FloatingChrome() {
                 onClick={() => trackEvent("whatsapp_click", { location: "ai_assistant_handover" })}
                 className="inline-flex items-center gap-1 font-bold text-emerald-700 hover:underline"
               >
-                <MessageCircle className="h-3.5 w-3.5" />
+                <WhatsAppIcon className="h-3.5 w-3.5" />
                 WhatsApp
               </a>
               <span className="text-[#786e60]">·</span>

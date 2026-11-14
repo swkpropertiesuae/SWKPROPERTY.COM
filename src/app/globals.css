@@ -215,3 +215,31 @@ div[class*="rounded-3xl"] {
     animation-delay: 0s !important;
   }
 }
+
+/* ---- Lively scroll reveals: each section eases up as it enters the viewport (pure CSS, no JS) ---- */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    main section + section,
+    main article section {
+      animation: reveal-up linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 24%;
+    }
+    main img[class*="object-cover"] {
+      animation: reveal-zoom linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 40%;
+    }
+  }
+}
+@keyframes reveal-up {
+  from {
+    opacity: 0;
+    transform: translateY(48px);
+  }
+}
+@keyframes reveal-zoom {
+  from {
+    scale: 1.08;
+  }
+}

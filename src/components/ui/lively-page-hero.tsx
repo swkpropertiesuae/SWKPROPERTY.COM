@@ -45,21 +45,21 @@ const DEFAULT_HIGHLIGHTS: LivelyPageHeroHighlight[] = [
     title: "Palm Jebel Ali & Como Residences",
     subtitle: "Nakheel island villas & Palm Jumeirah branded tower",
     tag: "Nakheel",
-    image: "/img/hero/slides/07-nakheel-palm-jebel-ali-thumb.webp",
+    image: "/img/hero/slides/p-palm-jebel-ali-card.webp",
     href: "/off-plan/palm-jebel-ali",
   },
   {
-    title: "Emaar The Oasis & Rashid Yachts",
-    subtitle: "Canal mansions & Mina Rashid marina residences",
+    title: "Creek Haven & Rashid Yachts",
+    subtitle: "Emaar waterfront living on the Creek and at Mina Rashid",
     tag: "Emaar",
-    image: "/img/hero/slides/05-emaar-the-oasis-thumb.webp",
-    href: "/off-plan/emaar-the-oasis",
+    image: "/img/hero/slides/p-creek-haven-card.webp",
+    href: "/off-plan/creek-haven",
   },
   {
     title: "Bugatti Residences & Burj Binghatti",
     subtitle: "Branded hyper-luxury towers in Business Bay",
     tag: "Binghatti",
-    image: "/img/hero/slides/08-binghatti-bugatti-thumb.webp",
+    image: "/img/hero/slides/p-bugatti-residences-card.webp",
     href: "/off-plan/bugatti-residences-by-binghatti",
   },
 ];
@@ -120,29 +120,21 @@ export function LivelyPageHero({
               target.src = fallback;
             }
           }}
-          className="h-full w-full object-cover object-center brightness-[1.05] contrast-[1.04] transition-transform duration-1000 ease-out"
+          className="h-full w-full object-cover object-center transition-transform duration-1000 ease-out"
         />
         {/* Balanced High-Clarity Architectural Vignette */}
         <div
           className="absolute inset-0"
           style={{
             background:
-              "linear-gradient(90deg, rgba(12,10,7,0.72) 0%, rgba(12,10,7,0.44) 54%, rgba(12,10,7,0.18) 100%)",
+              "linear-gradient(90deg, rgba(12,10,7,0.38) 0%, rgba(12,10,7,0.12) 45%, transparent 70%)",
           }}
         />
         <div
           className="absolute inset-0"
           style={{
             background:
-              "linear-gradient(180deg, rgba(12,10,7,0.34) 0%, rgba(12,10,7,0.06) 45%, rgba(12,10,7,0.58) 100%)",
-          }}
-        />
-        {/* Interactive Natural-Light Spotlight & Sunlight Sweep */}
-        <div
-          className="absolute inset-0 transition-opacity duration-300"
-          style={{
-            background:
-              "radial-gradient(60% 50% at 62% 16%, rgba(255,250,236,0.24) 0%, rgba(255,255,255,0.07) 45%, transparent 75%), radial-gradient(500px circle at var(--spot-x, 50%) var(--spot-y, 30%), rgba(255,252,240,0.18) 0%, transparent 70%)",
+              "linear-gradient(180deg, rgba(12,10,7,0.22) 0%, transparent 25%, transparent 75%, rgba(12,10,7,0.3) 100%)",
           }}
         />
       </div>

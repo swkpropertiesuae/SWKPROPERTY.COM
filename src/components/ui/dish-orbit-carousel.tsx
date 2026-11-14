@@ -79,9 +79,9 @@ export const SWK_HERO_DISHES: Dish[] = [
     subtitle: "The Next Palm",
     label: "Nakheel Palm Jebel Ali",
     eyebrow: "NAKHEEL FLAGSHIP · ISLAND VILLAS & BEACH RESIDENCES",
-    image: "/img/hero/slides/07-nakheel-palm-jebel-ali-thumb.webp",
-    backdropImage: "/img/hero/slides/07-nakheel-palm-jebel-ali-desktop.webp",
-    mobileBackdropImage: "/img/hero/slides/07-nakheel-palm-jebel-ali-mobile.webp",
+    image: "/img/hero/slides/p-palm-jebel-ali-card.webp",
+    backdropImage: "/img/hero/slides/p-palm-jebel-ali-desktop.webp",
+    mobileBackdropImage: "/img/hero/slides/p-palm-jebel-ali-mobile.webp",
     alt: "Nakheel Palm Jebel Ali island masterplan off the Jebel Ali coast",
     rating: 5.0,
     developerLogo: "/img/developers/nakheel.svg",
@@ -105,43 +105,43 @@ export const SWK_HERO_DISHES: Dish[] = [
       "Hello SWK Properties, please share Palm Jebel Ali availability, prices and the Nakheel payment plan.",
   },
   {
-    title: "Emaar Oasis",
-    subtitle: "Canal Mansions",
-    label: "Emaar The Oasis",
-    eyebrow: "EMAAR FLAGSHIP · 10% DOWN · 80/20 PAYMENT PLAN",
-    image: "/img/hero/slides/05-emaar-the-oasis-thumb.webp",
-    backdropImage: "/img/hero/slides/05-emaar-the-oasis-desktop.webp",
-    mobileBackdropImage: "/img/hero/slides/05-emaar-the-oasis-mobile.webp",
-    alt: "Emaar The Oasis & Dubai Hills Estate Waterfront Villas",
+    title: "Creek Haven",
+    subtitle: "Dubai Creek Harbour",
+    label: "Emaar Creek Haven",
+    eyebrow: "EMAAR · WATERFRONT LAUNCH ON THE CREEK",
+    image: "/img/hero/slides/p-creek-haven-card.webp",
+    backdropImage: "/img/hero/slides/p-creek-haven-desktop.webp",
+    mobileBackdropImage: "/img/hero/slides/p-creek-haven-mobile.webp",
+    alt: "Emaar Creek Haven waterfront promenade with the Downtown Dubai skyline",
     rating: 5.0,
     developerLogo: "/img/developers/emaar.svg",
     chef: "Emaar Properties",
-    kitchen: "Dubailand & Dubai Hills · Handover 2028 · From AED 8.5M",
+    kitchen: "Dubai Creek Harbour · Off-plan · Payment plan on request",
     description:
-      "100-million-sq-ft low-density luxury estate where 25% of the masterplan is dedicated to navigable water canals, parks, and private-jetty mansions.",
-    likes: 245,
+      "A waterfront launch in Dubai Creek Harbour, the district Emaar is shaping as a second city centre beside the Ras Al Khor wildlife sanctuary, with skyline views to Downtown.",
+    likes: 0,
     ingredients: [
-      "10% Down Payment",
-      "80/20 Emaar Plan",
-      "4–6 BR Canal Villas",
-      "25% Water & Parks",
-      "AED 2M+ Golden Visa",
+      "Waterfront Creek Living",
+      "Skyline Views",
+      "Emaar Masterplan",
+      "Promenade & Marina",
+      "Freehold Ownership",
     ],
     accent: "#33392c",
-    href: "/off-plan/emaar-the-oasis",
-    primaryLabel: "Explore Emaar Oasis",
+    href: "/off-plan/creek-haven",
+    primaryLabel: "Explore Creek Haven",
     secondaryLabel: "Price List",
     whatsappText:
-      "Hello SWK Properties, please share the floor plans and availability for Emaar The Oasis & Dubai Hills Estate.",
+      "Hello SWK Properties, please share availability and prices for Emaar Creek Haven.",
   },
   {
     title: "Bugatti Residences",
     subtitle: "By Binghatti",
     label: "Bugatti Residences by Binghatti",
     eyebrow: "BINGHATTI × BUGATTI · BRANDED HYPER-LUXURY",
-    image: "/img/hero/slides/08-binghatti-bugatti-thumb.webp",
-    backdropImage: "/img/hero/slides/08-binghatti-bugatti-desktop.webp",
-    mobileBackdropImage: "/img/hero/slides/08-binghatti-bugatti-mobile.webp",
+    image: "/img/hero/slides/p-bugatti-residences-card.webp",
+    backdropImage: "/img/hero/slides/p-bugatti-residences-desktop.webp",
+    mobileBackdropImage: "/img/hero/slides/p-bugatti-residences-mobile.webp",
     alt: "Bugatti Residences by Binghatti tower in Business Bay",
     rating: 5.0,
     developerLogo: "/img/developers/binghatti.png",
@@ -169,9 +169,9 @@ export const SWK_HERO_DISHES: Dish[] = [
     subtitle: "Palm Jumeirah",
     label: "Nakheel Como Residences",
     eyebrow: "NAKHEEL · BRANDED TOWER ON PALM JUMEIRAH",
-    image: "/img/hero/slides/09-nakheel-como-thumb.webp",
-    backdropImage: "/img/hero/slides/09-nakheel-como-desktop.webp",
-    mobileBackdropImage: "/img/hero/slides/09-nakheel-como-mobile.webp",
+    image: "/img/hero/slides/p-como-residences-card.webp",
+    backdropImage: "/img/hero/slides/p-como-residences-desktop.webp",
+    mobileBackdropImage: "/img/hero/slides/p-como-residences-mobile.webp",
     alt: "Como Residences by Nakheel on Palm Jumeirah",
     rating: 5.0,
     developerLogo: "/img/developers/nakheel.svg",
@@ -199,9 +199,9 @@ export const SWK_HERO_DISHES: Dish[] = [
     subtitle: "& Marina",
     label: "Emaar Rashid Yachts & Marina",
     eyebrow: "EMAAR · WATERFRONT MARINA DISTRICT",
-    image: "/img/hero/slides/10-emaar-rashid-yachts-thumb.webp",
-    backdropImage: "/img/hero/slides/10-emaar-rashid-yachts-desktop.webp",
-    mobileBackdropImage: "/img/hero/slides/10-emaar-rashid-yachts-mobile.webp",
+    image: "/img/hero/slides/p-rashid-yachts-card.webp",
+    backdropImage: "/img/hero/slides/p-rashid-yachts-desktop.webp",
+    mobileBackdropImage: "/img/hero/slides/p-rashid-yachts-mobile.webp",
     alt: "Emaar Rashid Yachts and Marina waterfront district",
     rating: 5.0,
     developerLogo: "/img/developers/emaar.svg",
@@ -229,9 +229,9 @@ export const SWK_HERO_DISHES: Dish[] = [
     subtitle: "Jacob & Co",
     label: "Burj Binghatti Jacob & Co Residences",
     eyebrow: "BINGHATTI × JACOB & CO · SUPER-TALL RESIDENCES",
-    image: "/img/hero/slides/11-binghatti-jacob-co-thumb.webp",
-    backdropImage: "/img/hero/slides/11-binghatti-jacob-co-desktop.webp",
-    mobileBackdropImage: "/img/hero/slides/11-binghatti-jacob-co-mobile.webp",
+    image: "/img/hero/slides/p-burj-binghatti-card.webp",
+    backdropImage: "/img/hero/slides/p-burj-binghatti-desktop.webp",
+    mobileBackdropImage: "/img/hero/slides/p-burj-binghatti-mobile.webp",
     alt: "Burj Binghatti Jacob and Co Residences super-tall tower in Business Bay",
     rating: 5.0,
     developerLogo: "/img/developers/binghatti.png",
@@ -259,9 +259,9 @@ export const SWK_HERO_DISHES: Dish[] = [
     subtitle: "Lagoon Villas",
     label: "DAMAC Islands",
     eyebrow: "DUBAILAND WATERFRONT · 75/25 PAYMENT PLAN",
-    image: "/img/hero/slides/06-damac-islands-thumb.webp",
-    backdropImage: "/img/hero/slides/06-damac-islands-desktop.webp",
-    mobileBackdropImage: "/img/hero/slides/06-damac-islands-mobile.webp",
+    image: "/img/hero/slides/p-damac-islands-card.webp",
+    backdropImage: "/img/hero/slides/p-damac-islands-desktop.webp",
+    mobileBackdropImage: "/img/hero/slides/p-damac-islands-mobile.webp",
     alt: "DAMAC Islands Tropical Lagoon Townhouses and Villas",
     rating: 4.9,
     developerLogo: "/img/developers/damac.png",
@@ -285,34 +285,34 @@ export const SWK_HERO_DISHES: Dish[] = [
       "Hello SWK Properties, please send the masterplan and villa availability for DAMAC Islands.",
   },
   {
-    title: "Sobha Century",
-    subtitle: "Sky Sanctuary",
-    label: "Sobha Century",
-    eyebrow: "SOBHA HARTLAND & MBR CITY · 60/40 PAYMENT PLAN",
-    image: "/img/hero/slides/05-sobha-century-thumb.webp",
-    backdropImage: "/img/hero/slides/05-sobha-century-desktop.webp",
-    mobileBackdropImage: "/img/hero/slides/05-sobha-century-mobile.webp",
-    alt: "Sobha Century & Sobha One Golf & Lagoon Residences",
+    title: "Sobha SeaHaven",
+    subtitle: "Dubai Harbour",
+    label: "Sobha SeaHaven",
+    eyebrow: "SOBHA REALTY · SEAFRONT AT DUBAI HARBOUR",
+    image: "/img/hero/slides/p-sobha-seahaven-card.webp",
+    backdropImage: "/img/hero/slides/p-sobha-seahaven-desktop.webp",
+    mobileBackdropImage: "/img/hero/slides/p-sobha-seahaven-mobile.webp",
+    alt: "Sobha SeaHaven seafront residences at Dubai Harbour",
     rating: 5.0,
     developerLogo: "/img/developers/sobha.png",
     chef: "Sobha Realty",
-    kitchen: "MBR City & Ras Al Khor · Handover Q4 2026 · From AED 1.55M",
+    kitchen: "Dubai Harbour · Off-plan · Payment plan on request",
     description:
-      "Backward-integrated construction quality overlooking an 18-hole pitch & putt golf course, sky-linked courtyard towers, and wildlife sanctuary views.",
-    likes: 212,
+      "A seafront residential address at Dubai Harbour looking across the Gulf, with marina and yacht-club neighbours and Sobha's in-house construction quality.",
+    likes: 0,
     ingredients: [
-      "60/40 Payment Plan",
-      "18-Hole Golf Course",
-      "12 Mins to DIFC",
-      "1–4 BR & Duplexes",
-      "In-House Sobha Build",
+      "Seafront Residences",
+      "Beachfront Address",
+      "Dubai Harbour Marina",
+      "Sobha Build Quality",
+      "Freehold Ownership",
     ],
     accent: "#17130e",
-    href: "/off-plan/sobha-century",
-    primaryLabel: "Explore Sobha Releases",
+    href: "/off-plan/sobha-seahaven",
+    primaryLabel: "Explore Sobha SeaHaven",
     secondaryLabel: "Price List",
     whatsappText:
-      "Hello SWK Properties, please share available units and payment plan details for Sobha Century & Sobha One.",
+      "Hello SWK Properties, please share availability and prices for Sobha SeaHaven.",
   },
 ]
 
@@ -392,19 +392,14 @@ const CSS =
   ".dsh-root{position:sticky;top:0;overflow:hidden;width:100%;background:#0e0b08;color:#ffffff;" +
   "font-family:var(--font-raleway),ui-sans-serif,system-ui,sans-serif;container-type:inline-size;-webkit-tap-highlight-color:transparent}" +
   ".dsh-root *{box-sizing:border-box}" +
-  ".dsh-bd{position:absolute;inset:0;width:100%;height:100%;max-width:none;object-fit:cover;object-position:center;pointer-events:none;transition:opacity 1.6s cubic-bezier(.65,0,.35,1),transform 9s cubic-bezier(.22,1,.36,1),filter 1.6s cubic-bezier(.65,0,.35,1);filter:brightness(1.02) contrast(1.08) saturate(.9) sepia(.08)}" +
-  // Cinematic grade: warm vignette plus a faint animated film grain over the backdrop.
-  ".dsh-scrim::before{content:'';position:absolute;inset:0;background:radial-gradient(120% 90% at 50% 45%,transparent 55%,rgba(8,6,4,.55) 100%)}" +
-  ".dsh-scrim::after{content:'';position:absolute;inset:-50%;opacity:.07;mix-blend-mode:overlay;animation:dsh-grain 1.2s steps(6) infinite;" +
-  "background-image:url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>\")}" +
-  "@keyframes dsh-grain{0%{transform:translate(0,0)}20%{transform:translate(-3%,2%)}40%{transform:translate(2%,-3%)}60%{transform:translate(-2%,3%)}80%{transform:translate(3%,1%)}100%{transform:translate(0,0)}}" +
-  "@media (prefers-reduced-motion:reduce){.dsh-scrim::after{animation:none}}" +
+  ".dsh-bd{position:absolute;inset:0;width:100%;height:100%;max-width:none;object-fit:cover;object-position:center;pointer-events:none;transition:opacity 1.6s cubic-bezier(.65,0,.35,1),transform 9s cubic-bezier(.22,1,.36,1),filter 1.6s cubic-bezier(.65,0,.35,1);filter:none}" +
+  // Photo stays true to the render: only a soft gradient behind the headline (left) and the thumbnail rail (bottom).
   ".dsh-scrim{position:absolute;inset:0;pointer-events:none;" +
-  "background:linear-gradient(90deg,rgba(12,10,7,.72) 0%,rgba(12,10,7,.48) 52%,rgba(12,10,7,.28) 100%)," +
-  "linear-gradient(180deg,rgba(12,10,7,.58) 0%,rgba(12,10,7,.08) 32%,rgba(12,10,7,.16) 68%,rgba(12,10,7,.72) 100%)}" +
-  ".dsh-sunlight{position:absolute;inset:0;pointer-events:none;z-index:1;animation:dsh-sun-pulse 9s ease-in-out infinite;" +
-  "background:radial-gradient(62% 52% at 64% 16%,rgba(255,250,236,.26) 0%,rgba(255,255,255,.08) 42%,transparent 74%)," +
-  "radial-gradient(520px circle at var(--spot-x,50%) var(--spot-y,32%),rgba(255,252,242,.16) 0%,transparent 70%)}" +
+  "background:linear-gradient(90deg,rgba(12,10,7,.42) 0%,rgba(12,10,7,.16) 38%,transparent 62%)," +
+  "linear-gradient(180deg,rgba(12,10,7,.28) 0%,transparent 18%,transparent 72%,rgba(12,10,7,.38) 100%)}" +
+  ".dsh-sunlight{display:none}" +
+  // Legibility comes from a soft text shadow instead of darkening the whole photo.
+  ".dsh-hd,.dsh-eye{text-shadow:0 2px 14px rgba(0,0,0,.55),0 1px 3px rgba(0,0,0,.35)}" +
   ".dsh-root:focus-visible{outline:2px solid #ffffff;outline-offset:-4px}" +
   ".dsh-canvas{position:absolute;left:50%;top:calc(50% + 46px);width:1040px;height:520px;transform:translate(-50%,-50%) scale(var(--dsh-s,1));transform-origin:50% 50%;z-index:2}" +
   ".dsh-arc{position:absolute;left:0;top:0;width:1040px;height:520px;overflow:visible;pointer-events:none}" +
@@ -526,7 +521,7 @@ const CSS =
   ".dsh-pager{left:10px;top:132px}" +
   ".dsh-plates{position:relative;left:auto;top:auto;width:min(38vw,20svh);height:min(38vw,20svh);margin-top:2px}" +
   ".dsh-medallion{width:100%;height:100%}" +
-  ".dsh-head{position:relative;left:auto;top:auto;width:100%;height:122px;margin-top:6px}" +
+  ".dsh-head{position:relative;left:auto;top:auto;width:100%;height:150px;margin-top:6px}" +
   ".dsh-hd{text-align:center;transform:scale(.78);transform-origin:50% 0}" +
   ".dsh-kpis{justify-content:center;flex-wrap:nowrap}" +
   ".dsh-acts{position:relative;left:auto;top:auto;width:100%;margin-top:4px;gap:8px;flex-wrap:nowrap;justify-content:center}" +
@@ -548,9 +543,10 @@ const Icon = {
       <path d="M5 12h14M13 5l7 7-7 7" stroke="currentColor" strokeWidth="2.2" fill="none" />
     </svg>
   ),
+  // Official WhatsApp glyph: the secondary action opens a WhatsApp chat.
   order: (
-    <svg className="dsh-ico" viewBox="0 0 24 24" aria-hidden="true">
-      <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
+    <svg className="dsh-ico" viewBox="0 0 24 24" aria-hidden="true" style={{ fill: "currentColor", stroke: "none" }}>
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
     </svg>
   ),
   up: (

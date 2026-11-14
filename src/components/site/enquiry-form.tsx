@@ -5,7 +5,6 @@ import Link from "next/link";
 import {
   CheckCircle2,
   Clock,
-  MessageCircle,
   Phone,
   ShieldCheck,
   Sparkles,
@@ -15,6 +14,7 @@ import {
 } from "lucide-react";
 import { usePrefs } from "@/lib/prefs";
 import { SITE } from "@/lib/swk";
+import { WhatsAppIcon } from "@/components/site/whatsapp-icon";
 
 export type EnquiryContextType =
   | "property"
@@ -280,7 +280,7 @@ export function EnquiryForm({
             }
             className="inline-flex items-center gap-2 rounded-full bg-emerald-600 px-5 py-2.5 text-xs font-bold uppercase tracking-[0.16em] text-white hover:bg-emerald-700"
           >
-            <MessageCircle className="h-4 w-4" />
+            <WhatsAppIcon className="h-4 w-4" />
             Continue on WhatsApp Now
           </a>
           <Link

@@ -13,7 +13,6 @@ import {
   Heart,
   MapPin,
   Maximize2,
-  MessageCircle,
   Phone,
   Scale,
   Share2,
@@ -28,6 +27,7 @@ import { PropertyCard } from "@/components/site/property-card";
 import { usePrefs } from "@/lib/prefs";
 import { SITE } from "@/lib/swk";
 import { MapEmbed } from "@/components/site/map-embed";
+import { WhatsAppIcon } from "@/components/site/whatsapp-icon";
 
 export function PropertyDetailClient({
   listing,
@@ -618,7 +618,7 @@ export function PropertyDetailClient({
                 }
                 className="inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-500 px-4 py-3 text-xs font-bold uppercase tracking-[0.14em] text-black hover:bg-emerald-400"
               >
-                <MessageCircle className="h-4 w-4" />
+                <WhatsAppIcon className="h-4 w-4" />
                 WhatsApp Agent
               </a>
               <a
