@@ -48,8 +48,19 @@ Native app icon sets (`App_Icons/…/iOS`, `…/Android/res`) are kept in the ki
 
 Motion: Tailwind transitions default to 450 ms `cubic-bezier(0.22, 1, 0.36, 1)`; route changes play a blur
 crossfade via React `<ViewTransition>` (`src/app/template.tsx`, `::view-transition` rules in `globals.css`);
-the hero has a film grade (warm vignette, faint animated grain, 1.6 s backdrop dissolves). All motion is
-disabled under `prefers-reduced-motion`.
+hero photos are shown ungraded (only a soft gradient behind the headline, plus a text shadow) with 1.6 s
+backdrop dissolves; sections ease up and images settle from a slight zoom as they scroll into view (CSS
+scroll-driven animations). All motion is disabled under `prefers-reduced-motion`.
+
+## Hero imagery
+
+Slides use `public/img/hero/slides/p-<project>-{desktop,mobile,card}.webp`, generated from the official
+developer render in `public/img/projects/<developer>/`: desktop 1920×1080 (q92), mobile 900×1350, and a
+separate detail framing for the card medallion so it differs from the backdrop. Only one official render per
+project is in the repository; add more images from developer media kits to use fully different shots.
+
+WhatsApp buttons use the official glyph (`src/components/site/whatsapp-icon.tsx`, from simple-icons) and the
+WhatsApp brand green `#25D366` on the floating button.
 
 ## Usage rules
 

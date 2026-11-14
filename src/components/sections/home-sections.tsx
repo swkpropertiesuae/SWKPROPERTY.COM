@@ -17,7 +17,6 @@ import {
   KeyRound,
   Landmark,
   MapPin,
-  MessageCircle,
   Phone,
   ShieldCheck,
   TrendingUp,
@@ -37,6 +36,7 @@ import {
   team,
   testimonials,
 } from "@/lib/swk"
+import { WhatsAppIcon } from "@/components/site/whatsapp-icon";
 
 /* ------------------------------------------------------------------ Dish Orbit Carousel Dubai Real Estate Hero (21st.dev kedhareswer/dish-orbit-carousel) */
 export function Hero() {
@@ -526,7 +526,7 @@ export function Aerial() {
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-1.5 text-xs font-bold text-[#94652c] hover:underline"
               >
-                <MessageCircle className="h-4 w-4" />
+                <WhatsAppIcon className="h-4 w-4" />
                 Ask on WhatsApp
               </a>
             </div>
@@ -1403,7 +1403,7 @@ export function Team() {
                         rel="noopener noreferrer"
                         className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-5 py-3 text-xs font-bold uppercase tracking-[0.16em] text-white transition hover:bg-emerald-700"
                       >
-                        <MessageCircle className="h-4 w-4" />
+                        <WhatsAppIcon className="h-4 w-4" />
                         WhatsApp {selectedMember.name.split(" ")[0]}
                       </a>
                       <a

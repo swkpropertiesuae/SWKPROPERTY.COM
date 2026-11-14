@@ -6,12 +6,12 @@ import {
   Clock,
   Mail,
   MapPin,
-  MessageCircle,
   Phone,
   ShieldCheck,
 } from "lucide-react";
 import { SITE } from "@/lib/swk";
 import { usePrefs } from "@/lib/prefs";
+import { WhatsAppIcon } from "@/components/site/whatsapp-icon";
 
 export function SectionHeading({
   eyebrow,
@@ -98,7 +98,7 @@ export function SiteFooter() {
                   onClick={() => trackEvent("whatsapp_click", { location: "footer" })}
                   className="inline-flex items-center gap-1 text-emerald-300 hover:underline"
                 >
-                  <MessageCircle className="h-3.5 w-3.5" />
+                  <WhatsAppIcon className="h-3.5 w-3.5" />
                   WhatsApp
                 </a>
               </div>

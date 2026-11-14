@@ -8,7 +8,6 @@ import {
   ExternalLink,
   FileText,
   MapPin,
-  MessageCircle,
   ShieldCheck,
 } from "lucide-react";
 import { getDeveloper, getProject, projects } from "@/lib/developers";
@@ -17,6 +16,7 @@ import { JsonLd } from "@/components/seo/json-ld";
 import { breadcrumbLd, buildMeta } from "@/lib/seo";
 import { SITE } from "@/lib/swk";
 import { MapEmbed } from "@/components/site/map-embed";
+import { WhatsAppIcon } from "@/components/site/whatsapp-icon";
 
 export function generateStaticParams() {
   return projects.map((p) => ({ slug: p.slug }));
@@ -157,7 +157,7 @@ export default async function OffPlanProjectDetailPage({
                 rel="noopener noreferrer"
                 className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-500 px-4 py-2.5 text-xs font-bold uppercase tracking-[0.14em] text-black hover:bg-emerald-400"
               >
-                <MessageCircle className="h-4 w-4" />
+                <WhatsAppIcon className="h-4 w-4" />
                 Request Live Availability
               </a>
             </div>

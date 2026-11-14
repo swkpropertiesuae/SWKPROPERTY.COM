@@ -9,7 +9,6 @@ import {
   ChevronRight,
   Cookie,
   Heart,
-  MessageCircle,
   Phone,
   Scale,
   Send,
@@ -21,6 +20,7 @@ import { LISTINGS, permitLabel } from "@/lib/listings";
 import { projects } from "@/lib/developers";
 import { faqs, SITE } from "@/lib/swk";
 import { usePrefs } from "@/lib/prefs";
+import { WhatsAppIcon } from "@/components/site/whatsapp-icon";
 
 interface ChatMessage {
   id: string;
@@ -435,9 +435,9 @@ export function FloatingChrome() {
           rel="noopener noreferrer"
           onClick={() => trackEvent("whatsapp_click", { location: "floating_corner" })}
           aria-label="Chat on WhatsApp"
-          className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-emerald-600 text-white shadow-lg transition hover:bg-emerald-700"
+          className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-[#25D366] text-white shadow-[0_10px_28px_rgba(37,211,102,0.45)] transition hover:bg-[#1ebe5a]"
         >
-          <MessageCircle className="h-5 w-5" />
+          <WhatsAppIcon className="h-6 w-6" />
         </a>
       </div>
 
@@ -545,7 +545,7 @@ export function FloatingChrome() {
                 onClick={() => trackEvent("whatsapp_click", { location: "ai_assistant_handover" })}
                 className="inline-flex items-center gap-1 font-bold text-emerald-700 hover:underline"
               >
-                <MessageCircle className="h-3.5 w-3.5" />
+                <WhatsAppIcon className="h-3.5 w-3.5" />
                 WhatsApp
               </a>
               <span className="text-[#786e60]">·</span>

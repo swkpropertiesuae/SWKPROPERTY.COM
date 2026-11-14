@@ -10,13 +10,13 @@ import {
   Heart,
   MapPin,
   Maximize2,
-  MessageCircle,
   Scale,
   ShieldCheck,
 } from "lucide-react";
 import { type PropertyListing, isPermitVerified, permitLabel } from "@/lib/listings";
 import { usePrefs } from "@/lib/prefs";
 import { SITE } from "@/lib/swk";
+import { WhatsAppIcon } from "@/components/site/whatsapp-icon";
 
 export function PropertyCard({ listing }: { listing: PropertyListing }) {
   const {
@@ -208,7 +208,7 @@ export function PropertyCard({ listing }: { listing: PropertyListing }) {
               }
               className="inline-flex items-center justify-center gap-1.5 rounded-xl border border-emerald-600/35 bg-emerald-50 px-4 py-2.5 text-xs font-bold uppercase tracking-[0.14em] text-emerald-800 transition hover:bg-emerald-600 hover:text-white"
             >
-              <MessageCircle className="h-3.5 w-3.5" />
+              <WhatsAppIcon className="h-3.5 w-3.5" />
               WhatsApp
             </a>
           </div>
