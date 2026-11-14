@@ -311,7 +311,7 @@ export function FloatingChrome() {
             animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
             exit={{ opacity: 0, y: -20, scale: 0.94, filter: "blur(4px)" }}
             transition={{ type: "spring", stiffness: 320, damping: 24 }}
-            className="fixed top-20 right-3 sm:right-5 z-[75] flex max-w-[calc(100vw-1.5rem)] sm:max-w-md items-center gap-3.5 overflow-hidden rounded-2xl border border-[#E0C1A3]/65 bg-[#17130e]/95 p-3.5 text-white shadow-[0_22px_55px_rgba(23,19,14,0.65)] backdrop-blur-xl"
+            className="fixed top-20 right-3 sm:right-5 z-[75] hidden sm:flex max-w-[calc(100vw-1.5rem)] sm:max-w-md items-center gap-3.5 overflow-hidden rounded-2xl border border-[#E0C1A3]/65 bg-[#17130e]/95 p-3.5 text-white shadow-[0_22px_55px_rgba(23,19,14,0.65)] backdrop-blur-xl"
           >
             {/* Animated Shimmer Accent Bar */}
             <motion.div

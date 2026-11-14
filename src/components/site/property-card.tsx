@@ -14,7 +14,7 @@ import {
   Scale,
   ShieldCheck,
 } from "lucide-react";
-import { type PropertyListing, permitLabel } from "@/lib/listings";
+import { type PropertyListing, isPermitVerified, permitLabel } from "@/lib/listings";
 import { usePrefs } from "@/lib/prefs";
 import { SITE } from "@/lib/swk";
 
@@ -58,7 +58,7 @@ export function PropertyCard({ listing }: { listing: PropertyListing }) {
                 ? `For Rent · ${listing.rentalPeriod === "monthly" ? "Monthly" : "Yearly"}`
                 : "Off-Plan Launch"}
             </span>
-            {listing.badge && (
+            {listing.badge && (listing.badge !== "Verified Permit" || isPermitVerified(listing)) && (
               <span className="rounded-full border border-[#c99a63]/50 bg-white/95 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.14em] text-[#94652c] backdrop-blur-md">
                 {listing.badge}
               </span>
@@ -185,7 +185,7 @@ export function PropertyCard({ listing }: { listing: PropertyListing }) {
               Consultant: <strong className="text-[#17130e]">{listing.agentName}</strong>
             </Link>
             <span className="text-[10px] font-medium text-[#786e60]">
-              Verified {listing.lastChecked}
+              Checked {listing.lastChecked}
             </span>
           </div>
 
