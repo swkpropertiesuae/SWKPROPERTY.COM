@@ -18,12 +18,18 @@
       "/about.html",
       "/services.html",
       "/mortgage.html",
+      "/mortgage",
       "/blog.html",
+      "/blog",
       "/contact.html",
       "/assets/video/*",
       "/properties/*",
       "/blog/*"
     ]
+  },
+  "vars": {
+    "NEXT_PUBLIC_GA_ID": "G-1FXMV3FTYL",
+    "NEXT_PUBLIC_GTM_ID": "GTM-NMJ9MVNG"
   },
   "r2_buckets": [
     { "binding": "MEDIA", "bucket_name": "swk-media" }

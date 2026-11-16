@@ -34,33 +34,44 @@ async function serveMedia(request, env, key) {
   return new Response(head ? null : object.body, { status, headers });
 }
 
-const redirect = (url, path) => Response.redirect(new URL(path, url).toString(), 301);
+const redirect = (url, path) => Response.redirect(new URL(path, "https://www.swkpropertiesuae.com").toString(), 301);
 
 const worker = {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
-    const { pathname } = url;
+    const { pathname, search } = url;
     const trimmed = pathname.replace(/\/$/, '');
+
+    // 1. Canonical domain enforcement: 301 redirect apex (non-www) to www.swkpropertiesuae.com
+    if (url.hostname === 'swkpropertiesuae.com') {
+      return Response.redirect(`https://www.swkpropertiesuae.com${pathname}${search}`, 301);
+    }
 
     const media = pathname.match(MEDIA_PATH);
     if (media && env.MEDIA && (request.method === 'GET' || request.method === 'HEAD')) return serveMedia(request, env, media[1]);
 
-    if (pathname === '/property-details.html') return redirect(url, '/properties/');
+    // 2. Legacy .html and route redirects -> exact clean extensionless canonical URLs (no trailing slash)
+    if (pathname === '/property-details.html') return redirect(url, '/properties');
     if (pathname === '/index.html') return redirect(url, '/');
+    if (pathname === '/mortgage.html' || trimmed === '/mortgage') return redirect(url, '/calculators');
+    if (pathname === '/blog.html' || trimmed === '/blog') return redirect(url, '/insights');
 
-    const page = pathname.match(/^\/(properties|about|services|mortgage|blog|contact)\.html$/);
-    if (page) return redirect(url, `/${page[1]}/`);
+    const page = pathname.match(/^\/(properties|about|services|contact)\.html$/);
+    if (page) return redirect(url, `/${page[1]}`);
 
     if (pathname === '/blog-post.html') {
       const slug = url.searchParams.get('slug');
-      if (slug !== null) return redirect(url, `/blog/${slug}/`);
+      if (slug !== null) return redirect(url, `/insights/${slug}`);
+      return redirect(url, '/insights');
     }
 
     const listing = trimmed.match(/^\/properties\/([^/]+)$/);
-    if (listing && RETIRED_LISTINGS.has(listing[1])) return redirect(url, '/properties/');
+    if (listing && RETIRED_LISTINGS.has(listing[1])) return redirect(url, '/properties');
 
-    if (/^\/blog\/research(\/|$)/.test(pathname)) return redirect(url, '/blog/');
-    if (/^\/blog\/[^/]+-residential-sales$/.test(trimmed)) return redirect(url, '/blog/');
+    if (/^\/blog\/research(\/|$)/.test(pathname)) return redirect(url, '/insights');
+    if (/^\/blog\/[^/]+-residential-sales$/.test(trimmed)) return redirect(url, '/insights');
+    const blogPost = trimmed.match(/^\/blog\/([^/]+)$/);
+    if (blogPost) return redirect(url, `/insights/${blogPost[1]}`);
 
     return nextWorker.fetch(request, env, ctx);
   },

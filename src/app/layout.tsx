@@ -109,11 +109,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${serif.variable} ${raleway.variable} min-h-screen overflow-x-clip bg-[#faf7f2] text-[#17130e] antialiased selection:bg-[#17130e] selection:text-white`}
       >
-        {process.env.NEXT_PUBLIC_GTM_ID ? (
-          <Script id="consent-default" strategy="beforeInteractive">
-            {CONSENT_DEFAULT_SCRIPT}
-          </Script>
-        ) : null}
+        <Script id="consent-default" strategy="beforeInteractive">
+          {CONSENT_DEFAULT_SCRIPT}
+        </Script>
         <JsonLd data={[organizationLd, websiteLd]} />
         <PrefsProvider>
           <a
