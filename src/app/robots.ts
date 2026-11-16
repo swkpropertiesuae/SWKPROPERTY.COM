@@ -34,6 +34,10 @@ const AI_AND_SEARCH_AGENTS = [
   "MistralAI-User",
   "cohere-ai",
   "CCBot",
+  "YouBot",
+  "Diffbot",
+  "Bytespider",
+  "PhindBot",
 ]
 
 const PRIVATE = ["/api/", "/thank-you"]
