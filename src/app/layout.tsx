@@ -5,7 +5,6 @@ import { PrefsProvider } from "@/lib/prefs";
 import { SiteHeader } from "@/components/site/site-header";
 import { SiteFooter } from "@/components/site/site-footer";
 import { FloatingChrome } from "@/components/site/floating-chrome";
-import Script from "next/script";
 import { JsonLd } from "@/components/seo/json-ld";
 import { Analytics, CONSENT_DEFAULT_SCRIPT } from "@/components/seo/analytics";
 import { KEYWORDS, OG_DEFAULT, organizationLd, websiteLd } from "@/lib/seo";
@@ -106,12 +105,18 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className="overflow-x-clip">
+      <head>
+        <script async src="https://www.googletagmanager.com/gtm.js?id=GTM-NMJ9MVNG" />
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-1FXMV3FTYL" />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: CONSENT_DEFAULT_SCRIPT,
+          }}
+        />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${serif.variable} ${raleway.variable} min-h-screen overflow-x-clip bg-[#faf7f2] text-[#17130e] antialiased selection:bg-[#17130e] selection:text-white`}
       >
-        <Script id="consent-default" strategy="beforeInteractive">
-          {CONSENT_DEFAULT_SCRIPT}
-        </Script>
         <JsonLd data={[organizationLd, websiteLd]} />
         <PrefsProvider>
           <a
