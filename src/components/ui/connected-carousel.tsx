@@ -55,6 +55,7 @@ export function CalendlyCarousel({
   const animationFrameRef = useRef<number | null>(null);
   const lastTimeRef = useRef<number | null>(null);
   const elapsedRef = useRef<number>(0);
+  const touchStartXRef = useRef<number | null>(null);
 
   // State
   const [page, setPage] = useState<number>(0);
@@ -225,7 +226,7 @@ export function CalendlyCarousel({
   const activeDimensions = {
     desktop: { width: 762, height: 513 },
     tablet: { width: 560, height: 440 },
-    mobile: { width: Math.min(340, viewportWidth - 56), height: 490 },
+    mobile: { width: Math.min(342, Math.max(280, viewportWidth - 36)), height: 550 },
   }[tier];
 
   return (
@@ -238,6 +239,19 @@ export function CalendlyCarousel({
       onKeyDown={handleKeyDown}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
+      onTouchStart={(e) => {
+        touchStartXRef.current = e.touches[0]?.clientX ?? null;
+      }}
+      onTouchEnd={(e) => {
+        const startX = touchStartXRef.current;
+        const endX = e.changedTouches[0]?.clientX ?? null;
+        touchStartXRef.current = null;
+        if (startX !== null && endX !== null) {
+          const dx = endX - startX;
+          if (dx < -40) handleNext();
+          else if (dx > 40) handlePrev();
+        }
+      }}
       className={cn(
         "relative w-full max-w-[1240px] mx-auto flex flex-col items-center select-none outline-none py-4 overflow-hidden",
         className
@@ -607,23 +621,23 @@ export function CalendlyCarousel({
                       !isActive && "pointer-events-none"
                     )}
                   >
-                    <div className="flex-1 min-w-0 flex flex-col items-center md:items-start text-center md:text-left justify-between py-1 gap-2 sm:gap-3">
-                      <div className="w-full space-y-2">
+                    <div className="order-2 md:order-1 flex-1 min-w-0 flex flex-col items-center md:items-start text-center md:text-left justify-between py-0.5 md:py-1 gap-2 sm:gap-3">
+                      <div className="w-full space-y-1.5 sm:space-y-2">
                         {item.badge ? (
-                          <span className="inline-flex items-center gap-1.5 rounded-full border border-[#0e9f6e]/25 bg-[#0e9f6e]/[0.07] px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.16em] text-[#0e9f6e]">
+                          <span className="inline-flex items-center gap-1.5 rounded-full border border-[#0e9f6e]/25 bg-[#0e9f6e]/[0.07] px-2.5 py-0.5 text-[9.5px] sm:text-[10px] font-semibold uppercase tracking-[0.15em] text-[#0e9f6e]">
                             <span className="h-1.5 w-1.5 rounded-full bg-[#0e9f6e]" />
                             {item.badge}
                           </span>
                         ) : null}
                         <h3
                           title={item.stat}
-                          className="text-lg sm:text-2xl md:text-[26px] lg:text-[31px] font-semibold tracking-[-0.03em] text-foreground leading-[1.12] w-full"
+                          className="text-[17px] sm:text-2xl md:text-[26px] lg:text-[31px] font-semibold tracking-[-0.03em] text-foreground leading-[1.12] w-full"
                         >
                           {item.stat}
                         </h3>
                       </div>
 
-                      <div className="relative w-full min-w-0 my-auto py-1">
+                      <div className="relative w-full min-w-0 my-auto py-0.5">
                         <span
                           aria-hidden="true"
                           className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-foreground/25 absolute right-full top-0 pr-1 select-none pointer-events-none hidden md:inline"
@@ -631,14 +645,14 @@ export function CalendlyCarousel({
                           &ldquo;
                         </span>
 
-                        <p className="text-xs sm:text-[14.5px] md:text-[15.5px] text-foreground/80 leading-[1.58]">
+                        <p className="line-clamp-3 md:line-clamp-none text-xs sm:text-[14.5px] md:text-[15.5px] text-foreground/80 leading-[1.52] md:leading-[1.58]">
                           &ldquo;{item.quote}&rdquo;
                         </p>
                       </div>
 
-                      <div className="flex flex-wrap items-end justify-center md:justify-between gap-3 min-w-0 w-full max-w-full">
+                      <div className="flex flex-wrap items-center md:items-end justify-center md:justify-between gap-2.5 sm:gap-3 min-w-0 w-full max-w-full">
                         <div className="flex flex-col items-center md:items-start min-w-0 max-w-full">
-                          <span className="w-fit inline-flex items-center justify-center rounded-[5px] font-medium py-1 px-2.5 text-[11px] sm:text-xs bg-secondary text-secondary-foreground shrink-0 select-none">
+                          <span className="w-fit inline-flex items-center justify-center rounded-[5px] font-medium py-0.5 sm:py-1 px-2.5 text-[11px] sm:text-xs bg-secondary text-secondary-foreground shrink-0 select-none">
                             <span className="whitespace-nowrap font-semibold">
                               {item.author}
                             </span>
@@ -656,7 +670,7 @@ export function CalendlyCarousel({
                             </svg>
                           </div>
 
-                          <span className="w-fit inline-flex items-center justify-center rounded-[5px] font-medium py-1 px-2.5 text-[10px] sm:text-xs bg-secondary text-muted-foreground max-w-full select-none">
+                          <span className="w-fit inline-flex items-center justify-center rounded-[5px] font-medium py-0.5 sm:py-1 px-2.5 text-[10px] sm:text-xs bg-secondary text-muted-foreground max-w-full select-none">
                             <span title={item.role} className="truncate">
                               {item.role}
                             </span>
@@ -667,7 +681,7 @@ export function CalendlyCarousel({
                           <Link
                             href={item.href}
                             onClick={(e) => e.stopPropagation()}
-                            className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-black/15 bg-white px-3.5 py-2 text-[11px] font-semibold uppercase tracking-[0.13em] text-[#121212] shadow-xs transition-all duration-200 hover:-translate-y-0.5 hover:border-[#121212] hover:bg-[#121212] hover:text-white hover:shadow-md"
+                            className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-black/15 bg-white px-3.5 py-1.5 sm:py-2 text-[10.5px] sm:text-[11px] font-semibold uppercase tracking-[0.13em] text-[#121212] shadow-xs transition-all duration-200 hover:-translate-y-0.5 hover:border-[#121212] hover:bg-[#121212] hover:text-white hover:shadow-md"
                           >
                             <span>View Profile</span>
                             <ArrowUpRight className="h-3.5 w-3.5" />
@@ -676,7 +690,7 @@ export function CalendlyCarousel({
                       </div>
                     </div>
 
-                    <div className="relative shrink-0 overflow-hidden rounded-[18px] sm:rounded-[22px] bg-muted w-full md:w-[clamp(180px,44%,330px)] flex-1 md:flex-initial md:h-full max-h-[215px] md:max-h-none shadow-inner">
+                    <div className="order-1 md:order-2 relative shrink-0 overflow-hidden rounded-[18px] sm:rounded-[22px] bg-muted w-full md:w-[clamp(180px,44%,330px)] h-[220px] md:h-full shadow-inner">
                       <Image
                         alt={item.alt || item.author}
                         src={item.selectedImage}
@@ -729,8 +743,8 @@ export function CalendlyCarousel({
                 className={cn(
                   "h-[8px] rounded-[4px] overflow-hidden border-0 p-0 cursor-pointer transition-all duration-300 ease-out outline-none hover:scale-y-125 focus-visible:ring-2 focus-visible:ring-ring",
                   isSelected
-                    ? "w-[80px] bg-[#0c233a]/18 ring-1 ring-white/80"
-                    : "w-[10px] bg-[#0c233a]/25 hover:bg-[#0c233a]/60"
+                    ? "w-[42px] sm:w-[80px] bg-[#0c233a]/18 ring-1 ring-white/80"
+                    : "w-[8px] sm:w-[10px] bg-[#0c233a]/25 hover:bg-[#0c233a]/60"
                 )}
               >
                 {isSelected && (

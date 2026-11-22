@@ -9,8 +9,8 @@ import { cn } from "@/lib/utils";
 
 /**
  * 21st.dev HoverExpand Spring Accordion Panels
- * Spring-animated expandable architectural strips with vertical rotated collapsed labels,
- * keyboard arrow navigation, reduced-motion support, and optional direct route links.
+ * Desktop: horizontal spring-expanding strips with rotated collapsed labels.
+ * Mobile (< 768px): sleek vertical tap-to-expand accordion with horizontal labels & clear Explore CTA.
  */
 
 export type HoverExpandOrientation = "horizontal" | "vertical";
@@ -55,21 +55,26 @@ export function HoverExpand({
   const isControlled = activeIndexProp !== undefined;
   const activeIndex = isControlled ? activeIndexProp : internalActive;
   const [isHoverDevice, setIsHoverDevice] = useState(false);
+  const [isMobileViewport, setIsMobileViewport] = useState(false);
   const panelRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const isHorizontal = orientation === "horizontal";
 
   useEffect(() => {
-    const mediaQuery = window.matchMedia("(hover: hover) and (pointer: fine)");
-    const update = () => setIsHoverDevice(mediaQuery.matches);
-    update();
-
-    const handleChange = (event: MediaQueryListEvent) => {
-      setIsHoverDevice(event.matches);
+    const hoverMq = window.matchMedia("(hover: hover) and (pointer: fine)");
+    const mobileMq = window.matchMedia("(max-width: 767px)");
+    const update = () => {
+      setIsHoverDevice(hoverMq.matches);
+      setIsMobileViewport(mobileMq.matches);
     };
-
-    mediaQuery.addEventListener("change", handleChange);
-    return () => mediaQuery.removeEventListener("change", handleChange);
+    update();
+    hoverMq.addEventListener("change", update);
+    mobileMq.addEventListener("change", update);
+    return () => {
+      hoverMq.removeEventListener("change", update);
+      mobileMq.removeEventListener("change", update);
+    };
   }, []);
+
+  const isHorizontal = orientation === "horizontal" && !isMobileViewport;
 
   const setActive = (index: number) => {
     if (!isControlled) {
@@ -102,8 +107,8 @@ export function HoverExpand({
     <div
       aria-label="Expandable Dubai advisory panels"
       className={cn(
-        "flex w-full gap-3",
-        isHorizontal ? "h-[400px] sm:h-[440px] flex-row" : "h-[540px] flex-col",
+        "flex w-full gap-2.5 sm:gap-3",
+        isHorizontal ? "h-[440px] flex-row" : "h-[590px] sm:h-[540px] flex-col",
         className
       )}
       role="group"
@@ -114,19 +119,31 @@ export function HoverExpand({
 
         return (
           <motion.div
-            animate={{ flexGrow: isActive ? expandedFlex : collapsedFlex }}
+            animate={{
+              flexGrow: isActive
+                ? isMobileViewport
+                  ? 4.6
+                  : expandedFlex
+                : isMobileViewport
+                  ? 0.9
+                  : collapsedFlex,
+            }}
             aria-label={item.title}
             role="button"
             tabIndex={0}
             aria-expanded={isActive}
-            className="relative min-h-0 min-w-[64px] flex-1 cursor-pointer overflow-hidden rounded-2xl border border-white/15 bg-[#101c2b] text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#51fec0]"
+            className={cn(
+              "relative min-h-0 flex-1 cursor-pointer overflow-hidden rounded-2xl border bg-[#101c2b] text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#51fec0]",
+              isHorizontal ? "min-w-[64px]" : "min-h-[56px] w-full",
+              isActive ? "border-[#51fec0]/60" : "border-white/15"
+            )}
             initial={false}
             key={item.id}
             onClick={() => setActive(index)}
             onFocus={() => setActive(index)}
             onKeyDown={(event) => handleKeyDown(event, index)}
             onMouseEnter={() => {
-              if (isHoverDevice) {
+              if (isHoverDevice && !isMobileViewport) {
                 setActive(index);
               }
             }}
@@ -137,7 +154,7 @@ export function HoverExpand({
             transition={
               shouldReduceMotion
                 ? { duration: 0 }
-                : { bounce: 0.1, duration: 0.35, type: "spring" }
+                : { bounce: 0.08, duration: 0.42, type: "spring" }
             }
           >
             {item.image ? (
@@ -152,7 +169,7 @@ export function HoverExpand({
             ) : null}
             <div
               aria-hidden="true"
-              className="absolute inset-0 bg-gradient-to-t from-[#07111d]/88 via-[#07111d]/25 to-[#07111d]/20"
+              className="absolute inset-0 bg-gradient-to-t from-[#07111d]/92 via-[#07111d]/38 to-[#07111d]/25"
             />
             <motion.div
               animate={
@@ -163,40 +180,52 @@ export function HoverExpand({
                       rotate: isHorizontal && !isActive ? LABEL_ROTATION : 0,
                     }
               }
-              className="absolute inset-0 flex items-end p-5"
+              className={cn(
+                "absolute inset-0 flex p-4 sm:p-5",
+                isActive || isHorizontal ? "items-end" : "items-center"
+              )}
               transition={
                 shouldReduceMotion
                   ? { duration: 0 }
-                  : { bounce: 0.1, duration: 0.3, type: "spring" }
+                  : { bounce: 0.08, duration: 0.35, type: "spring" }
               }
             >
               <div
                 className={cn(
-                  "flex w-full items-end justify-between gap-4",
+                  "flex w-full gap-3 sm:gap-4",
+                  isActive
+                    ? "flex-col sm:flex-row sm:items-end justify-between"
+                    : "items-center justify-between",
                   isHorizontal && !isActive && "origin-left whitespace-nowrap"
                 )}
               >
-                <div>
+                <div className="min-w-0">
                   {isActive && item.tag ? (
-                    <span className="mb-1.5 inline-block text-[10px] font-semibold uppercase tracking-[0.2em] text-[#51fec0]">
+                    <span className="mb-1 inline-block text-[9.5px] sm:text-[10px] font-semibold uppercase tracking-[0.2em] text-[#51fec0]">
                       {item.tag}
                     </span>
                   ) : null}
-                  <p className="text-base sm:text-xl font-medium tracking-[-0.02em] text-white">
+                  <p className="text-[15px] sm:text-xl font-medium tracking-[-0.02em] text-white truncate sm:whitespace-normal">
                     {item.title}
                   </p>
                   {isActive && item.description ? (
-                    <p className="mt-1.5 max-w-md text-xs sm:text-sm leading-relaxed text-white/80">
+                    <p className="mt-1.5 max-w-md text-xs sm:text-sm leading-relaxed text-white/82 line-clamp-3 sm:line-clamp-none">
                       {item.description}
                     </p>
                   ) : null}
                 </div>
 
+                {!isActive && isMobileViewport ? (
+                  <span className="shrink-0 font-mono text-[10px] uppercase tracking-[0.16em] text-[#51fec0]">
+                    Tap +
+                  </span>
+                ) : null}
+
                 {isActive && item.href ? (
                   <Link
                     href={item.href}
                     onClick={(e) => e.stopPropagation()}
-                    className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-white px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-[#0a1624] transition-colors hover:bg-[#51fec0]"
+                    className="inline-flex w-fit shrink-0 items-center gap-1.5 rounded-full bg-white px-4 py-2 text-[10.5px] sm:text-[11px] font-semibold uppercase tracking-[0.14em] text-[#0a1624] transition-colors hover:bg-[#51fec0]"
                   >
                     <span>Explore</span>
                     <ArrowUpRight className="h-3.5 w-3.5" />

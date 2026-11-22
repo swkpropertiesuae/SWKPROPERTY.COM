@@ -85,7 +85,7 @@ export function DevelopersDirectory({ developers }: { developers: Developer[] })
               <Sparkles className="h-3.5 w-3.5" />
               <span>FEATURED MASTER-DEVELOPER SPOTLIGHT</span>
             </div>
-            <div className="flex flex-wrap gap-1.5">
+            <div className="flex flex-nowrap sm:flex-wrap gap-1.5 overflow-x-auto pb-1 w-full sm:w-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
               {featuredDevs.map((dev) => {
                 const isSelected = dev.slug === activeSpotlight.slug;
                 return (
@@ -93,7 +93,7 @@ export function DevelopersDirectory({ developers }: { developers: Developer[] })
                     key={dev.slug}
                     type="button"
                     onClick={() => setSpotlightSlug(dev.slug)}
-                    className={`relative cursor-pointer rounded-full px-3.5 py-1.5 text-xs font-medium transition-all duration-200 ${
+                    className={`relative shrink-0 cursor-pointer rounded-full px-3.5 py-1.5 text-xs font-medium transition-all duration-200 ${
                       isSelected
                         ? "text-white"
                         : "border border-black/10 bg-white text-[#475569] hover:border-[#121212] hover:text-[#121212]"

@@ -157,20 +157,20 @@ export function SiteHeader() {
           aria-label="SWK Properties Dubai Home"
         >
           <img
-            src="/brand/swk-icon-192.webp"
+            src="/brand/swk-icon-192.webp?v=4"
             width={56}
             height={56}
             alt="SWK Properties Emblem"
             fetchPriority="high"
-            className="h-12 w-12 sm:h-14 sm:w-14 shrink-0 object-contain drop-shadow-[0_4px_14px_rgba(196,154,70,0.38)] transition-transform duration-300 group-hover:scale-[1.06]"
+            className="h-12 w-12 sm:h-14 sm:w-14 shrink-0 object-contain drop-shadow-[0_4px_14px_rgba(196,154,70,0.42)] transition-transform duration-300 group-hover:scale-[1.06]"
           />
           <img
-            src="/brand/swk-logo-light.webp"
-            width={142}
-            height={64}
+            src="/brand/swk-logo-light.webp?v=4"
+            width={150}
+            height={68}
             alt="SWK Properties"
             fetchPriority="high"
-            className="h-11 sm:h-12 w-auto object-contain drop-shadow-[0_2px_8px_rgba(12,35,58,0.08)] transition-transform duration-300 group-hover:scale-[1.02]"
+            className="h-11 sm:h-[52px] w-auto object-contain drop-shadow-[0_2px_10px_rgba(184,134,42,0.2)] transition-transform duration-300 group-hover:scale-[1.02] group-hover:brightness-105"
           />
         </Link>
 

@@ -208,8 +208,8 @@ export function MarketIntelligenceBento() {
           </div>
         </div>
 
-        {/* Interactive District Switcher Pills with Framer Motion layoutId */}
-        <div className="mt-10 flex flex-wrap items-center gap-2">
+        {/* Interactive District Switcher Pills (Horizontal Swipe Rail on Mobile, Wrapped on Desktop) */}
+        <div className="mt-8 sm:mt-10 flex flex-nowrap sm:flex-wrap items-center gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {DISTRICTS.map((dist) => {
             const isSelected = dist.slug === active.slug;
             return (
@@ -220,7 +220,7 @@ export function MarketIntelligenceBento() {
                   setSelectedSlug(dist.slug);
                   setHoveredYearIdx(null);
                 }}
-                className={`relative cursor-pointer rounded-full px-4 py-2.5 text-xs font-medium transition-all duration-200 hover:-translate-y-0.5 ${
+                className={`relative shrink-0 cursor-pointer rounded-full px-3.5 py-2 sm:px-4 sm:py-2.5 text-xs font-medium transition-all duration-200 sm:hover:-translate-y-0.5 ${
                   isSelected
                     ? "text-white"
                     : "border border-white/85 bg-white/80 text-[#1e293b] shadow-xs backdrop-blur-xl hover:border-[#121212] hover:bg-white hover:text-[#121212]"
@@ -293,9 +293,9 @@ export function MarketIntelligenceBento() {
 
                 {/* Interactive Luminous SVG Demand Curve (2021-2026) */}
                 <div className="mt-6 rounded-2xl border border-black/[0.06] bg-gradient-to-b from-[#f8fbff] to-white p-4 sm:p-5">
-                  <div className="mb-2 flex items-center justify-between text-[11px]">
-                    <span className="font-mono font-semibold uppercase tracking-[0.16em] text-[#1b6aa7]">
-                      2021–2026 FREEHOLD DEMAND CURVE · HOVER POINTS
+                  <div className="mb-2 flex flex-wrap items-center justify-between gap-2 text-[10px] sm:text-[11px]">
+                    <span className="font-mono font-semibold uppercase tracking-[0.14em] sm:tracking-[0.16em] text-[#1b6aa7]">
+                      2021–2026 DEMAND CURVE · <span className="sm:hidden">TAP POINTS</span><span className="hidden sm:inline">HOVER POINTS</span>
                     </span>
                     <span className="font-mono font-semibold text-[#0e9f6e]">
                       {hoveredYearIdx !== null
@@ -352,6 +352,7 @@ export function MarketIntelligenceBento() {
                           key={active.years[idx]}
                           onMouseEnter={() => setHoveredYearIdx(idx)}
                           onMouseLeave={() => setHoveredYearIdx(null)}
+                          onClick={() => setHoveredYearIdx(idx)}
                           className="cursor-pointer"
                         >
                           <circle cx={pt.x} cy={pt.y} r="14" fill="transparent" />

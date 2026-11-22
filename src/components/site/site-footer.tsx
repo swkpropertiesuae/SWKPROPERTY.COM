@@ -109,20 +109,20 @@ export function SiteFooter() {
         <div className="mb-14 flex flex-wrap items-center justify-between gap-6 border-b border-white/[0.08] pb-10">
           <Link href="/" className="group inline-flex items-center gap-4" aria-label="SWK Properties Home">
             <img
-              src="/brand/swk-icon-192.webp"
+              src="/brand/swk-icon-192.webp?v=4"
               width={64}
               height={64}
               alt="SWK Properties Emblem"
               loading="lazy"
-              className="h-14 w-14 sm:h-16 sm:w-16 object-contain drop-shadow-[0_6px_18px_rgba(212,175,55,0.42)] transition-transform duration-300 group-hover:scale-[1.06]"
+              className="h-14 w-14 sm:h-16 sm:w-16 object-contain drop-shadow-[0_6px_18px_rgba(212,175,55,0.45)] transition-transform duration-300 group-hover:scale-[1.06]"
             />
             <img
-              src="/brand/swk-logo-dark.webp"
-              width={168}
-              height={76}
+              src="/brand/swk-logo-dark.webp?v=4"
+              width={172}
+              height={78}
               alt="SWK Properties"
               loading="lazy"
-              className="h-12 sm:h-14 w-auto object-contain drop-shadow-[0_4px_14px_rgba(212,175,55,0.22)] transition-transform duration-300 group-hover:scale-[1.02]"
+              className="h-12 sm:h-14 w-auto object-contain drop-shadow-[0_4px_16px_rgba(212,175,55,0.28)] transition-transform duration-300 group-hover:scale-[1.02] group-hover:brightness-105"
             />
           </Link>
 

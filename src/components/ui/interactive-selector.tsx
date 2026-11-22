@@ -15,7 +15,7 @@ import { cn } from "@/lib/utils";
 /**
  * 21st.dev Interactive Selector
  * Staggered-entry architectural corridor selector with frosted-glass icon medallions,
- * smooth flex expansion on click/hover, and direct Dubai collection links.
+ * smooth flex expansion on click/hover, mobile-visible collapsed titles, and direct CTA.
  */
 
 export interface SelectorOption {
@@ -66,7 +66,7 @@ const DEFAULT_OPTIONS: SelectorOption[] = [
 
 export function InteractiveSelector({
   heading = "Live Across Every Dubai Lifestyle",
-  subheading = "Click any architectural corridor to explore curated waterfront, supertall, golf, and island releases.",
+  subheading = "Tap or hover any architectural corridor to explore curated waterfront, supertall, golf, and island releases.",
   options = DEFAULT_OPTIONS,
   className,
 }: {
@@ -77,13 +77,22 @@ export function InteractiveSelector({
 }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [animatedOptions, setAnimatedOptions] = useState<number[]>([]);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 639px)");
+    const update = () => setIsMobile(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
 
   useEffect(() => {
     const timers: ReturnType<typeof setTimeout>[] = [];
     options.forEach((_, i) => {
       const timer = setTimeout(() => {
         setAnimatedOptions((prev) => (prev.includes(i) ? prev : [...prev, i]));
-      }, 140 * i);
+      }, 110 * i);
       timers.push(timer);
     });
     return () => {
@@ -94,23 +103,23 @@ export function InteractiveSelector({
   return (
     <div
       className={cn(
-        "relative flex flex-col items-center justify-center rounded-3xl border border-white/15 bg-gradient-to-b from-[#08131f]/95 via-[#0c1a2c]/95 to-[#09121e]/96 px-4 py-14 sm:px-8 sm:py-16 text-white shadow-[0_28px_80px_rgba(6,18,32,0.34)] backdrop-blur-2xl",
+        "relative flex flex-col items-center justify-center rounded-[26px] sm:rounded-3xl border border-white/15 bg-gradient-to-b from-[#08131f]/95 via-[#0c1a2c]/95 to-[#09121e]/96 px-4 py-11 sm:px-8 sm:py-16 text-white shadow-[0_28px_80px_rgba(6,18,32,0.34)] backdrop-blur-2xl",
         className
       )}
     >
       {/* Header */}
-      <div className="mx-auto mb-10 max-w-2xl text-center">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#51fec0]">
+      <div className="mx-auto mb-8 sm:mb-10 max-w-2xl text-center">
+        <p className="text-[10.5px] sm:text-[11px] font-semibold uppercase tracking-[0.22em] text-[#51fec0]">
           ARCHITECTURAL CORRIDORS · UAE
         </p>
-        <h3 className="mt-3 text-3xl sm:text-4xl md:text-[44px] font-medium leading-[1.08] tracking-[-0.035em] text-white">
+        <h3 className="mt-2.5 sm:mt-3 text-[26px] sm:text-4xl md:text-[44px] font-medium leading-[1.08] tracking-[-0.035em] text-white">
           {heading}
         </h3>
-        <p className="mt-3 text-sm sm:text-base text-white/72">{subheading}</p>
+        <p className="mt-2.5 sm:mt-3 text-xs sm:text-base text-white/72">{subheading}</p>
       </div>
 
       {/* Expandable Selector Track */}
-      <div className="flex h-[420px] sm:h-[450px] w-full max-w-[1140px] flex-col sm:flex-row items-stretch gap-2.5 overflow-hidden">
+      <div className="flex h-[560px] sm:h-[450px] w-full max-w-[1140px] flex-col sm:flex-row items-stretch gap-2.5 overflow-hidden">
         {options.map((option, index) => {
           const isActive = activeIndex === index;
           const isAnimated = animatedOptions.includes(index);
@@ -121,24 +130,30 @@ export function InteractiveSelector({
               tabIndex={0}
               aria-expanded={isActive}
               onClick={() => setActiveIndex(index)}
-              onMouseEnter={() => setActiveIndex(index)}
+              onMouseEnter={() => {
+                if (!isMobile) setActiveIndex(index);
+              }}
               onKeyDown={(e) => {
                 if (e.key === "Enter" || e.key === " ") {
                   e.preventDefault();
                   setActiveIndex(index);
                 }
               }}
-              className="relative flex min-h-[64px] sm:min-w-[68px] cursor-pointer flex-col justify-end overflow-hidden rounded-2xl border-2 transition-all duration-700 ease-out"
+              className={cn(
+                "relative flex cursor-pointer flex-col overflow-hidden rounded-2xl border-2 transition-all duration-500 ease-out",
+                isActive ? "justify-end" : "justify-center sm:justify-end",
+                "min-h-[60px] sm:min-w-[68px]"
+              )}
               style={{
                 opacity: isAnimated ? 1 : 0,
-                transform: isAnimated ? "translateX(0)" : "translateX(-32px)",
+                transform: isAnimated ? "translateX(0)" : "translateX(-20px)",
                 borderColor: isActive
-                  ? "rgba(255,255,255,0.88)"
+                  ? "rgba(81,254,192,0.85)"
                   : "rgba(255,255,255,0.14)",
                 boxShadow: isActive
                   ? "0 20px 60px rgba(0,0,0,0.52)"
                   : "0 10px 30px rgba(0,0,0,0.28)",
-                flex: isActive ? "6.2 1 0%" : "1 1 0%",
+                flex: isActive ? (isMobile ? "5.2 1 0%" : "6.2 1 0%") : "1 1 0%",
                 zIndex: isActive ? 10 : 1,
                 willChange: "flex-grow, box-shadow",
               }}
@@ -149,36 +164,39 @@ export function InteractiveSelector({
                 loading="lazy"
                 className="absolute inset-0 h-full w-full object-cover transition-transform duration-700"
                 style={{
-                  transform: isActive ? "scale(1)" : "scale(1.12)",
+                  transform: isActive ? "scale(1)" : "scale(1.1)",
                 }}
               />
 
-              {/* Deep Cinematic Bottom Scrim */}
+              {/* Deep Cinematic Scrim */}
               <div
                 aria-hidden="true"
-                className="pointer-events-none absolute inset-x-0 bottom-0 h-44 bg-gradient-to-t from-[#050d16]/92 via-[#050d16]/45 to-transparent transition-opacity duration-500"
-                style={{ opacity: isActive ? 1 : 0.65 }}
+                className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#050d16]/94 via-[#050d16]/48 to-[#050d16]/25 transition-opacity duration-500"
+                style={{ opacity: isActive ? 1 : 0.8 }}
               />
 
               {/* Medallion Icon + Animated Label & Action */}
-              <div className="relative z-10 flex items-center justify-between gap-3 p-4 sm:p-5">
-                <div className="flex items-center gap-3.5 min-w-0">
-                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-white/25 bg-[#0a1624]/82 backdrop-blur-md shadow-md">
+              <div className="relative z-10 flex items-center justify-between gap-3 p-3.5 sm:p-5">
+                <div className="flex items-center gap-3 min-w-0">
+                  <div className="flex h-10 w-10 sm:h-11 sm:w-11 shrink-0 items-center justify-center rounded-full border border-white/25 bg-[#0a1624]/82 backdrop-blur-md shadow-md">
                     {option.icon}
                   </div>
                   <div
-                    className="min-w-0 transition-all duration-500"
-                    style={{
-                      opacity: isActive ? 1 : 0,
-                      transform: isActive ? "translateX(0)" : "translateX(20px)",
-                    }}
+                    className={cn(
+                      "min-w-0 transition-all duration-300",
+                      isActive
+                        ? "opacity-100 translate-x-0"
+                        : "opacity-100 sm:opacity-0 sm:translate-x-5"
+                    )}
                   >
-                    <div className="truncate text-base sm:text-xl font-semibold tracking-[-0.02em] text-white">
+                    <div className="truncate text-sm sm:text-xl font-semibold tracking-[-0.02em] text-white">
                       {option.title}
                     </div>
-                    <div className="truncate text-xs sm:text-sm text-white/75">
-                      {option.description}
-                    </div>
+                    {isActive ? (
+                      <div className="line-clamp-1 sm:truncate text-xs sm:text-sm text-white/78">
+                        {option.description}
+                      </div>
+                    ) : null}
                   </div>
                 </div>
 
@@ -186,12 +204,16 @@ export function InteractiveSelector({
                   <Link
                     href={option.href}
                     onClick={(e) => e.stopPropagation()}
-                    className="hidden md:inline-flex shrink-0 items-center gap-1.5 rounded-full bg-white px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-[#0a1624] transition-colors hover:bg-[#51fec0]"
+                    className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-[#51fec0] sm:bg-white px-3.5 py-2 sm:px-4 text-[10.5px] sm:text-[11px] font-semibold uppercase tracking-[0.14em] text-[#0a1624] transition-colors hover:bg-[#51fec0]"
                   >
                     <span>View</span>
                     <ArrowUpRight className="h-3.5 w-3.5" />
                   </Link>
-                ) : null}
+                ) : (
+                  <span className="sm:hidden shrink-0 font-mono text-[10px] uppercase tracking-[0.14em] text-[#51fec0]">
+                    Tap
+                  </span>
+                )}
               </div>
             </div>
           );

@@ -218,25 +218,55 @@ const SCOPED_CSS = `
 @media (max-width: 680px) {
   .cc-scope .cc-cards {
     flex-direction: column;
-    height: 580px;
-    gap: 8px;
+    height: 650px;
+    gap: 10px;
   }
   .cc-scope .cc-card {
-    flex: 0.75;
+    flex: 0.72;
     min-width: 0;
-    min-height: 0;
+    min-height: 58px;
+    border-radius: 18px;
   }
   .cc-scope .cc-card.active {
-    flex: 3.2;
+    flex: 4.1;
   }
   .cc-scope .cc-v-title {
     writing-mode: horizontal-tb;
-    transform: none;
-    left: 18px;
-    bottom: 16px;
+    transform: translateY(-50%);
+    left: auto;
+    right: 16px;
+    top: 50%;
+    bottom: auto;
+    font-size: 12px;
+    letter-spacing: 0.18em;
   }
   .cc-scope .cc-content {
     padding: 16px;
+    justify-content: center;
+  }
+  .cc-scope .cc-card.active .cc-content {
+    justify-content: space-between;
+  }
+  .cc-scope .cc-meta {
+    display: none;
+  }
+  .cc-scope .cc-card.active .cc-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .cc-scope .cc-title {
+    font-size: 20px;
+    line-height: 1.15;
+  }
+  .cc-scope .cc-sub {
+    font-size: 12.5px;
+    line-height: 1.45;
+  }
+  .cc-scope .cc-cta {
+    padding: 9px 15px;
+    font-size: 10.5px;
   }
 }
 @media (prefers-reduced-motion: reduce) {

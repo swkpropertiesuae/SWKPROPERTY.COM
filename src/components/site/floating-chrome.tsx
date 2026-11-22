@@ -182,36 +182,46 @@ export function FloatingChrome() {
         </div>
       ) : null}
 
-      {/* 2. UAE PDPL Cookie Consent Card */}
+      {/* 2. UAE PDPL Cookie Consent Card (Compact & Always-Dismissible on Mobile) */}
       {!cookieConsent.decided ? (
-        <div className="fixed bottom-24 left-3 right-3 sm:left-6 sm:right-auto sm:max-w-sm z-50 rounded-2xl border border-black/10 bg-white/95 p-5 text-[#121212] shadow-[0_20px_50px_rgba(18,18,18,0.16)] backdrop-blur-xl">
-          <div className="flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.2em] text-[#8b8b8b]">
-            <Cookie className="h-3.5 w-3.5 text-[#121212]" />
-            <span>Privacy &amp; Cookies (UAE PDPL)</span>
+        <div className="fixed bottom-[122px] sm:bottom-24 left-3 right-3 sm:left-6 sm:right-auto sm:max-w-sm z-50 rounded-2xl border border-black/10 bg-white/96 p-3.5 sm:p-5 text-[#121212] shadow-[0_18px_46px_rgba(18,18,18,0.18)] backdrop-blur-xl max-w-[360px] mx-auto sm:mx-0">
+          <div className="flex items-center justify-between gap-2">
+            <div className="flex items-center gap-1.5 text-[10px] sm:text-[11px] font-semibold uppercase tracking-[0.16em] sm:tracking-[0.2em] text-[#525252]">
+              <Cookie className="h-3.5 w-3.5 text-[#121212] shrink-0" />
+              <span>Privacy &amp; Cookies (UAE PDPL)</span>
+            </div>
+            <button
+              type="button"
+              aria-label="Close cookie banner (essential only)"
+              onClick={() => updateCookieConsent({ analytics: false, preferences: true })}
+              className="inline-flex h-7 w-7 shrink-0 cursor-pointer items-center justify-center rounded-full bg-black/[0.08] text-[#121212] transition-colors hover:bg-[#121212] hover:text-white"
+            >
+              <X className="h-3.5 w-3.5" />
+            </button>
           </div>
-          <p className="mt-2 text-xs leading-relaxed text-[#525252]">
-            Essential storage keeps your shortlist and currency preference working. Review our{" "}
+          <p className="mt-1.5 sm:mt-2 text-[11.5px] sm:text-xs leading-relaxed text-[#525252]">
+            Essential storage keeps your shortlist and currency working. See{" "}
             <Link href="/cookies" className="font-medium text-[#121212] underline underline-offset-2">
-              Cookie Inventory
+              Cookies
             </Link>{" "}
-            and{" "}
+            &amp;{" "}
             <Link href="/privacy" className="font-medium text-[#121212] underline underline-offset-2">
-              Privacy Policy
+              Privacy
             </Link>
             .
           </p>
-          <div className="mt-4 flex items-center gap-2">
+          <div className="mt-2.5 sm:mt-4 flex items-center gap-2">
             <button
               type="button"
               onClick={() => updateCookieConsent({ analytics: true, preferences: true })}
-              className="cursor-pointer rounded-full bg-[#121212] px-4 py-2 text-[11px] font-medium uppercase tracking-[0.14em] text-white transition-colors hover:bg-[#2b2b2b]"
+              className="flex-1 sm:flex-initial cursor-pointer rounded-full bg-[#121212] px-3.5 py-1.5 sm:px-4 sm:py-2 text-[10.5px] sm:text-[11px] font-medium uppercase tracking-[0.13em] text-white transition-colors hover:bg-[#2b2b2b]"
             >
               Accept All
             </button>
             <button
               type="button"
               onClick={() => updateCookieConsent({ analytics: false, preferences: true })}
-              className="cursor-pointer rounded-full border border-black/15 bg-[#f7f7f7] px-4 py-2 text-[11px] font-medium uppercase tracking-[0.14em] text-[#121212] transition-colors hover:bg-[#ececec]"
+              className="flex-1 sm:flex-initial cursor-pointer rounded-full border border-black/15 bg-[#f7f7f7] px-3.5 py-1.5 sm:px-4 sm:py-2 text-[10.5px] sm:text-[11px] font-medium uppercase tracking-[0.13em] text-[#121212] transition-colors hover:bg-[#ececec]"
             >
               Essential Only
             </button>
@@ -278,17 +288,17 @@ export function FloatingChrome() {
           onClick={() => setPillOpen((v) => !v)}
           aria-expanded={pillOpen}
           aria-label="Open quick navigation menu"
-          className="inline-flex h-12 min-w-[220px] cursor-pointer items-center justify-between gap-6 rounded-xl border border-white/18 bg-[#0b1522]/88 px-4 text-xs font-medium text-white backdrop-blur-xl shadow-[0_14px_34px_rgba(8,22,38,0.32)] transition-all duration-200 hover:-translate-y-0.5 hover:border-[#51fec0]/50 hover:bg-[#0b1522]/96 hover:shadow-[0_18px_42px_rgba(8,22,38,0.48)]"
+          className="inline-flex h-11 sm:h-12 min-w-[180px] sm:min-w-[220px] cursor-pointer items-center justify-between gap-4 sm:gap-6 rounded-xl border border-white/18 bg-[#0b1522]/88 px-3.5 sm:px-4 text-xs font-medium text-white backdrop-blur-xl shadow-[0_14px_34px_rgba(8,22,38,0.32)] transition-all duration-200 hover:-translate-y-0.5 hover:border-[#51fec0]/50 hover:bg-[#0b1522]/96 hover:shadow-[0_18px_42px_rgba(8,22,38,0.48)]"
         >
-          <span className="inline-flex items-center gap-2.5">
+          <span className="inline-flex items-center gap-2 sm:gap-2.5 whitespace-nowrap">
             <img
-              src="/brand/swk-icon-192.webp"
+              src="/brand/swk-icon-192.webp?v=4"
               width={28}
               height={28}
               alt=""
-              className="h-7 w-7 object-contain drop-shadow-[0_2px_10px_rgba(212,175,55,0.45)]"
+              className="h-6 w-6 sm:h-7 sm:w-7 shrink-0 object-contain drop-shadow-[0_2px_10px_rgba(212,175,55,0.48)]"
             />
-            <span className="font-semibold tracking-[-0.01em]">SWK Properties</span>
+            <span className="font-semibold tracking-[-0.01em] whitespace-nowrap">SWK Properties</span>
           </span>
           <span className="inline-flex items-center gap-1.5">
             {shortlistCount > 0 ? (

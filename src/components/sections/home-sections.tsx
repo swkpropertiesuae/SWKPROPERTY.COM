@@ -42,6 +42,7 @@ import {
   SignatureHorizontalDeck,
   type SignatureDeckItem,
 } from "@/components/ui/signature-horizontal-deck";
+import { HeroDubaiReel } from "@/components/site/hero-dubai-reel";
 
 /* -------------------------------------------------------------------------- */
 /* 01. ACTIVE ARCHITECTURAL HERO OVER LIVE 21ST.DEV MESH DRIFT SHADER WAVES   */
@@ -104,12 +105,12 @@ export function AvenloHero() {
               className="group inline-flex flex-wrap items-center gap-2 rounded-2xl border border-white/85 bg-white/82 p-2.5 shadow-[0_18px_46px_rgba(12,56,96,0.12)] backdrop-blur-2xl transition-all duration-300 hover:-translate-y-1 hover:border-[#0e9f6e]/40 hover:bg-white hover:shadow-[0_24px_56px_rgba(12,56,96,0.18)]"
               aria-label="Meet the SWK Properties Dubai Advisory Team"
             >
-              <div className="flex flex-wrap items-center -space-x-2.5 sm:-space-x-2">
+              <div className="flex items-center -space-x-2">
                 {team.map((member) => (
                   <div
                     key={member.slug}
                     title={`${member.name} — ${member.role}`}
-                    className="relative h-12 w-12 sm:h-14 sm:w-14 overflow-hidden rounded-full border-2 border-white bg-[#eaf3f9] shadow-xs transition-all duration-300 hover:z-20 hover:-translate-y-1.5 hover:scale-110 hover:border-[#51fec0]"
+                    className="relative h-9 w-9 sm:h-12 sm:w-12 md:h-14 md:w-14 shrink-0 overflow-hidden rounded-full border-2 border-white bg-[#eaf3f9] shadow-xs transition-all duration-300 hover:z-20 hover:-translate-y-1.5 hover:scale-110 hover:border-[#51fec0]"
                   >
                     <img
                       src={member.photo}
@@ -163,7 +164,7 @@ export function AvenloHero() {
         </div>
       </div>
 
-      {/* Ultra-Sharp Photorealistic UAE Skyline Layered Over Faint "Since 2008" Watermark */}
+      {/* Cinematic HD Dubai Real Estate Landmark Video Transition Reel Over "Since 2008" Watermark */}
       <div className="relative z-10 mt-10 sm:mt-14 w-full overflow-hidden">
         <div
           aria-hidden="true"
@@ -173,38 +174,18 @@ export function AvenloHero() {
         </div>
 
         <div className="relative z-10 mx-auto -mt-[8vw] sm:-mt-[95px] max-w-[1260px] px-4 sm:px-8">
-          <div className="relative overflow-hidden rounded-t-3xl border border-b-0 border-white/80 bg-[#0b1623] shadow-[0_-24px_80px_rgba(12,56,96,0.2)]">
-            <img
-              src="/img/hero/uae-skyline-flagship.webp"
-              alt="Downtown Dubai architectural skyline, Burj Khalifa and Dubai Water Canal at golden hour"
-              fetchPriority="high"
-              className="h-[340px] sm:h-[480px] md:h-[600px] w-full object-cover object-center"
-            />
-            <div className="absolute inset-x-0 bottom-0 flex flex-wrap items-center justify-between gap-3 bg-gradient-to-t from-[#08131f]/88 via-[#08131f]/40 to-transparent px-6 py-5 text-white">
-              <LiveStatusDot
-                label="Nakheel · Binghatti · Emaar · DAMAC · Azizi · Sobha"
-                tone="launch"
-                surface="dark"
-              />
-              <Link
-                href="#dubai-launches"
-                className="text-xs font-medium uppercase tracking-[0.16em] text-white/95 hover:text-[#51fec0] transition-colors"
-              >
-                Explore Iconic Projects ↓
-              </Link>
-            </div>
-          </div>
+          <HeroDubaiReel />
         </div>
       </div>
 
-      {/* Clean Market Briefing Lightbox Modal */}
+      {/* Clean Market Briefing Lightbox Modal (Compact Mobile Sheet + Always-Visible Close Button) */}
       <AnimatePresence>
         {briefOpen ? (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] flex items-center justify-center bg-[#08131f]/75 p-4 backdrop-blur-md"
+            className="fixed inset-0 z-[120] flex items-center justify-center bg-[#08131f]/80 p-3 sm:p-4 backdrop-blur-md"
             onClick={() => setBriefOpen(false)}
           >
             <motion.div
@@ -212,20 +193,20 @@ export function AvenloHero() {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.96, y: 12 }}
               onClick={(e) => e.stopPropagation()}
-              className="w-full max-w-2xl overflow-hidden rounded-2xl border border-white/15 bg-[#0c1624] text-white shadow-2xl"
+              className="flex max-h-[84dvh] w-full max-w-[390px] sm:max-w-2xl flex-col overflow-hidden rounded-2xl border border-white/15 bg-[#0c1624] text-white shadow-2xl"
             >
-              <div className="flex items-center justify-between border-b border-white/10 px-6 py-4">
+              <div className="flex shrink-0 items-center justify-between border-b border-white/10 px-4 py-3.5 sm:px-6 sm:py-4">
                 <SectionEyebrow tone="dark">DUBAI MARKET BRIEFING</SectionEyebrow>
                 <button
                   type="button"
                   onClick={() => setBriefOpen(false)}
                   aria-label="Close briefing"
-                  className="cursor-pointer rounded-full p-1.5 text-white/70 hover:bg-white/10 hover:text-white"
+                  className="inline-flex h-9 w-9 cursor-pointer items-center justify-center rounded-full bg-white text-[#0c1624] shadow-md transition-colors hover:bg-[#51fec0] sm:bg-white/10 sm:text-white sm:hover:bg-white/20"
                 >
-                  <X className="h-4 w-4" />
+                  <X className="h-4 w-4 stroke-[2.3]" />
                 </button>
               </div>
-              <div className="p-6 sm:p-8 space-y-5">
+              <div className="flex-1 overflow-y-auto overscroll-contain p-5 sm:p-8 space-y-4 sm:space-y-5">
                 <h2 className="text-2xl sm:text-3xl font-medium tracking-[-0.03em]">
                   How SWK navigates Dubai&apos;s flagship developer pipeline
                 </h2>
@@ -698,8 +679,8 @@ export function DubaiDeveloperPulse() {
         {/* 21st.dev Bidirectional Flowing Developer Logo Cloud — 100% Authentic Original Colors */}
         <LogoCloudMarquee developers={logoDevelopers} className="mt-12" />
 
-        {/* Interactive Glass Category Pill Filters */}
-        <div className="mt-12 flex flex-wrap items-center gap-2.5">
+        {/* Interactive Glass Category Pill Filters (Swipeable Rail on Mobile) */}
+        <div className="mt-10 sm:mt-12 flex flex-nowrap sm:flex-wrap items-center gap-2 sm:gap-2.5 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {LAUNCH_TABS.map((tab) => {
             const active = activeTab === tab.id;
             return (
@@ -707,7 +688,7 @@ export function DubaiDeveloperPulse() {
                 key={tab.id}
                 type="button"
                 onClick={() => setActiveTab(tab.id)}
-                className={`cursor-pointer rounded-full px-5 py-2.5 text-xs font-medium transition-all duration-200 hover:-translate-y-0.5 ${
+                className={`shrink-0 cursor-pointer rounded-full px-4 py-2 sm:px-5 sm:py-2.5 text-xs font-medium transition-all duration-200 sm:hover:-translate-y-0.5 ${
                   active
                     ? "bg-[#121212] text-white shadow-[0_12px_28px_rgba(12,35,58,0.28)]"
                     : "border border-white/85 bg-white/80 text-[#1e293b] shadow-xs backdrop-blur-xl hover:border-[#121212] hover:bg-[#121212] hover:text-white hover:shadow-[0_12px_28px_rgba(12,35,58,0.2)]"
@@ -859,7 +840,7 @@ export function FullBleedResidences() {
                 href={panel.href}
                 onMouseEnter={() => setActiveIndex(panel.originalIdx)}
                 onFocus={() => setActiveIndex(panel.originalIdx)}
-                className={`group/rcard relative flex h-[450px] sm:h-[500px] w-[320px] sm:w-[400px] lg:w-[440px] shrink-0 flex-col justify-between overflow-hidden rounded-[28px] border bg-[#0d1928] transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-2.5 hover:scale-[1.02] hover:border-[#51fec0]/80 hover:shadow-[0_30px_76px_rgba(81,254,192,0.2)] ${
+                className={`group/rcard relative flex h-[385px] sm:h-[500px] w-[275px] sm:w-[400px] lg:w-[440px] shrink-0 flex-col justify-between overflow-hidden rounded-[24px] sm:rounded-[28px] border bg-[#0d1928] transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] sm:hover:-translate-y-2.5 sm:hover:scale-[1.02] hover:border-[#51fec0]/80 hover:shadow-[0_30px_76px_rgba(81,254,192,0.2)] ${
                   isHighlighted
                     ? "border-[#51fec0]/55 shadow-[0_24px_64px_rgba(0,0,0,0.55)]"
                     : "border-white/15 shadow-[0_18px_46px_rgba(0,0,0,0.4)]"
@@ -923,9 +904,9 @@ export function FullBleedResidences() {
         </div>
       </div>
 
-      {/* Interactive Landmark Selector Pills (Hover or Click to Highlight & Open) */}
+      {/* Interactive Landmark Selector Pills (Horizontal Swipe Rail on Mobile, Wrapped on Desktop) */}
       <div className="relative z-10 mx-auto mt-6 max-w-[1260px] px-4 sm:px-8">
-        <div className="flex flex-wrap items-center justify-center gap-2.5">
+        <div className="flex flex-nowrap sm:flex-wrap items-center justify-start sm:justify-center gap-2 sm:gap-2.5 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {SHOWCASE_PANELS.map((panel, idx) => {
             const active = idx === activeIndex;
             return (
@@ -933,7 +914,7 @@ export function FullBleedResidences() {
                 key={panel.title}
                 href={panel.href}
                 onMouseEnter={() => setActiveIndex(idx)}
-                className={`cursor-pointer rounded-full px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.14em] transition-all duration-200 hover:-translate-y-0.5 ${
+                className={`shrink-0 cursor-pointer rounded-full px-3.5 py-2 sm:px-4 text-[10.5px] sm:text-[11px] font-semibold uppercase tracking-[0.14em] transition-all duration-200 sm:hover:-translate-y-0.5 ${
                   active
                     ? "bg-white text-[#0a1624] shadow-[0_10px_28px_rgba(255,255,255,0.28)] hover:bg-[#51fec0]"
                     : "border border-white/20 bg-white/[0.08] text-white/85 hover:border-[#51fec0]/70 hover:bg-white/16 hover:text-white hover:shadow-[0_10px_24px_rgba(81,254,192,0.18)]"
