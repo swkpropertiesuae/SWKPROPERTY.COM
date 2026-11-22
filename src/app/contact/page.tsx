@@ -11,11 +11,11 @@ import { AvenloPageHeader } from "@/components/avenlo/page-header";
 export const metadata: Metadata = buildMetadata({
   title: "Contact SWK Properties — Sheikh Zayed Road, Dubai",
   description:
-    "Visit or contact SWK Properties at Office No 54, 27th Floor, Al Saqr Business Tower, Sheikh Zayed Road, Dubai. Call +971 56 433 0448 or book a private consultation.",
+    "Visit or contact SWK Properties at 25th Floor, Al Saqr Building, Sheikh Zayed Road, Dubai. Call +971 56 433 0448 or book a private consultation.",
   path: "/contact",
   keywords: [
     "Contact SWK Properties Dubai",
-    "Al Saqr Business Tower real estate office",
+    "Al Saqr Building real estate office",
     "Sheikh Zayed Road property broker phone",
     "SWK Properties consultation",
   ],
@@ -44,7 +44,7 @@ export default function ContactPage() {
         eyebrow="GET IN TOUCH · SHEIKH ZAYED ROAD"
         title="Tell us what you"
         italic="are looking for"
-        lead="Whether comparing 2026 off-plan launches, buying a ready home, arranging an annual lease, or instructing a sale, speak directly with our 27th-floor Dubai desk."
+        lead="Whether comparing premier off-plan launches, buying a ready home, arranging a lease, or securing commercial space, speak directly with our 25th-floor Dubai desk."
         breadcrumb={[
           { label: "Home", href: "/" },
           { label: "Contact" },
@@ -65,7 +65,7 @@ export default function ContactPage() {
                 <div className="flex items-start gap-3">
                   <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-[#121212]" />
                   <div>
-                    <p className="font-medium text-[#121212]">Al Saqr Business Tower</p>
+                    <p className="font-medium text-[#121212]">25th Floor, Al Saqr Building</p>
                     <p className="mt-0.5 leading-relaxed">{SITE.address.full}</p>
                   </div>
                 </div>
@@ -121,8 +121,8 @@ export default function ContactPage() {
 
             <div className="overflow-hidden rounded-2xl border border-black/[0.07] bg-[#f7f7f7]">
               <img
-                src="/img/about/private-consultation-lounge.jpg"
-                alt="SWK Properties Private Advisory Suite, 27th Floor, Al Saqr Business Tower"
+                src="/img/about/contact-reception.webp"
+                alt="SWK Properties Private Advisory Suite, 25th Floor, Al Saqr Building"
                 loading="lazy"
                 className="h-56 w-full object-cover"
               />
@@ -140,7 +140,7 @@ export default function ContactPage() {
               lat={SITE.geo.lat}
               lng={SITE.geo.lng}
               zoom={15}
-              title="SWK Properties — Al Saqr Business Tower, Sheikh Zayed Road"
+              title="SWK Properties — 25th Floor, Al Saqr Building, Sheikh Zayed Road"
             />
           </div>
 

@@ -56,20 +56,19 @@ export function AvenloPreloader() {
 
           <div className="flex items-center gap-3.5">
             <img
-              src="/brand/swk-crest-2026-192.webp"
-              width={48}
-              height={48}
+              src="/brand/swk-icon-192.webp"
+              width={52}
+              height={52}
               alt=""
-              className="h-12 w-12 object-contain"
+              className="h-13 w-13 object-contain"
             />
-            <div className="leading-none">
-              <div className="text-xl font-semibold tracking-[-0.03em] text-white">
-                SWK Properties
-              </div>
-              <div className="mt-1 text-[10px] font-medium uppercase tracking-[0.24em] text-[#8b8b8b]">
-                DUBAI REAL ESTATE
-              </div>
-            </div>
+            <img
+              src="/brand/swk-logo-dark.webp"
+              width={136}
+              height={62}
+              alt="SWK Properties"
+              className="h-11 w-auto object-contain"
+            />
           </div>
 
           <div className="font-mono text-xs tracking-[0.2em] text-white/60 tabular-nums">

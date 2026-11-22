@@ -40,7 +40,7 @@ export default async function ThankYouPage({
         </h1>
 
         <p className="mx-auto mt-4 max-w-lg text-sm sm:text-base leading-relaxed text-[#525252]">
-          Routed to <strong className="font-medium text-[#121212]">{assignedAgent}</strong> (backup coverage: {backupAgent}) at Al Saqr Business Tower, Sheikh Zayed Road.
+          Routed to <strong className="font-medium text-[#121212]">{assignedAgent}</strong> (backup coverage: {backupAgent}) at 25th Floor, Al Saqr Building, Sheikh Zayed Road.
         </p>
 
         <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 rounded-2xl bg-[#f7f7f7] p-5 text-left text-xs text-[#525252]">

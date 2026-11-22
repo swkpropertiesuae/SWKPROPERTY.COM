@@ -123,7 +123,7 @@ export const blogArticles: BlogArticle[] = (blogJson as RawBlogItem[]).map((item
     reviewer: {
       name: "SWK Regulatory & Market Review Desk",
       role: "Compliance & DLD Verification Team",
-      credentials: "RERA ORN 51517 · Al Saqr Business Tower, Sheikh Zayed Road",
+      credentials: "RERA ORN 51517 · 25th Floor, Al Saqr Building, Sheikh Zayed Road",
     },
     keyTakeaways: (item.sections || []).slice(0, 4).map((s) => `${s.title}: ${s.text.split(".")[0]}.`),
     faqs: [

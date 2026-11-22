@@ -7,6 +7,7 @@ import { type PropertyListing, isPermitVerified, permitLabel } from "@/lib/listi
 import { usePrefs } from "@/lib/prefs";
 import { SITE } from "@/lib/swk";
 import { WhatsAppIcon } from "@/components/site/whatsapp-icon";
+import { SpotlightCard } from "@/components/ui/spotlight-card";
 
 export function PropertyCard({
   listing,
@@ -51,7 +52,8 @@ export function PropertyCard({
       : "For Sale · Ready";
 
   return (
-    <article className="group flex flex-col overflow-hidden rounded-2xl border border-black/[0.07] bg-white transition-all duration-300 hover:border-black/20 hover:shadow-[0_20px_50px_rgba(18,18,18,0.08)]">
+    <SpotlightCard>
+      <article className="group flex h-full flex-col">
       {/* Architectural Photo Frame */}
       <div
         className={`relative w-full overflow-hidden bg-[#f5f5f5] ${
@@ -139,7 +141,12 @@ export function PropertyCard({
               ) : null}
             </div>
             <div className="text-xs font-medium text-[#525252] tabular-nums">
-              {listing.bedrooms === 0 ? "Studio" : `${listing.bedrooms} Bed`} · {listing.bathrooms} Bath · {formatArea(listing.areaSqFt)}
+              {listing.propertyType === "Office"
+                ? "Commercial Suite"
+                : listing.bedrooms === 0
+                  ? "Studio"
+                  : `${listing.bedrooms} Bed`}{" "}
+              · {listing.bathrooms} Bath · {formatArea(listing.areaSqFt)}
             </div>
           </div>
 
@@ -182,6 +189,7 @@ export function PropertyCard({
           </a>
         </div>
       </div>
-    </article>
+      </article>
+    </SpotlightCard>
   );
 }

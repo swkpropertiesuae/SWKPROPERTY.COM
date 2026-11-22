@@ -14,7 +14,7 @@ export const metadata: Metadata = buildMeta({
   description:
     "SWK Properties full-cycle UAE real estate services: Off-Plan Advisory, Secondary Sales, Leasing & Ejari, Investment Advisory, Property Management, Mortgages & Legal.",
   path: "/services",
-  image: "/img/hero/dubai-services-cinematic.webp",
+  image: "/img/hero/banner-services.webp",
   keywords: KEYWORDS.services,
 });
 

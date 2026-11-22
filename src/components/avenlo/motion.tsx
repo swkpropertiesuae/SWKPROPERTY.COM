@@ -233,7 +233,7 @@ export function CtaBanner({
   primaryLabel = "Book a Call",
   secondaryHref = "/calculators",
   secondaryLabel = "Calculate Costs",
-  image = "/img/hero/dubai-skyline-hero.webp",
+  image = "/img/hero/cta-dubai-banner.webp",
 }: {
   eyebrow?: string;
   primary?: string;

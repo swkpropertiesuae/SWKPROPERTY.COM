@@ -26,9 +26,11 @@ import { CtaBanner } from "@/components/avenlo/motion";
 
 const QUICK_PILLS = [
   { id: "all", label: "All" },
-  { id: "buy", label: "For Sale" },
-  { id: "rent", label: "For Rent" },
+  { id: "buy", label: "Secondary / Buy" },
+  { id: "ready", label: "Handover & Ready" },
+  { id: "rent", label: "Leasing" },
   { id: "off-plan", label: "Off-Plan" },
+  { id: "Office", label: "Commercial Spaces" },
   { id: "Apartment", label: "Apartments" },
   { id: "Villa", label: "Villas" },
   { id: "Townhouse", label: "Townhouses" },
@@ -49,6 +51,9 @@ function PropertiesExplorer() {
   const [query, setQuery] = useState(searchParams.get("q") || "");
   const [purpose, setPurpose] = useState<"" | ListingPurpose>(
     (searchParams.get("purpose") as ListingPurpose) || ""
+  );
+  const [completion, setCompletion] = useState<"" | "Ready" | "Off-Plan">(
+    (searchParams.get("completion") as "" | "Ready" | "Off-Plan") || ""
   );
   const [propertyType, setPropertyType] = useState<"" | PropertyType>(
     (searchParams.get("type") as PropertyType) || ""
@@ -72,8 +77,10 @@ function PropertiesExplorer() {
   const [mapZone, setMapZone] = useState<"" | "central" | "coastal" | "green-suburban" | "creek-east">("");
 
   const activePill: QuickPillId = useMemo(() => {
+    if (completion === "Ready" && !purpose && !propertyType) return "ready";
     if (purpose) return purpose;
     if (
+      propertyType === "Office" ||
       propertyType === "Apartment" ||
       propertyType === "Villa" ||
       propertyType === "Townhouse" ||
@@ -82,17 +89,24 @@ function PropertiesExplorer() {
       return propertyType;
     }
     return "all";
-  }, [purpose, propertyType]);
+  }, [purpose, propertyType, completion]);
 
   const applyQuickPill = (id: QuickPillId) => {
     if (id === "all") {
       setPurpose("");
+      setCompletion("");
+      setPropertyType("");
+    } else if (id === "ready") {
+      setPurpose("");
+      setCompletion("Ready");
       setPropertyType("");
     } else if (id === "buy" || id === "rent" || id === "off-plan") {
       setPurpose(id);
+      setCompletion("");
       setPropertyType("");
     } else {
       setPurpose("");
+      setCompletion("");
       setPropertyType(id);
     }
   };
@@ -102,6 +116,7 @@ function PropertiesExplorer() {
     const p = new URLSearchParams();
     if (query.trim()) p.set("q", query.trim());
     if (purpose) p.set("purpose", purpose);
+    if (completion) p.set("completion", completion);
     if (propertyType) p.set("type", propertyType);
     if (community) p.set("community", community);
     if (bedrooms) p.set("beds", bedrooms);
@@ -109,12 +124,13 @@ function PropertiesExplorer() {
     if (sortBy && sortBy !== "featured") p.set("sort", sortBy);
     const qs = p.toString();
     router.replace(qs ? `/properties?${qs}` : "/properties", { scroll: false });
-  }, [query, purpose, propertyType, community, bedrooms, maxPrice, sortBy, router]);
+  }, [query, purpose, completion, propertyType, community, bedrooms, maxPrice, sortBy, router]);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
     const list = LISTINGS.filter((item) => {
       if (purpose && item.purpose !== purpose) return false;
+      if (completion && item.completion !== completion) return false;
       if (propertyType && item.propertyType !== propertyType) return false;
       if (community && item.communitySlug !== community) return false;
       if (bedrooms !== "") {
@@ -146,6 +162,7 @@ function PropertiesExplorer() {
   }, [
     query,
     purpose,
+    completion,
     propertyType,
     community,
     bedrooms,
@@ -177,6 +194,7 @@ function PropertiesExplorer() {
   const resetAll = () => {
     setQuery("");
     setPurpose("");
+    setCompletion("");
     setPropertyType("");
     setCommunity("");
     setBedrooms("");

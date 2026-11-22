@@ -13,7 +13,7 @@ export const metadata: Metadata = buildMeta({
   description:
     "Annual and executive residential leases across Dubai Marina, Downtown Dubai, Sheikh Zayed Road, JVC & Dubai Hills with official Ejari registration by SWK Properties (ORN 51517).",
   path: "/rent",
-  image: "/img/communities/dubai-marina.webp",
+  image: "/img/hero/banner-rent.webp",
   keywords: [
     "rent apartment in Dubai",
     "Dubai Marina apartments for rent",

@@ -9,9 +9,9 @@ import { CtaBanner } from "@/components/avenlo/motion";
 
 export const metadata: Metadata = buildMeta({
   title: "Dubai Property Advisors & Team",
-  description: `Meet the RERA-registered Dubai real estate advisors at ${SITE.legalName} (ORN ${SITE.reraOrn}) covering off-plan launches, ready sales, leasing, and investor portfolios.`,
+  description: `Meet the RERA-registered Dubai real estate advisory team at ${SITE.legalName} (ORN ${SITE.reraOrn}) covering off-plan launches, ready sales, leasing, and commercial portfolios.`,
   path: "/agents",
-  image: "/img/about/private-consultation-lounge.jpg",
+  image: "/img/hero/banner-agents.webp",
 });
 
 export default function AgentsPage() {

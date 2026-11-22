@@ -4,6 +4,7 @@ import React, { useMemo, useState } from "react";
 import Link from "next/link";
 import { ArrowUpRight, Search } from "lucide-react";
 import type { Developer } from "@/lib/developers";
+import { SpotlightCard } from "@/components/ui/spotlight-card";
 
 const EMIRATE_TABS = ["All", "Dubai", "Abu Dhabi", "Sharjah", "Ras Al Khaimah"] as const;
 
@@ -41,7 +42,7 @@ export function DevelopersDirectory({ developers }: { developers: Developer[] })
                 : "border border-black/10 bg-white text-[#525252] hover:border-[#121212] hover:text-[#121212]"
             }`}
           >
-            {tab === "All" ? `All Developers (${developers.length})` : tab}
+            {tab === "All" ? "All UAE Developers" : tab}
           </button>
         ))}
       </div>
@@ -53,80 +54,79 @@ export function DevelopersDirectory({ developers }: { developers: Developer[] })
           type="search"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="Search Emaar, Nakheel, Sobha, DAMAC, Binghatti, Aldar..."
+          placeholder="Search Nakheel, Binghatti, Emaar, DAMAC, Azizi, Sobha, Aldar..."
           aria-label="Search UAE developers"
           className="w-full rounded-full border border-black/12 bg-[#f7f7f7] py-3 pr-5 pl-11 text-sm text-[#121212] placeholder:text-[#8b8b8b] focus:border-[#121212] focus:bg-white focus:outline-none"
         />
       </div>
 
-      {/* Clean White Architectural Developer Grid */}
+      {/* Architectural Developer Showcase Grid — Original Full-Color Logos & Zero Repeated Photos */}
       <div className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
         {filtered.map((dev) => (
-          <Link
-            key={dev.slug}
-            href={`/developers/${dev.slug}`}
-            className="group flex flex-col justify-between overflow-hidden rounded-2xl border border-black/[0.07] bg-white transition-all duration-300 hover:border-black/20 hover:shadow-[0_20px_50px_rgba(18,18,18,0.08)]"
-          >
-            <div>
-              <div className="relative h-44 w-full overflow-hidden bg-[#f5f5f5]">
-                <img
-                  src={dev.coverImage}
-                  alt={`${dev.name} flagship UAE development`}
-                  loading="lazy"
-                  className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-                />
-                <span className="absolute top-3.5 left-3.5 rounded-full bg-[#121212]/80 px-3 py-1 text-[10px] font-medium uppercase tracking-[0.16em] text-white backdrop-blur-md">
-                  {dev.emirate}
-                </span>
-                <span className="absolute top-3.5 right-3.5 rounded-full bg-white/92 px-3 py-1 font-mono text-[10px] font-medium text-[#121212]">
-                  {dev.projectCount} Projects
-                </span>
-              </div>
+          <SpotlightCard key={dev.slug}>
+            <Link
+              href={`/developers/${dev.slug}`}
+              className="group flex h-full flex-col justify-between"
+            >
+              <div>
+                {/* Crisp Studio Logo Stage (Original Colors, Zero Photo Duplication) */}
+                <div className="relative flex h-40 w-full items-center justify-center overflow-hidden border-b border-black/[0.06] bg-gradient-to-br from-[#fafafa] via-white to-[#f3f5f4] px-8">
+                  <div
+                    aria-hidden="true"
+                    className="pointer-events-none absolute inset-0 bg-arch-grid-fade opacity-50"
+                  />
+                  <span className="absolute top-3.5 left-3.5 rounded-full bg-[#121212] px-3 py-1 text-[10px] font-medium uppercase tracking-[0.16em] text-white">
+                    {dev.emirate}
+                  </span>
+                  <span className="absolute top-3.5 right-3.5 rounded-full border border-black/10 bg-white px-3 py-1 text-[10px] font-medium text-[#525252]">
+                    {dev.knownFor}
+                  </span>
 
-              <div className="p-6">
-                <div className="flex h-9 items-center">
                   {dev.logo ? (
                     <img
                       src={dev.logo}
                       alt={dev.name}
                       loading="lazy"
-                      className="max-h-8 max-w-[140px] object-contain object-left"
+                      className="relative z-10 mt-4 max-h-14 max-w-[180px] object-contain transition-transform duration-300 group-hover:scale-[1.06]"
                     />
                   ) : (
-                    <span className="text-xl font-medium tracking-[-0.03em] text-[#121212]">
+                    <span className="relative z-10 mt-4 text-2xl font-medium tracking-[-0.035em] text-[#121212]">
                       {dev.name}
                     </span>
                   )}
                 </div>
-                <h2 className="mt-3 text-lg font-medium tracking-[-0.025em] text-[#121212]">
-                  {dev.name}
-                </h2>
-                <p className="mt-1.5 line-clamp-2 text-xs leading-relaxed text-[#666666]">
-                  {dev.tagline}
-                </p>
 
-                {dev.flagshipAreas.length > 0 ? (
-                  <div className="mt-4 flex flex-wrap gap-1.5">
-                    {dev.flagshipAreas.slice(0, 3).map((area) => (
-                      <span
-                        key={area}
-                        className="rounded-full bg-[#f5f5f5] px-2.5 py-1 text-[10px] font-medium text-[#525252]"
-                      >
-                        {area}
-                      </span>
-                    ))}
-                  </div>
-                ) : null}
+                <div className="p-6">
+                  <h2 className="text-xl font-medium tracking-[-0.025em] text-[#121212] group-hover:text-[#0e9f6e] transition-colors">
+                    {dev.name}
+                  </h2>
+                  <p className="mt-2 line-clamp-2 text-xs leading-relaxed text-[#666666]">
+                    {dev.tagline}
+                  </p>
+
+                  {dev.flagshipAreas.length > 0 ? (
+                    <div className="mt-4 flex flex-wrap gap-1.5">
+                      {dev.flagshipAreas.slice(0, 3).map((area) => (
+                        <span
+                          key={area}
+                          className="rounded-full bg-[#f5f5f5] px-2.5 py-1 text-[10px] font-medium text-[#525252]"
+                        >
+                          {area}
+                        </span>
+                      ))}
+                    </div>
+                  ) : null}
+                </div>
               </div>
-            </div>
 
-            <div className="flex items-center justify-between border-t border-black/[0.06] px-6 py-4 text-xs font-medium text-[#121212]">
-              <span className="text-[#8b8b8b]">{dev.headquarters}</span>
-              <span className="inline-flex items-center gap-1 group-hover:text-[#0e9f6e]">
-                View Profile <ArrowUpRight className="h-3.5 w-3.5" />
-              </span>
-            </div>
-          </Link>
+              <div className="flex items-center justify-between border-t border-black/[0.06] px-6 py-4 text-xs font-medium text-[#121212]">
+                <span className="text-[#8b8b8b]">{dev.headquarters}</span>
+                <span className="inline-flex items-center gap-1 group-hover:text-[#0e9f6e]">
+                  View Projects <ArrowUpRight className="h-3.5 w-3.5" />
+                </span>
+              </div>
+            </Link>
+          </SpotlightCard>
         ))}
       </div>
     </section>

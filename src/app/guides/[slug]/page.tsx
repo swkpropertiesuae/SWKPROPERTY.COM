@@ -56,7 +56,7 @@ export default async function GuideDetailPage({
           slug: `guides/${guide.slug}`,
           datePublished: "2026-09-01",
           dateModified: guide.updatedAt,
-          image: "/img/hero/dubai-skyline-hero.webp",
+          image: "/img/hero/banner-communities.webp",
           authorName: guide.reviewedBy,
         })}
       />

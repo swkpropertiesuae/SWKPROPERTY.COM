@@ -18,17 +18,17 @@ export default function Home() {
       <link
         rel="preload"
         as="image"
-        href="/img/hero/dubai-skyline-hero.webp"
+        href="/img/hero/uae-skyline-flagship.webp"
         fetchPriority="high"
       />
 
-      {/* 01 · Bright Architectural Hairline-Grid Hero (owns the page's single <h1>) */}
+      {/* 01 · Bright Architectural Hairline-Grid + 21st.dev GradientWave Hero */}
       <AvenloHero />
 
       {/* 02 · Scroll-Reveal Editorial Statement & 2-Card Client Growth Bento */}
       <EditorialBento />
 
-      {/* 03 · What's Happening in Dubai: 27+ Master Developers & Live 2026 Releases */}
+      {/* 03 · Premier UAE Master Developers & 21st.dev Luxury Project Carousel */}
       <DubaiDeveloperPulse />
 
       {/* 04 · Six Full-Bleed Architectural Residence Showcase Panels */}

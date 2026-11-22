@@ -169,7 +169,7 @@ const G: Record<string, Base> = {
     metaDescription:
       "Sheikh Zayed Road property guide: landmark towers, offices and metro-connected living along Dubai's business spine, with pros, drawbacks and current listings.",
     overview:
-      "Sheikh Zayed Road is Dubai's business spine, lined with landmark towers, offices and hotels, with metro stops along its length. SWK's own office is here, at Al Saqr Business Tower.",
+      "Sheikh Zayed Road is Dubai's business spine, lined with landmark towers, offices and hotels, with metro stops along its length. SWK's own office is here, on the 25th Floor, Al Saqr Building.",
     propertyTypes: ["Apartments in towers", "Serviced residences", "Commercial offices"],
     transport: ["Multiple Red Line metro stations along the road", "Direct highway links to Downtown, Marina and Abu Dhabi"],
     schoolsHealth: ["Schools in surrounding Al Wasl, Al Quoz and Satwa", "Hospitals and clinics within a short drive"],

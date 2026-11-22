@@ -17,21 +17,21 @@ import {
 export const metadata: Metadata = buildMetadata({
   title: "About SWK Properties — Sheikh Zayed Road, Dubai",
   description:
-    "Backed by 18+ years of UAE real estate advisory across 27+ developers and 108+ projects, SWK Properties (RERA ORN 51517) operates from Al Saqr Business Tower, Sheikh Zayed Road.",
+    "Backed by 18+ years of UAE real estate advisory across premier master developers, SWK Properties (RERA ORN 51517) operates from 25th Floor, Al Saqr Building, Sheikh Zayed Road.",
   path: "/about",
   keywords: [
     "About SWK Properties Dubai",
-    "Al Saqr Business Tower real estate brokerage",
+    "Al Saqr Building real estate brokerage",
     "Sheikh Zayed Road property consultants",
     "SWK Properties team",
   ],
 });
 
 const STRIP_PHOTOS = [
-  { src: "/img/about/private-consultation-lounge.jpg", alt: "SWK Private Consultation Suite — 27th Floor Al Saqr Business Tower" },
-  { src: "/img/about/swk-office.webp", alt: "SWK Properties Dubai Advisory Office" },
-  { src: "/img/communities/downtown-dubai.webp", alt: "Downtown Dubai skyline corridor" },
-  { src: "/img/communities/palm-jumeirah.webp", alt: "Palm Jumeirah waterfront residences" },
+  { src: "/img/about/al-saqr-suite.webp", alt: "SWK Private Consultation Suite — 25th Floor, Al Saqr Building" },
+  { src: "/img/about/al-saqr-boardroom.webp", alt: "SWK Properties Dubai Advisory Gallery — Sheikh Zayed Road" },
+  { src: "/img/about/architectural-atrium.webp", alt: "Dubai contemporary architectural atrium" },
+  { src: "/img/about/waterfront-vertical.webp", alt: "Dubai waterfront skyline at golden hour" },
 ];
 
 export default function AboutPage() {
@@ -99,7 +99,7 @@ export default function AboutPage() {
             },
             {
               title: "Direct Developer Access",
-              body: "Active agency agreements across 27+ UAE master developers covering 108+ off-plan launches across five emirates.",
+              body: "Active agency agreements across Nakheel, Binghatti, Emaar, DAMAC, Azizi, Sobha Realty, Omniyat, Aldar, Ellington, and leading UAE master developers.",
             },
             {
               title: "RERA & DLD Governance",
@@ -152,7 +152,7 @@ export default function AboutPage() {
             />
           </div>
           <BracketLink href="/agents" variant="light" size="sm">
-            All {team.length} Advisors
+            Meet Our Team
           </BracketLink>
         </div>
 
@@ -190,12 +190,12 @@ export default function AboutPage() {
             <div className="lg:col-span-5 space-y-5">
               <SectionEyebrow>DUBAI HEADQUARTERS</SectionEyebrow>
               <SplitHeading
-                primary="Al Saqr Business Tower,"
+                primary="Al Saqr Building,"
                 muted="Sheikh Zayed Road"
                 size="md"
               />
               <p className="text-sm leading-relaxed text-[#525252]">
-                Visit our 27th-floor consultation suite (Office 54) for private floor-plan walkthroughs, developer portfolio briefings, or Form A / Form F documentation.
+                Visit our 25th-floor consultation suite at Al Saqr Building for private floor-plan walkthroughs, developer portfolio briefings, or Form A / Form F documentation.
               </p>
               <div className="rounded-2xl border border-black/[0.07] bg-white p-6 text-xs text-[#525252] space-y-2.5">
                 <div className="flex items-center gap-2 font-medium text-[#121212]">

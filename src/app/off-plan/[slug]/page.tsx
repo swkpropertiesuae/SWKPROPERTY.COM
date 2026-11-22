@@ -27,7 +27,7 @@ export async function generateMetadata({
   if (!project) {
     return buildMeta({
       title: "Off-Plan Project Not Found",
-      description: "Explore 108+ verified UAE off-plan developments with SWK Properties.",
+      description: "Explore premier UAE off-plan developments with SWK Properties.",
       path: "/off-plan",
     });
   }
@@ -207,7 +207,7 @@ export default async function OffPlanProjectDetailPage({
                     </p>
                     <p className="mt-0.5 text-lg font-medium text-[#121212]">{dev.name}</p>
                     <p className="text-xs text-[#737373]">
-                      {dev.emirate} · {dev.projectCount} tracked releases
+                      {dev.emirate} · {dev.knownFor}
                     </p>
                   </div>
                 </div>
@@ -279,7 +279,7 @@ export default async function OffPlanProjectDetailPage({
                 >
                   <div className="aspect-[16/10] w-full overflow-hidden bg-[#ececec]">
                     <img
-                      src={rel.thumb || rel.image}
+                      src={rel.image}
                       alt={rel.name}
                       loading="lazy"
                       className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"

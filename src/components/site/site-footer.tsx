@@ -104,8 +104,37 @@ export function SiteFooter() {
 
   return (
     <footer className="relative w-full overflow-hidden bg-[#121212] text-white">
-      <div className="mx-auto max-w-[1260px] px-4 pt-20 pb-8 sm:px-8">
-        {/* Top 4-Column Avenlo Architecture */}
+      <div className="mx-auto max-w-[1260px] px-4 pt-20 pb-24 sm:px-8">
+        {/* Top Brand Row — Unified Transparent Icon + Calligraphic Wordmark */}
+        <div className="mb-14 flex flex-wrap items-center justify-between gap-6 border-b border-white/[0.08] pb-10">
+          <Link href="/" className="inline-flex items-center gap-3.5" aria-label="SWK Properties Home">
+            <img
+              src="/brand/swk-icon-192.webp"
+              width={48}
+              height={48}
+              alt="SWK Properties Emblem"
+              loading="lazy"
+              className="h-12 w-12 object-contain"
+            />
+            <img
+              src="/brand/swk-logo-dark.webp"
+              width={132}
+              height={60}
+              alt="SWK Properties"
+              loading="lazy"
+              className="h-11 w-auto object-contain"
+            />
+          </Link>
+
+          <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-[#1e1e1e] px-4 py-2 text-xs text-white/85">
+            <span className="h-1.5 w-1.5 rounded-full bg-[#51fec0]" aria-hidden="true" />
+            <span>
+              RERA ORN <strong>{SITE.reraOrn}</strong> · Sheikh Zayed Road, Dubai
+            </span>
+          </div>
+        </div>
+
+        {/* Main 4-Column Avenlo Architecture */}
         <div className="grid grid-cols-1 gap-10 lg:grid-cols-12 lg:gap-8">
           {/* Col 1: Elevated #1E1E1E Newsletter Card */}
           <div className="lg:col-span-4">
@@ -173,7 +202,7 @@ export function SiteFooter() {
             </p>
             <div className="mt-4 grid grid-cols-2 gap-x-6 gap-y-2.5 text-[14px] text-white/85">
               <Link href="/" className="hover:text-[#51fec0] transition-colors">Home</Link>
-              <Link href="/agents" className="hover:text-[#51fec0] transition-colors">Advisors</Link>
+              <Link href="/agents" className="hover:text-[#51fec0] transition-colors">Our Team</Link>
               <Link href="/about" className="hover:text-[#51fec0] transition-colors">About</Link>
               <Link href="/insights" className="hover:text-[#51fec0] transition-colors">Insights</Link>
               <Link href="/properties" className="hover:text-[#51fec0] transition-colors">Properties</Link>
@@ -189,7 +218,7 @@ export function SiteFooter() {
             </div>
           </div>
 
-          {/* Col 3: SERVICES & TOOLS */}
+          {/* Col 3: SERVICES & PORTFOLIO */}
           <div className="lg:col-span-2">
             <p className="text-[11px] font-medium uppercase tracking-[0.22em] text-[#8b8b8b]">
               SERVICES
@@ -198,8 +227,8 @@ export function SiteFooter() {
               <li><Link href="/services/off-plan-advisory" className="hover:text-[#51fec0] transition-colors">Off-Plan Advisory</Link></li>
               <li><Link href="/services/secondary-market" className="hover:text-[#51fec0] transition-colors">Buying &amp; Selling</Link></li>
               <li><Link href="/services/leasing-rental" className="hover:text-[#51fec0] transition-colors">Leasing &amp; Ejari</Link></li>
+              <li><Link href="/properties?type=Office" className="hover:text-[#51fec0] transition-colors">Commercial Spaces</Link></li>
               <li><Link href="/services/investment-advisory" className="hover:text-[#51fec0] transition-colors">Investment Advisory</Link></li>
-              <li><Link href="/services/property-management" className="hover:text-[#51fec0] transition-colors">Management</Link></li>
               <li><Link href="/calculators" className="hover:text-[#51fec0] transition-colors">Mortgage Calculator</Link></li>
               <li><Link href="/list-your-property" className="hover:text-[#51fec0] transition-colors">List Your Property</Link></li>
             </ul>
@@ -261,24 +290,15 @@ export function SiteFooter() {
         {/* Mandatory RERA, AED & Trademark Disclosures */}
         <div className="mt-14 border-t border-white/[0.08] pt-6 text-[11px] leading-relaxed text-[#8b8b8b] space-y-1.5">
           <p>
-            <strong className="text-white/75 font-medium">Regulatory &amp; Pricing Notice:</strong> Primary prices are quoted in UAE Dirhams (AED). Foreign currency conversions and calculator outputs are approximate and for general information only—not financial, tax, or legal advice. Off-plan visuals include developer architectural renders; floor plans, service charges, payment plans, and handover timelines are governed by the official Sales &amp; Purchase Agreement (SPA) and Dubai Land Department (DLD) registration.
+            <strong className="text-white/75 font-medium">Regulatory &amp; Pricing Notice:</strong> Primary prices are quoted in UAE Dirhams (AED). Foreign currency conversions and calculator outputs are approximate and for general information only—not financial, tax, or legal advice. Off-plan visuals include architectural renders; floor plans, service charges, payment plans, and handover timelines are governed by the official Sales &amp; Purchase Agreement (SPA) and Dubai Land Department (DLD) registration.
           </p>
           <p>
             <strong className="text-white/75 font-medium">Developer Trademarks:</strong> Developer names, logos, and project imagery remain the property of their respective developers and are used solely to identify UAE developments. {SITE.legalName} is an independent RERA-licensed brokerage (ORN {SITE.reraOrn}).
           </p>
         </div>
-      </div>
 
-      {/* Monumental Clipped SWK Wordmark Band + 3 Floating Pills (Avenlo Signature) */}
-      <div className="relative mx-auto max-w-[1260px] overflow-hidden px-4 pt-8 pb-24 sm:px-8 sm:pt-12 sm:pb-24">
-        <div
-          aria-hidden="true"
-          className="pointer-events-none select-none text-center text-[24vw] xl:text-[310px] font-medium leading-[0.8] tracking-[-0.055em] text-white/[0.08]"
-        >
-          SWK
-        </div>
-
-        <div className="relative z-10 -mt-10 sm:-mt-16 flex flex-col items-center justify-between gap-3 sm:flex-row">
+        {/* Clean Bottom Utility Pill Row (Monumental bottom SWK watermark removed) */}
+        <div className="mt-10 flex flex-col items-center justify-between gap-3 border-t border-white/[0.08] pt-8 sm:flex-row">
           {/* Pill 1: Socials */}
           <div className="inline-flex items-center gap-3 rounded-full border border-white/10 bg-[#1e1e1e]/95 px-4 py-2 text-xs text-white/80 backdrop-blur-md">
             {SOCIAL_LINKS.filter(([, href]) => href).map(([label, href]) => (

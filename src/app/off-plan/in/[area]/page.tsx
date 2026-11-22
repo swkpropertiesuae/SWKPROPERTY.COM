@@ -114,13 +114,13 @@ export default async function OffPlanAreaPage({
               >
                 <div className="relative aspect-[16/10] w-full overflow-hidden bg-[#ececec]">
                   <img
-                    src={p.thumb || p.image}
+                    src={p.image}
                     alt={`${p.name} by ${p.devName}`}
                     loading="lazy"
                     className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />
                   <span className="absolute bottom-3 right-3 rounded-full bg-white/90 px-2.5 py-0.5 text-[10px] font-medium text-[#121212]">
-                    Developer Render
+                    Architectural Visual
                   </span>
                 </div>
                 <div className="flex flex-1 flex-col justify-between p-6">
@@ -130,7 +130,7 @@ export default async function OffPlanAreaPage({
                         <img
                           src={dev.logo}
                           alt={p.devName}
-                          className="h-5 w-auto max-w-[100px] object-contain opacity-80"
+                          className="h-6 w-auto max-w-[108px] object-contain"
                         />
                       ) : (
                         <span className="text-[11px] font-medium uppercase tracking-[0.16em] text-[#8b8b8b]">

@@ -34,8 +34,8 @@ const INITIAL_CHAT: ChatMessage[] = [
     role: "assistant",
     text: "Welcome to SWK Properties (RERA ORN 51517). Ask about any Dubai developer, 2026 off-plan launch, ready property, or DLD fees and I will point you straight to the right page or specialist.",
     links: [
-      { label: "2026 Off-Plan Launches", href: "/off-plan" },
-      { label: "27+ Master Developers", href: "/developers" },
+      { label: "Off-Plan Launches", href: "/off-plan" },
+      { label: "UAE Master Developers", href: "/developers" },
       { label: "Mortgage & DLD Calculator", href: "/calculators" },
     ],
   },
@@ -108,10 +108,10 @@ function generateAssistantReply(query: string): {
   }
 
   return {
-    text: "I search SWK Properties' Dubai inventory across 27+ developers and 108+ off-plan projects. Would you like to browse releases, run the DLD & mortgage calculator, or speak directly with an advisor?",
+    text: "I search SWK Properties' Dubai & UAE portfolio across leading master developers including Nakheel, Binghatti, Emaar, DAMAC, Sobha, and Azizi. Would you like to browse releases, run the DLD & mortgage calculator, or speak directly with our team?",
     links: [
       { label: "Browse All Properties", href: "/properties" },
-      { label: "Explore 108+ Off-Plan Projects", href: "/off-plan" },
+      { label: "Explore Off-Plan Projects", href: "/off-plan" },
       { label: "Book a Call", href: "/contact" },
     ],
   };
@@ -282,7 +282,7 @@ export function FloatingChrome() {
         >
           <span className="inline-flex items-center gap-2">
             <img
-              src="/brand/swk-crest-2026-192.webp"
+              src="/brand/swk-icon-192.webp"
               width={20}
               height={20}
               alt=""
@@ -333,7 +333,7 @@ export function FloatingChrome() {
           <div className="flex items-center justify-between bg-[#121212] px-5 py-4 text-white">
             <div className="flex items-center gap-2.5">
               <img
-                src="/brand/swk-crest-2026-192.webp"
+                src="/brand/swk-icon-192.webp"
                 width={24}
                 height={24}
                 alt=""

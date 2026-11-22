@@ -3,11 +3,12 @@
 import React, { useMemo, useState } from "react";
 import Link from "next/link";
 import { ArrowUpRight, Search } from "lucide-react";
-import { developers, priorityProjects, projects } from "@/lib/developers";
+import { developers, projects } from "@/lib/developers";
 import { offPlanAreas } from "@/lib/areas";
 import { AvenloPageHeader } from "@/components/avenlo/page-header";
 import { BracketLink } from "@/components/avenlo/bracket-button";
 import { CtaBanner, SectionEyebrow, SplitHeading } from "@/components/avenlo/motion";
+import { SpotlightCard } from "@/components/ui/spotlight-card";
 
 const EMIRATES = ["All", "Dubai", "Abu Dhabi", "Sharjah", "Ras Al Khaimah"] as const;
 
@@ -43,10 +44,10 @@ export default function OffPlanPage() {
   return (
     <div className="bg-white">
       <AvenloPageHeader
-        eyebrow="OFF-PLAN LAUNCHES · 27+ UAE DEVELOPERS"
+        eyebrow="OFF-PLAN LAUNCHES · PREMIER UAE DEVELOPERS"
         title="New projects"
         italic="rising now"
-        lead={`Track ${projects.length}+ verified off-plan developments across Dubai, Abu Dhabi, Sharjah, Ras Al Khaimah, and Umm Al Quwain—with 0% buyer agency commission on primary releases and RERA escrow verification.`}
+        lead="Explore direct off-plan developments from Nakheel, Binghatti, Emaar, DAMAC, Azizi, Sobha Realty, Omniyat, Ellington, and Aldar—with 0% buyer agency commission on primary releases and RERA escrow verification."
         breadcrumb={[
           { label: "Home", href: "/" },
           { label: "Off-Plan Launches" },
@@ -57,7 +58,7 @@ export default function OffPlanPage() {
               Payment Plan Calculator
             </BracketLink>
             <BracketLink href="/developers" variant="light" size="md">
-              All 27+ Developers
+              Master Developers
             </BracketLink>
           </>
         }
@@ -77,7 +78,7 @@ export default function OffPlanPage() {
                   : "border border-black/10 bg-white text-[#525252] hover:border-[#121212] hover:text-[#121212]"
               }`}
             >
-              {em === "All" ? `All UAE (${projects.length})` : em}
+              {em === "All" ? "All UAE" : em}
             </button>
           ))}
           <button
@@ -89,7 +90,7 @@ export default function OffPlanPage() {
                 : "border border-black/10 bg-[#f7f7f7] text-[#121212] hover:border-[#121212]"
             }`}
           >
-            2026 Priority Mandates ({priorityProjects.length})
+            Flagship Mandates
           </button>
         </div>
 
@@ -100,7 +101,7 @@ export default function OffPlanPage() {
               type="search"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search project, developer, island, or payment plan..."
+              placeholder="Search Palm, Mercedes-Benz, Bugatti, Creek Harbour, JVC, Lagoons, Azizi..."
               aria-label="Search off-plan projects"
               className="w-full rounded-lg border border-black/10 bg-white py-2.5 pr-4 pl-10 text-sm text-[#121212] placeholder:text-[#a7a7a7] focus:border-[#121212] focus:outline-none"
             />
@@ -112,10 +113,10 @@ export default function OffPlanPage() {
             onChange={(e) => setDevSlug(e.target.value)}
             className="sm:col-span-4 rounded-lg border border-black/10 bg-white px-3.5 py-2.5 text-sm text-[#121212] focus:border-[#121212] focus:outline-none"
           >
-            <option value="">All 27+ Master Developers</option>
+            <option value="">All Master Developers</option>
             {developers.map((d) => (
               <option key={d.slug} value={d.slug}>
-                {d.name} ({d.projectCount})
+                {d.name}
               </option>
             ))}
           </select>
@@ -154,72 +155,73 @@ export default function OffPlanPage() {
             {filtered.map((proj) => {
               const dev = devMap.get(proj.developerSlug);
               return (
-                <Link
-                  key={proj.slug}
-                  href={`/off-plan/${proj.slug}`}
-                  className="group flex flex-col overflow-hidden rounded-2xl border border-black/[0.07] bg-white transition-all duration-300 hover:border-black/20 hover:shadow-[0_20px_50px_rgba(18,18,18,0.08)]"
-                >
-                  <div className="relative aspect-[16/10] w-full overflow-hidden bg-[#ececec]">
-                    <img
-                      src={proj.thumb || proj.image}
-                      alt={`${proj.name} by ${proj.developer}`}
-                      loading="lazy"
-                      className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
-                    />
-                    <div className="absolute top-3.5 left-3.5">
-                      <span className="inline-flex items-center gap-1.5 rounded-full bg-[#121212]/82 px-3 py-1 text-[10px] font-medium uppercase tracking-[0.16em] text-white backdrop-blur-md">
-                        <span className="h-1.5 w-1.5 rounded-[2px] bg-[#51fec0]" aria-hidden="true" />
-                        {proj.priorityTarget ? "2026 Priority" : "Off-Plan"}
+                <SpotlightCard key={proj.slug}>
+                  <Link
+                    href={`/off-plan/${proj.slug}`}
+                    className="group flex h-full flex-col"
+                  >
+                    <div className="relative aspect-[16/10] w-full overflow-hidden bg-[#ececec]">
+                      <img
+                        src={proj.image}
+                        alt={`${proj.name} by ${proj.developer}`}
+                        loading="lazy"
+                        className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
+                      />
+                      <div className="absolute top-3.5 left-3.5">
+                        <span className="inline-flex items-center gap-1.5 rounded-full bg-[#121212]/82 px-3 py-1 text-[10px] font-medium uppercase tracking-[0.16em] text-white backdrop-blur-md">
+                          <span className="h-1.5 w-1.5 rounded-[2px] bg-[#51fec0]" aria-hidden="true" />
+                          {proj.priorityTarget ? "Flagship Release" : "Off-Plan"}
+                        </span>
+                      </div>
+                      <span className="absolute bottom-3 right-3 rounded-full bg-white/90 px-2.5 py-0.5 text-[10px] font-medium text-[#121212]">
+                        Architectural Visual
                       </span>
                     </div>
-                    <span className="absolute bottom-3 right-3 rounded-full bg-white/90 px-2.5 py-0.5 text-[10px] font-medium text-[#121212]">
-                      Developer Render
-                    </span>
-                  </div>
 
-                  <div className="flex flex-1 flex-col justify-between p-6">
-                    <div>
-                      <div className="flex items-center justify-between gap-2">
-                        {dev?.logo ? (
-                          <img
-                            src={dev.logo}
-                            alt={proj.developer}
-                            loading="lazy"
-                            className="h-5 w-auto max-w-[100px] object-contain opacity-80"
-                          />
-                        ) : (
-                          <span className="text-[11px] font-medium uppercase tracking-[0.16em] text-[#8b8b8b]">
-                            {proj.developer}
-                          </span>
-                        )}
-                        <span className="truncate text-[11px] text-[#8b8b8b]">{proj.community}</span>
+                    <div className="flex flex-1 flex-col justify-between p-6">
+                      <div>
+                        <div className="flex items-center justify-between gap-2">
+                          {dev?.logo ? (
+                            <img
+                              src={dev.logo}
+                              alt={proj.developer}
+                              loading="lazy"
+                              className="h-6 w-auto max-w-[108px] object-contain"
+                            />
+                          ) : (
+                            <span className="text-[11px] font-medium uppercase tracking-[0.16em] text-[#8b8b8b]">
+                              {proj.developer}
+                            </span>
+                          )}
+                          <span className="truncate text-[11px] text-[#8b8b8b]">{proj.community}</span>
+                        </div>
+                        <h2 className="mt-3 text-[22px] font-medium tracking-[-0.03em] text-[#121212] group-hover:text-[#0e9f6e] transition-colors">
+                          {proj.name}
+                        </h2>
+                        <p className="mt-2 line-clamp-2 text-xs leading-relaxed text-[#666666]">
+                          {proj.summary}
+                        </p>
                       </div>
-                      <h2 className="mt-3 text-[22px] font-medium tracking-[-0.03em] text-[#121212] group-hover:text-[#525252]">
-                        {proj.name}
-                      </h2>
-                      <p className="mt-2 line-clamp-2 text-xs leading-relaxed text-[#666666]">
-                        {proj.summary}
-                      </p>
-                    </div>
 
-                    <div className="mt-5 flex items-center justify-between gap-3 border-t border-black/[0.06] pt-4">
-                      <div className="flex flex-wrap gap-1.5">
-                        {proj.tags.slice(0, 2).map((tag) => (
-                          <span
-                            key={tag}
-                            className="rounded-full bg-[#f5f5f5] px-2.5 py-1 text-[10px] font-medium text-[#525252]"
-                          >
-                            {tag}
-                          </span>
-                        ))}
+                      <div className="mt-5 flex items-center justify-between gap-3 border-t border-black/[0.06] pt-4">
+                        <div className="flex flex-wrap gap-1.5">
+                          {proj.tags.slice(0, 2).map((tag) => (
+                            <span
+                              key={tag}
+                              className="rounded-full bg-[#f5f5f5] px-2.5 py-1 text-[10px] font-medium text-[#525252]"
+                            >
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+                        <span className="inline-flex shrink-0 items-center gap-1 text-xs font-medium text-[#121212] group-hover:text-[#0e9f6e]">
+                          <span>View</span>
+                          <ArrowUpRight className="h-3.5 w-3.5" />
+                        </span>
                       </div>
-                      <span className="inline-flex shrink-0 items-center gap-1 text-xs font-medium text-[#121212] group-hover:text-[#0e9f6e]">
-                        <span>View</span>
-                        <ArrowUpRight className="h-3.5 w-3.5" />
-                      </span>
                     </div>
-                  </div>
-                </Link>
+                  </Link>
+                </SpotlightCard>
               );
             })}
           </div>

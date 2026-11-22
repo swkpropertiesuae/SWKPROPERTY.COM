@@ -14,7 +14,7 @@ export const metadata: Metadata = buildMeta({
   description:
     "Balanced neighbourhood guides for Dubai's core freehold communities: Downtown Dubai, Dubai Marina, Palm Jumeirah, Business Bay, Dubai Hills Estate, JVC, Creek Harbour & SZR.",
   path: "/communities",
-  image: "/img/communities/downtown-dubai.webp",
+  image: "/img/hero/banner-communities.webp",
   keywords: KEYWORDS.communities,
 });
 

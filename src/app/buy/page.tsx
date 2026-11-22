@@ -13,7 +13,7 @@ export const metadata: Metadata = buildMeta({
   description:
     "Acquire ready apartments, waterfront villas, townhouses, and penthouses in Dubai with RERA Form F, NOC, and DLD Trustee transfer support from SWK Properties (ORN 51517).",
   path: "/buy",
-  image: "/img/communities/downtown-dubai.webp",
+  image: "/img/hero/banner-buy.webp",
   keywords: [
     "buy property in Dubai",
     "ready apartments for sale Dubai",

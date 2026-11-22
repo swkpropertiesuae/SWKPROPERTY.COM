@@ -9,11 +9,11 @@ import { DevelopersDirectory } from "@/components/avenlo/developers-directory";
 import { CtaBanner, SectionEyebrow, SplitHeading } from "@/components/avenlo/motion";
 
 export const metadata: Metadata = buildMeta({
-  title: "27+ UAE Real Estate Developers | Emaar, DAMAC, Sobha & Aldar",
+  title: "UAE Real Estate Developers | Nakheel, Binghatti, Emaar & DAMAC",
   description:
-    "Explore factual profiles, delivery track records, flagship communities, and 108+ off-plan & ready developments across 27+ leading Dubai and UAE developers with SWK Properties.",
+    "Explore factual profiles, delivery track records, flagship communities, and off-plan & ready developments across leading Dubai and UAE master developers with SWK Properties.",
   path: "/developers",
-  image: "/img/hero/dubai-skyline-hero.webp",
+  image: "/img/hero/banner-developers.webp",
   keywords: KEYWORDS.developers,
 });
 
@@ -27,7 +27,7 @@ export default function DevelopersPage() {
             { name: "UAE Developers", path: "/developers" },
           ]),
           itemListLd(
-            "Top 27+ UAE Real Estate Developers",
+            "Premier UAE Real Estate Developers",
             developers.map((d) => ({
               name: d.name,
               url: `${SITE.url}/developers/${d.slug}`,
@@ -40,7 +40,7 @@ export default function DevelopersPage() {
         eyebrow="MASTER DEVELOPERS · DUBAI & UAE"
         title="The builders shaping"
         italic="the UAE skyline"
-        lead="Compare delivery records, flagship master communities, and active 2026 releases across 27+ leading UAE developers—audited beyond the brochure."
+        lead="Compare delivery records, flagship master communities, and active releases across Nakheel, Binghatti, Emaar, DAMAC, Azizi, Sobha Realty, Omniyat, Ellington, and premier UAE developers—audited beyond the brochure."
         breadcrumb={[
           { label: "Home", href: "/" },
           { label: "Developers" },

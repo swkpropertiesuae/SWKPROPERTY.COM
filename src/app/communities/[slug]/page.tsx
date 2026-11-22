@@ -257,7 +257,7 @@ export default async function CommunityDetailPage({
               >
                 <div className="aspect-[16/10] w-full overflow-hidden bg-[#ececec]">
                   <img
-                    src={p.thumb || p.image}
+                    src={p.image}
                     alt={p.name}
                     loading="lazy"
                     className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"

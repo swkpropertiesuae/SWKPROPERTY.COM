@@ -34,9 +34,9 @@ export async function generateMetadata({
 
   return buildMeta({
     title: `${dev.name} Projects & Payment Plans | Dubai & UAE`,
-    description: `${dev.tagline}. Explore ${dev.projectCount} off-plan and ready developments by ${dev.name} and DLD escrow guidance with SWK Properties (ORN ${SITE.reraOrn}).`,
+    description: `${dev.tagline}. Explore off-plan and ready developments by ${dev.name} and DLD escrow guidance with SWK Properties (ORN ${SITE.reraOrn}).`,
     path: `/developers/${dev.slug}`,
-    image: dev.projects[0]?.images[0] || "/img/hero/dubai-skyline-hero.webp",
+    image: dev.projects[0]?.images[0] || "/img/hero/banner-developers.webp",
     keywords: [
       dev.name,
       `${dev.name} Dubai projects`,
@@ -78,7 +78,7 @@ export default async function DeveloperDetailPage({
         ]}
         meta={
           <>
-            <span>{dev.projectCount} Tracked Releases</span>
+            <span>Direct Allocation Desk</span>
             <span className="text-[#cfcfcf]">·</span>
             <span>HQ: {dev.headquarters}</span>
             {dev.founded ? (
@@ -131,7 +131,7 @@ export default async function DeveloperDetailPage({
               {[
                 ["Primary Emirate", dev.emirate],
                 ["Headquarters", dev.headquarters],
-                ["Tracked Projects", `${dev.projectCount} releases`],
+                ["Signature Focus", dev.knownFor],
                 ["Flagship Corridors", dev.flagshipAreas.join(", ") || "Dubai & UAE"],
               ].map(([k, v]) => (
                 <div key={k} className="flex items-start justify-between gap-4 py-3.5">
@@ -149,7 +149,7 @@ export default async function DeveloperDetailPage({
         <div className="mx-auto max-w-[1260px] px-4 sm:px-8">
           <SectionEyebrow>{dev.name.toUpperCase()} PORTFOLIO</SectionEyebrow>
           <SplitHeading
-            primary={`${dev.projectCount} verified`}
+            primary="Featured"
             muted="developments"
             size="md"
             inline
@@ -165,13 +165,13 @@ export default async function DeveloperDetailPage({
               >
                 <div className="relative aspect-[16/10] w-full overflow-hidden bg-[#ececec]">
                   <img
-                    src={proj.thumb || proj.image}
+                    src={proj.image}
                     alt={`${proj.name} by ${dev.name}`}
                     loading="lazy"
                     className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />
                   <span className="absolute bottom-3 right-3 rounded-full bg-white/90 px-2.5 py-0.5 text-[10px] font-medium text-[#121212]">
-                    Developer Render
+                    Architectural Visual
                   </span>
                 </div>
                 <div className="flex flex-1 flex-col justify-between p-6">

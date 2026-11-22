@@ -746,7 +746,7 @@ export default function CalculatorsPage() {
               <div className="mt-8 border-t border-white/10 pt-5 flex items-center justify-between text-xs text-[#8b8b8b]">
                 <span>0% Buyer Agency Fee on primary launches</span>
                 <BracketLink href="/off-plan" variant="dark" size="sm">
-                  Explore 108+ Projects
+                  Explore Premier Projects
                 </BracketLink>
               </div>
             </div>

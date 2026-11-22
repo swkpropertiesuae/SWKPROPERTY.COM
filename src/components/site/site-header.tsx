@@ -3,37 +3,70 @@
 import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Heart, Menu, X } from "lucide-react";
+import { ArrowUpRight, Heart, Menu, X } from "lucide-react";
 import { CURRENCY_RATES, type CurrencyCode, usePrefs } from "@/lib/prefs";
 import { SITE } from "@/lib/swk";
 import { BracketLink } from "@/components/avenlo/bracket-button";
 
+const PROPERTIES_MENU = [
+  {
+    href: "/off-plan",
+    label: "Off-Plan Launches",
+    desc: "Direct developer allocations across Nakheel, Binghatti, Emaar, DAMAC, Azizi & Sobha",
+  },
+  {
+    href: "/buy",
+    label: "Secondary (Ready Homes)",
+    desc: "Verified resale apartments, villas & penthouses with Title Deed clarity",
+  },
+  {
+    href: "/properties?completion=Ready",
+    label: "Handover & Ready Transfer",
+    desc: "Move-in-ready residences with immediate DLD Trustee transfer & keys",
+  },
+  {
+    href: "/rent",
+    label: "Leasing & Rentals",
+    desc: "Yearly residential leasing with Ejari registration & tenant advisory",
+  },
+  {
+    href: "/properties?type=Office",
+    label: "Commercial Spaces",
+    desc: "Grade-A fitted offices & executive suites along Sheikh Zayed Road & Business Bay",
+  },
+  {
+    href: "/properties",
+    label: "All Properties & Map Search",
+    desc: "Browse full Dubai & UAE portfolio with live currency & area filters",
+  },
+];
+
 const TOP_NAV = [
-  { href: "/properties", label: "Properties" },
-  { href: "/off-plan", label: "Off-Plan" },
   { href: "/developers", label: "Developers" },
   { href: "/services", label: "Services" },
+  { href: "/about", label: "About" },
 ];
 
 const PAGES_COLUMNS = [
   {
-    heading: "Explore",
+    heading: "Properties",
     links: [
       { href: "/", label: "Home" },
-      { href: "/properties", label: "All Properties" },
-      { href: "/buy", label: "Buy Ready Homes" },
-      { href: "/rent", label: "Rent & Leasing" },
       { href: "/off-plan", label: "Off-Plan Launches" },
+      { href: "/buy", label: "Secondary Market" },
+      { href: "/properties?completion=Ready", label: "Handover & Ready" },
+      { href: "/rent", label: "Leasing & Rentals" },
+      { href: "/properties?type=Office", label: "Commercial Spaces" },
       { href: "/list-your-property", label: "List Your Property" },
     ],
   },
   {
     heading: "Dubai Ecosystem",
     links: [
-      { href: "/developers", label: "27+ Master Developers" },
+      { href: "/developers", label: "Master Developers" },
       { href: "/communities", label: "Dubai Communities" },
       { href: "/services", label: "Advisory Services" },
-      { href: "/agents", label: "Advisors & Team" },
+      { href: "/agents", label: "Our Advisory Team" },
       { href: "/insights", label: "Market Insights" },
       { href: "/guides", label: "Dubai Property Guides" },
     ],
@@ -63,13 +96,21 @@ export function SiteHeader() {
     setDrawerOpen,
   } = usePrefs();
 
-  const [pagesOpen, setPagesOpen] = useState(false);
+  const [openMenu, setOpenMenu] = useState<"properties" | "pages" | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
+  const navRef = useRef<HTMLDivElement>(null);
 
-  const isActive = (href: string) =>
-    href === "/" ? pathname === "/" : pathname === href || pathname.startsWith(`${href}/`);
+  const isActive = (href: string) => {
+    const clean = href.split("?")[0];
+    return clean === "/" ? pathname === "/" : pathname === clean || pathname.startsWith(`${clean}/`);
+  };
+
+  const propertiesActive =
+    pathname.startsWith("/properties") ||
+    pathname.startsWith("/off-plan") ||
+    pathname.startsWith("/buy") ||
+    pathname.startsWith("/rent");
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
@@ -80,13 +121,13 @@ export function SiteHeader() {
 
   useEffect(() => {
     const onClickOutside = (e: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
-        setPagesOpen(false);
+      if (navRef.current && !navRef.current.contains(e.target as Node)) {
+        setOpenMenu(null);
       }
     };
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
-        setPagesOpen(false);
+        setOpenMenu(null);
         setMobileOpen(false);
       }
     };
@@ -108,40 +149,112 @@ export function SiteHeader() {
           : "bg-white/88 backdrop-blur-md border-b border-black/[0.04]"
       }`}
     >
-      <div className="mx-auto flex h-[78px] sm:h-[88px] max-w-[1260px] items-center justify-between gap-4 px-4 sm:px-8">
-        {/* Left: Uploaded Transparent SWK Crest + Architectural Lockup */}
+      <div className="mx-auto flex h-[80px] sm:h-[88px] max-w-[1260px] items-center justify-between gap-4 px-4 sm:px-8">
+        {/* Left: Unified Transparent SWK Crest Icon + Calligraphic Wordmark */}
         <Link
           href="/"
-          className="group flex shrink-0 items-center gap-3 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#121212]"
+          className="group flex shrink-0 items-center gap-2.5 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#121212]"
           aria-label="SWK Properties Dubai Home"
         >
           <img
-            src="/brand/swk-crest-2026-192.webp"
+            src="/brand/swk-icon-192.webp"
             width={44}
             height={44}
             alt="SWK Properties Emblem"
             fetchPriority="high"
-            className="h-10 w-10 sm:h-11 sm:w-11 shrink-0 object-contain transition-transform duration-300 group-hover:scale-[1.03]"
+            className="h-10 w-10 sm:h-11 sm:w-11 shrink-0 object-contain transition-transform duration-300 group-hover:scale-[1.04]"
           />
-          <div className="flex flex-col leading-none">
-            <span className="text-[19px] sm:text-[21px] font-semibold tracking-[-0.04em] text-[#121212]">
-              SWK Properties
-            </span>
-            <span className="mt-1 text-[9.5px] sm:text-[10px] font-medium uppercase tracking-[0.22em] text-[#8b8b8b]">
-              DUBAI REAL ESTATE
-            </span>
-          </div>
+          <img
+            src="/brand/swk-logo-light.webp"
+            width={116}
+            height={53}
+            alt="SWK Properties"
+            fetchPriority="high"
+            className="h-9 sm:h-10 w-auto object-contain"
+          />
         </Link>
 
         {/* Center-Right: Avenlo "+ LINK" Architectural Navigation */}
-        <div className="hidden lg:flex items-center gap-7 xl:gap-8">
+        <div ref={navRef} className="hidden lg:flex items-center gap-7 xl:gap-8">
           <nav aria-label="Primary navigation" className="flex items-center gap-6 xl:gap-7">
+            {/* "+ PROPERTIES" Dropdown (Off-Plan, Secondary, Handover, Leasing, Commercial Spaces) */}
+            <div className="relative">
+              <button
+                type="button"
+                onClick={() => setOpenMenu((m) => (m === "properties" ? null : "properties"))}
+                aria-expanded={openMenu === "properties"}
+                aria-controls="swk-properties-panel"
+                className={`group inline-flex cursor-pointer items-center gap-1.5 text-[12px] font-medium uppercase tracking-[0.12em] transition-colors ${
+                  openMenu === "properties" || propertiesActive
+                    ? "text-[#121212]"
+                    : "text-[#121212]/75 hover:text-[#121212]"
+                }`}
+              >
+                <span
+                  aria-hidden="true"
+                  className={`text-[13px] font-light transition-transform duration-200 ${
+                    openMenu === "properties"
+                      ? "rotate-45 text-[#0e9f6e]"
+                      : propertiesActive
+                        ? "text-[#0e9f6e]"
+                        : "text-[#8b8b8b] group-hover:rotate-90"
+                  }`}
+                >
+                  +
+                </span>
+                <span>Properties</span>
+              </button>
+
+              {openMenu === "properties" ? (
+                <div
+                  id="swk-properties-panel"
+                  className="absolute left-0 top-[calc(100%+22px)] z-50 w-[640px] rounded-2xl border border-black/[0.08] bg-white p-6 shadow-[0_24px_60px_rgba(18,18,18,0.14)]"
+                >
+                  <div className="mb-4 flex items-center justify-between border-b border-black/[0.06] pb-3">
+                    <span className="text-[10px] font-medium uppercase tracking-[0.22em] text-[#8b8b8b]">
+                      UAE PROPERTY PORTFOLIO
+                    </span>
+                    <Link
+                      href="/list-your-property"
+                      onClick={() => setOpenMenu(null)}
+                      className="inline-flex items-center gap-1 text-[11px] font-medium text-[#0e9f6e] hover:underline"
+                    >
+                      <span>List Your Property</span>
+                      <ArrowUpRight className="h-3 w-3" />
+                    </Link>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2.5">
+                    {PROPERTIES_MENU.map((item) => (
+                      <Link
+                        key={item.href}
+                        href={item.href}
+                        onClick={() => setOpenMenu(null)}
+                        className="group rounded-xl border border-transparent bg-[#f8f8f8] p-4 transition-all hover:border-black/15 hover:bg-white hover:shadow-sm"
+                      >
+                        <div className="flex items-center justify-between gap-2">
+                          <span className="text-sm font-medium tracking-[-0.015em] text-[#121212] group-hover:text-[#0e9f6e]">
+                            {item.label}
+                          </span>
+                          <ArrowUpRight className="h-3.5 w-3.5 text-[#8b8b8b] transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-[#121212]" />
+                        </div>
+                        <p className="mt-1.5 text-[11.5px] leading-snug text-[#666666]">
+                          {item.desc}
+                        </p>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              ) : null}
+            </div>
+
+            {/* + DEVELOPERS, + SERVICES, + ABOUT */}
             {TOP_NAV.map((item) => {
               const active = isActive(item.href);
               return (
                 <Link
                   key={item.href}
                   href={item.href}
+                  onClick={() => setOpenMenu(null)}
                   aria-current={active ? "page" : undefined}
                   className={`group inline-flex items-center gap-1.5 text-[12px] font-medium uppercase tracking-[0.12em] transition-colors ${
                     active ? "text-[#121212]" : "text-[#121212]/75 hover:text-[#121212]"
@@ -161,20 +274,20 @@ export function SiteHeader() {
             })}
 
             {/* "+ PAGES" 3-Column Avenlo Mega Dropdown */}
-            <div ref={dropdownRef} className="relative">
+            <div className="relative">
               <button
                 type="button"
-                onClick={() => setPagesOpen((v) => !v)}
-                aria-expanded={pagesOpen}
+                onClick={() => setOpenMenu((m) => (m === "pages" ? null : "pages"))}
+                aria-expanded={openMenu === "pages"}
                 aria-controls="swk-pages-panel"
                 className={`group inline-flex cursor-pointer items-center gap-1.5 text-[12px] font-medium uppercase tracking-[0.12em] transition-colors ${
-                  pagesOpen ? "text-[#121212]" : "text-[#121212]/75 hover:text-[#121212]"
+                  openMenu === "pages" ? "text-[#121212]" : "text-[#121212]/75 hover:text-[#121212]"
                 }`}
               >
                 <span
                   aria-hidden="true"
                   className={`text-[13px] font-light transition-transform duration-200 ${
-                    pagesOpen ? "rotate-45 text-[#121212]" : "text-[#8b8b8b]"
+                    openMenu === "pages" ? "rotate-45 text-[#121212]" : "text-[#8b8b8b]"
                   }`}
                 >
                   +
@@ -182,7 +295,7 @@ export function SiteHeader() {
                 <span>Pages</span>
               </button>
 
-              {pagesOpen ? (
+              {openMenu === "pages" ? (
                 <div
                   id="swk-pages-panel"
                   className="absolute right-0 top-[calc(100%+22px)] z-50 w-[680px] rounded-2xl border border-black/[0.08] bg-white p-8 shadow-[0_24px_60px_rgba(18,18,18,0.14)]"
@@ -198,7 +311,7 @@ export function SiteHeader() {
                             <li key={lnk.href}>
                               <Link
                                 href={lnk.href}
-                                onClick={() => setPagesOpen(false)}
+                                onClick={() => setOpenMenu(null)}
                                 className={`block text-[14px] tracking-[-0.015em] transition-colors ${
                                   isActive(lnk.href)
                                     ? "font-medium text-[#121212]"
@@ -244,7 +357,7 @@ export function SiteHeader() {
                       <button
                         type="button"
                         onClick={() => {
-                          setPagesOpen(false);
+                          setOpenMenu(null);
                           setDrawerOpen(true);
                         }}
                         className="inline-flex cursor-pointer items-center gap-1.5 rounded-lg border border-black/10 bg-[#f7f7f7] px-2.5 py-1.5 text-xs font-medium text-[#121212] hover:bg-[#ececec]"
@@ -289,26 +402,53 @@ export function SiteHeader() {
       {/* Clean Light Mobile Drawer */}
       {mobileOpen ? (
         <div className="lg:hidden border-t border-black/[0.08] bg-white px-4 py-6 shadow-xl">
-          <div className="grid grid-cols-2 gap-2.5">
+          <p className="mb-2.5 text-[10px] font-medium uppercase tracking-[0.22em] text-[#8b8b8b]">
+            Properties
+          </p>
+          <div className="grid grid-cols-2 gap-2">
             {[
-              { href: "/properties", label: "Properties" },
-              { href: "/off-plan", label: "Off-Plan Launches" },
-              { href: "/developers", label: "27+ Developers" },
-              { href: "/communities", label: "Communities" },
+              { href: "/off-plan", label: "Off-Plan" },
+              { href: "/buy", label: "Secondary" },
+              { href: "/properties?completion=Ready", label: "Handover" },
+              { href: "/rent", label: "Leasing" },
+              { href: "/properties?type=Office", label: "Commercial" },
+              { href: "/properties", label: "All Properties" },
+            ].map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                onClick={() => setMobileOpen(false)}
+                className={`flex min-h-[44px] items-center justify-between rounded-xl px-3.5 py-2 text-sm font-medium transition-colors ${
+                  isActive(item.href)
+                    ? "bg-[#121212] text-white"
+                    : "bg-[#f7f7f7] text-[#121212] hover:bg-[#ececec]"
+                }`}
+              >
+                <span>{item.label}</span>
+                <span className="text-xs opacity-50">→</span>
+              </Link>
+            ))}
+          </div>
+
+          <p className="mt-5 mb-2.5 text-[10px] font-medium uppercase tracking-[0.22em] text-[#8b8b8b]">
+            Explore
+          </p>
+          <div className="grid grid-cols-2 gap-2">
+            {[
+              { href: "/developers", label: "Developers" },
               { href: "/services", label: "Services" },
-              { href: "/calculators", label: "Calculators" },
-              { href: "/agents", label: "Advisors" },
-              { href: "/insights", label: "Insights" },
-              { href: "/guides", label: "Dubai Guides" },
               { href: "/about", label: "About SWK" },
-              { href: "/list-your-property", label: "List Property" },
+              { href: "/communities", label: "Communities" },
+              { href: "/agents", label: "Our Team" },
+              { href: "/calculators", label: "Calculators" },
+              { href: "/insights", label: "Insights" },
               { href: "/contact", label: "Contact" },
             ].map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
                 onClick={() => setMobileOpen(false)}
-                className={`flex min-h-[46px] items-center justify-between rounded-xl px-3.5 py-2.5 text-sm font-medium transition-colors ${
+                className={`flex min-h-[44px] items-center justify-between rounded-xl px-3.5 py-2 text-sm font-medium transition-colors ${
                   isActive(item.href)
                     ? "bg-[#121212] text-white"
                     : "bg-[#f7f7f7] text-[#121212] hover:bg-[#ececec]"
