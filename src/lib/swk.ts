@@ -68,15 +68,20 @@ export const stats = [
 
 const img = (p: string) => `/img/${p}`;
 
-export const communities = communitiesJson.map((c) => ({
-  id: c.id,
-  slug: c.id,
-  name: c.name,
-  blurb: c.blurb,
-  tagline: c.blurb,
-  image: img(`communities/${c.id}-hd.webp`),
-  thumb: img(`communities/${c.id}-hd.webp`),
-}));
+export const communities = communitiesJson.map((c) => {
+  const imagePath = c.image.startsWith("/")
+    ? c.image
+    : img(`communities/${c.id}-hd.webp`);
+  return {
+    id: c.id,
+    slug: c.id,
+    name: c.name,
+    blurb: c.blurb,
+    tagline: c.blurb,
+    image: imagePath,
+    thumb: imagePath,
+  };
+});
 
 export const services = servicesJson;
 
@@ -122,16 +127,16 @@ const COORDS: Record<string, { city: string; code: string; lat: number; lng: num
 };
 
 const UNIQUE_CLIENT_PORTRAIT_BY_NAME: Record<string, string> = {
-  "Arjun S.": "/img/clients/arjun-s.jpg",
-  "Priya M.": "/img/clients/priya-m.jpg",
-  "Rohan K.": "/img/clients/rohan-k.jpg",
-  "Ahmed R.": "/img/clients/ahmed-r.jpg",
-  "Sana A.": "/img/clients/sana-a.jpg",
-  "Elena V.": "/img/clients/elena-v.jpg",
-  "James W.": "/img/clients/james-w.jpg",
-  "Charlotte B.": "/img/clients/charlotte-b.jpg",
-  "Khalid A.": "/img/clients/khalid-a.jpg",
-  "Daniel C.": "/img/clients/daniel-c.jpg",
+  "Arjun S.": "/img/clients/arjun-s.jpg?v=2",
+  "Priya M.": "/img/clients/priya-m.jpg?v=2",
+  "Rohan K.": "/img/clients/rohan-k.jpg?v=2",
+  "Ahmed R.": "/img/clients/ahmed-r.jpg?v=2",
+  "Sana A.": "/img/clients/sana-a.jpg?v=2",
+  "Elena V.": "/img/clients/elena-v.jpg?v=2",
+  "James W.": "/img/clients/james-w.jpg?v=2",
+  "Charlotte B.": "/img/clients/charlotte-b.jpg?v=2",
+  "Khalid A.": "/img/clients/khalid-a.jpg?v=2",
+  "Daniel C.": "/img/clients/daniel-c.jpg?v=2",
 };
 
 const allMappedTestimonials = testimonialsJson

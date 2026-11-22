@@ -13,7 +13,7 @@ import {
   horizontalTestimonials,
 } from "@/lib/swk";
 import { developers, projects, type Project } from "@/lib/developers";
-import { blogArticles } from "@/lib/blog";
+import { blogIndex } from "@/lib/blog";
 import { BracketLink } from "@/components/avenlo/bracket-button";
 import {
   BlurReveal,
@@ -30,18 +30,17 @@ import {
 import { LogoCloudMarquee } from "@/components/ui/logo-cloud-marquee";
 import { CommunityFlipCard } from "@/components/ui/perspective-flip-card";
 import {
-  TestimonialSlider,
-  type SliderReview,
-} from "@/components/ui/testimonial-slider";
+  AnimatedTestimonials,
+  type Testimonial,
+} from "@/components/ui/animated-testimonials";
 import {
   InteractiveImageGallery,
   type GalleryItem,
 } from "@/components/ui/interactive-image-gallery";
 import { HoverExpand, type HoverExpandItem } from "@/components/ui/hover-expand";
-import {
-  ElevatorDoorsGallery,
-  type ElevatorFloorItem,
-} from "@/components/ui/elevator-doors-gallery";
+import TiltStackScroll, {
+  type TiltStackCard,
+} from "@/components/ui/tilt-stack-scroll";
 
 /* -------------------------------------------------------------------------- */
 /* 01. ACTIVE ARCHITECTURAL HERO OVER LIVE 21ST.DEV MESH DRIFT SHADER WAVES   */
@@ -544,266 +543,80 @@ const CAROUSEL_SLUGS_BY_TAB: Record<LaunchCategory, string[]> = {
   ],
 };
 
-const SIGNATURE_ELEVATOR_CONFIG = [
+const SIGNATURE_TILT_CONFIG = [
   {
     slug: "palm-springs-beachfront-villas",
-    floor: 1,
-    shortCaption: "Private Gulf-front villas along Nakheel's iconic palm fronds.",
-  },
-  {
-    slug: "creek-haven",
-    floor: 12,
-    shortCaption: "Waterfront promenade residences framing the Dubai Creek skyline.",
-  },
-  {
-    slug: "damac-lagoons",
-    floor: 25,
-    shortCaption: "Mediterranean resort clusters surrounding crystal swimmable lagoons.",
-  },
-  {
-    slug: "riviera",
-    floor: 38,
-    shortCaption: "French Riviera-inspired boulevard overlooking MBR City waters.",
-  },
-  {
-    slug: "bugatti-residences-by-binghatti",
-    floor: 52,
-    shortCaption: "Ultra-prime Riviera sky mansions with private car elevators.",
+    kicker: "Nakheel · Palm Jebel Ali & Palm Jumeirah",
+    price: "From AED 18.5M",
+    priceNote: "80/20 Plan · 0% Buyer Fee",
+    accent: "#51fec0",
   },
   {
     slug: "mercedes-benz-places",
-    floor: 65,
-    shortCaption: "Sensual Purity architecture rising 65 floors above Burj Khalifa.",
+    kicker: "Binghatti · Downtown Dubai · 65 Floors",
+    price: "From AED 8.8M",
+    priceNote: "70/30 Plan · Burj Views",
+    accent: "#67e8f9",
+  },
+  {
+    slug: "bugatti-residences-by-binghatti",
+    kicker: "Binghatti · Business Bay Sky Mansions",
+    price: "From AED 19.0M",
+    priceNote: "Private Car Lifts · Riviera",
+    accent: "#f4d35e",
+  },
+  {
+    slug: "creek-haven",
+    kicker: "Emaar · Dubai Creek Harbour · Blue Line",
+    price: "From AED 1.65M",
+    priceNote: "80/20 Emaar Schedule",
+    accent: "#51fec0",
+  },
+  {
+    slug: "damac-lagoons",
+    kicker: "DAMAC · Mediterranean Lagoon Villas",
+    price: "From AED 2.65M",
+    priceNote: "Crystal Swimmable Lagoons",
+    accent: "#93c5fd",
+  },
+  {
+    slug: "riviera",
+    kicker: "Azizi · MBR City Waterfront Boulevard",
+    price: "From AED 1.15M",
+    priceNote: "Ready & Off-Plan Phases",
+    accent: "#51fec0",
   },
 ] as const;
 
-function SignatureIconsElevatorShowcase() {
-  const [floorIndex, setFloorIndex] = useState(5);
-  const [inside, setInside] = useState(false);
-  const [replayKey, setReplayKey] = useState(0);
-  const [paused, setPaused] = useState(false);
-
-  const floorEntries = useMemo(() => {
-    return SIGNATURE_ELEVATOR_CONFIG.map((cfg) => {
+function SignatureIconsTiltShowcase() {
+  const tiltCards = useMemo<TiltStackCard[]>(() => {
+    return SIGNATURE_TILT_CONFIG.map((cfg) => {
       const proj = projects.find((p) => p.slug === cfg.slug) ?? projects[0];
-      const item: ElevatorFloorItem = {
-        src: proj.image,
-        alt: `${proj.name} by ${proj.developer} in ${proj.community}`,
-        floor: cfg.floor,
+      return {
         title: proj.name,
-        caption: cfg.shortCaption,
+        kicker: cfg.kicker,
+        description: proj.summary,
+        image: proj.image,
+        alt: `${proj.name} by ${proj.developer} in ${proj.community}`,
+        tags: proj.tags.slice(0, 3),
+        price: cfg.price,
+        priceNote: cfg.priceNote,
+        cta: "Explore Residence",
         href: `/off-plan/${proj.slug}`,
-        developer: proj.developer,
+        accent: cfg.accent,
       };
-      return { cfg, proj, item };
     });
   }, []);
 
-  const elevatorItems = useMemo(
-    () => floorEntries.map((entry) => entry.item),
-    [floorEntries]
-  );
-
-  const activeEntry = floorEntries[floorIndex] ?? floorEntries[0];
-
-  const handleRestart = () => {
-    setFloorIndex(0);
-    setInside(false);
-    setPaused(false);
-    setReplayKey((v) => v + 1);
-  };
-
-  const handleSelectDirectoryFloor = (idx: number) => {
-    setPaused(true);
-    setInside(false);
-    setFloorIndex(idx);
-  };
-
   return (
-    <div className="mt-8 grid grid-cols-1 items-center gap-8 lg:grid-cols-12 lg:gap-10">
-      {/* Left: Exact 21st.dev Elevator Doors Gallery Stage */}
-      <div className="lg:col-span-6 flex justify-center">
-        <div className="w-full max-w-[560px]">
-          <header className="mb-3.5 flex items-end justify-between gap-4 px-1">
-            <div>
-              <p className="mb-1.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-[#1b6aa7]">
-                Every floor, a signature Dubai address
-              </p>
-              <h3 className="text-[clamp(22px,3vw,28px)] font-medium leading-tight tracking-[-0.03em] text-[#121212]">
-                Signature Icons elevator gallery
-              </h3>
-            </div>
-            <button
-              data-replay
-              type="button"
-              onClick={handleRestart}
-              className="mb-0.5 inline-flex shrink-0 cursor-pointer items-center gap-1.5 rounded-full border border-white/90 bg-white/88 px-3.5 py-2 text-xs font-medium text-[#121212] shadow-xs backdrop-blur-md outline-none transition-all duration-200 hover:-translate-y-0.5 hover:border-[#121212] hover:bg-[#121212] hover:text-white hover:shadow-md focus-visible:ring-2 focus-visible:ring-ring"
-            >
-              <svg
-                aria-hidden="true"
-                width="12"
-                height="12"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.8"
-              >
-                <path d="M3 10a9 9 0 1 1 2.6 8.4M3 4v6h6" />
-              </svg>
-              Replay
-            </button>
-          </header>
-
-          <ElevatorDoorsGallery
-            key={replayKey}
-            items={elevatorItems}
-            floor={floorIndex}
-            onFloorChange={setFloorIndex}
-            inside={inside}
-            onInsideChange={setInside}
-            autoplay={!paused}
-            initialDelay={3400}
-            interval={5200}
-            aria-label="Dubai Signature Icons elevator gallery"
-            onPointerDownCapture={() => setPaused(true)}
-            onKeyDownCapture={(event) => {
-              if (
-                ["ArrowUp", "ArrowDown", "Home", "End", "Enter", " ", "Escape"].includes(
-                  event.key
-                )
-              ) {
-                setPaused(true);
-              }
-            }}
-          />
-
-          <footer className="mt-3 flex items-center justify-between gap-3 px-1 text-[11px] text-[#475569]">
-            <p>
-              Six landmark floors. Pick one, then step inside.
-              <span className="ml-2 text-[#1b6aa7] font-medium">Interactive</span>
-            </p>
-            <button
-              data-pause
-              type="button"
-              aria-pressed={paused}
-              onClick={() => setPaused((p) => !p)}
-              className="shrink-0 cursor-pointer rounded-full px-2.5 py-1 font-medium text-[#121212] transition-all duration-200 hover:bg-[#121212] hover:text-white focus-visible:ring-2 focus-visible:ring-ring motion-reduce:hidden"
-            >
-              {paused ? "Resume tour" : "Pause tour"}
-            </button>
-          </footer>
-        </div>
-      </div>
-
-      {/* Right: Synchronized Frosted-Glass Active Floor Dossier & Directory */}
-      <div className="lg:col-span-6">
-        <div className="rounded-[28px] border border-white/85 bg-white/82 p-6 sm:p-8 shadow-[0_24px_64px_rgba(12,56,96,0.12)] backdrop-blur-2xl">
-          {activeEntry ? (
-            <>
-              <div className="flex flex-wrap items-center justify-between gap-3">
-                <span className="inline-flex items-center gap-2 rounded-full border border-[#0e9f6e]/25 bg-[#0e9f6e]/[0.08] px-3 py-1 font-mono text-[11px] font-semibold uppercase tracking-[0.16em] text-[#0e9f6e]">
-                  <span className="h-1.5 w-1.5 rounded-full bg-[#0e9f6e]" />
-                  FLOOR {String(activeEntry.cfg.floor).padStart(2, "0")} · {activeEntry.proj.developer}
-                </span>
-                <span className="text-[11px] font-medium uppercase tracking-[0.16em] text-[#64748b]">
-                  {activeEntry.proj.community}
-                </span>
-              </div>
-
-              <h4 className="mt-4 text-2xl sm:text-3xl font-medium tracking-[-0.03em] text-[#121212]">
-                {activeEntry.proj.name}
-              </h4>
-
-              <p className="mt-2.5 text-sm leading-relaxed text-[#475569]">
-                {activeEntry.proj.summary}
-              </p>
-
-              {activeEntry.proj.tags.length > 0 ? (
-                <div className="mt-4 flex flex-wrap gap-1.5">
-                  {activeEntry.proj.tags.slice(0, 4).map((tag) => (
-                    <span
-                      key={tag}
-                      className="rounded-full border border-black/10 bg-white/90 px-3 py-1 text-[11px] font-medium text-[#334155]"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              ) : null}
-
-              <div className="mt-6 flex flex-wrap items-center gap-3">
-                <BracketLink
-                  href={`/off-plan/${activeEntry.proj.slug}`}
-                  variant="light"
-                  size="sm"
-                >
-                  Open Project Dossier
-                </BracketLink>
-                <Link
-                  href="/contact"
-                  className="inline-flex items-center gap-1.5 rounded-full border border-black/15 bg-white/90 px-4 py-2.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-[#121212] transition-all duration-200 hover:-translate-y-0.5 hover:border-[#121212] hover:bg-[#121212] hover:text-white hover:shadow-md"
-                >
-                  <span>Request Allocation</span>
-                  <ArrowUpRight className="h-3.5 w-3.5" />
-                </Link>
-              </div>
-            </>
-          ) : null}
-
-          {/* Interactive 6-Floor Architectural Directory */}
-          <div className="mt-7 border-t border-black/[0.08] pt-5">
-            <p className="mb-3 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#64748b]">
-              Direct Floor Directory · Click Any Tower To Ride
-            </p>
-            <div className="grid grid-cols-1 gap-1.5 sm:grid-cols-2">
-              {floorEntries.map((entry, idx) => {
-                const isSelected = idx === floorIndex;
-                return (
-                  <button
-                    key={entry.cfg.slug}
-                    type="button"
-                    onClick={() => handleSelectDirectoryFloor(idx)}
-                    className={`group flex w-full cursor-pointer items-center justify-between gap-2 rounded-xl border px-3.5 py-2.5 text-left transition-all duration-200 hover:-translate-y-0.5 ${
-                      isSelected
-                        ? "border-[#121212] bg-[#121212] text-white shadow-md"
-                        : "border-black/[0.07] bg-white/80 text-[#121212] hover:border-[#121212]/40 hover:bg-white hover:shadow-sm"
-                    }`}
-                  >
-                    <div className="flex min-w-0 items-center gap-2.5">
-                      <span
-                        className={`inline-flex h-6 w-7 shrink-0 items-center justify-center rounded-md font-mono text-[11px] font-semibold tabular-nums ${
-                          isSelected
-                            ? "bg-[#51fec0] text-[#121212]"
-                            : "bg-[#f1f5f9] text-[#475569] group-hover:bg-[#121212] group-hover:text-white"
-                        }`}
-                      >
-                        {String(entry.cfg.floor).padStart(2, "0")}
-                      </span>
-                      <div className="min-w-0">
-                        <p className="truncate text-xs font-semibold leading-tight">
-                          {entry.proj.name}
-                        </p>
-                        <p
-                          className={`truncate text-[10px] ${
-                            isSelected ? "text-white/70" : "text-[#64748b]"
-                          }`}
-                        >
-                          {entry.proj.developer}
-                        </p>
-                      </div>
-                    </div>
-                    <ArrowRight
-                      className={`h-3.5 w-3.5 shrink-0 transition-transform duration-200 group-hover:translate-x-0.5 ${
-                        isSelected ? "text-[#51fec0]" : "text-[#94a3b8] group-hover:text-[#121212]"
-                      }`}
-                    />
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-        </div>
-      </div>
+    <div className="mt-6">
+      <TiltStackScroll
+        cards={tiltCards}
+        eyebrow="SIGNATURE ICONS · SCROLL TO EXPLORE"
+        heading="Six landmark Dubai launches"
+        height="84svh"
+        snap={false}
+      />
     </div>
   );
 }
@@ -900,9 +713,9 @@ export function DubaiDeveloperPulse() {
           })}
         </div>
 
-        {/* Signature Icons -> 21st.dev Elevator Doors Gallery; other developer clusters -> Gallery Hover Carousel */}
+        {/* Signature Icons -> GSAP TiltStackScroll; other developer clusters -> Gallery Hover Carousel */}
         {activeTab === "signature" ? (
-          <SignatureIconsElevatorShowcase />
+          <SignatureIconsTiltShowcase />
         ) : (
           <GalleryHoverCarousel items={galleryItems} className="mt-8" />
         )}
@@ -1418,7 +1231,7 @@ export function CommunitiesAndTicker() {
         </div>
 
         <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {communities.map((comm) => (
+          {communities.slice(0, 8).map((comm) => (
             <CommunityFlipCard
               key={comm.slug}
               name={comm.name}
@@ -1516,53 +1329,82 @@ export function AcquisitionStagesWave() {
 }
 
 /* -------------------------------------------------------------------------- */
-/* 08. 21ST.DEV EDITORIAL TESTIMONIAL SLIDER (USER BOOKMARK #9203)            */
+/* 08. 21ST.DEV ANIMATED TESTIMONIALS — ALL 10 VERIFIED REPO CLIENT REVIEWS   */
 /* -------------------------------------------------------------------------- */
+const TRUSTED_MASTER_DEVELOPERS = [
+  "Nakheel",
+  "Emaar Properties",
+  "Binghatti",
+  "DAMAC",
+  "Azizi Developments",
+  "Sobha Realty",
+  "Omniyat",
+  "Ellington",
+  "Meraas",
+  "Aldar",
+];
+
 export function ClientVoices() {
-  // Non-overlapping stories (index 3..5 + horizontalTestimonials) keeping EditorialBento's quotePool[0..2] distinct
-  const sliderReviews = useMemo<SliderReview[]>(() => {
-    const allVoices = [...testimonials.slice(3), ...horizontalTestimonials].slice(0, 6);
-    return allVoices.map((item) => ({
-      id: item.id,
+  const allClientReviews = useMemo<Testimonial[]>(() => {
+    const combined = [...testimonials, ...horizontalTestimonials];
+    const seen = new Set<string>();
+    const unique = combined.filter((item) => {
+      if (seen.has(item.name)) return false;
+      seen.add(item.name);
+      return true;
+    });
+
+    return unique.map((item, idx) => ({
+      id: idx + 1,
       name: item.name,
-      affiliation: `${item.role} · ${item.city}`,
-      quote: item.quote,
-      imageSrc: item.image,
-      thumbnailSrc: item.image,
+      role: item.role,
+      company: item.city,
+      content: item.quote,
+      rating: item.rating ?? 5,
+      avatar: item.image,
     }));
   }, []);
 
   return (
-    <section className="bg-white/20 pt-14 pb-12 backdrop-blur-[2px]">
-      <div className="mx-auto max-w-[1260px] px-4 sm:px-8">
-        <div className="text-center">
-          <SectionEyebrow align="center">WHAT CLIENTS SAY</SectionEyebrow>
-          <SplitHeading
-            align="center"
-            primary="Judged on outcomes,"
-            muted="not on brochures"
-            className="mt-5"
-          />
-        </div>
-
-        <TestimonialSlider reviews={sliderReviews} className="mt-12" />
-      </div>
-    </section>
+    <AnimatedTestimonials
+      badgeText="What Clients Say · Verified Reviews"
+      title="Judged on outcomes, not on brochures"
+      subtitle="Hear directly from international buyers, relocating families, and yield-focused investors advised by our Sheikh Zayed Road desk across Dubai."
+      testimonials={allClientReviews}
+      autoRotateInterval={6500}
+      trustedCompanies={TRUSTED_MASTER_DEVELOPERS}
+      trustedCompaniesTitle="Advising acquisitions across Dubai & UAE master developers"
+    />
   );
 }
 
 /* -------------------------------------------------------------------------- */
 /* 09. DUBAI MARKET INSIGHTS & BUYER GUIDES PREVIEW                           */
 /* -------------------------------------------------------------------------- */
+const HOME_INSIGHT_TABS = [
+  { id: "latest", label: "Latest Briefings" },
+  { id: "Off-Plan & Launches", label: "Off-Plan & Launches" },
+  { id: "Rental Yields & Leasing", label: "Rental Yields" },
+  { id: "Buying & DLD Law", label: "Buying & DLD Law" },
+] as const;
+
 export function InsightsPreview() {
-  const latest = blogArticles.slice(0, 3);
+  const [tab, setTab] = useState<string>("latest");
+
+  const visibleArticles = useMemo(() => {
+    const pool =
+      tab === "latest"
+        ? blogIndex
+        : blogIndex.filter((a) => a.category === tab);
+    return pool.slice(0, 6);
+  }, [tab]);
 
   return (
     <section className="bg-white/24 py-24 backdrop-blur-[2px]">
       <div className="mx-auto max-w-[1260px] px-4 sm:px-8">
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div>
-            <SectionEyebrow>JOURNAL &amp; BRIEFINGS</SectionEyebrow>
+            <SectionEyebrow>JOURNAL &amp; RESEARCH ARCHIVE · SINCE 2008</SectionEyebrow>
             <SplitHeading
               primary="Notes from Sheikh"
               muted="Zayed Road"
@@ -1583,13 +1425,34 @@ export function InsightsPreview() {
               Investor Guide
             </Link>
             <BracketLink href="/insights" variant="light" size="sm">
-              All Briefings
+              Explore Full Archive
             </BracketLink>
           </div>
         </div>
 
-        <div className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-3">
-          {latest.map((art) => (
+        {/* Interactive Category Switcher */}
+        <div className="mt-8 flex flex-wrap items-center gap-2">
+          {HOME_INSIGHT_TABS.map((t) => {
+            const active = tab === t.id;
+            return (
+              <button
+                key={t.id}
+                type="button"
+                onClick={() => setTab(t.id)}
+                className={`cursor-pointer rounded-full px-4 py-2 text-xs font-medium transition-all duration-200 hover:-translate-y-0.5 ${
+                  active
+                    ? "bg-[#121212] text-white shadow-md"
+                    : "border border-white/85 bg-white/80 text-[#334155] backdrop-blur-xl hover:border-[#121212] hover:bg-white hover:text-[#121212]"
+                }`}
+              >
+                {t.label}
+              </button>
+            );
+          })}
+        </div>
+
+        <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {visibleArticles.map((art) => (
             <SpotlightCard key={art.slug}>
               <Link
                 href={`/insights/${art.slug}`}
@@ -1605,20 +1468,20 @@ export function InsightsPreview() {
                     />
                   </div>
                   <div className="p-6">
-                    <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#1b6aa7]">
+                    <p className="font-mono text-[10.5px] font-semibold uppercase tracking-[0.16em] text-[#1b6aa7]">
                       {art.category} · {art.readTime}
                     </p>
-                    <h3 className="mt-2.5 text-[20px] font-medium leading-[1.25] tracking-[-0.025em] text-[#121212] group-hover:text-[#0e9f6e] transition-colors">
+                    <h3 className="mt-2.5 text-[19px] font-medium leading-[1.25] tracking-[-0.025em] text-[#121212] group-hover:text-[#0e9f6e] transition-colors">
                       {art.title}
                     </h3>
-                    <p className="mt-2.5 line-clamp-3 text-sm leading-relaxed text-[#475569]">
+                    <p className="mt-2.5 line-clamp-3 text-xs leading-relaxed text-[#475569]">
                       {art.excerpt}
                     </p>
                   </div>
                 </div>
                 <div className="flex items-center justify-between border-t border-black/[0.06] px-6 py-4 text-xs font-medium text-[#121212]">
-                  <span>{art.date}</span>
-                  <span className="inline-flex items-center gap-1 group-hover:text-[#0e9f6e]">
+                  <span className="font-mono text-[11px] text-[#64748b]">{art.date}</span>
+                  <span className="inline-flex items-center gap-1 transition-all group-hover:translate-x-0.5 group-hover:text-[#0e9f6e]">
                     Read <ArrowUpRight className="h-3.5 w-3.5" />
                   </span>
                 </div>

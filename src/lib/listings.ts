@@ -1,3 +1,5 @@
+import listingsExpandedJson from "@/data/listings-expanded.json";
+
 export type ListingPurpose = "buy" | "rent" | "off-plan";
 export type ListingStatus = "available" | "reserved" | "rented" | "sold";
 export type PropertyType = "Apartment" | "Villa" | "Townhouse" | "Penthouse" | "Duplex" | "Office";
@@ -1256,6 +1258,7 @@ export const LISTINGS: PropertyListing[] = [
       verificationUrl: "https://dubailand.gov.ae",
     },
   },
+  ...(listingsExpandedJson as PropertyListing[]),
 ];
 
 export const listings = LISTINGS;

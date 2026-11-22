@@ -593,7 +593,7 @@ export function CalendlyCarousel({
                       <div className="relative w-full min-w-0 my-auto py-1">
                         <span
                           aria-hidden="true"
-                          className="font-serif text-2xl sm:text-3xl lg:text-4xl text-foreground/30 absolute right-full top-0 pr-1 select-none pointer-events-none hidden md:inline"
+                          className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-foreground/25 absolute right-full top-0 pr-1 select-none pointer-events-none hidden md:inline"
                         >
                           &ldquo;
                         </span>

@@ -105,24 +105,24 @@ export function SiteFooter() {
   return (
     <footer className="relative w-full overflow-hidden bg-[#121212] text-white">
       <div className="mx-auto max-w-[1260px] px-4 pt-20 pb-24 sm:px-8">
-        {/* Top Brand Row — Unified Transparent Icon + Calligraphic Wordmark */}
+        {/* Top Brand Row — Highlighted Prominent Transparent Icon + Calligraphic Wordmark */}
         <div className="mb-14 flex flex-wrap items-center justify-between gap-6 border-b border-white/[0.08] pb-10">
-          <Link href="/" className="inline-flex items-center gap-3.5" aria-label="SWK Properties Home">
+          <Link href="/" className="group inline-flex items-center gap-4" aria-label="SWK Properties Home">
             <img
               src="/brand/swk-icon-192.webp"
-              width={48}
-              height={48}
+              width={64}
+              height={64}
               alt="SWK Properties Emblem"
               loading="lazy"
-              className="h-12 w-12 object-contain"
+              className="h-14 w-14 sm:h-16 sm:w-16 object-contain drop-shadow-[0_6px_18px_rgba(212,175,55,0.42)] transition-transform duration-300 group-hover:scale-[1.06]"
             />
             <img
               src="/brand/swk-logo-dark.webp"
-              width={132}
-              height={60}
+              width={168}
+              height={76}
               alt="SWK Properties"
               loading="lazy"
-              className="h-11 w-auto object-contain"
+              className="h-12 sm:h-14 w-auto object-contain drop-shadow-[0_4px_14px_rgba(212,175,55,0.22)] transition-transform duration-300 group-hover:scale-[1.02]"
             />
           </Link>
 

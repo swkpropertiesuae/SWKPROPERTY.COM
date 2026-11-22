@@ -149,28 +149,28 @@ export function SiteHeader() {
           : "bg-white/58 backdrop-blur-xl border-b border-white/55"
       }`}
     >
-      <div className="mx-auto flex h-[80px] sm:h-[88px] max-w-[1260px] items-center justify-between gap-4 px-4 sm:px-8">
-        {/* Left: Unified Transparent SWK Crest Icon + Calligraphic Wordmark */}
+      <div className="mx-auto flex h-[88px] sm:h-[96px] max-w-[1260px] items-center justify-between gap-4 px-4 sm:px-8">
+        {/* Left: Highlighted Prominent Transparent SWK Crest Icon + Calligraphic Wordmark */}
         <Link
           href="/"
-          className="group flex shrink-0 items-center gap-2.5 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#121212]"
+          className="group flex shrink-0 items-center gap-3 rounded-2xl px-2 py-1 transition-all duration-300 hover:bg-white/70 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#121212]"
           aria-label="SWK Properties Dubai Home"
         >
           <img
             src="/brand/swk-icon-192.webp"
-            width={44}
-            height={44}
+            width={56}
+            height={56}
             alt="SWK Properties Emblem"
             fetchPriority="high"
-            className="h-10 w-10 sm:h-11 sm:w-11 shrink-0 object-contain transition-transform duration-300 group-hover:scale-[1.04]"
+            className="h-12 w-12 sm:h-14 sm:w-14 shrink-0 object-contain drop-shadow-[0_4px_14px_rgba(196,154,70,0.38)] transition-transform duration-300 group-hover:scale-[1.06]"
           />
           <img
             src="/brand/swk-logo-light.webp"
-            width={116}
-            height={53}
+            width={142}
+            height={64}
             alt="SWK Properties"
             fetchPriority="high"
-            className="h-9 sm:h-10 w-auto object-contain"
+            className="h-11 sm:h-12 w-auto object-contain drop-shadow-[0_2px_8px_rgba(12,35,58,0.08)] transition-transform duration-300 group-hover:scale-[1.02]"
           />
         </Link>
 

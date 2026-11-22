@@ -36,11 +36,14 @@ export async function generateMetadata({
     description: article.directAnswer,
     path: `/insights/${article.slug}`,
     ogImage: article.image,
+    type: "article",
+    publishedTime: article.date,
+    modifiedTime: article.updatedAt,
     keywords: [
-      article.title,
+      ...article.keywords,
       article.category,
-      "SWK Properties research",
-      "Dubai real estate guide",
+      "SWK Properties Dubai",
+      "Dubai real estate research",
     ],
   });
 }
@@ -120,12 +123,12 @@ export default async function InsightArticlePage({
           />
         </div>
 
-        {/* Direct Summary Callout */}
+        {/* Direct Summary Callout (AEO/GEO Speakable Direct Answer) */}
         <div className="rounded-2xl border border-white/80 bg-white/80 backdrop-blur-xl shadow-[0_14px_40px_rgba(12,56,96,0.08)] p-6 sm:p-8">
-          <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-[#8b8b8b]">
-            KEY SUMMARY
+          <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.2em] text-[#1b6aa7]">
+            KEY SUMMARY · DIRECT ANSWER
           </p>
-          <p className="mt-3 text-[16px] leading-[1.7] text-[#121212]">{article.directAnswer}</p>
+          <p data-speakable className="mt-3 text-[16px] leading-[1.7] text-[#121212]">{article.directAnswer}</p>
         </div>
 
         <p className="text-[17px] leading-[1.75] text-[#4a4a4a]">{article.content}</p>

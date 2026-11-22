@@ -16,10 +16,26 @@ import {
 } from "@/components/sections/showcase-sections";
 import { Faq } from "@/components/site/faq";
 import { CtaBanner } from "@/components/avenlo/motion";
+import { JsonLd } from "@/components/seo/json-ld";
+import { faqSchema, webPageLd } from "@/lib/seo";
+import { faqs } from "@/lib/swk";
 
 export default function Home() {
   return (
     <>
+      <JsonLd
+        id="ld-home-aeo"
+        data={[
+          webPageLd({
+            name: "SWK Properties | RERA-Licensed Dubai Real Estate Broker",
+            description:
+              "RERA-licensed Dubai real estate brokerage (ORN 51517) on Sheikh Zayed Road advising on off-plan developer launches, secondary homes, leasing, commercial spaces, and property management across the UAE.",
+            path: "/",
+            type: "RealEstateAgent",
+          }),
+          faqSchema(faqs),
+        ]}
+      />
       <link
         rel="preload"
         as="image"

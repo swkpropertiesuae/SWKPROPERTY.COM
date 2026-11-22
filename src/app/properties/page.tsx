@@ -329,9 +329,12 @@ function PropertiesExplorer() {
           </div>
 
           <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-black/[0.06] pt-3.5 text-xs text-[#525252]">
-            <div className="flex items-center gap-3">
+            <div className="flex flex-wrap items-center gap-3">
               <span className="font-medium text-[#121212]">
-                {filtered.length} {filtered.length === 1 ? "residence" : "residences"}
+                Showing curated Dubai &amp; UAE portfolio
+              </span>
+              <span className="hidden sm:inline text-[#64748b]">
+                · Additional private &amp; off-market stock available on request
               </span>
               {(query || purpose || propertyType || community || bedrooms || maxPrice || activeAdvancedCount > 0) ? (
                 <button

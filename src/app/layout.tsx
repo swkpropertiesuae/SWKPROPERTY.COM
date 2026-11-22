@@ -6,6 +6,7 @@ import { PrefsProvider } from "@/lib/prefs";
 import { SiteHeader } from "@/components/site/site-header";
 import { SiteFooter } from "@/components/site/site-footer";
 import { FloatingChrome } from "@/components/site/floating-chrome";
+import { TrendingProjectPopups } from "@/components/site/trending-project-popups";
 import { AvenloPreloader } from "@/components/avenlo/preloader";
 import { ShaderBackground } from "@/components/ui/shader-background";
 import { JsonLd } from "@/components/seo/json-ld";
@@ -136,6 +137,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className="overflow-x-clip">
       <head>
+        <link rel="alternate" type="text/plain" title="LLMs.txt" href="/llms.txt" />
+        <link rel="alternate" type="text/plain" title="LLMs Full Corpus" href="/llms-full.txt" />
+        <meta name="geo.region" content="AE-DU" />
+        <meta name="geo.placename" content="Dubai, United Arab Emirates" />
+        <meta name="geo.position" content="25.213925;55.277978" />
+        <meta name="ICBM" content="25.213925, 55.277978" />
         <script async src="https://www.googletagmanager.com/gtm.js?id=GTM-NMJ9MVNG" />
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-1FXMV3FTYL" />
         <script
@@ -171,6 +178,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </main>
             <SiteFooter />
             <FloatingChrome />
+            <TrendingProjectPopups />
             <Analytics />
           </div>
         </PrefsProvider>

@@ -184,7 +184,7 @@ export function FloatingChrome() {
 
       {/* 2. UAE PDPL Cookie Consent Card */}
       {!cookieConsent.decided ? (
-        <div className="fixed bottom-20 left-3 right-3 sm:left-6 sm:right-auto sm:max-w-sm z-50 rounded-2xl border border-black/10 bg-white p-5 text-[#121212] shadow-[0_20px_50px_rgba(18,18,18,0.16)]">
+        <div className="fixed bottom-24 left-3 right-3 sm:left-6 sm:right-auto sm:max-w-sm z-50 rounded-2xl border border-black/10 bg-white/95 p-5 text-[#121212] shadow-[0_20px_50px_rgba(18,18,18,0.16)] backdrop-blur-xl">
           <div className="flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.2em] text-[#8b8b8b]">
             <Cookie className="h-3.5 w-3.5 text-[#121212]" />
             <span>Privacy &amp; Cookies (UAE PDPL)</span>
@@ -278,17 +278,17 @@ export function FloatingChrome() {
           onClick={() => setPillOpen((v) => !v)}
           aria-expanded={pillOpen}
           aria-label="Open quick navigation menu"
-          className="inline-flex h-11 min-w-[205px] cursor-pointer items-center justify-between gap-6 rounded-xl border border-white/18 bg-[#0b1522]/84 px-4 text-xs font-medium text-white backdrop-blur-xl shadow-[0_14px_34px_rgba(8,22,38,0.32)] transition-all duration-200 hover:-translate-y-0.5 hover:border-[#51fec0]/50 hover:bg-[#0b1522]/96 hover:shadow-[0_18px_42px_rgba(8,22,38,0.48)]"
+          className="inline-flex h-12 min-w-[220px] cursor-pointer items-center justify-between gap-6 rounded-xl border border-white/18 bg-[#0b1522]/88 px-4 text-xs font-medium text-white backdrop-blur-xl shadow-[0_14px_34px_rgba(8,22,38,0.32)] transition-all duration-200 hover:-translate-y-0.5 hover:border-[#51fec0]/50 hover:bg-[#0b1522]/96 hover:shadow-[0_18px_42px_rgba(8,22,38,0.48)]"
         >
-          <span className="inline-flex items-center gap-2">
+          <span className="inline-flex items-center gap-2.5">
             <img
               src="/brand/swk-icon-192.webp"
-              width={20}
-              height={20}
+              width={28}
+              height={28}
               alt=""
-              className="h-5 w-5 object-contain"
+              className="h-7 w-7 object-contain drop-shadow-[0_2px_10px_rgba(212,175,55,0.45)]"
             />
-            <span className="tracking-[-0.01em]">SWK Properties</span>
+            <span className="font-semibold tracking-[-0.01em]">SWK Properties</span>
           </span>
           <span className="inline-flex items-center gap-1.5">
             {shortlistCount > 0 ? (
