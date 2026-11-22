@@ -1,1596 +1,1172 @@
-"use client"
+"use client";
 
-import { communityHref } from "@/lib/communities";
-import * as React from "react"
-import Link from "next/link"
-import { AnimatePresence, motion } from "framer-motion"
+import React, { useMemo, useState } from "react";
+import Link from "next/link";
+import { AnimatePresence, motion } from "framer-motion";
+import { ArrowRight, ArrowUpRight, Play, X } from "lucide-react";
 import {
-  ArrowRight,
-  ArrowUpRight,
-  Award,
-  Building2,
-  CheckCircle2,
-  Compass,
-  FileCheck2,
-  Globe,
-  Home,
-  KeyRound,
-  Landmark,
-  MapPin,
-  Phone,
-  ShieldCheck,
-  TrendingUp,
-  X,
-} from "lucide-react"
-
-import DishOrbitCarousel from "@/components/ui/dish-orbit-carousel"
-import InteractiveSelector from "@/components/ui/interactive-selector"
-import { TestimonialInfiniteMarquee } from "@/components/ui/infinite-moving-cards"
-import { SectionHeading } from "@/components/site/site-footer"
-import {
-  SITE,
   communities,
-  gallery,
-  horizontalTestimonials,
-  services,
+  SITE,
+  stats,
   team,
   testimonials,
-} from "@/lib/swk"
-import { WhatsAppIcon } from "@/components/site/whatsapp-icon";
+  horizontalTestimonials,
+} from "@/lib/swk";
+import { developers, projects, type Project } from "@/lib/developers";
+import { LISTINGS } from "@/lib/listings";
+import { blogArticles } from "@/lib/blog";
+import { BracketLink } from "@/components/avenlo/bracket-button";
+import {
+  BlurReveal,
+  LiveStatusDot,
+  ScrollRevealStatement,
+  SectionEyebrow,
+  SplitHeading,
+} from "@/components/avenlo/motion";
 
-/* ------------------------------------------------------------------ Dish Orbit Carousel Dubai Real Estate Hero (21st.dev kedhareswer/dish-orbit-carousel) */
-export function Hero() {
-  return (
-    <div className="relative bg-[#0e0b08]">
-      <DishOrbitCarousel />
-    </div>
-  )
-}
+/* -------------------------------------------------------------------------- */
+/* 01. BRIGHT ARCHITECTURAL HERO                                              */
+/* -------------------------------------------------------------------------- */
+export function AvenloHero() {
+  const [briefOpen, setBriefOpen] = useState(false);
 
-/* ----------------------------------------------------------------- TrustBar (18+ Years, 27+ Developers, 108+ Verified Projects — No RERA Number) */
-export function TrustBar() {
-  const items = [
-    ["18+", "Years of Experience"],
-    ["27+", "Partner Developers"],
-    ["108+", "Verified Projects"],
-    ["5", "UAE Emirates Covered"],
-  ]
   return (
-    <section className="border-y border-[#e6dfd2] bg-white">
-      <div className="mx-auto grid max-w-7xl grid-cols-2 gap-y-8 px-4 py-10 md:grid-cols-4 md:px-6">
-        {items.map(([n, l]) => (
-          <div key={l} className="text-center">
-            <div className="font-hero-raleway font-light text-4xl text-[#17130e] md:text-5xl">
-              {n}
+    <section className="relative overflow-hidden bg-white bg-arch-grid-fade pt-14 pb-0 sm:pt-20">
+      <div className="mx-auto max-w-[1260px] px-4 sm:px-8">
+        {/* Centered Eyebrow + Monumental Mixed Roman/Italic H1 */}
+        <div className="mx-auto max-w-5xl text-center">
+          <SectionEyebrow align="center">
+            RERA ORN {SITE.reraOrn} · DUBAI &amp; UAE REAL ESTATE
+          </SectionEyebrow>
+
+          <h1 className="mt-6 text-[46px] sm:text-[74px] md:text-[102px] lg:text-[124px] font-medium leading-[0.96] tracking-[-0.048em] text-[#121212]">
+            Own the{" "}
+            <span className="italic font-light">skyline</span>
+            <br />
+            before it rises
+          </h1>
+
+          <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-5">
+            <BracketLink href="/contact" variant="light" size="lg">
+              Work With Us
+            </BracketLink>
+            <Link
+              href="/off-plan"
+              className="inline-flex items-center gap-1.5 text-xs font-medium uppercase tracking-[0.16em] text-[#525252] transition-colors hover:text-[#121212]"
+            >
+              <span>Explore 108+ Developer Launches</span>
+              <ArrowUpRight className="h-3.5 w-3.5" />
+            </Link>
+          </div>
+        </div>
+
+        {/* Asymmetric Lower Meta Row (Avenlo Signature) */}
+        <div className="mt-14 sm:mt-20 grid grid-cols-1 items-end gap-10 md:grid-cols-12">
+          {/* Left: Arched Portrait + 18+ Stat */}
+          <div className="md:col-span-5 flex items-center gap-6">
+            <div className="relative h-[132px] w-[104px] sm:h-[154px] sm:w-[122px] shrink-0 overflow-hidden rounded-tl-[90px] rounded-bl-[90px] rounded-tr-xl rounded-br-xl bg-[#f5f5f5] border border-black/[0.06]">
+              <img
+                src="/img/team/haseeb-portrait.webp"
+                alt="Mohammad Haseeb — SWK Properties Sales & Operations Manager"
+                className="h-full w-full object-cover object-top"
+              />
             </div>
-            <div className="mt-2 text-xs font-bold tracking-[0.22em] text-[#94652c] uppercase">
-              {l}
+            <div>
+              <div className="text-[44px] sm:text-[56px] font-medium leading-none tracking-[-0.045em] text-[#121212] tabular-nums">
+                18+
+              </div>
+              <p className="mt-2 max-w-[160px] text-[13px] leading-snug text-[#525252]">
+                Years advising buyers across Dubai &amp; the UAE
+              </p>
             </div>
           </div>
-        ))}
-      </div>
-    </section>
-  )
-}
 
-/* ----------------------------------------------------------- Communities (Continuous Infinite Marquee Animation) */
-const EXTRA_UAE_COMMUNITIES = [
-  {
-    id: "dubai-south-azizi-venice",
-    slug: "dubai-south",
-    name: "Dubai South & Azizi Venice",
-    blurb: "Crystal lagoon living beside Al Maktoum International Airport and Expo City Dubai.",
-    image: "/img/projects/azizi/azizi-venice.webp",
-  },
-  {
-    id: "the-oasis-dubailand",
-    slug: "dubai-hills-estate",
-    name: "The Oasis & DAMAC Islands",
-    blurb: "Low-density waterfront villas, swimmable canals, and tropical island masterplans in Dubailand.",
-    image: "/img/projects/damac/damac-islands.webp",
-  },
-  {
-    id: "al-marjan-island-rak",
-    slug: "palm-jumeirah",
-    name: "Al Marjan Island & Al Hamra (RAK)",
-    blurb: "Ras Al Khaimah's freehold coral islands, Address beachfront towers, and championship golf marina.",
-    image: "/img/projects/emaar/avarra-by-palace.webp",
-  },
-  {
-    id: "yas-saadiyat-abu-dhabi",
-    slug: "dubai-creek-harbour",
-    name: "Yas & Saadiyat Island (Abu Dhabi)",
-    blurb: "Manchester City Yas Residences, museum district lagoons, and waterfront canal homes.",
-    image: "/img/projects/aldar/yas-bay.webp",
-  },
-  {
-    id: "siniya-island-uaq",
-    slug: "dubai-marina",
-    name: "Siniya Island & Downtown UAQ",
-    blurb: "Sobha Realty's natural mangrove island villas and 11-km coastal masterplan in Umm Al Quwain.",
-    image: "/img/projects/sobha/sobha-sanctuary.webp",
-  },
-]
-
-export function Communities() {
-  const allCommunityCards = [
-    ...communities.map((c) => ({
-      id: c.id,
-      name: c.name,
-      blurb: c.blurb,
-      href: communityHref(c.slug),
-      image: c.image,
-    })),
-    ...EXTRA_UAE_COMMUNITIES.map((c) => ({
-      id: c.id,
-      name: c.name,
-      blurb: c.blurb,
-      href: `/off-plan`,
-      image: c.image,
-    })),
-  ]
-
-  const row1 = [...allCommunityCards, ...allCommunityCards]
-  const row2 = [...allCommunityCards.slice().reverse(), ...allCommunityCards.slice().reverse()]
-
-  return (
-    <section id="communities" className="scroll-mt-20 border-b border-[#e6dfd2] bg-white py-24 overflow-hidden">
-      <div className="mx-auto max-w-7xl px-4 md:px-6 mb-12 flex flex-wrap items-end justify-between gap-6">
-        <div>
-          <p className="text-xs font-bold uppercase tracking-[0.26em] text-[#94652c]">
-            03 · Freehold Neighbourhoods &amp; Island Masterplans
-          </p>
-          <h2 className="mt-2 font-serif text-3xl md:text-5xl font-semibold text-[#17130e] leading-[1.08]">
-            Explore Dubai &amp; UAE Communities
-          </h2>
-          <p className="mt-2.5 max-w-2xl text-sm md:text-base text-[#4a4237] leading-relaxed">
-            From Downtown Dubai, Dubai Hills Estate, and Dubai South to Yas Island, Masaar in Sharjah, Siniya Island, and Al Marjan Island—inspect the districts our team advises on daily.
-          </p>
+          {/* Right: Circular Play / Market Brief Button + Split-Tone Editorial Note */}
+          <div className="md:col-span-5 md:col-start-8 flex flex-col items-start md:items-end text-left md:text-right">
+            <button
+              type="button"
+              onClick={() => setBriefOpen(true)}
+              aria-label="Open 2026 Dubai Market Briefing"
+              className="group inline-flex h-16 w-16 cursor-pointer items-center justify-center rounded-full border border-[#cfcfcf] bg-white text-[#121212] transition-all duration-300 hover:scale-105 hover:border-[#121212] hover:bg-[#121212] hover:text-white"
+            >
+              <Play className="h-5 w-5 translate-x-0.5 fill-current" />
+            </button>
+            <p className="mt-5 max-w-[320px] text-[15px] leading-[1.45] tracking-[-0.015em] text-[#121212]">
+              Dubai advisory built around{" "}
+              <span className="text-[#8b8b8b]">
+                live developer launches, RERA escrow clarity,
+              </span>{" "}
+              and real handover records.
+            </p>
+          </div>
         </div>
-        <Link
-          href="/communities"
-          className="inline-flex items-center gap-2 rounded-full bg-[#17130e] px-7 py-3.5 text-xs font-bold uppercase tracking-[0.18em] text-white transition hover:bg-[#94652c]"
+      </div>
+
+      {/* Architectural Skyline Layered Over Monumental Faint "Since 2008" Watermark */}
+      <div className="relative mt-10 sm:mt-14 w-full overflow-hidden">
+        <div
+          aria-hidden="true"
+          className="pointer-events-none select-none text-center text-[19vw] xl:text-[230px] font-medium leading-[0.82] tracking-[-0.055em] text-black/[0.045]"
         >
-          <span>All Community Guides</span>
-          <ArrowRight className="h-4 w-4 text-[#dcb888]" />
-        </Link>
-      </div>
-
-      <style>{`
-        @keyframes swk-marquee-left {
-          0% { transform: translateX(0%); }
-          100% { transform: translateX(-50%); }
-        }
-        @keyframes swk-marquee-right {
-          0% { transform: translateX(-50%); }
-          100% { transform: translateX(0%); }
-        }
-        .swk-track-left {
-          display: flex;
-          width: max-content;
-          animation: swk-marquee-left 120s linear infinite;
-        }
-        .swk-track-right {
-          display: flex;
-          width: max-content;
-          animation: swk-marquee-right 132s linear infinite;
-        }
-        .swk-track-left:hover,
-        .swk-track-right:hover {
-          animation-play-state: paused;
-        }
-      `}</style>
-
-      {/* Row 1: Continuous Infinite Marquee Moving Left */}
-      <div className="relative w-full overflow-hidden py-2">
-        <div className="swk-track-left gap-6 px-4">
-          {row1.map((item, idx) => (
-            <Link
-              key={`${item.id}-r1-${idx}`}
-              href={item.href}
-              className="group relative flex h-[320px] w-[360px] shrink-0 flex-col justify-end overflow-hidden rounded-3xl border border-[#e6dfd2] bg-[#17130e] p-6 text-white shadow-md transition-all duration-300 hover:-translate-y-1 hover:border-[#94652c]"
-            >
-              <img
-                src={item.image}
-                alt={item.name}
-                className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#17130e]/95 via-[#17130e]/40 to-transparent" />
-              <div className="relative z-10">
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-[#dcb888]/20 border border-[#dcb888]/40 px-3 py-0.5 text-[10px] font-bold uppercase tracking-[0.18em] text-[#dcb888]">
-                  <MapPin className="h-3 w-3" />
-                  Freehold Corridor
-                </span>
-                <h3 className="mt-2 font-serif text-2xl font-semibold text-white group-hover:text-[#dcb888]">
-                  {item.name}
-                </h3>
-                <p className="mt-1 line-clamp-2 text-xs text-white/85 leading-relaxed">
-                  {item.blurb}
-                </p>
-              </div>
-            </Link>
-          ))}
-        </div>
-      </div>
-
-      {/* Row 2: Continuous Counter-Scrolling Marquee Moving Right */}
-      <div className="relative mt-6 w-full overflow-hidden py-2">
-        <div className="swk-track-right gap-6 px-4">
-          {row2.map((item, idx) => (
-            <Link
-              key={`${item.id}-r2-${idx}`}
-              href={item.href}
-              className="group flex w-[380px] shrink-0 items-center gap-4 rounded-2xl border border-[#e6dfd2] bg-[#faf7f2] p-3.5 transition hover:border-[#94652c] hover:bg-white hover:shadow-md"
-            >
-              <img
-                src={item.image}
-                alt={item.name}
-                className="h-20 w-24 shrink-0 rounded-xl object-cover"
-              />
-              <div className="min-w-0 flex-1">
-                <div className="flex items-center justify-between gap-2">
-                  <h4 className="truncate font-serif text-lg font-semibold text-[#17130e] group-hover:text-[#94652c]">
-                    {item.name}
-                  </h4>
-                  <ArrowUpRight className="h-4 w-4 shrink-0 text-[#94652c]" />
-                </div>
-                <p className="mt-1 line-clamp-2 text-xs text-[#4a4237]">
-                  {item.blurb}
-                </p>
-              </div>
-            </Link>
-          ))}
-        </div>
-      </div>
-    </section>
-  )
-}
-
-/* ---------------------------------------------------------------- Aerial (Interactive Aerial Masterplan & Corridor Explorer) */
-const AERIAL_ZONES = [
-  {
-    id: "dubai-central",
-    badge: "Central Spine · Sheikh Zayed Road & Downtown",
-    title: "Downtown Dubai, Business Bay & Sobha Century",
-    emirate: "Dubai",
-    image: "/img/communities/downtown-dubai.webp",
-    priceBand: "AED 1.85M – 45M+",
-    paymentPlans: "60/40 · 70/30 · 80/20",
-    flagshipLaunches: [
-      "Binghatti Maybach Mercedes-Benz Places",
-      "Sobha Century (Sheikh Zayed Road)",
-      "Samana Downtown One",
-      "Avarra by Palace (Emaar)",
-    ],
-    summary:
-      "The vertical spine of Dubai stretching from our 27th-floor headquarters at Al Saqr Business Tower through DIFC and Burj Khalifa to the Dubai Water Canal. High global liquidity, year-round corporate tenant demand, and iconic branded towers.",
-    hotspots: [
-      { x: "34%", y: "42%", label: "Binghatti Maybach · Downtown" },
-      { x: "58%", y: "55%", label: "Samana Downtown One" },
-      { x: "22%", y: "66%", label: "Sobha Century · SZR Corridor" },
-    ],
-  },
-  {
-    id: "dubai-lagoon",
-    badge: "Lagoon & Villa Sanctuaries · Dubai South & Dubailand",
-    title: "Azizi Venice, Emaar The Oasis & DAMAC Islands",
-    emirate: "Dubai",
-    image: "/img/projects/azizi/azizi-venice.webp",
-    priceBand: "AED 1.15M – 18M+",
-    paymentPlans: "50/50 · 75/25 · 80/20 · 1% Monthly",
-    flagshipLaunches: [
-      "Azizi Venice (Dubai South)",
-      "Emaar The Oasis (Dubailand)",
-      "DAMAC Islands (Dubailand)",
-      "Dubai Hills Estate & Danube Greenz",
-    ],
-    summary:
-      "Master-planned swimmable crystal lagoons, golf estates, and botanical villa sanctuaries positioned along the Al Maktoum Airport and Dubailand growth corridors—our highest-volume segment for capital appreciation.",
-    hotspots: [
-      { x: "28%", y: "48%", label: "Azizi Venice · 18km Crystal Lagoon" },
-      { x: "62%", y: "38%", label: "Emaar The Oasis · Waterfront Mansions" },
-      { x: "52%", y: "68%", label: "DAMAC Islands & Lunaya Bloom Villas" },
-    ],
-  },
-  {
-    id: "dubai-islands",
-    badge: "Coastal & Island Masterplans · Dubai",
-    title: "The Meriva on Dubai Islands, Palm Jumeirah & Creek",
-    emirate: "Dubai",
-    image: "/img/projects/nakheel/dubai-islands.webp",
-    priceBand: "AED 2.2M – 60M+",
-    paymentPlans: "70/30 · 80/20 · 60/40",
-    flagshipLaunches: [
-      "The Meriva — Dubai Islands by Ellington",
-      "Ellington Berkeley Tower",
-      "Azizi Leily (Al Jaddaf Creek Corridor)",
-      "Sobha River Core (Hartland II)",
-    ],
-    summary:
-      "Waterfront living across Dubai's new coastal archipelagos and creekside sanctuaries, led by Ellington's design-led beachfront release on Dubai Islands and Sobha's riverfront boardwalks.",
-    hotspots: [
-      { x: "42%", y: "36%", label: "The Meriva · Dubai Islands by Ellington" },
-      { x: "66%", y: "58%", label: "Sobha River Core & Azizi Leily" },
-      { x: "25%", y: "62%", label: "Ellington Berkeley Tower" },
-    ],
-  },
-  {
-    id: "rak-uaq",
-    badge: "Northern Emirates Island Boom · RAK & Umm Al Quwain",
-    title: "Al Marjan Island, Siniya Island & Al Hamra Waterfront",
-    emirate: "Ras Al Khaimah & UAQ",
-    image: "/img/projects/sobha/sobha-seahaven.webp",
-    priceBand: "AED 1.35M – 28M+",
-    paymentPlans: "60/40 · 70/30 · 80/20",
-    flagshipLaunches: [
-      "Address Residences Al Marjan Island",
-      "Quattro Del Mar & Al Hamra Waterfront (RAK)",
-      "Sobha Siniya Island (Umm Al Quwain)",
-      "Downtown Umm Al Quwain",
-    ],
-    summary:
-      "Anchored by the multi-billion-dollar integrated resort transformation of Al Marjan Island in Ras Al Khaimah and Sobha's natural mangrove sanctuary on Siniya Island in Umm Al Quwain.",
-    hotspots: [
-      { x: "32%", y: "44%", label: "Address Residences · Al Marjan Island" },
-      { x: "58%", y: "52%", label: "Quattro Del Mar & Al Hamra Waterfront" },
-      { x: "74%", y: "64%", label: "Sobha Siniya Island & Downtown UAQ" },
-    ],
-  },
-  {
-    id: "abudhabi-sharjah",
-    badge: "Capital & Cultural Hubs · Abu Dhabi & Sharjah",
-    title: "Manchester City Yas Residences, Saadiyat & Masaar",
-    emirate: "Abu Dhabi & Sharjah",
-    image: "/img/projects/aldar/saadiyat-lagoons.webp",
-    priceBand: "AED 1.1M – 22M+",
-    paymentPlans: "50/50 · 60/40 · 65/35",
-    flagshipLaunches: [
-      "Manchester City Yas Residences (Yas Island)",
-      "Saadiyat Island & Yas Island Waterfront",
-      "Masaar Woodland Villas (Sharjah)",
-      "Alif — Aljada Boulevard (Sharjah)",
-    ],
-    summary:
-      "From branded canal residences on Yas Island and cultural district villas on Saadiyat Island in Abu Dhabi to Arada's 50,000-tree forested sanctuary of Masaar and Alif in Sharjah.",
-    hotspots: [
-      { x: "36%", y: "46%", label: "Manchester City Yas Residences" },
-      { x: "64%", y: "40%", label: "Saadiyat Island Sanctuary" },
-      { x: "48%", y: "70%", label: "Masaar & Alif · Sharjah" },
-    ],
-  },
-]
-
-export function Aerial() {
-  const [activeZoneIdx, setActiveZoneIdx] = React.useState(0)
-  const activeZone = AERIAL_ZONES[activeZoneIdx]
-
-  return (
-    <section id="aerial" className="scroll-mt-20 border-b border-[#e6dfd2] bg-[#f4efe6] py-24">
-      <div className="mx-auto max-w-7xl px-4 md:px-6">
-        <div className="flex flex-wrap items-end justify-between gap-6 mb-10">
-          <SectionHeading
-            eyebrow="Interactive Aerial Masterplan Explorer"
-            title={
-              <>
-                Inspect the UAE{" "}
-                <em className="text-[#94652c] not-italic">From Above.</em>
-              </>
-            }
-            lead="Select any of our 5 priority aerial corridors below to inspect live hotspot pins, price bands, payment structures, and flagship developer launches."
-          />
-
-          <div className="flex flex-wrap gap-2">
-            {AERIAL_ZONES.map((zone, idx) => {
-              const selected = idx === activeZoneIdx
-              return (
-                <button
-                  key={zone.id}
-                  type="button"
-                  onClick={() => setActiveZoneIdx(idx)}
-                  className={`rounded-full border px-4 py-2 text-xs font-bold uppercase tracking-[0.14em] transition-all ${
-                    selected
-                      ? "border-[#17130e] bg-[#17130e] text-white shadow-sm"
-                      : "border-[#e6dfd2] bg-white text-[#17130e] hover:border-[#94652c] hover:text-[#94652c]"
-                  }`}
-                >
-                  {zone.emirate} · 0{idx + 1}
-                </button>
-              )
-            })}
-          </div>
+          Since 2008
         </div>
 
-        {/* Interactive Aerial Viewport + Telemetry Panel */}
-        <div className="grid grid-cols-1 gap-8 lg:grid-cols-12 items-stretch">
-          {/* Left: Interactive Aerial Map Viewport with Animated Hotspot Pins */}
-          <div className="lg:col-span-7 relative min-h-[420px] md:min-h-[500px] overflow-hidden rounded-3xl border border-[#e6dfd2] bg-[#17130e] shadow-lg">
-            <AnimatePresence initial={false} mode="wait">
-              <motion.img
-                key={activeZone.image}
-                src={activeZone.image}
-                alt={activeZone.title}
-                loading="eager"
-                decoding="sync"
-                initial={{ opacity: 0, scale: 1.04 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.45 }}
-                className="absolute inset-0 h-full w-full object-cover"
-              />
-            </AnimatePresence>
-            <div className="absolute inset-0 bg-gradient-to-t from-[#17130e]/90 via-[#17130e]/25 to-[#17130e]/30" />
-
-            {/* Top Radar Bar */}
-            <div className="absolute top-4 left-4 right-4 flex flex-wrap items-center justify-between gap-2 z-10">
-              <span className="inline-flex items-center gap-2 rounded-full bg-[#17130e]/90 border border-[#dcb888]/40 px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-[#dcb888] backdrop-blur-md">
-                <Compass className="h-3.5 w-3.5 animate-spin" style={{ animationDuration: "12s" }} />
-                {activeZone.badge}
-              </span>
-              <span className="rounded-full bg-white/95 px-3.5 py-1.5 text-xs font-bold text-[#17130e] shadow-sm">
-                {activeZone.priceBand}
-              </span>
-            </div>
-
-            {/* Interactive Pulsing Hotspot Pins with Official SWK Portal Map Pin */}
-            {activeZone.hotspots.map((spot) => (
-              <div
-                key={spot.label}
-                style={{ left: spot.x, top: spot.y }}
-                className="absolute -translate-x-1/2 -translate-y-1/2 z-20 group"
-              >
-                <div className="flex items-center gap-2 rounded-full border border-[#dcb888] bg-[#17130e]/95 px-3 py-1.5 text-[11px] font-semibold text-white shadow-xl backdrop-blur-md transition-transform duration-300 hover:scale-105">
-                  <img
-                    src="/brand/swk-emblem.svg"
-                    alt=""
-                    className="h-4 w-3.5 object-contain shrink-0"
-                  />
-                  <span className="whitespace-nowrap">{spot.label}</span>
-                </div>
-              </div>
-            ))}
-
-            {/* Bottom Caption Overlay */}
-            <div className="absolute bottom-5 left-5 right-5 z-10 flex flex-wrap items-end justify-between gap-4 text-white">
-              <div className="max-w-xl">
-                <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#dcb888]">
-                  Aerial Sector 0{activeZoneIdx + 1} · {activeZone.emirate}
-                </p>
-                <h3 className="mt-1 font-serif text-2xl md:text-3xl font-semibold">
-                  {activeZone.title}
-                </h3>
-              </div>
+        <div className="relative z-10 mx-auto -mt-[8vw] sm:-mt-[95px] max-w-[1260px] px-4 sm:px-8">
+          <div className="relative overflow-hidden rounded-t-3xl border border-b-0 border-black/[0.08] bg-[#f5f5f5] shadow-[0_-20px_70px_rgba(18,18,18,0.06)]">
+            <img
+              src="/img/hero/dubai-skyline-hero.webp"
+              alt="Dubai skyline modern glass towers and architectural waterfront"
+              fetchPriority="high"
+              className="h-[320px] sm:h-[460px] md:h-[580px] w-full object-cover object-center"
+            />
+            <div className="absolute inset-x-0 bottom-0 flex flex-wrap items-center justify-between gap-3 bg-gradient-to-t from-[#121212]/80 via-[#121212]/35 to-transparent px-6 py-5 text-white">
+              <LiveStatusDot label="27+ UAE Developers · 108+ Verified Projects" tone="launch" />
               <Link
-                href="/off-plan"
-                className="inline-flex items-center gap-2 rounded-full bg-[#dcb888] px-5 py-2.5 text-xs font-bold uppercase tracking-[0.16em] text-[#17130e] transition hover:bg-white"
+                href="#dubai-launches"
+                className="text-xs font-medium uppercase tracking-[0.16em] text-white/90 hover:text-[#51fec0] transition-colors"
               >
-                <span>Inspect Corridor Releases</span>
-                <ArrowUpRight className="h-4 w-4" />
+                See 2026 New Releases ↓
               </Link>
             </div>
           </div>
+        </div>
+      </div>
 
-          {/* Right: Corridor Intelligence & Target Projects Panel */}
-          <div className="lg:col-span-5 flex flex-col justify-between rounded-3xl border border-[#e6dfd2] bg-white p-6 md:p-8 shadow-sm">
-            <div>
-              <div className="flex items-center justify-between border-b border-[#e6dfd2] pb-4">
-                <div>
-                  <span className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#94652c]">
-                    Corridor Briefing
-                  </span>
-                  <h4 className="mt-1 font-serif text-2xl font-semibold text-[#17130e]">
-                    {activeZone.emirate} Growth Matrix
-                  </h4>
-                </div>
-                <span className="rounded-xl bg-[#faf7f2] border border-[#e6dfd2] px-3 py-1.5 text-xs font-bold text-[#94652c]">
-                  {activeZone.paymentPlans}
-                </span>
+      {/* Clean Market Briefing Lightbox Modal */}
+      <AnimatePresence>
+        {briefOpen ? (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-[#121212]/70 p-4 backdrop-blur-md"
+            onClick={() => setBriefOpen(false)}
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.96, y: 12 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.96, y: 12 }}
+              onClick={(e) => e.stopPropagation()}
+              className="w-full max-w-2xl overflow-hidden rounded-2xl border border-white/15 bg-[#121212] text-white shadow-2xl"
+            >
+              <div className="flex items-center justify-between border-b border-white/10 px-6 py-4">
+                <SectionEyebrow tone="dark">2026 DUBAI MARKET BRIEFING</SectionEyebrow>
+                <button
+                  type="button"
+                  onClick={() => setBriefOpen(false)}
+                  aria-label="Close briefing"
+                  className="cursor-pointer rounded-full p-1.5 text-white/70 hover:bg-white/10 hover:text-white"
+                >
+                  <X className="h-4 w-4" />
+                </button>
               </div>
-
-              <p className="mt-4 text-sm text-[#4a4237] leading-relaxed">
-                {activeZone.summary}
-              </p>
-
-              <div className="mt-6">
-                <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#17130e] mb-3">
-                  Priority Target Projects in This Corridor:
+              <div className="p-6 sm:p-8 space-y-5">
+                <h2 className="text-2xl sm:text-3xl font-medium tracking-[-0.03em]">
+                  How SWK approaches Dubai&apos;s 2026 developer pipeline
+                </h2>
+                <p className="text-sm leading-relaxed text-white/75">
+                  With over 108 tracked launches across Emaar, Nakheel, Sobha, DAMAC, Binghatti, Azizi, Aldar, Ellington, and Arada, the difference between an average purchase and a resilient asset comes down to three checks: delivered build quality, RERA escrow protection, and realistic net rental yield after service charges.
                 </p>
-                <div className="space-y-2.5">
-                  {activeZone.flagshipLaunches.map((launch) => (
-                    <Link
-                      key={launch}
-                      href="/off-plan"
-                      className="flex items-center justify-between rounded-2xl border border-[#e6dfd2] bg-[#faf7f2] px-4 py-3 text-xs font-semibold text-[#17130e] transition hover:border-[#94652c] hover:bg-white"
-                    >
-                      <span className="flex items-center gap-2">
-                        <CheckCircle2 className="h-4 w-4 text-[#94652c]" />
-                        {launch}
-                      </span>
-                      <span className="text-[#94652c]">View Allocation →</span>
-                    </Link>
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-3 pt-2">
+                  {[
+                    { k: "0% Buyer Fee", v: "On primary developer launches" },
+                    { k: "Escrow Registered", v: "Under Dubai Law No. 8 / 2007" },
+                    { k: "5 Emirates", v: "Dubai, Abu Dhabi, Sharjah, RAK & UAQ" },
+                  ].map((item) => (
+                    <div key={item.k} className="rounded-xl bg-[#1e1e1e] p-4">
+                      <p className="text-sm font-medium text-[#51fec0]">{item.k}</p>
+                      <p className="mt-1 text-xs text-white/70">{item.v}</p>
+                    </div>
                   ))}
                 </div>
-              </div>
-            </div>
-
-            <div className="mt-6 flex flex-wrap items-center justify-between gap-3 border-t border-[#e6dfd2] pt-5">
-              <Link
-                href="/contact"
-                className="inline-flex items-center gap-2 rounded-full bg-[#17130e] px-6 py-3 text-xs font-bold uppercase tracking-[0.16em] text-white transition hover:bg-[#94652c]"
-              >
-                <span>Request Corridor Price Sheet</span>
-                <ArrowRight className="h-4 w-4 text-[#dcb888]" />
-              </Link>
-              <a
-                href={SITE.whatsappUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 text-xs font-bold text-[#94652c] hover:underline"
-              >
-                <WhatsAppIcon className="h-4 w-4" />
-                Ask on WhatsApp
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  )
-}
-
-/* ------------------------------------------------------------ Residences (Continuous Infinite Horizontal Animation) */
-const VISUALISATION_SHOWCASE = [
-  {
-    title: "Azizi Venice · Crystal Lagoon Mansions & Boulevard",
-    location: "Dubai South",
-    tag: "50/50 Payment Plan",
-    src: "/img/projects/azizi/azizi-venice.webp",
-  },
-  {
-    title: "Emaar The Oasis · Swimmable Canal Villas",
-    location: "Dubailand",
-    tag: "80/20 Payment Plan",
-    src: "/img/projects/emaar/greencrest.webp",
-  },
-  {
-    title: "DAMAC Islands · Tropical Waterfront Townhouses",
-    location: "Dubailand",
-    tag: "75/25 Payment Plan",
-    src: "/img/projects/damac/damac-islands.webp",
-  },
-  {
-    title: "Binghatti Maybach & Mercedes-Benz Places",
-    location: "Downtown Dubai",
-    tag: "70/30 Payment Plan",
-    src: "/img/projects/binghatti/mercedes-benz-places.webp",
-  },
-  {
-    title: "Sobha Century · Sheikh Zayed Road Sky Towers",
-    location: "Sheikh Zayed Road",
-    tag: "60/40 Payment Plan",
-    src: "/img/projects/sobha/sobha-seahaven.webp",
-  },
-  {
-    title: "The Meriva · Dubai Islands by Ellington",
-    location: "Dubai Islands",
-    tag: "70/30 Payment Plan",
-    src: "/img/projects/nakheel/dubai-islands.webp",
-  },
-  {
-    title: "Address Residences · Al Marjan Island Beachfront",
-    location: "Ras Al Khaimah",
-    tag: "80/20 Payment Plan",
-    src: "/img/projects/emaar/avarra-by-palace.webp",
-  },
-  {
-    title: "Sobha Siniya Island & Downtown Umm Al Quwain",
-    location: "Umm Al Quwain",
-    tag: "60/40 Payment Plan",
-    src: "/img/projects/sobha/sobha-sanctuary.webp",
-  },
-  {
-    title: "Manchester City Yas Residences & Saadiyat Lagoons",
-    location: "Abu Dhabi",
-    tag: "60/40 Payment Plan",
-    src: "/img/projects/aldar/yas-bay.webp",
-  },
-  {
-    title: "Masaar Woodland Villas & Alif Boulevard",
-    location: "Sharjah",
-    tag: "50/50 Payment Plan",
-    src: "/img/projects/arada/masaar.webp",
-  },
-]
-
-export function Residences() {
-  const infiniteItems = [...VISUALISATION_SHOWCASE, ...VISUALISATION_SHOWCASE]
-
-  return (
-    <section id="residences" className="scroll-mt-20 bg-[#faf7f2] py-24 border-b border-[#e6dfd2] overflow-hidden">
-      <div className="mx-auto max-w-7xl px-4 md:px-6 mb-12 flex flex-wrap items-end justify-between gap-6">
-        <SectionHeading
-          eyebrow="Architectural Visualisations · Continuous Infinite Stream"
-          title={
-            <>
-              Residences Built to Be{" "}
-              <em className="text-[#94652c] not-italic">Remembered.</em>
-            </>
-          }
-          lead="Verified architectural visualisations across our priority launches in Dubai, Abu Dhabi, Sharjah, Ras Al Khaimah, and Umm Al Quwain. Hover any residence to pause and inspect."
-        />
-        <Link
-          href="/off-plan"
-          className="inline-flex items-center gap-2 rounded-full border border-[#17130e] bg-white px-6 py-3 text-xs font-bold uppercase tracking-[0.18em] text-[#17130e] transition hover:bg-[#17130e] hover:text-white"
-        >
-          <span>View All 108+ Projects</span>
-          <ArrowRight className="h-4 w-4" />
-        </Link>
-      </div>
-
-      {/* Continuous Infinite Horizontal Moving Gallery */}
-      <div className="relative w-full overflow-hidden py-3">
-        <div className="swk-track-left gap-6 px-4">
-          {infiniteItems.map((item, idx) => (
-            <Link
-              key={`${item.title}-${idx}`}
-              href="/off-plan"
-              className="group relative flex h-[400px] w-[440px] shrink-0 flex-col justify-between overflow-hidden rounded-3xl border border-[#e6dfd2] bg-[#17130e] p-6 text-white shadow-lg transition-all duration-300 hover:-translate-y-1.5 hover:border-[#94652c]"
-            >
-              <img
-                src={item.src}
-                alt={item.title}
-                className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#17130e]/95 via-[#17130e]/25 to-[#17130e]/35" />
-
-              <div className="relative z-10 flex items-center justify-between gap-2">
-                <span className="rounded-full bg-[#17130e]/85 border border-[#dcb888]/40 px-3.5 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-[#dcb888] backdrop-blur-md">
-                  {item.location}
-                </span>
-                <span className="rounded-full bg-white/95 px-3 py-1 text-[10px] font-bold text-[#17130e]">
-                  {item.tag}
-                </span>
-              </div>
-
-              <div className="relative z-10">
-                <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#dcb888]">
-                  SWK Priority Launch Visualisation
-                </p>
-                <h3 className="mt-1 font-serif text-2xl font-semibold text-white group-hover:text-[#dcb888]">
-                  {item.title}
-                </h3>
-                <div className="mt-3 inline-flex items-center gap-1.5 text-xs font-bold text-[#dcb888]">
-                  <span>Request Floor Plans &amp; Availability</span>
-                  <ArrowUpRight className="h-4 w-4" />
+                <div className="flex flex-wrap items-center gap-4 pt-3">
+                  <BracketLink
+                    href="/off-plan"
+                    variant="white"
+                    size="sm"
+                    onClick={() => setBriefOpen(false)}
+                  >
+                    Browse 108+ Launches
+                  </BracketLink>
+                  <BracketLink
+                    href="/contact"
+                    variant="dark"
+                    size="sm"
+                    onClick={() => setBriefOpen(false)}
+                  >
+                    Book Private Briefing
+                  </BracketLink>
                 </div>
               </div>
-            </Link>
-          ))}
-        </div>
-      </div>
+            </motion.div>
+          </motion.div>
+        ) : null}
+      </AnimatePresence>
     </section>
-  )
+  );
 }
 
-/* -------------------------------------------------------------- Services (Redesigned Interactive 6-Pillar Advisory Showcase + Refined Buttons) */
-const SERVICE_ICONS = [Landmark, Home, KeyRound, Building2, TrendingUp, FileCheck2]
-const SERVICE_DELIVERABLES = [
-  [
-    "Direct launch-day unit allocations across 27+ partner developers",
-    "Zero agency commission on primary off-plan purchases",
-    "Side-by-side payment plan & construction milestone comparison",
-  ],
-  [
-    "Live comparable transfer analysis before you submit an offer",
-    "Full Form F (MOU) drafting, NOC coordination & DLD Trustee transfer",
-    "Itemised upfront cost sheet (4% DLD, trustee & agency fees)",
-  ],
-  [
-    "Tenant vetting, corporate lease structuring & cheque schedule management",
-    "Full Ejari registration, DEWA activation & move-in inspection",
-    "Annual renewal benchmarking against official rental index",
-  ],
-  [
-    "Dedicated landlord asset management for overseas & local owners",
-    "Preventive maintenance, snagging & tenant relationship desk",
-    "Structured annual rent collection and expense statements",
-  ],
-  [
-    "Multi-unit portfolio structuring for family offices & funds",
-    "10-Year UAE Golden Visa (AED 2M+) property qualification support",
-    "Cross-emirate allocation across Dubai, Abu Dhabi, RAK & UAQ",
-  ],
-  [
-    "Independent technical snagging inspection prior to developer handover",
-    "Bank-agnostic UAE resident & non-resident mortgage introductions",
-    "Title Deed & Oqood registration verification from start to keys",
-  ],
-]
-
-export function Services() {
-  const [activeServiceIdx, setActiveServiceIdx] = React.useState(0)
-  const activeService = services[activeServiceIdx] ?? services[0]
-  const ActiveIcon = SERVICE_ICONS[activeServiceIdx % SERVICE_ICONS.length]
-  const activeImage = gallery[[0, 3, 7, 9, 2, 12][activeServiceIdx % 6]]
-  const deliverables = SERVICE_DELIVERABLES[activeServiceIdx % SERVICE_DELIVERABLES.length]
+/* -------------------------------------------------------------------------- */
+/* 02. SCROLL-REVEAL EDITORIAL STATEMENT & 2-CARD CLIENT GROWTH BENTO         */
+/* -------------------------------------------------------------------------- */
+export function EditorialBento() {
+  const quotePool = useMemo(() => testimonials.slice(0, 3), []);
+  const [activeQuote, setActiveQuote] = useState(0);
+  const current = quotePool[activeQuote] ?? quotePool[0];
 
   return (
-    <section id="services" className="scroll-mt-20 bg-white py-24 border-b border-[#e6dfd2]">
-      <div className="mx-auto max-w-7xl px-4 md:px-6">
-        <div className="flex flex-wrap items-end justify-between gap-6 mb-12">
-          <SectionHeading
-            eyebrow="05 · End-to-End Real Estate Advisory"
-            title={
-              <>
-                One Partner,{" "}
-                <em className="text-[#94652c] not-italic">From Shortlist to Keys.</em>
-              </>
-            }
-            lead="Six specialist divisions under one roof on Sheikh Zayed Road—covering primary off-plan launches, ready resales, Ejari leasing, portfolio management, and handover snagging."
-          />
+    <section className="relative overflow-hidden bg-white py-24 sm:py-32">
+      {/* Soft Architectural Halo Backdrop */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 top-0 h-[520px] bg-gradient-to-b from-[#f7f7f7] via-white to-white"
+      />
 
-          <Link
-            href="/services"
-            className="inline-flex items-center gap-2.5 rounded-xl bg-[#17130e] px-6 py-3.5 text-xs font-bold uppercase tracking-[0.16em] text-white shadow-sm transition hover:bg-[#94652c]"
-          >
-            <span>Explore All 6 Advisory Divisions</span>
-            <ArrowRight className="h-4 w-4 text-[#dcb888]" />
-          </Link>
+      <div className="relative mx-auto max-w-[1120px] px-4 sm:px-8">
+        <div className="mx-auto max-w-4xl">
+          <ScrollRevealStatement text="We advise buyers and investors who look past developer brochures — pairing Dubai floor-plate intelligence with escrow security and long-term appreciation." />
+
+          <div className="mt-10 flex flex-wrap items-center gap-3">
+            {["Off-Plan Intelligence", "DLD & Escrow Due Diligence", "Yield & Exit Strategy"].map(
+              (pillar) => (
+                <span
+                  key={pillar}
+                  className="rounded-full border border-black/10 bg-[#f7f7f7] px-4 py-2 text-xs font-medium text-[#121212]"
+                >
+                  {pillar}
+                </span>
+              )
+            )}
+          </div>
         </div>
 
-        {/* Interactive 6-Pillar Selector Grid + Active Spotlight Card */}
-        <div className="grid grid-cols-1 gap-8 lg:grid-cols-12 items-stretch">
-          {/* Left: 6 Interactive Service Pillar Cards */}
-          <div className="lg:col-span-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-3">
-            {services.map((s, idx) => {
-              const Icon = SERVICE_ICONS[idx % SERVICE_ICONS.length]
-              const isSelected = idx === activeServiceIdx
-              return (
-                <button
-                  key={s.title}
-                  type="button"
-                  onClick={() => setActiveServiceIdx(idx)}
-                  className={`group flex items-center justify-between gap-4 rounded-2xl border p-4 text-left transition-all ${
-                    isSelected
-                      ? "border-[#17130e] bg-[#17130e] text-white shadow-md"
-                      : "border-[#e6dfd2] bg-[#faf7f2] text-[#17130e] hover:border-[#94652c] hover:bg-white"
-                  }`}
-                >
-                  <div className="flex items-center gap-3.5 min-w-0">
-                    <div
-                      className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border transition ${
-                        isSelected
-                          ? "border-[#dcb888]/40 bg-[#dcb888]/15 text-[#dcb888]"
-                          : "border-[#e6dfd2] bg-white text-[#94652c] group-hover:border-[#94652c]"
-                      }`}
-                    >
-                      <Icon className="h-5 w-5" />
-                    </div>
-                    <div className="min-w-0">
-                      <span
-                        className={`block text-[10px] font-bold uppercase tracking-[0.2em] ${
-                          isSelected ? "text-[#dcb888]" : "text-[#94652c]"
-                        }`}
-                      >
-                        Division 0{idx + 1}
-                      </span>
-                      <span className="block truncate font-serif text-lg font-semibold">
-                        {s.title}
-                      </span>
-                    </div>
-                  </div>
-                  <ArrowRight
-                    className={`h-4 w-4 shrink-0 transition-transform ${
-                      isSelected ? "translate-x-1 text-[#dcb888]" : "text-[#786e60] group-hover:translate-x-1"
+        {/* 2-Card Avenlo Bento Row */}
+        <div className="mt-16 grid grid-cols-1 gap-6 md:grid-cols-2">
+          {/* Left Card: Pure White Client Outcome Spotlight */}
+          <div className="flex min-h-[400px] sm:min-h-[450px] flex-col justify-between rounded-2xl border border-black/[0.07] bg-[#f7f7f7] p-8 sm:p-10">
+            <div className="flex items-center justify-between">
+              <span className="text-xl font-semibold tracking-[-0.04em] text-[#121212]">
+                client note
+              </span>
+              <div className="flex items-center gap-1.5" role="tablist" aria-label="Client stories">
+                {quotePool.map((q, idx) => (
+                  <button
+                    key={q.id}
+                    type="button"
+                    role="tab"
+                    aria-selected={activeQuote === idx}
+                    aria-label={`Read quote from ${q.name}`}
+                    onClick={() => setActiveQuote(idx)}
+                    className={`h-2 w-2 cursor-pointer rounded-full transition-colors ${
+                      activeQuote === idx ? "bg-[#121212]" : "bg-[#cfcfcf] hover:bg-[#8b8b8b]"
                     }`}
                   />
-                </button>
-              )
-            })}
-          </div>
-
-          {/* Right: Active Service Spotlight Panel with Architectural Photography & Clean Tactile Buttons */}
-          <div className="lg:col-span-7 flex flex-col justify-between overflow-hidden rounded-3xl border border-[#e6dfd2] bg-[#faf7f2] shadow-sm">
-            <div className="relative h-64 md:h-72 w-full overflow-hidden bg-[#17130e]">
-              <AnimatePresence initial={false} mode="wait">
-                <motion.img
-                  key={activeImage}
-                  src={activeImage}
-                  alt={activeService.title}
-                  loading="eager"
-                  decoding="sync"
-                  initial={{ opacity: 0, scale: 1.04 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.4 }}
-                  className="h-full w-full object-cover"
-                />
-              </AnimatePresence>
-              <div className="absolute inset-0 bg-gradient-to-t from-[#17130e]/90 via-[#17130e]/35 to-transparent" />
-              <div className="absolute bottom-5 left-6 right-6 flex items-end justify-between gap-4 text-white">
-                <div>
-                  <span className="inline-flex items-center gap-1.5 rounded-full bg-[#dcb888]/20 border border-[#dcb888]/40 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-[#dcb888]">
-                    <ActiveIcon className="h-3.5 w-3.5" />
-                    0{activeServiceIdx + 1} · SWK Advisory Division
-                  </span>
-                  <h3 className="mt-2 font-serif text-2xl md:text-4xl font-semibold">
-                    {activeService.title}
-                  </h3>
-                </div>
+                ))}
               </div>
             </div>
 
-            <div className="p-6 md:p-8 space-y-6">
-              <p className="text-sm md:text-base text-[#4a4237] leading-relaxed">
-                {activeService.description}
-              </p>
+            {current ? (
+              <blockquote className="my-8 text-[22px] sm:text-[26px] font-medium leading-[1.3] tracking-[-0.03em] text-[#121212]">
+                &ldquo;{current.quote}&rdquo;
+              </blockquote>
+            ) : null}
 
-              <div className="rounded-2xl border border-[#e6dfd2] bg-white p-5 space-y-2.5">
-                <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#94652c]">
-                  What Our Team Delivers For You:
-                </p>
-                {deliverables.map((item) => (
-                  <div key={item} className="flex items-start gap-2.5 text-xs md:text-sm text-[#17130e]">
-                    <CheckCircle2 className="h-4 w-4 shrink-0 text-[#94652c] mt-0.5" />
-                    <span>{item}</span>
+            {current ? (
+              <div className="flex items-center justify-between gap-4 border-t border-black/[0.06] pt-5">
+                <div className="flex items-center gap-3">
+                  <img
+                    src={current.image}
+                    alt={current.name}
+                    loading="lazy"
+                    className="h-10 w-10 rounded-lg object-cover"
+                  />
+                  <div className="text-xs">
+                    <span className="font-medium text-[#121212]">{current.name}</span>
+                    <span className="mx-1.5 text-[#a7a7a7]">•</span>
+                    <span className="uppercase tracking-[0.14em] text-[#8b8b8b]">
+                      {current.city}
+                    </span>
+                    <span className="block text-[#737373]">{current.role}</span>
                   </div>
+                </div>
+                <Link
+                  href="/about"
+                  className="text-xs font-medium text-[#121212] underline underline-offset-4"
+                >
+                  Our ethos
+                </Link>
+              </div>
+            ) : null}
+          </div>
+
+          {/* Right Card: Vivid Dubai Architecture + Frosted Glass Advisor Overlay */}
+          <div className="relative min-h-[400px] sm:min-h-[450px] overflow-hidden rounded-2xl bg-[#121212]">
+            <img
+              src="/img/projects/emaar/rashid-yachts-and-marina.webp"
+              alt="Dubai waterfront luxury architecture"
+              loading="lazy"
+              className="h-full w-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#121212]/65 via-transparent to-transparent" />
+
+            <div className="absolute inset-x-4 bottom-4 sm:inset-x-6 sm:bottom-6 rounded-2xl border border-white/25 bg-white/16 p-5 text-white backdrop-blur-xl">
+              <div className="flex items-center gap-1.5">
+                {team.slice(0, 4).map((advisor) => (
+                  <img
+                    key={advisor.slug}
+                    src={advisor.photo}
+                    alt={advisor.name}
+                    loading="lazy"
+                    className="h-10 w-10 rounded-lg border border-white/40 object-cover object-top"
+                  />
                 ))}
+                <Link
+                  href="/agents"
+                  aria-label="Meet all SWK Properties advisors"
+                  className="flex h-10 w-10 items-center justify-center rounded-lg border border-white/30 bg-[#121212]/80 text-xs font-medium text-[#51fec0] hover:bg-[#121212]"
+                >
+                  +4
+                </Link>
               </div>
 
-              {/* Clean Corporate Buttons (Replaces old HalomotButton style) */}
-              <div className="flex flex-wrap items-center gap-3 pt-2">
-                <Link
-                  href="/services"
-                  className="inline-flex items-center gap-2 rounded-xl bg-[#17130e] px-6 py-3.5 text-xs font-bold uppercase tracking-[0.16em] text-white shadow-sm transition hover:bg-[#2a2219]"
-                >
-                  <span>View Service Mandate</span>
-                  <ArrowRight className="h-4 w-4 text-[#dcb888]" />
-                </Link>
-                <Link
-                  href="/contact"
-                  className="inline-flex items-center gap-2 rounded-xl border border-[#94652c] bg-white px-6 py-3.5 text-xs font-bold uppercase tracking-[0.16em] text-[#94652c] transition hover:bg-[#94652c] hover:text-white"
-                >
-                  <span>Speak With a Specialist</span>
-                </Link>
+              <div className="mt-4 flex items-end justify-between gap-4">
+                <p className="max-w-[230px] text-xs sm:text-sm leading-snug text-white/95">
+                  Turning a Dubai brief into the right developer allocation.
+                </p>
+                <div className="text-right leading-none shrink-0">
+                  <span className="text-3xl sm:text-4xl font-medium tracking-[-0.04em] text-white">
+                    108+
+                  </span>
+                  <span className="ml-1 text-[11px] font-medium uppercase tracking-[0.14em] text-[#51fec0]">
+                    Launches
+                  </span>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
     </section>
-  )
+  );
 }
 
-/* --------------------------------------------------------------- Journey (Interactive 6-Stage Acquisition & Handover Timeline) */
-const JOURNEY_STAGES = [
-  {
-    step: "01",
-    phase: "Brief & Strategy",
-    title: "Portfolio Brief & Corridor Selection",
-    timing: "Day 1–2",
-    description:
-      "We map your capital budget, target yield, and timeline against live inventory across Dubai, Abu Dhabi, Sharjah, Ras Al Khaimah, and Umm Al Quwain.",
-    deliverable: "Custom 3-to-5 project comparison pack with historical capital & rental benchmarks.",
-    image: "/img/projects/azizi/azizi-venice.webp",
-  },
-  {
-    step: "02",
-    phase: "Cost & Unit Audit",
-    title: "Floor-Plate Selection & Written Fee Sheet",
-    timing: "Day 3–5",
-    description:
-      "Before any reservation, we prepare a written acquisition sheet detailing unit orientation, service charges per sq ft, 4% DLD fee, and milestone dates.",
-    deliverable: "Itemised AED & foreign-currency acquisition cost breakdown with zero hidden charges.",
-    image: "/img/projects/emaar/greencrest.webp",
-  },
-  {
-    step: "03",
-    phase: "Inspection",
-    title: "Private Show-Home or Live Video Walkthrough",
-    timing: "Week 1",
-    description:
-      "Tour developer experience centres and ready properties in person with our advisors, or join a live GST-anchored architectural video inspection from overseas.",
-    deliverable: "On-site view corridor check, community drive-time test & developer stock verification.",
-    image: "/img/projects/damac/damac-islands.webp",
-  },
-  {
-    step: "04",
-    phase: "Reservation & SPA",
-    title: "Unit Allocation, Form F & Escrow Transfer",
-    timing: "Week 2",
-    description:
-      "Secure priority developer unit allocation or execute Form F (MOU) for secondary homes. All payments route directly to official project escrow or trustee accounts.",
-    deliverable: "Sales & Purchase Agreement (SPA) review and official developer booking receipt.",
-    image: "/img/projects/binghatti/mercedes-benz-places.webp",
-  },
-  {
-    step: "05",
-    phase: "Registration",
-    title: "Oqood, Title Deed & Golden Visa Filing",
-    timing: "Week 2–4",
-    description:
-      "Our operations team coordinates Oqood registration, Title Deed transfer, UAE mortgage disbursement, and 10-year Golden Visa documentation for AED 2M+ buyers.",
-    deliverable: "Official Title Deed / Oqood certificate & Golden Visa nomination dossier.",
-    image: "/img/projects/sobha/sobha-seahaven.webp",
-  },
-  {
-    step: "06",
-    phase: "Handover & Yield",
-    title: "Technical Snagging, Key Handover & Leasing",
-    timing: "Completion & Ongoing",
-    description:
-      "At completion, we conduct a multi-point technical snagging inspection, activate utilities, and transition your property into annual leasing or resale management.",
-    deliverable: "Snagging clearance report, key handover & signed annual lease mandate.",
-    image: "/img/projects/nakheel/dubai-islands.webp",
-  },
-]
+/* -------------------------------------------------------------------------- */
+/* 03. WHAT'S HAPPENING IN DUBAI — 2026 DEVELOPER LAUNCHES PULSE              */
+/* -------------------------------------------------------------------------- */
+type LaunchCategory = "all" | "waterfront" | "branded" | "villas" | "plans";
 
-export function Journey() {
-  const [activeStep, setActiveStep] = React.useState(0)
-  const current = JOURNEY_STAGES[activeStep]
+const LAUNCH_TABS: { id: LaunchCategory; label: string }[] = [
+  { id: "all", label: "All 2026 Releases" },
+  { id: "waterfront", label: "Waterfront & Islands" },
+  { id: "branded", label: "Branded & Sky Towers" },
+  { id: "villas", label: "Master Villas" },
+  { id: "plans", label: "Structured Plans" },
+];
+
+const CURATED_RELEASE_SLUGS: Record<LaunchCategory, string[]> = {
+  all: [
+    "imtiaz-kore",
+    "azizi-venice",
+    "emaar-the-oasis",
+    "damac-islands",
+    "sobha-century",
+    "binghatti-maybach-mercedes-benz",
+  ],
+  waterfront: [
+    "palm-jebel-ali",
+    "creek-haven",
+    "azizi-venice",
+    "the-meriva-dubai-islands",
+    "sobha-seahaven",
+    "sobha-siniya-island",
+  ],
+  branded: [
+    "binghatti-maybach-mercedes-benz",
+    "bugatti-residences-by-binghatti",
+    "mercedes-benz-places",
+    "como-residences",
+    "manchester-city-yas-residences",
+    "karl-lagerfeld-villas",
+  ],
+  villas: [
+    "emaar-the-oasis",
+    "damac-islands",
+    "palm-jebel-ali",
+    "masaar",
+    "lunaya-the-bloom-villa",
+    "dubai-hills-estate-residences",
+  ],
+  plans: [
+    "imtiaz-kore",
+    "azizi-florence",
+    "danube-greenz",
+    "samana-downtown-one",
+    "dugasta-platinum-residence",
+    "sobha-river-core",
+  ],
+};
+
+export function DubaiDeveloperPulse() {
+  const [activeTab, setActiveTab] = useState<LaunchCategory>("all");
+
+  const visibleReleases = useMemo(() => {
+    const slugs = CURATED_RELEASE_SLUGS[activeTab];
+    const matched = slugs
+      .map((s) => projects.find((p) => p.slug === s))
+      .filter((p): p is Project => Boolean(p));
+    if (matched.length >= 6) return matched.slice(0, 6);
+    const seen = new Set(matched.map((m) => m.slug));
+    const fill = projects.filter((p) => !seen.has(p.slug)).slice(0, 6 - matched.length);
+    return [...matched, ...fill];
+  }, [activeTab]);
+
+  const logoDevelopers = useMemo(
+    () => developers.filter((d) => Boolean(d.logo)).slice(0, 14),
+    []
+  );
 
   return (
-    <section id="journey" className="scroll-mt-20 border-y border-[#e6dfd2] bg-white py-24">
-      <div className="mx-auto max-w-7xl px-4 md:px-6">
-        <div className="flex flex-wrap items-end justify-between gap-6 mb-12">
-          <SectionHeading
-            eyebrow="06 · Your Buying & Leasing Journey"
-            title={
-              <>
-                From First Call to{" "}
-                <em className="text-[#94652c] not-italic">Title Deed &amp; First Rent.</em>
-              </>
-            }
-            lead="Click any of the 6 milestones below to see how our sales and operations desk manages every step of your acquisition."
-          />
+    <section id="dubai-launches" className="border-y border-black/[0.06] bg-[#f7f7f7] py-24">
+      <div className="mx-auto max-w-[1260px] px-4 sm:px-8">
+        {/* Header */}
+        <div className="flex flex-wrap items-end justify-between gap-6">
+          <div>
+            <SectionEyebrow>DUBAI MARKET PULSE · 2026 RELEASES</SectionEyebrow>
+            <SplitHeading
+              primary="What's launching now"
+              muted="across Dubai & the UAE"
+              className="mt-5"
+            />
+          </div>
+          <BracketLink href="/off-plan" variant="light" size="md">
+            All 108+ Projects
+          </BracketLink>
+        </div>
 
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={() => setActiveStep((prev) => (prev - 1 + JOURNEY_STAGES.length) % JOURNEY_STAGES.length)}
-              className="rounded-xl border border-[#e6dfd2] bg-[#faf7f2] px-4 py-2.5 text-xs font-bold text-[#17130e] transition hover:border-[#94652c]"
+        {/* Official UAE Master Developer Logo Roster */}
+        <div className="mt-12 rounded-2xl border border-black/[0.06] bg-white p-5 sm:p-7">
+          <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
+            <span className="text-[11px] font-medium uppercase tracking-[0.2em] text-[#8b8b8b]">
+              27+ Official UAE Master Developer Partners
+            </span>
+            <Link
+              href="/developers"
+              className="text-xs font-medium text-[#121212] underline underline-offset-4 hover:text-[#0e9f6e]"
             >
-              ← Previous Step
-            </button>
-            <button
-              type="button"
-              onClick={() => setActiveStep((prev) => (prev + 1) % JOURNEY_STAGES.length)}
-              className="rounded-xl bg-[#17130e] px-4 py-2.5 text-xs font-bold text-white transition hover:bg-[#94652c]"
-            >
-              Next Step →
-            </button>
+              Inspect All 27+ Developers →
+            </Link>
+          </div>
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 md:grid-cols-7">
+            {logoDevelopers.map((dev) => (
+              <Link
+                key={dev.slug}
+                href={`/developers/${dev.slug}`}
+                title={`${dev.name} — ${dev.projectCount} projects`}
+                className="group flex h-16 items-center justify-center rounded-xl border border-black/[0.05] bg-[#f7f7f7] px-3 transition-colors hover:border-black/20 hover:bg-white"
+              >
+                <img
+                  src={dev.logo}
+                  alt={dev.name}
+                  loading="lazy"
+                  className="max-h-8 max-w-[96px] object-contain opacity-75 grayscale transition-all duration-200 group-hover:opacity-100 group-hover:grayscale-0"
+                />
+              </Link>
+            ))}
           </div>
         </div>
 
-        {/* Interactive Progress Stepper Bar */}
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6 mb-10">
-          {JOURNEY_STAGES.map((item, idx) => {
-            const active = idx === activeStep
-            const completed = idx < activeStep
+        {/* Interactive Avenlo Pill Filters */}
+        <div className="mt-10 flex flex-wrap items-center gap-2">
+          {LAUNCH_TABS.map((tab) => {
+            const active = activeTab === tab.id;
             return (
               <button
-                key={item.step}
+                key={tab.id}
                 type="button"
-                onClick={() => setActiveStep(idx)}
-                className={`group relative flex flex-col justify-between rounded-2xl border p-4 text-left transition-all ${
+                onClick={() => setActiveTab(tab.id)}
+                className={`cursor-pointer rounded-full px-5 py-2.5 text-xs font-medium transition-colors ${
                   active
-                    ? "border-[#17130e] bg-[#17130e] text-white shadow-md -translate-y-0.5"
-                    : completed
-                    ? "border-[#94652c]/50 bg-[#f6ead7]/55 text-[#17130e]"
-                    : "border-[#e6dfd2] bg-[#faf7f2] text-[#17130e] hover:border-[#94652c] hover:bg-white"
+                    ? "bg-[#121212] text-white"
+                    : "border border-black/10 bg-white text-[#525252] hover:border-[#121212] hover:text-[#121212]"
                 }`}
               >
-                <div className="flex items-center justify-between gap-2">
-                  <span
-                    className={`font-hero-raleway font-light text-2xl ${
-                      active ? "text-[#dcb888]" : "text-[#94652c]"
-                    }`}
-                  >
-                    {item.step}
-                  </span>
-                  <span
-                    className={`rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${
-                      active
-                        ? "bg-white/15 text-[#dcb888]"
-                        : "bg-white text-[#786e60] border border-[#e6dfd2]"
-                    }`}
-                  >
-                    {item.timing}
-                  </span>
-                </div>
-                <div className="mt-3">
-                  <p
-                    className={`text-[10px] font-bold uppercase tracking-[0.18em] ${
-                      active ? "text-[#dcb888]" : "text-[#94652c]"
-                    }`}
-                  >
-                    {item.phase}
-                  </p>
-                  <p className="mt-0.5 font-serif text-base font-semibold leading-snug">
-                    {item.title}
-                  </p>
-                </div>
+                {tab.label}
               </button>
-            )
+            );
           })}
         </div>
 
-        {/* Animated Stage Detail Card */}
-        <AnimatePresence initial={false} mode="wait">
-          <motion.div
-            key={current.step}
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -12 }}
-            transition={{ duration: 0.35 }}
-            className="grid grid-cols-1 gap-8 lg:grid-cols-12 items-center rounded-3xl border border-[#e6dfd2] bg-[#faf7f2] p-6 md:p-10 shadow-sm"
-          >
-            <div className="lg:col-span-7 space-y-5">
-              <div className="inline-flex items-center gap-2 rounded-full border border-[#94652c]/35 bg-white px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.2em] text-[#94652c]">
-                <span>Step {current.step} of 06</span>
-                <span>·</span>
-                <span>{current.timing}</span>
-              </div>
-
-              <h3 className="font-serif text-2xl md:text-4xl font-semibold text-[#17130e]">
-                {current.title}
-              </h3>
-
-              <p className="text-sm md:text-base text-[#4a4237] leading-relaxed">
-                {current.description}
-              </p>
-
-              <div className="rounded-2xl border border-[#e6dfd2] bg-white p-4 flex items-start gap-3">
-                <CheckCircle2 className="h-5 w-5 shrink-0 text-[#94652c] mt-0.5" />
-                <div>
-                  <span className="block text-[10px] font-bold uppercase tracking-[0.2em] text-[#94652c]">
-                    Key Client Deliverable
-                  </span>
-                  <span className="text-xs md:text-sm font-semibold text-[#17130e]">
-                    {current.deliverable}
-                  </span>
-                </div>
-              </div>
-
-              <div className="flex flex-wrap items-center gap-3 pt-1">
-                <Link
-                  href="/guides/buying"
-                  className="inline-flex items-center gap-2 rounded-xl bg-[#17130e] px-6 py-3 text-xs font-bold uppercase tracking-[0.16em] text-white transition hover:bg-[#94652c]"
-                >
-                  <span>Read Full Acquisition Guide</span>
-                  <ArrowRight className="h-4 w-4 text-[#dcb888]" />
-                </Link>
-                <Link
-                  href="/calculators"
-                  className="inline-flex items-center gap-2 rounded-xl border border-[#e6dfd2] bg-white px-5 py-3 text-xs font-bold uppercase tracking-[0.16em] text-[#17130e] transition hover:border-[#94652c]"
-                >
-                  <span>Open Fee &amp; Yield Calculators</span>
-                </Link>
-              </div>
-            </div>
-
-            <div className="lg:col-span-5 overflow-hidden rounded-2xl border border-[#e6dfd2] bg-white shadow-md">
-              <img
-                src={current.image}
-                alt={current.title}
-                className="h-64 md:h-80 w-full object-cover"
-              />
-            </div>
-          </motion.div>
-        </AnimatePresence>
-      </div>
-    </section>
-  )
-}
-
-/* ------------------------------------------------------------- Our Promise (Viewfinder Inspection Removed per User Request) */
-export function OurNote() {
-  return (
-    <section className="border-b border-[#e6dfd2] bg-[#f4efe6] py-24">
-      <div className="mx-auto max-w-7xl px-4 md:px-6">
-        <div className="flex flex-col items-center text-center mb-10">
-          <span className="inline-flex items-center gap-2 rounded-full border border-[#94652c]/35 bg-white px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.24em] text-[#94652c] shadow-sm">
-            <ShieldCheck className="h-3.5 w-3.5" />
-            07 · Our Promise · The SWK Advisory Charter
-          </span>
-          <h2 className="mt-4 font-serif text-3xl md:text-5xl font-semibold text-[#17130e] leading-[1.08]">
-            Clarity Before <em className="text-[#94652c] not-italic">Commitment.</em>
-          </h2>
-          <p className="mt-3 max-w-2xl text-sm md:text-base text-[#4a4237] leading-relaxed">
-            Buying or leasing property in the UAE should be led by clear paperwork, verified developer track records, and written cost sheets. Explore our interactive charter pillars below.
-          </p>
-        </div>
-
-        {/* 21st.dev InteractiveExpandingSelector for SWK Charter */}
-        <div className="rounded-3xl border border-[#e6dfd2] bg-white p-4 md:p-8 shadow-sm">
-          <InteractiveSelector />
-        </div>
-      </div>
-    </section>
-  )
-}
-
-/* ------------------------------------------------------------------ Team (Unified 8-Member Team Section + Animated Track-Record Popup Modal) */
-export type TeamMemberItem = (typeof team)[number] & {
-  dealsCount?: string
-  experienceYears?: string
-  topDevelopers?: string[]
-  keyProjects?: string[]
-  specialties?: string[]
-}
-
-export function Team() {
-  const [selectedMember, setSelectedMember] = React.useState<TeamMemberItem | null>(null)
-  const typedTeam = team as TeamMemberItem[]
-
-  return (
-    <section id="team" className="scroll-mt-20 border-b border-[#e6dfd2] bg-white py-16 md:py-24">
-      <div className="mx-auto max-w-7xl px-4 md:px-6">
-        <div className="flex flex-wrap items-end justify-between gap-6 mb-10 md:mb-12">
-          <div>
-            <p className="text-xs font-bold uppercase tracking-[0.26em] text-[#17130e]">
-              25+ Real Estate Professionals · Sheikh Zayed Road, Dubai
-            </p>
-            <h2 className="mt-2 font-serif text-3xl md:text-5xl font-semibold text-[#17130e]">
-              Leadership &amp; Key Advisory Specialists
-            </h2>
-            <p className="mt-2.5 max-w-2xl text-sm md:text-base text-[#4a4237] leading-relaxed">
-              Backed by a team of 25+ dedicated real estate professionals on Sheikh Zayed Road. Click any senior advisor below to inspect their track-record dossier—including years of experience, verified transactions, developer partnerships, and direct WhatsApp contact.
-            </p>
-          </div>
-          <div className="rounded-2xl border border-[#e6dfd2] bg-[#faf7f2] px-5 py-3 text-left sm:text-right">
-            <div className="font-hero-raleway font-light text-2xl font-bold text-[#17130e]">
-              25+ Professionals
-            </div>
-            <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#17130e]/75">
-              18+ Years Combined UAE Leadership
-            </div>
-          </div>
-        </div>
-
-        {/* Interactive Senior Advisory Grid */}
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {typedTeam.map((member) => (
-            <motion.div
-              key={member.slug}
-              whileHover={{ y: -5 }}
-              transition={{ type: "spring", stiffness: 300, damping: 24 }}
-              onClick={() => setSelectedMember(member)}
-              className="group cursor-pointer flex flex-col justify-between overflow-hidden rounded-3xl border border-[#e6dfd2] bg-[#faf7f2] shadow-sm transition-colors hover:border-[#17130e] hover:bg-white hover:shadow-xl"
+        {/* 6 Live Release Architectural Cards */}
+        <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {visibleReleases.map((proj) => (
+            <Link
+              key={proj.slug}
+              href={`/off-plan/${proj.slug}`}
+              className="group flex flex-col overflow-hidden rounded-2xl border border-black/[0.07] bg-white transition-all duration-300 hover:border-black/20 hover:shadow-[0_20px_50px_rgba(18,18,18,0.08)]"
             >
-              <div>
-                {/* High-Resolution 4:5 Centered Portrait — Zero Overlapping Badges */}
-                <div className="relative aspect-[4/5] w-full overflow-hidden bg-[#17130e]">
-                  <img
-                    src={member.photo}
-                    alt={member.name}
-                    loading="eager"
-                    decoding="sync"
-                    className="h-full w-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#17130e]/90 via-transparent to-transparent" />
-
-                  <div className="absolute bottom-4 left-4 right-4 text-white">
-                    <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-white/80">
-                      {member.role}
-                    </p>
-                    <h3 className="mt-0.5 font-serif text-xl md:text-2xl font-semibold text-white">
-                      {member.name}
-                    </h3>
-                  </div>
+              <div className="relative aspect-[16/10] w-full overflow-hidden bg-[#ececec]">
+                <img
+                  src={proj.image}
+                  alt={`${proj.name} by ${proj.developer}`}
+                  loading="lazy"
+                  className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+                />
+                <div className="absolute top-3.5 left-3.5 flex items-center gap-1.5">
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-[#121212]/82 px-3 py-1 text-[10px] font-medium uppercase tracking-[0.16em] text-white backdrop-blur-md">
+                    <span className="h-1.5 w-1.5 rounded-[2px] bg-[#51fec0]" aria-hidden="true" />
+                    New Release
+                  </span>
                 </div>
-
-                {/* Non-Overlapping Experience & Transaction Badges + Summary */}
-                <div className="p-5 space-y-3.5">
-                  <div className="flex flex-wrap items-center gap-1.5">
-                    {member.experienceYears && (
-                      <span className="rounded-full bg-[#17130e] px-3 py-1 text-[10px] font-bold uppercase tracking-[0.1em] text-white">
-                        {member.experienceYears}
-                      </span>
-                    )}
-                    {member.dealsCount && (
-                      <span className="rounded-full border border-[#17130e]/20 bg-white px-3 py-1 text-[10px] font-bold text-[#17130e]">
-                        {member.dealsCount}
-                      </span>
-                    )}
-                  </div>
-
-                  <p className="line-clamp-3 text-xs text-[#4a4237] leading-relaxed">
-                    {member.bio}
-                  </p>
-
-                  {member.topDevelopers && member.topDevelopers.length > 0 && (
-                    <div>
-                      <span className="block text-[10px] font-bold uppercase tracking-[0.18em] text-[#17130e] mb-1.5">
-                        Key Developer Track Record:
-                      </span>
-                      <div className="flex flex-wrap gap-1.5">
-                        {member.topDevelopers.map((dev) => (
-                          <span
-                            key={dev}
-                            className="rounded-full border border-[#e6dfd2] bg-white px-2.5 py-0.5 text-[10px] font-semibold text-[#17130e]"
-                          >
-                            {dev}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              <div className="flex items-center justify-between border-t border-[#e6dfd2] bg-white px-5 py-3.5 text-xs font-bold text-[#17130e] group-hover:bg-[#17130e] group-hover:text-white transition-colors">
-                <span className="uppercase tracking-[0.14em]">
-                  View Experience &amp; Track Record
+                <span className="absolute bottom-3 right-3 rounded-full bg-white/90 px-2.5 py-0.5 text-[10px] font-medium text-[#121212] backdrop-blur-md">
+                  Developer Render
                 </span>
-                <ArrowUpRight className="h-4 w-4" />
               </div>
-            </motion.div>
+
+              <div className="flex flex-1 flex-col justify-between p-6">
+                <div>
+                  <div className="flex items-center justify-between gap-2 text-[11px] font-medium uppercase tracking-[0.16em] text-[#8b8b8b]">
+                    <span className="truncate">{proj.developer}</span>
+                    <span className="shrink-0">{proj.community}</span>
+                  </div>
+                  <h3 className="mt-2 text-[22px] font-medium tracking-[-0.03em] text-[#121212] group-hover:text-[#525252] transition-colors">
+                    {proj.name}
+                  </h3>
+                  <p className="mt-2 line-clamp-2 text-xs leading-relaxed text-[#666666]">
+                    {proj.summary}
+                  </p>
+                </div>
+
+                <div className="mt-5 flex items-center justify-between gap-3 border-t border-black/[0.06] pt-4">
+                  <div className="flex flex-wrap gap-1.5">
+                    {proj.tags.slice(0, 2).map((tag) => (
+                      <span
+                        key={tag}
+                        className="rounded-full bg-[#f5f5f5] px-2.5 py-1 text-[10px] font-medium text-[#525252]"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                  <span className="inline-flex shrink-0 items-center gap-1 text-xs font-medium text-[#121212] group-hover:text-[#0e9f6e]">
+                    <span>Inspect</span>
+                    <ArrowUpRight className="h-3.5 w-3.5" />
+                  </span>
+                </div>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/* 04. FULL-BLEED ARCHITECTURAL RESIDENCE PANELS (AVENLO SHOWSTOPPER)         */
+/* -------------------------------------------------------------------------- */
+const SHOWCASE_PANELS = [
+  {
+    title: "Palm Jebel Ali",
+    status: "NEW LAUNCH",
+    tone: "launch" as const,
+    specs: "PALM JEBEL ALI, DUBAI  |  WATERFRONT VILLAS  |  NAKHEEL",
+    href: "/off-plan/palm-jebel-ali",
+    image: "/img/projects/nakheel/palm-jebel-ali.webp",
+    isRender: true,
+  },
+  {
+    title: "Creek Haven",
+    status: "NEW LAUNCH",
+    tone: "launch" as const,
+    specs: "DUBAI CREEK HARBOUR  |  CREEKFRONT TOWER  |  EMAAR",
+    href: "/off-plan/creek-haven",
+    image: "/img/projects/emaar/creek-haven.webp",
+    isRender: true,
+  },
+  {
+    title: "Bugatti Residences",
+    status: "PRIORITY ALLOCATION",
+    tone: "offer" as const,
+    specs: "BUSINESS BAY, DUBAI  |  BRANDED SKY MANSIONS  |  BINGHATTI",
+    href: "/off-plan/bugatti-residences-by-binghatti",
+    image: "/img/projects/binghatti/bugatti-residences-by-binghatti.webp",
+    isRender: true,
+  },
+  {
+    title: "Sobha SeaHaven",
+    status: "NEW LAUNCH",
+    tone: "launch" as const,
+    specs: "DUBAI HARBOUR  |  MARINA RESIDENCES  |  SOBHA REALTY",
+    href: "/off-plan/sobha-seahaven",
+    image: "/img/projects/sobha/sobha-seahaven.webp",
+    isRender: true,
+  },
+  {
+    title: LISTINGS[0]?.title ?? "Burj Crown Boulevard Residence",
+    status: "FOR SALE · READY",
+    tone: "sale" as const,
+    specs: "DOWNTOWN DUBAI  |  3 BR APARTMENT  |  1,785 SQ FT",
+    href: `/properties/${LISTINGS[0]?.slug ?? "burj-crown-boulevard-3br-downtown-dubai"}`,
+    image: LISTINGS[0]?.images[0] ?? "/img/communities/downtown-dubai.webp",
+    isRender: false,
+  },
+  {
+    title: "Como Residences",
+    status: "LIMITED RELEASE",
+    tone: "offer" as const,
+    specs: "PALM JUMEIRAH  |  SCULPTURAL SKY PENTHOUSES  |  NAKHEEL",
+    href: "/off-plan/como-residences",
+    image: "/img/projects/nakheel/como-residences.webp",
+    isRender: true,
+  },
+];
+
+export function FullBleedResidences() {
+  return (
+    <section aria-label="Featured Dubai Residences Showcase" className="bg-[#121212]">
+      {SHOWCASE_PANELS.map((panel) => (
+        <div
+          key={panel.title}
+          className="group relative flex min-h-[600px] sm:min-h-[720px] lg:min-h-[780px] w-full items-center justify-center overflow-hidden border-b border-white/10"
+        >
+          <img
+            src={panel.image}
+            alt={panel.title}
+            loading="lazy"
+            className="absolute inset-0 h-full w-full object-cover transition-transform duration-1000 ease-out group-hover:scale-[1.03]"
+          />
+          <div
+            aria-hidden="true"
+            className="absolute inset-0 bg-gradient-to-t from-[#121212]/80 via-[#121212]/30 to-[#121212]/40"
+          />
+
+          <div className="relative z-10 mx-auto max-w-4xl px-4 text-center text-white">
+            <LiveStatusDot label={panel.status} tone={panel.tone} surface="dark" />
+            <h3 className="mt-4 text-[36px] sm:text-[50px] md:text-[60px] font-light leading-[1.04] tracking-[-0.035em] text-white">
+              {panel.title}
+            </h3>
+            <p className="mt-4 text-[11px] sm:text-[12px] font-medium uppercase tracking-[0.22em] text-white/80">
+              {panel.specs}
+            </p>
+            <div className="mt-9">
+              <BracketLink href={panel.href} variant="dark" size="md">
+                View Residence
+              </BracketLink>
+            </div>
+          </div>
+
+          {panel.isRender ? (
+            <span className="absolute bottom-5 right-5 z-10 text-[10px] font-medium uppercase tracking-[0.18em] text-white/55">
+              Developer Architectural Render
+            </span>
+          ) : null}
+        </div>
+      ))}
+    </section>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/* 05. OBSIDIAN CONTRAST BAND: SERVICES + 3 PHOTO CARDS + TRACK RECORD        */
+/* -------------------------------------------------------------------------- */
+const CORE_SERVICES = [
+  {
+    num: "01",
+    title: "Off-Plan Advisory",
+    href: "/services/off-plan-advisory",
+    items: [
+      "Direct access to 27+ UAE master developers",
+      "Side-by-side payment plan & floor-plate audit",
+      "RERA escrow & Oqood verification",
+      "Launch-day allocation & exit guidance",
+    ],
+  },
+  {
+    num: "02",
+    title: "Buying & Selling Ready Homes",
+    href: "/services/secondary-market",
+    items: [
+      "Valuation anchored to DLD comparable sales",
+      "Qualified viewings & offer strategy",
+      "Form F (MOU), Developer NOC & Trustee transfer",
+      "Seamless Title Deed & utility handover",
+    ],
+  },
+  {
+    num: "03",
+    title: "Leasing & Ejari Rentals",
+    href: "/services/leasing-rental",
+    items: [
+      "Executive tenant & landlord representation",
+      "Realistic cheque-schedule structuring",
+      "Ejari contract drafting & registration",
+      "Renewal benchmarks & RERA index checks",
+    ],
+  },
+  {
+    num: "04",
+    title: "Investment & Portfolio Advisory",
+    href: "/services/investment-advisory",
+    items: [
+      "Net rental yield after Mollak service charges",
+      "Capital growth corridors across 5 emirates",
+      "UAE Golden Visa AED 2M+ qualification mapping",
+      "Annual hold, refinance, or resale review",
+    ],
+  },
+];
+
+const BEYOND_CARDS = [
+  {
+    title: "Mortgage Assistance",
+    href: "/services/mortgage-assistance",
+    image: "/img/gallery/image13.webp",
+  },
+  {
+    title: "Property Management",
+    href: "/services/property-management",
+    image: "/img/gallery/image12.webp",
+  },
+  {
+    title: "Legal, Golden Visa & Fit-Out",
+    href: "/services/legal-documentation",
+    image: "/img/gallery/image4.webp",
+  },
+];
+
+function CredentialLaurel({ top, bottom }: { top: string; bottom: string }) {
+  return (
+    <div className="flex flex-col items-center text-center">
+      <div className="relative flex h-24 w-24 items-center justify-center rounded-full border border-dashed border-white/25 bg-[#1e1e1e]/70">
+        <div className="text-center px-2">
+          <div className="text-sm font-medium tracking-[-0.02em] text-white">{top}</div>
+        </div>
+      </div>
+      <p className="mt-3 max-w-[110px] text-[11px] leading-snug text-[#8b8b8b]">{bottom}</p>
+    </div>
+  );
+}
+
+export function ServicesAndTrackRecord() {
+  return (
+    <section className="bg-[#121212] py-24 sm:py-32 text-white">
+      <div className="mx-auto max-w-[1260px] px-4 sm:px-8">
+        {/* Part A: Services Header */}
+        <div className="flex flex-wrap items-end justify-between gap-6">
+          <div>
+            <SectionEyebrow tone="dark">WHAT WE PROVIDE</SectionEyebrow>
+            <SplitHeading
+              tone="dark"
+              primary="Taking the guesswork"
+              muted="out of Dubai property"
+              className="mt-5"
+            />
+          </div>
+          <div className="text-left sm:text-right">
+            <p className="text-[11px] font-medium uppercase tracking-[0.22em] text-[#8b8b8b]">
+              SERVICES
+            </p>
+            <p className="mt-1 text-3xl sm:text-4xl font-medium tracking-[-0.04em] text-white tabular-nums">
+              +008
+            </p>
+          </div>
+        </div>
+
+        {/* 4 Interactive Numbered Rows */}
+        <div className="mt-14 divide-y divide-white/[0.1] border-y border-white/[0.1]">
+          {CORE_SERVICES.map((srv) => (
+            <Link
+              key={srv.num}
+              href={srv.href}
+              className="group grid grid-cols-1 items-center gap-6 py-9 sm:py-11 md:grid-cols-12 transition-colors hover:bg-white/[0.02]"
+            >
+              <div className="md:col-span-5 flex items-baseline gap-6">
+                <span className="font-mono text-sm text-[#8b8b8b]">{srv.num}</span>
+                <h3 className="text-2xl sm:text-[28px] font-medium tracking-[-0.03em] text-white group-hover:text-[#51fec0] transition-colors">
+                  {srv.title}
+                </h3>
+              </div>
+              <ul className="md:col-span-5 space-y-2 text-sm text-[#a7a7a7]">
+                {srv.items.map((pt) => (
+                  <li key={pt} className="flex items-start gap-2.5">
+                    <span className="text-[#8b8b8b]" aria-hidden="true">+</span>
+                    <span>{pt}</span>
+                  </li>
+                ))}
+              </ul>
+              <div className="md:col-span-2 flex md:justify-end">
+                <span className="inline-flex h-16 w-12 items-center justify-center rounded-xl bg-[#1e1e1e] text-white transition-colors duration-200 group-hover:bg-[#51fec0] group-hover:text-[#121212]">
+                  <ArrowRight className="h-4 w-4" />
+                </span>
+              </div>
+            </Link>
           ))}
         </div>
 
-        {/* Animated Detailed Popup Modal for Selected Team Member */}
-        <AnimatePresence>
-          {selectedMember && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setSelectedMember(null)}
-              role="dialog"
-              aria-modal="true"
-              className="fixed inset-0 z-[90] flex items-center justify-center bg-[#17130e]/75 p-3 sm:p-4 backdrop-blur-md"
-            >
-              <motion.div
-                initial={{ opacity: 0, scale: 0.92, y: 24 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.92, y: 24 }}
-                transition={{ type: "spring", stiffness: 320, damping: 28 }}
-                onClick={(e) => e.stopPropagation()}
-                className="relative max-h-[90dvh] w-full max-w-3xl overflow-y-auto rounded-3xl border border-[#e6dfd2] bg-white text-[#17130e] shadow-[0_32px_90px_rgba(23,19,14,0.45)]"
-              >
-                {/* Modal Top Header Bar */}
-                <div className="sticky top-0 z-20 flex items-center justify-between border-b border-[#e6dfd2] bg-[#17130e] px-5 sm:px-6 py-4 text-white">
-                  <div className="flex items-center gap-2.5">
-                    <img
-                      src="/brand/swk-emblem.svg"
-                      alt="SWK"
-                      className="h-7 w-7 object-contain"
-                    />
-                    <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#E0C1A3]">
-                      Verified Advisor Dossier · SWK Properties
-                    </span>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => setSelectedMember(null)}
-                    aria-label="Close advisor modal"
-                    className="rounded-full bg-white/10 p-2 text-white hover:bg-white/20"
-                  >
-                    <X className="h-4 w-4" />
-                  </button>
-                </div>
-
-                {/* Modal Body */}
-                <div className="p-5 sm:p-8 space-y-6">
-                  <div className="grid grid-cols-1 gap-6 md:grid-cols-12 items-center">
-                    <div className="md:col-span-5 overflow-hidden rounded-2xl border border-[#e6dfd2] bg-[#17130e] shadow-md">
-                      <img
-                        src={selectedMember.photo}
-                        alt={selectedMember.name}
-                        className="h-72 w-full object-cover object-top"
-                      />
-                    </div>
-
-                    <div className="md:col-span-7 space-y-4">
-                      <div className="flex flex-wrap items-center gap-2">
-                        {selectedMember.experienceYears && (
-                          <span className="inline-flex items-center gap-1.5 rounded-full bg-[#17130e] px-3.5 py-1 text-[11px] font-bold uppercase tracking-[0.14em] text-[#dcb888]">
-                            <Award className="h-3.5 w-3.5" />
-                            {selectedMember.experienceYears}
-                          </span>
-                        )}
-                        {selectedMember.dealsCount && (
-                          <span className="rounded-full border border-[#94652c]/40 bg-[#f6ead7] px-3 py-1 text-[11px] font-bold text-[#94652c]">
-                            {selectedMember.dealsCount}
-                          </span>
-                        )}
-                      </div>
-
-                      <div>
-                        <h3 className="font-serif text-2xl sm:text-3xl font-semibold text-[#17130e]">
-                          {selectedMember.name}
-                        </h3>
-                        <p className="mt-1 text-xs font-bold uppercase tracking-[0.2em] text-[#94652c]">
-                          {selectedMember.role}
-                        </p>
-                      </div>
-
-                      <p className="text-sm text-[#4a4237] leading-relaxed">
-                        {selectedMember.bio}
-                      </p>
-
-                      <div className="flex flex-wrap items-center gap-1.5 pt-1">
-                        <span className="text-xs font-bold text-[#17130e] mr-1">
-                          Languages:
-                        </span>
-                        {selectedMember.languages.map((lang) => (
-                          <span
-                            key={lang}
-                            className="rounded-full border border-[#e6dfd2] bg-[#faf7f2] px-2.5 py-0.5 text-[11px] font-semibold text-[#4a4237]"
-                          >
-                            {lang}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Verified Performance Metrics Grid (Years & Number of Transactions Only — No Currency Figures) */}
-                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-                    <div className="rounded-2xl border border-[#e6dfd2] bg-[#faf7f2] p-4">
-                      <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#94652c]">
-                        Market Experience
-                      </span>
-                      <div className="mt-1 font-serif text-xl font-bold text-[#17130e]">
-                        {selectedMember.experienceYears ?? "10+ Years"}
-                      </div>
-                    </div>
-                    <div className="rounded-2xl border border-[#e6dfd2] bg-[#faf7f2] p-4">
-                      <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#94652c]">
-                        Completed Transactions
-                      </span>
-                      <div className="mt-1 font-serif text-xl font-bold text-[#17130e]">
-                        {selectedMember.dealsCount ?? "100+ Transactions"}
-                      </div>
-                    </div>
-                    <div className="rounded-2xl border border-[#e6dfd2] bg-[#faf7f2] p-4">
-                      <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#94652c]">
-                        Advisory Base
-                      </span>
-                      <div className="mt-1 font-serif text-xl font-bold text-[#17130e]">
-                        Sheikh Zayed Road
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Top Developers & Priority Projects */}
-                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                    {selectedMember.topDevelopers && (
-                      <div className="rounded-2xl border border-[#e6dfd2] bg-white p-4">
-                        <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#94652c] mb-2.5">
-                          Top Developer Partnerships
-                        </p>
-                        <div className="flex flex-wrap gap-1.5">
-                          {selectedMember.topDevelopers.map((dev) => (
-                            <span
-                              key={dev}
-                              className="rounded-lg bg-[#17130e] px-3 py-1 text-xs font-semibold text-white"
-                            >
-                              {dev}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-
-                    {selectedMember.keyProjects && (
-                      <div className="rounded-2xl border border-[#e6dfd2] bg-white p-4">
-                        <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#94652c] mb-2.5">
-                          Priority Target Allocations
-                        </p>
-                        <div className="flex flex-wrap gap-1.5">
-                          {selectedMember.keyProjects.map((proj) => (
-                            <span
-                              key={proj}
-                              className="rounded-lg border border-[#94652c]/35 bg-[#f6ead7] px-2.5 py-1 text-xs font-semibold text-[#17130e]"
-                            >
-                              {proj}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Modal Footer CTAs */}
-                  <div className="flex flex-wrap items-center justify-between gap-3 border-t border-[#e6dfd2] pt-5">
-                    <div className="flex flex-wrap items-center gap-2.5">
-                      <a
-                        href={`${SITE.whatsappUrl}?text=${encodeURIComponent(
-                          `Hello ${selectedMember.name} at SWK Properties, I would like to discuss UAE property options.`
-                        )}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-5 py-3 text-xs font-bold uppercase tracking-[0.16em] text-white transition hover:bg-emerald-700"
-                      >
-                        <WhatsAppIcon className="h-4 w-4" />
-                        WhatsApp {selectedMember.name.split(" ")[0]}
-                      </a>
-                      <a
-                        href={`tel:${SITE.phoneRaw}`}
-                        className="inline-flex items-center gap-2 rounded-xl border border-[#e6dfd2] bg-[#faf7f2] px-5 py-3 text-xs font-bold uppercase tracking-[0.16em] text-[#17130e] transition hover:border-[#94652c]"
-                      >
-                        <Phone className="h-4 w-4 text-[#94652c]" />
-                        {SITE.phone}
-                      </a>
-                    </div>
-
-                    <Link
-                      href={`/agents/${selectedMember.slug}`}
-                      onClick={() => setSelectedMember(null)}
-                      className="inline-flex items-center gap-2 rounded-xl bg-[#17130e] px-5 py-3 text-xs font-bold uppercase tracking-[0.16em] text-white transition hover:bg-[#94652c]"
-                    >
-                      <span>Full Advisor Page</span>
-                      <ArrowRight className="h-4 w-4 text-[#dcb888]" />
-                    </Link>
-                  </div>
-                </div>
-              </motion.div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
-    </section>
-  )
-}
-
-/* ---------------------------------------------------------------- Voices (Interactive Client Spotlight + Dual Counter-Scrolling Infinite Showcase) */
-export function Voices() {
-  const allStories = [...testimonials, ...horizontalTestimonials]
-  const [activeStoryIdx, setActiveStoryIdx] = React.useState(0)
-  const featured = allStories[activeStoryIdx] ?? allStories[0]
-
-  return (
-    <section id="reviews" className="scroll-mt-20 border-b border-[#e6dfd2] bg-white py-24 overflow-hidden">
-      <div className="mx-auto max-w-7xl px-4 md:px-6">
-        <div className="flex flex-wrap items-end justify-between gap-6 mb-12">
-          <SectionHeading
-            eyebrow="08 · Verified Global Client Stories"
-            title={
-              <>
-                Trusted by Buyers From{" "}
-                <em className="text-[#94652c] not-italic">Six Countries.</em>
-              </>
-            }
-            lead="Select any buyer profile below to read how families and overseas investors from the UK, India, UAE, Canada, Pakistan, and Russia completed their acquisitions with SWK."
+        {/* Part B: Support Beyond Buying and Selling (3 Vertical Architectural Cards) */}
+        <div className="mt-24">
+          <SplitHeading
+            tone="dark"
+            size="md"
+            primary="Support beyond"
+            muted="buying and selling"
           />
-
-          {/* Interactive Buyer Selector Pills */}
-          <div className="flex flex-wrap gap-2">
-            { testimonials.map((item, idx) => {
-              const selected = idx === activeStoryIdx
-              return (
-                <button
-                  key={item.id}
-                  type="button"
-                  onClick={() => setActiveStoryIdx(idx)}
-                  className={`inline-flex items-center gap-2 rounded-full border px-3.5 py-1.5 text-xs font-semibold transition-all ${
-                    selected
-                      ? "border-[#17130e] bg-[#17130e] text-white shadow-sm"
-                      : "border-[#e6dfd2] bg-[#faf7f2] text-[#17130e] hover:border-[#94652c]"
-                  }`}
-                >
-                  <img
-                    src={item.image}
-                    alt={item.name}
-                    className="h-5 w-5 rounded-full object-cover"
-                  />
-                  <span>{item.name}</span>
-                  <span className="text-[10px] opacity-75">({item.city})</span>
-                </button>
-              )
-            })}
+          <div className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-3">
+            {BEYOND_CARDS.map((card) => (
+              <Link
+                key={card.title}
+                href={card.href}
+                className="group relative flex min-h-[380px] sm:min-h-[430px] flex-col justify-between overflow-hidden rounded-2xl bg-[#1e1e1e] p-6"
+              >
+                <img
+                  src={card.image}
+                  alt={card.title}
+                  loading="lazy"
+                  className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-b from-[#121212]/70 via-[#121212]/15 to-[#121212]/65" />
+                <h3 className="relative z-10 text-2xl font-medium tracking-[-0.03em] text-white">
+                  {card.title}
+                </h3>
+                <div className="relative z-10">
+                  <span className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-2.5 text-[11px] font-medium uppercase tracking-[0.16em] text-[#121212] transition-colors group-hover:bg-[#51fec0]">
+                    <span>Learn More</span>
+                    <ArrowRight className="h-3.5 w-3.5" />
+                  </span>
+                </div>
+              </Link>
+            ))}
           </div>
         </div>
 
-        {/* Animated Featured Client Case Study Spotlight */}
-        {featured && (
-          <AnimatePresence initial={false} mode="wait">
-            <motion.div
-              key={featured.id}
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -12 }}
-              transition={{ duration: 0.35 }}
-              className="mb-14 grid grid-cols-1 gap-8 lg:grid-cols-12 items-center rounded-3xl border border-[#e6dfd2] bg-[#17130e] p-6 md:p-10 text-white shadow-xl"
+        {/* Part C: Track Record Credentials + 2x2 Crisp White Stat Cards */}
+        <div className="mt-28 border-t border-white/[0.1] pt-20">
+          <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-12">
+            <div className="lg:col-span-5 grid grid-cols-3 gap-4">
+              <CredentialLaurel top="ORN 51517" bottom="RERA Registered Dubai Brokerage" />
+              <CredentialLaurel top="27+" bottom="Official UAE Master Developers" />
+              <CredentialLaurel top="Est. 2008" bottom="Sheikh Zayed Road Advisory" />
+            </div>
+
+            <div className="lg:col-span-7">
+              <h2 className="text-[30px] sm:text-[42px] md:text-[48px] font-medium leading-[1.1] tracking-[-0.04em] text-white">
+                Eighteen years advising Dubai buyers and investors —{" "}
+                <span className="text-[#8b8b8b]">
+                  pairing DLD transaction evidence with street-level floor-plate knowledge.
+                </span>
+              </h2>
+            </div>
+          </div>
+
+          {/* 2x2 Crisp White Avenlo Stat Cards */}
+          <div className="mt-14 grid grid-cols-1 gap-5 sm:grid-cols-2">
+            {stats.map((st) => (
+              <div
+                key={st.label}
+                className="flex min-h-[136px] items-center justify-between gap-6 rounded-2xl bg-white px-7 py-6 sm:px-9 text-[#121212]"
+              >
+                <p className="max-w-[200px] text-sm leading-snug text-[#737373]">{st.label}</p>
+                <p className="text-[42px] sm:text-[56px] font-medium leading-none tracking-[-0.045em] text-[#121212] tabular-nums">
+                  {st.value}
+                  {st.suffix}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/* 06. TICKER MARQUEE + DUBAI COMMUNITIES ARCHITECTURAL STRIP                 */
+/* -------------------------------------------------------------------------- */
+const TICKER_ITEMS = [
+  "RERA ORN 51517",
+  "DIRECT DEVELOPER ALLOCATIONS",
+  "ESCROW-REGISTERED OFF-PLAN",
+  "SHEIKH ZAYED ROAD HQ",
+  "108+ VERIFIED UAE PROJECTS",
+  "DLD TRANSFER & EJARI ADVISORY",
+];
+
+export function CommunitiesAndTicker() {
+  return (
+    <section className="bg-white">
+      {/* Crisp White Uppercase Marquee Ticker */}
+      <div className="overflow-hidden border-b border-black/[0.08] py-5">
+        <div className="avenlo-marquee-track flex items-center gap-8 text-[11px] font-medium uppercase tracking-[0.22em] text-[#121212]">
+          {[...TICKER_ITEMS, ...TICKER_ITEMS].map((item, idx) => (
+            <React.Fragment key={`${item}-${idx}`}>
+              <span className="whitespace-nowrap">{item}</span>
+              <span className="h-[5px] w-[5px] shrink-0 bg-[#121212]" aria-hidden="true" />
+            </React.Fragment>
+          ))}
+        </div>
+      </div>
+
+      {/* 8 Core Dubai Communities */}
+      <div className="mx-auto max-w-[1260px] px-4 py-24 sm:px-8">
+        <div className="flex flex-wrap items-end justify-between gap-6">
+          <div>
+            <SectionEyebrow>DUBAI DISTRICTS</SectionEyebrow>
+            <SplitHeading
+              primary="Eight flagship corridors,"
+              muted="known building by building"
+              className="mt-5"
+            />
+          </div>
+          <BracketLink href="/communities" variant="light" size="md">
+            All Community Guides
+          </BracketLink>
+        </div>
+
+        <div className="mt-12 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          {communities.map((comm) => (
+            <Link
+              key={comm.slug}
+              href={`/communities/${comm.slug}`}
+              className="group overflow-hidden rounded-2xl border border-black/[0.06] bg-[#f7f7f7] transition-all hover:border-black/20"
             >
-              <div className="lg:col-span-4 flex flex-col sm:flex-row lg:flex-col items-center sm:items-start gap-5">
+              <div className="relative aspect-[4/3] w-full overflow-hidden bg-[#ececec]">
                 <img
-                  src={featured.image}
-                  alt={featured.name}
-                  className="h-28 w-28 md:h-36 md:w-36 rounded-3xl object-cover border-2 border-[#dcb888]"
+                  src={comm.thumb}
+                  alt={comm.name}
+                  loading="lazy"
+                  className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                 />
-                <div className="text-center sm:text-left">
-                  <div className="inline-flex items-center gap-1.5 rounded-full bg-[#dcb888]/20 border border-[#dcb888]/40 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-[#dcb888]">
-                    <Globe className="h-3 w-3" />
-                    Verified Buyer · {featured.city}
-                  </div>
-                  <h3 className="mt-2 font-serif text-2xl md:text-3xl font-semibold text-white">
-                    {featured.name}
+              </div>
+              <div className="p-5">
+                <div className="flex items-center justify-between gap-2">
+                  <h3 className="text-[18px] font-medium tracking-[-0.025em] text-[#121212]">
+                    {comm.name}
                   </h3>
-                  <p className="text-xs font-medium text-[#dcb888]">
-                    {featured.role}
+                  <ArrowUpRight className="h-4 w-4 shrink-0 text-[#8b8b8b] transition-colors group-hover:text-[#121212]" />
+                </div>
+                <p className="mt-1.5 line-clamp-2 text-xs leading-relaxed text-[#737373]">
+                  {comm.blurb}
+                </p>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/* 07. STAGES OF ACQUISITION — 4-COLUMN STAGGERED WAVE (AVENLO SIGNATURE)     */
+/* -------------------------------------------------------------------------- */
+const ACQUISITION_STAGES = [
+  {
+    num: "01",
+    title: "Brief & Shortlist",
+    body: "We align on yield, lifestyle, or Golden Visa goals, then narrow 108+ launches and ready units to a sharp 3–5 contender sheet.",
+    dashed: true,
+    offset: "lg:mt-0",
+  },
+  {
+    num: "02",
+    title: "Viewings & DLD Check",
+    body: "Sales gallery tours or building inspections paired with RERA escrow status, developer handover history, and service-charge evidence.",
+    dashed: false,
+    offset: "lg:mt-16",
+  },
+  {
+    num: "03",
+    title: "Reservation, Form F & SPA",
+    body: "We price every offer on recent DLD comparables, review SPA/Form F clauses in plain English, and structure mortgage pre-approval.",
+    dashed: true,
+    offset: "lg:mt-4",
+  },
+  {
+    num: "04",
+    title: "Transfer, Oqood & Keys",
+    body: "Developer NOC, DLD Trustee transfer or Oqood registration, handover snagging, DEWA setup, and Ejari leasing handled cleanly.",
+    dashed: false,
+    offset: "lg:mt-20",
+  },
+];
+
+export function AcquisitionStagesWave() {
+  return (
+    <section className="border-t border-black/[0.06] bg-[#f7f7f7] py-24 sm:py-28">
+      <div className="mx-auto max-w-[1260px] px-4 sm:px-8">
+        <div className="text-center">
+          <SectionEyebrow align="center">STAGES OF A TRANSACTION</SectionEyebrow>
+          <SplitHeading
+            align="center"
+            primary="From first brief"
+            muted="to Title Deed"
+            inline
+            className="mt-5"
+          />
+        </div>
+
+        <div className="mt-16 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 items-start">
+          {ACQUISITION_STAGES.map((stage) => (
+            <BlurReveal key={stage.num} className={stage.offset}>
+              <div className="flex min-h-[290px] flex-col justify-between rounded-2xl border border-black/[0.06] bg-white p-7 sm:p-8">
+                {stage.dashed ? (
+                  <div className="flex h-16 w-16 items-center justify-center rounded-full border border-dashed border-[#cfcfcf] font-mono text-sm font-medium text-[#121212]">
+                    {stage.num}
+                  </div>
+                ) : (
+                  <span className="font-mono text-xs font-medium tracking-[0.18em] text-[#8b8b8b]">
+                    STAGE {stage.num}
+                  </span>
+                )}
+
+                <div className="mt-10">
+                  <h3 className="text-[20px] font-medium tracking-[-0.025em] text-[#121212]">
+                    {stage.title}
+                  </h3>
+                  <p className="mt-3 text-sm leading-[1.6] text-[#737373]">{stage.body}</p>
+                </div>
+              </div>
+            </BlurReveal>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/* 08. CLIENT STORIES STRIP                                                   */
+/* -------------------------------------------------------------------------- */
+export function ClientVoices() {
+  const allVoices = [...testimonials, ...horizontalTestimonials].slice(0, 6);
+
+  return (
+    <section className="bg-[#f7f7f7] pt-10 pb-8">
+      <div className="mx-auto max-w-[1260px] px-4 sm:px-8">
+        <div className="text-center">
+          <SectionEyebrow align="center">WHAT CLIENTS SAY</SectionEyebrow>
+          <SplitHeading
+            align="center"
+            primary="Judged on outcomes,"
+            muted="not on brochures"
+            className="mt-5"
+          />
+        </div>
+
+        <div className="mt-14 grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+          {allVoices.map((item) => (
+            <article
+              key={item.id}
+              className="flex flex-col justify-between rounded-2xl border border-black/[0.06] bg-white p-7"
+            >
+              <div>
+                <span
+                  aria-hidden="true"
+                  className="font-mono text-sm tracking-[0.2em] text-[#cfcfcf]"
+                >
+                  {"//"}
+                </span>
+                <p className="mt-4 text-[15px] leading-[1.65] text-[#4a4a4a]">
+                  &ldquo;{item.quote}&rdquo;
+                </p>
+              </div>
+              <div className="mt-8 flex items-center gap-3.5 pt-4 border-t border-black/[0.05]">
+                <img
+                  src={item.image}
+                  alt={item.name}
+                  loading="lazy"
+                  className="h-10 w-10 rounded-lg object-cover"
+                />
+                <div>
+                  <p className="text-sm font-medium text-[#121212]">{item.name}</p>
+                  <p className="text-xs text-[#8b8b8b]">
+                    {item.role} · {item.city}
                   </p>
                 </div>
               </div>
-
-              <div className="lg:col-span-8 space-y-5 border-t lg:border-t-0 lg:border-l border-white/15 pt-5 lg:pt-0 lg:pl-8">
-                <div className="flex items-center gap-1 text-[#dcb888] text-sm">
-                  {"★★★★★"}
-                  <span className="ml-2 text-[11px] font-bold uppercase tracking-[0.2em] text-white/75">
-                    Completed Transaction Review
-                  </span>
-                </div>
-                <blockquote className="font-serif text-xl md:text-3xl leading-relaxed text-white">
-                  &ldquo;{featured.quote}&rdquo;
-                </blockquote>
-                <div className="flex flex-wrap items-center justify-between gap-4 pt-2">
-                  <span className="text-xs text-white/75">
-                    File handled by SWK Advisory Desk · Al Saqr Business Tower, Sheikh Zayed Road
-                  </span>
-                  <Link
-                    href="/contact"
-                    className="inline-flex items-center gap-2 rounded-full bg-[#dcb888] px-5 py-2.5 text-xs font-bold uppercase tracking-[0.16em] text-[#17130e] transition hover:bg-white"
-                  >
-                    <span>Start Your Shortlist</span>
-                    <ArrowRight className="h-3.5 w-3.5" />
-                  </Link>
-                </div>
-              </div>
-            </motion.div>
-          </AnimatePresence>
-        )}
-
-        {/* Dual Counter-Scrolling Infinite Client Testimonial Streams (Zero Repeated Images Between Rows) */}
-        <div className="space-y-6">
-          <div>
-            <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
-              <span className="text-xs font-bold uppercase tracking-[0.22em] text-[#94652c]">
-                Stream 01 · International &amp; Regional Investor Feedback
-              </span>
-              <span className="text-xs font-medium text-[#786e60]">
-                Hover any review card to pause
-              </span>
-            </div>
-            <TestimonialInfiniteMarquee
-              items={testimonials.map((t) => ({
-                id: t.id,
-                name: t.name,
-                role: t.role,
-                city: t.city,
-                country: t.country,
-                quote: t.quote,
-                image: t.image,
-                rating: t.rating,
-              }))}
-              direction="left"
-              speed="slow"
-            />
-          </div>
-
-          <div>
-            <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
-              <span className="text-xs font-bold uppercase tracking-[0.22em] text-[#17130e]">
-                Stream 02 · End-User Family &amp; Landlord Reviews
-              </span>
-            </div>
-            <TestimonialInfiniteMarquee
-              items={horizontalTestimonials.map((t) => ({
-                id: t.id,
-                name: t.name,
-                role: t.role,
-                city: t.city,
-                country: t.country,
-                quote: t.quote,
-                image: t.image,
-                rating: t.rating,
-              }))}
-              direction="right"
-              speed="slow"
-            />
-          </div>
+            </article>
+          ))}
         </div>
       </div>
     </section>
-  )
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/* 09. DUBAI MARKET INSIGHTS & BUYER GUIDES PREVIEW                           */
+/* -------------------------------------------------------------------------- */
+export function InsightsPreview() {
+  const latest = blogArticles.slice(0, 3);
+
+  return (
+    <section className="bg-white py-24">
+      <div className="mx-auto max-w-[1260px] px-4 sm:px-8">
+        <div className="flex flex-wrap items-end justify-between gap-6">
+          <div>
+            <SectionEyebrow>JOURNAL &amp; BRIEFINGS</SectionEyebrow>
+            <SplitHeading
+              primary="Notes from Sheikh"
+              muted="Zayed Road"
+              className="mt-5"
+            />
+          </div>
+          <div className="flex flex-wrap items-center gap-3">
+            <Link
+              href="/guides/buying"
+              className="rounded-full border border-black/10 bg-[#f7f7f7] px-4 py-2.5 text-xs font-medium text-[#121212] hover:bg-[#ececec]"
+            >
+              Buying Guide
+            </Link>
+            <Link
+              href="/guides/investing"
+              className="rounded-full border border-black/10 bg-[#f7f7f7] px-4 py-2.5 text-xs font-medium text-[#121212] hover:bg-[#ececec]"
+            >
+              Investor Guide
+            </Link>
+            <BracketLink href="/insights" variant="light" size="sm">
+              All Briefings
+            </BracketLink>
+          </div>
+        </div>
+
+        <div className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-3">
+          {latest.map((art) => (
+            <Link
+              key={art.slug}
+              href={`/insights/${art.slug}`}
+              className="group flex flex-col justify-between overflow-hidden rounded-2xl border border-black/[0.07] bg-white transition-all hover:border-black/20 hover:shadow-[0_20px_50px_rgba(18,18,18,0.07)]"
+            >
+              <div>
+                <div className="relative aspect-[16/10] w-full overflow-hidden bg-[#f5f5f5]">
+                  <img
+                    src={art.image}
+                    alt={art.title}
+                    loading="lazy"
+                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                </div>
+                <div className="p-6">
+                  <p className="text-[11px] font-medium uppercase tracking-[0.16em] text-[#8b8b8b]">
+                    {art.category} · {art.readTime}
+                  </p>
+                  <h3 className="mt-2.5 text-[20px] font-medium leading-[1.25] tracking-[-0.025em] text-[#121212] group-hover:text-[#525252]">
+                    {art.title}
+                  </h3>
+                  <p className="mt-2.5 line-clamp-3 text-sm leading-relaxed text-[#666666]">
+                    {art.excerpt}
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-center justify-between border-t border-black/[0.06] px-6 py-4 text-xs font-medium text-[#121212]">
+                <span>{art.date}</span>
+                <span className="inline-flex items-center gap-1 group-hover:text-[#0e9f6e]">
+                  Read <ArrowUpRight className="h-3.5 w-3.5" />
+                </span>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
 }
