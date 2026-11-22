@@ -1,15 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import {
-  Building2,
-  Calendar,
-  CheckCircle2,
-  ExternalLink,
-  FileText,
-  MapPin,
-  ShieldCheck,
-} from "lucide-react";
+import { ArrowUpRight, Check, ShieldCheck } from "lucide-react";
 import { getDeveloper, getProject, projects } from "@/lib/developers";
 import { EnquiryForm } from "@/components/site/enquiry-form";
 import { JsonLd } from "@/components/seo/json-ld";
@@ -17,6 +9,9 @@ import { breadcrumbLd, buildMeta } from "@/lib/seo";
 import { SITE } from "@/lib/swk";
 import { MapEmbed } from "@/components/site/map-embed";
 import { WhatsAppIcon } from "@/components/site/whatsapp-icon";
+import { AvenloPageHeader } from "@/components/avenlo/page-header";
+import { BracketLink } from "@/components/avenlo/bracket-button";
+import { CtaBanner, SectionEyebrow, SplitHeading } from "@/components/avenlo/motion";
 
 export function generateStaticParams() {
   return projects.map((p) => ({ slug: p.slug }));
@@ -32,21 +27,20 @@ export async function generateMetadata({
   if (!project) {
     return buildMeta({
       title: "Off-Plan Project Not Found",
-      description: "Explore 108 verified UAE off-plan developments with SWK Properties.",
+      description: "Explore 108+ verified UAE off-plan developments with SWK Properties.",
       path: "/off-plan",
     });
   }
 
   return buildMeta({
-    title: `${project.name} by ${project.developer} (${project.community}) | Off-Plan Payment Plan & Brochure`,
-    description: `${project.summary} Request verified floor plans, starting prices, handover schedule, and DLD escrow details from SWK Properties (RERA ORN ${SITE.reraOrn}).`,
+    title: `${project.name} by ${project.developer} (${project.community})`,
+    description: `${project.summary} Request floor plans, payment schedule, and DLD escrow details from SWK Properties (RERA ORN ${SITE.reraOrn}).`,
     path: `/off-plan/${project.slug}`,
     image: project.images[0],
     keywords: [
       project.name,
       `${project.name} ${project.developer}`,
       `${project.name} payment plan`,
-      `${project.name} floor plan`,
       `${project.community} off-plan`,
       project.developer,
     ],
@@ -72,11 +66,11 @@ export default async function OffPlanProjectDetailPage({
     .slice(0, 3);
 
   const waMessage = encodeURIComponent(
-    `Hello SWK Properties, I would like the verified brochure, floor plans, and current unit availability for ${project.name} by ${project.developer} in ${project.community}.`
+    `Hello SWK Properties, I would like the brochure, floor plans, payment schedule, and live unit availability for ${project.name} by ${project.developer} in ${project.community}.`
   );
 
   return (
-    <>
+    <div className="bg-white">
       <JsonLd
         data={breadcrumbLd([
           { name: "Home", path: "/" },
@@ -86,304 +80,227 @@ export default async function OffPlanProjectDetailPage({
         ])}
       />
 
-      <div className="mx-auto max-w-7xl px-4 py-10">
-        {/* Breadcrumb */}
-        <nav aria-label="Breadcrumb" className="mb-6 flex flex-wrap items-center gap-2 text-xs text-[#786e60]">
-          <Link href="/" className="hover:text-[#94652c]">Home</Link>
-          <span>/</span>
-          <Link href="/off-plan" className="hover:text-[#94652c]">Off-Plan Launches</Link>
-          <span>/</span>
-          <Link href={`/developers/${project.developerSlug}`} className="hover:text-[#94652c]">
-            {project.developer}
-          </Link>
-          <span>/</span>
-          <span className="text-[#94652c]">{project.name}</span>
-        </nav>
+      <AvenloPageHeader
+        eyebrow={`${project.developer} · ${project.community}`}
+        title={project.name}
+        lead={project.summary}
+        breadcrumb={[
+          { label: "Home", href: "/" },
+          { label: "Off-Plan", href: "/off-plan" },
+          { label: project.developer, href: `/developers/${project.developerSlug}` },
+          { label: project.name },
+        ]}
+        meta={
+          <>
+            <span>{project.collection}</span>
+            <span className="text-[#cfcfcf]">·</span>
+            <span>0% Buyer Commission (Primary Release)</span>
+            <span className="text-[#cfcfcf]">·</span>
+            <span>Escrow Registered (Law 8/2007)</span>
+          </>
+        }
+        actions={
+          <>
+            <BracketLink href="#enquire" variant="light" size="md">
+              Request Floor Plans
+            </BracketLink>
+            <BracketLink href="/calculators" variant="light" size="md">
+              Calculate Payment
+            </BracketLink>
+          </>
+        }
+      />
 
-        {/* §09 Off-Plan Project Header */}
-        <div className="rounded-3xl border border-[#e6dfd2] bg-white p-6 md:p-8">
-          <div className="flex flex-wrap items-start justify-between gap-6">
-            <div className="max-w-3xl space-y-3">
-              <div className="flex flex-wrap items-center gap-2">
-                <span className="rounded-full bg-[#17130e] px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-white">
-                  Off-Plan · {project.collection}
-                </span>
-                <span className="rounded-full border border-emerald-500/35 bg-emerald-500/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-wider text-emerald-700">
-                  DLD Escrow Mandatory
-                </span>
-                <span className="rounded-full border border-amber-400/35 bg-amber-400/10 px-3 py-1 text-[10px] font-medium text-amber-800">
-                  Visuals Are Developer Architectural Renders
-                </span>
-              </div>
+      {/* Full-Width Architectural Render Showcase */}
+      <section className="mx-auto max-w-[1260px] px-4 py-12 sm:px-8">
+        <div className="relative overflow-hidden rounded-2xl bg-[#f5f5f5]">
+          <img
+            src={project.images[0]}
+            alt={`${project.name} architectural render by ${project.developer}`}
+            className="h-[340px] sm:h-[520px] md:h-[600px] w-full object-cover"
+          />
+          <span className="absolute bottom-4 left-4 rounded-full bg-[#121212]/80 px-3.5 py-1.5 text-[11px] font-medium text-white backdrop-blur-md">
+            Developer Architectural Render · Subject to Official SPA
+          </span>
+        </div>
 
-              <h1 className="font-serif text-3xl md:text-5xl font-semibold text-[#17130e]">
-                {project.name}
-              </h1>
+        {/* 4-Column Quick Facts */}
+        <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-4">
+          {[
+            { label: "Master Developer", value: project.developer },
+            { label: "District / Corridor", value: project.community },
+            { label: "Collection", value: project.collection },
+            { label: "Agency Commission", value: "0% (Developer-Paid)" },
+          ].map((stat) => (
+            <div
+              key={stat.label}
+              className="rounded-2xl border border-black/[0.06] bg-[#f7f7f7] p-5"
+            >
+              <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-[#8b8b8b]">
+                {stat.label}
+              </p>
+              <p className="mt-2 text-base sm:text-lg font-medium tracking-[-0.02em] text-[#121212]">
+                {stat.value}
+              </p>
+            </div>
+          ))}
+        </div>
+      </section>
 
-              <div className="flex flex-wrap items-center gap-4 text-xs text-[#4a4237]">
-                <Link
-                  href={`/developers/${project.developerSlug}`}
-                  className="inline-flex items-center gap-1.5 font-semibold text-[#94652c] hover:underline"
-                >
-                  {dev?.logo ? (
-                    <span className="inline-flex h-9 items-center rounded-lg border border-[#e6dfd2] bg-white px-3">
-                      <img src={dev.logo} alt={project.developer} className="h-5 w-auto max-w-[130px] object-contain" />
-                    </span>
-                  ) : (
-                    <Building2 className="h-4 w-4" />
-                  )}
-                  Developer: {project.developer}
-                </Link>
-                <span className="inline-flex items-center gap-1.5">
-                  <MapPin className="h-4 w-4 text-[#94652c]" />
-                  Community: {project.community}
-                </span>
+      {/* Project Overview, Due Diligence Checklist & Developer Card */}
+      <section className="mx-auto max-w-[1260px] px-4 py-10 sm:px-8">
+        <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 items-start">
+          <div className="lg:col-span-7 space-y-8">
+            <div>
+              <SectionEyebrow>DEVELOPMENT BRIEF</SectionEyebrow>
+              <h2 className="mt-4 text-3xl sm:text-4xl font-medium tracking-[-0.035em] text-[#121212]">
+                What to verify before reserving at {project.name}
+              </h2>
+              <p className="mt-4 text-[16px] leading-[1.7] text-[#4a4a4a]">{project.blurb}</p>
+
+              <div className="mt-6 flex flex-wrap gap-2">
+                {project.tags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="rounded-full border border-black/10 bg-[#f7f7f7] px-3.5 py-1.5 text-xs font-medium text-[#121212]"
+                  >
+                    {tag}
+                  </span>
+                ))}
               </div>
             </div>
 
-            <div className="rounded-2xl border border-[#94652c]/35 bg-[#faf7f2] p-5 min-w-[260px]">
-              <div className="text-[11px] uppercase tracking-[0.2em] text-[#94652c]">
-                Starting Price & Allocations
-              </div>
-              <div className="mt-1 font-serif text-2xl font-bold text-[#17130e]">
-                Indicative · On Request
-              </div>
-              <p className="mt-1 text-[11px] text-[#786e60]">
-                Confirmed live from {project.developer} inventory sheet + 4% DLD Oqood fee
+            <div className="rounded-2xl border border-black/[0.06] bg-[#f7f7f7] p-6 sm:p-8">
+              <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-[#8b8b8b]">
+                SWK DUE DILIGENCE PROTOCOL
               </p>
+              <ul className="mt-5 space-y-3.5 text-sm text-[#4a4a4a]">
+                {[
+                  "Confirm RERA project registration number and official project-specific escrow bank account before transfer.",
+                  "Audit floor-plate efficiency, view orientation, and projected Mollak service charges per sq ft.",
+                  "Review full payment schedule milestones, DLD 4% Oqood registration timing, and pre-handover resale clause in the SPA.",
+                  "Compare delivered communities by the same developer against brochure finishes.",
+                ].map((pt) => (
+                  <li key={pt} className="flex items-start gap-3">
+                    <Check className="mt-0.5 h-4 w-4 shrink-0 text-[#0e9f6e]" />
+                    <span>{pt}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {dev ? (
+              <div className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-black/[0.08] bg-white p-6">
+                <div className="flex items-center gap-4">
+                  {dev.logo ? (
+                    <div className="flex h-14 w-24 items-center justify-center rounded-xl bg-[#f7f7f7] p-2.5">
+                      <img
+                        src={dev.logo}
+                        alt={dev.name}
+                        className="max-h-9 max-w-full object-contain"
+                      />
+                    </div>
+                  ) : null}
+                  <div>
+                    <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-[#8b8b8b]">
+                      MASTER DEVELOPER
+                    </p>
+                    <p className="mt-0.5 text-lg font-medium text-[#121212]">{dev.name}</p>
+                    <p className="text-xs text-[#737373]">
+                      {dev.emirate} · {dev.projectCount} tracked releases
+                    </p>
+                  </div>
+                </div>
+                <Link
+                  href={`/developers/${dev.slug}`}
+                  className="inline-flex items-center gap-1.5 text-xs font-medium uppercase tracking-[0.14em] text-[#121212] underline underline-offset-4 hover:text-[#0e9f6e]"
+                >
+                  <span>Developer Profile</span>
+                  <ArrowUpRight className="h-3.5 w-3.5" />
+                </Link>
+              </div>
+            ) : null}
+
+            <MapEmbed
+              query={`${project.community}, UAE`}
+              zoom={13}
+              title={`${project.name} — ${project.community}`}
+            />
+          </div>
+
+          <div id="enquire" className="lg:col-span-5 lg:sticky lg:top-28 space-y-5">
+            <EnquiryForm
+              context="brochure"
+              heading={`Request ${project.name} dossier`}
+              subheading="Receive current developer inventory, floor plans, payment schedule, and escrow confirmation."
+              propertyTitle={`${project.name} by ${project.developer}`}
+              community={project.community}
+              developer={project.developer}
+              compact
+            />
+
+            <div className="rounded-2xl border border-black/[0.07] bg-[#f7f7f7] p-5 text-xs text-[#525252] space-y-3">
+              <div className="flex items-center gap-2 font-medium text-[#121212]">
+                <ShieldCheck className="h-4 w-4 text-[#0e9f6e]" />
+                <span>Direct Developer Desk · RERA ORN {SITE.reraOrn}</span>
+              </div>
               <a
                 href={`https://wa.me/${SITE.phoneRaw.replace("+", "")}?text=${waMessage}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-500 px-4 py-2.5 text-xs font-bold uppercase tracking-[0.14em] text-black hover:bg-emerald-400"
+                className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#121212] px-5 py-3 text-xs font-medium uppercase tracking-[0.14em] text-white hover:bg-[#2b2b2b]"
               >
-                <WhatsAppIcon className="h-4 w-4" />
-                Request Live Availability
+                <WhatsAppIcon className="h-4 w-4 text-[#51fec0]" />
+                <span>WhatsApp for Live Availability</span>
               </a>
             </div>
           </div>
         </div>
+      </section>
 
-        {/* §09 Clearly Labelled Developer Renders Gallery */}
-        <div className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-2">
-          {project.images.map((img, i) => (
-            <div key={i} className="relative overflow-hidden rounded-3xl border border-[#e6dfd2]">
-              <img
-                src={img}
-                alt={`${project.name} by ${project.developer} — Developer Render ${i + 1}`}
-                className="h-[340px] md:h-[420px] w-full object-cover"
-              />
-              <span className="absolute bottom-3 left-3 rounded-full bg-[#17130e]/90 px-3 py-1 text-[11px] text-white backdrop-blur-md">
-                {project.name} · Developer Architectural Render {i + 1}
-              </span>
-            </div>
-          ))}
-        </div>
-
-        {/* §09 Project Details, Payment Plan, Handover Source & DLD Escrow Compliance */}
-        <div className="mt-10 grid grid-cols-1 gap-10 lg:grid-cols-12 items-start">
-          <div className="lg:col-span-7 space-y-8">
-            <section className="rounded-3xl border border-[#e6dfd2] bg-white p-6 md:p-8">
-              <h2 className="font-serif text-2xl md:text-3xl font-semibold text-[#17130e]">
-                Development Overview & Masterplan Context
-              </h2>
-              <p className="mt-4 text-sm md:text-base text-[#4a4237] leading-relaxed">
-                {project.summary}
-              </p>
-              <p className="mt-4 text-sm text-[#4a4237] leading-relaxed">
-                Positioned within <strong>{project.community}</strong> and delivered by{" "}
-                <Link
-                  href={`/developers/${project.developerSlug}`}
-                  className="text-[#94652c] underline"
-                >
-                  {project.developer}
-                </Link>
-                , {project.name} forms part of the developer&apos;s{" "}
-                <strong>{project.collection}</strong> portfolio. SWK Properties provides independent buyer representation, unit comparison across floor plates, SPA review coordination, and DLD Oqood registration support.
-              </p>
-
-              {/* Key Off-Plan Checkpoints (§09) */}
-              <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-3 border-t border-[#e6dfd2] pt-5 text-xs">
-                <div className="rounded-2xl border border-[#e6dfd2] bg-[#faf7f2] p-4">
-                  <span className="text-[#786e60] block">Construction & Booking Status</span>
-                  <strong className="mt-1 flex items-center gap-1.5 text-sm text-emerald-700">
-                    <CheckCircle2 className="h-4 w-4" />
-                    Off-Plan Release · Allocations Checked on Request
-                  </strong>
-                </div>
-                <div className="rounded-2xl border border-[#e6dfd2] bg-[#faf7f2] p-4">
-                  <span className="text-[#786e60] block">Handover Date & Source</span>
-                  <strong className="mt-1 flex items-center gap-1.5 text-sm text-[#94652c]">
-                    <Calendar className="h-4 w-4" />
-                    Per Official {project.developer} SPA Schedule
-                  </strong>
-                </div>
-                <div className="rounded-2xl border border-[#e6dfd2] bg-[#faf7f2] p-4">
-                  <span className="text-[#786e60] block">Payment Plan Structure</span>
-                  <strong className="mt-1 block text-sm text-[#17130e]">
-                    Construction-Linked Milestone Schedule (+ 4% DLD Fee)
-                  </strong>
-                </div>
-                <div className="rounded-2xl border border-[#e6dfd2] bg-[#faf7f2] p-4">
-                  <span className="text-[#786e60] block">Buyer Agency Commission</span>
-                  <strong className="mt-1 block text-sm text-emerald-700">
-                    0% Commission on Direct Developer Allocations
-                  </strong>
-                </div>
-              </div>
-            </section>
-
-            {/* Typical Off-Plan Milestone Payment Schedule Breakdown */}
-            <section className="rounded-3xl border border-[#e6dfd2] bg-white p-6 md:p-8">
-              <div className="flex flex-wrap items-center justify-between gap-2">
-                <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#94652c]">
-                    Escrow-Linked Instalment Structure
-                  </p>
-                  <h2 className="mt-1 font-serif text-2xl font-semibold text-[#17130e]">
-                    How Payments Work for {project.name}
-                  </h2>
-                </div>
-                <Link
-                  href="/calculators"
-                  className="text-xs font-semibold text-[#94652c] hover:underline"
-                >
-                  Open Payment Calculator →
-                </Link>
-              </div>
-
-              <div className="mt-5 overflow-hidden rounded-2xl border border-[#e6dfd2]">
-                <table className="w-full text-left text-xs">
-                  <thead className="bg-[#faf7f2] text-[#94652c]">
-                    <tr>
-                      <th className="p-3.5 font-semibold">Milestone Stage</th>
-                      <th className="p-3.5 font-semibold">Typical Allocation</th>
-                      <th className="p-3.5 font-semibold">Regulatory Safeguard</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-[#e6dfd2] text-[#4a4237]">
-                    <tr>
-                      <td className="p-3.5 font-medium text-[#17130e]">1. Reservation & SPA Signing</td>
-                      <td className="p-3.5">10% – 20% Down Payment + 4% DLD Oqood Fee</td>
-                      <td className="p-3.5">Paid to {project.developer} DLD RERA Project Escrow Account</td>
-                    </tr>
-                    <tr>
-                      <td className="p-3.5 font-medium text-[#17130e]">2. Construction Instalments</td>
-                      <td className="p-3.5">40% – 60% across certified build stages</td>
-                      <td className="p-3.5">Released only against DLD engineer progress certification</td>
-                    </tr>
-                    <tr>
-                      <td className="p-3.5 font-medium text-[#17130e]">3. Completion & Key Handover</td>
-                      <td className="p-3.5">20% – 40% on Building Completion Certificate (BCC)</td>
-                      <td className="p-3.5">Includes pre-handover snagging inspection & Title Deed issuance</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </section>
-
-            <MapEmbed
-              query={`${project.name}, ${project.community}, UAE`}
-              zoom={13}
-              title={`${project.name} location — ${project.community}`}
+      {/* Related Releases */}
+      {relatedProjects.length > 0 ? (
+        <section className="border-t border-black/[0.06] bg-[#f7f7f7] py-16">
+          <div className="mx-auto max-w-[1260px] px-4 sm:px-8">
+            <SectionEyebrow>RELATED RELEASES</SectionEyebrow>
+            <SplitHeading
+              primary="Compare neighbouring"
+              muted="developer launches"
+              size="md"
+              inline
+              className="mt-4"
             />
-
-            {/* §09 DLD Registration, Escrow & Render Disclaimer */}
-            <section className="rounded-3xl border border-[#94652c]/35 bg-[#f6ead7]/55 p-6 md:p-8 space-y-3">
-              <div className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.22em] text-[#94652c]">
-                <ShieldCheck className="h-4 w-4 text-emerald-600" />
-                DLD Project Escrow & Availability Disclaimer
-              </div>
-              <p className="text-xs text-[#4a4237] leading-relaxed">
-                All off-plan developments in Dubai are regulated under Dubai Law No. 8 of 2007 Concerning Escrow Accounts for Real Estate Development. Before you sign a reservation form or transfer any funds for <strong>{project.name}</strong>, your SWK Properties consultant provides the official DLD project registration sheet, escrow account IBAN details, and unit-specific floor plan.
-              </p>
-              <p className="text-xs text-[#786e60] leading-relaxed">
-                <strong>Render & Specification Notice:</strong> Visuals on this page are artistic impressions and architectural renders supplied by {project.developer}. Final layouts, unit areas, views, service charges, and completion dates are governed exclusively by the executed Sales & Purchase Agreement (SPA).
-              </p>
-              <div className="pt-2 flex flex-wrap gap-4 text-xs">
-                <a
-                  href="https://dubailand.gov.ae"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 font-semibold text-[#94652c] hover:underline"
-                >
-                  Verify Project Status on dubailand.gov.ae
-                  <ExternalLink className="h-3.5 w-3.5" />
-                </a>
-                {dev && (
-                  <Link
-                    href={`/developers/${dev.slug}`}
-                    className="inline-flex items-center gap-1.5 font-semibold text-[#17130e] hover:text-[#94652c]"
-                  >
-                    <FileText className="h-3.5 w-3.5 text-[#94652c]" />
-                    Inspect {dev.name} Track Record ({dev.projectCount} Projects)
-                  </Link>
-                )}
-              </div>
-            </section>
-          </div>
-
-          {/* Right Column: Brochure, Floor Plan & Unit Availability Request Form */}
-          <div className="lg:col-span-5 lg:sticky lg:top-24">
-            <EnquiryForm
-              context="brochure"
-              heading={`Request ${project.name} Brochure & Floor Plans`}
-              subheading={`Receive the official ${project.developer} brochure, masterplan PDF, payment schedule, and live unit availability.`}
-              propertyRef={`OFFPLAN-${project.slug.toUpperCase().slice(0, 12)}`}
-              propertyTitle={`${project.name} by ${project.developer}`}
-              community={project.community}
-              developer={project.developer}
-            />
-          </div>
-        </div>
-
-        {/* Related Off-Plan Projects */}
-        {relatedProjects.length > 0 && (
-          <section className="mt-16 border-t border-[#e6dfd2] pt-14">
-            <div className="mb-8 flex items-end justify-between">
-              <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#94652c]">
-                  Compare Alternative Releases
-                </p>
-                <h2 className="mt-1 font-serif text-3xl font-semibold text-[#17130e]">
-                  Related Projects by {project.developer} & in {project.community}
-                </h2>
-              </div>
-              <Link href="/off-plan" className="text-xs font-semibold text-[#94652c] hover:underline">
-                View All 108 Projects →
-              </Link>
-            </div>
-
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+            <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-3">
               {relatedProjects.map((rel) => (
                 <Link
                   key={rel.slug}
                   href={`/off-plan/${rel.slug}`}
-                  className="group overflow-hidden rounded-3xl border border-[#e6dfd2] bg-white transition hover:border-[#94652c]/40"
+                  className="group overflow-hidden rounded-2xl border border-black/[0.07] bg-white transition-all hover:border-black/20"
                 >
-                  <div className="relative h-52 w-full overflow-hidden">
+                  <div className="aspect-[16/10] w-full overflow-hidden bg-[#ececec]">
                     <img
-                      src={rel.images[0]}
+                      src={rel.thumb || rel.image}
                       alt={rel.name}
-                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      loading="lazy"
+                      className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                     />
-                    <span className="absolute top-3 left-3 rounded-full bg-[#17130e]/90 px-3 py-1 text-[10px] font-semibold uppercase tracking-wider text-[#dcb888]">
-                      {rel.developer}
-                    </span>
                   </div>
                   <div className="p-5">
-                    <h3 className="font-serif text-xl font-semibold text-[#17130e] group-hover:text-[#94652c]">
+                    <p className="text-[11px] font-medium uppercase tracking-[0.16em] text-[#8b8b8b]">
+                      {rel.developer} · {rel.community}
+                    </p>
+                    <h3 className="mt-2 text-xl font-medium tracking-[-0.025em] text-[#121212]">
                       {rel.name}
                     </h3>
-                    <p className="mt-1 text-xs text-[#786e60]">{rel.community}</p>
-                    <p className="mt-2 line-clamp-2 text-xs text-[#4a4237]">{rel.summary}</p>
                   </div>
                 </Link>
               ))}
             </div>
-          </section>
-        )}
-      </div>
-    </>
+          </div>
+        </section>
+      ) : null}
+
+      <CtaBanner />
+    </div>
   );
 }

@@ -1,18 +1,17 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import { LivelyPageHero } from "@/components/ui/lively-page-hero";
 import { PropertyCard } from "@/components/site/property-card";
 import { EnquiryForm } from "@/components/site/enquiry-form";
 import { JsonLd } from "@/components/seo/json-ld";
 import { LISTINGS } from "@/lib/listings";
-import { GUIDES } from "@/lib/guides";
 import { breadcrumbLd, buildMeta } from "@/lib/seo";
-import { SITE } from "@/lib/swk";
+import { AvenloPageHeader } from "@/components/avenlo/page-header";
+import { BracketLink } from "@/components/avenlo/bracket-button";
+import { CtaBanner, SectionEyebrow, SplitHeading } from "@/components/avenlo/motion";
 
 export const metadata: Metadata = buildMeta({
-  title: "Buy Ready Property in Dubai | Secondary Market Villas, Apartments & Penthouses",
+  title: "Buy Ready Property in Dubai | Secondary Market Homes",
   description:
-    "Browse DLD Trakheesi-permitted ready apartments, waterfront villas, townhouses, and penthouses for sale in Dubai. Full RERA Form F, NOC, and DLD Trustee transfer support by SWK Properties (ORN 51517).",
+    "Acquire ready apartments, waterfront villas, townhouses, and penthouses in Dubai with RERA Form F, NOC, and DLD Trustee transfer support from SWK Properties (ORN 51517).",
   path: "/buy",
   image: "/img/communities/downtown-dubai.webp",
   keywords: [
@@ -20,18 +19,15 @@ export const metadata: Metadata = buildMeta({
     "ready apartments for sale Dubai",
     "Palm Jumeirah villas for sale",
     "Downtown Dubai apartments for sale",
-    "Dubai Hills Estate property for sale",
     "RERA Form F Dubai transfer",
-    "SWK Properties secondary market",
   ],
 });
 
 export default function BuyPage() {
   const buyListings = LISTINGS.filter((l) => l.purpose === "buy");
-  const buyingGuide = GUIDES.buying;
 
   return (
-    <>
+    <div className="bg-white">
       <JsonLd
         data={breadcrumbLd([
           { name: "Home", path: "/" },
@@ -39,124 +35,80 @@ export default function BuyPage() {
         ])}
       />
 
-      <LivelyPageHero
-        badge="Secondary Market Desk · Title Deed & Trakheesi Verified"
-        title="Acquire Ready Homes Across"
-        highlight="Dubai's Freehold Districts"
-        description="Every secondary market listing presented by SWK Properties is cross-checked for Title Deed validity, DLD Trakheesi marketing permit, service-charge history, and recent comparable transfers."
-        backgroundImage="/img/communities/downtown-dubai.webp"
-        primaryCta={{ label: "Filter All Ready Inventory", href: "/properties?purpose=buy" }}
-        secondaryCta={{ label: "Read Dubai Buying Guide", href: "/guides/buying" }}
-        sideImages={[
-          {
-            src: "/img/communities/palm-jumeirah.webp",
-            label: "Palm Jumeirah & Waterfront Villas",
-            sublabel: "Ready Title Deed · Private Beach & Marina",
-            href: "/communities/palm-jumeirah",
-          },
-          {
-            src: "/img/communities/downtown-dubai.webp",
-            label: "Downtown Dubai & Dubai Hills Estate",
-            sublabel: "Immediate Key Handover · Form F & Trustee Support",
-            href: "/communities/downtown-dubai",
-          },
+      <AvenloPageHeader
+        eyebrow="SECONDARY MARKET · READY HOMES"
+        title="Acquire ready homes across"
+        italic="Dubai freehold districts"
+        lead="Every secondary resale advised by SWK Properties is checked for Title Deed status, RERA Mollak service-charge history, and recent DLD comparable transfers."
+        breadcrumb={[
+          { label: "Home", href: "/" },
+          { label: "Properties", href: "/properties" },
+          { label: "Buy Ready" },
         ]}
+        actions={
+          <>
+            <BracketLink href="/properties?purpose=buy" variant="light" size="md">
+              Filter Ready Inventory
+            </BracketLink>
+            <BracketLink href="/guides/buying" variant="light" size="md">
+              Dubai Buying Guide
+            </BracketLink>
+          </>
+        }
       />
 
-      {/* Verified Ready Listings Grid */}
-      <section className="mx-auto max-w-7xl px-4 py-14">
-        <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.26em] text-[#94652c]">
-              Secondary Market · Title Deed Ready
-            </p>
-            <h2 className="mt-1 font-serif text-3xl md:text-5xl font-semibold text-[#17130e]">
-              Verified Properties For Sale in Dubai
-            </h2>
-          </div>
-          <Link
-            href="/properties?purpose=buy"
-            className="rounded-full border border-[#94652c]/35 px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.18em] text-[#94652c] hover:bg-[#f6ead7]"
-          >
-            Open Advanced Search →
-          </Link>
-        </div>
-
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-2">
+      <section className="mx-auto max-w-[1260px] px-4 py-16 sm:px-8">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {buyListings.map((listing) => (
             <PropertyCard key={listing.slug} listing={listing} />
           ))}
         </div>
       </section>
 
-      {/* Upfront DLD 4% & Secondary Acquisition Cost Breakdown (AEO Table) */}
-      <section className="border-y border-[#e6dfd2] bg-[#f4efe6] py-16">
-        <div className="mx-auto max-w-7xl px-4">
-          <div className="max-w-3xl mb-8">
-            <span className="text-xs font-semibold uppercase tracking-[0.26em] text-[#94652c]">
-              Transparent Fee Schedule · RERA ORN {SITE.reraOrn}
-            </span>
-            <h2 className="mt-2 font-serif text-3xl md:text-4xl font-semibold text-[#17130e]">
-              {buyingGuide.comparisonTable.caption}
-            </h2>
-            <p className="mt-2 text-sm text-[#4a4237] leading-relaxed">
-              {buyingGuide.directAnswer}
-            </p>
-          </div>
-
-          <div className="overflow-x-auto rounded-3xl border border-[#e6dfd2] bg-white">
-            <table className="w-full text-left text-xs md:text-sm">
-              <thead className="border-b border-[#e6dfd2] bg-[#faf7f2] text-[#94652c]">
-                <tr>
-                  {buyingGuide.comparisonTable.headers.map((h) => (
-                    <th key={h} className="p-4 font-semibold">
-                      {h}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-[#e6dfd2] text-[#4a4237]">
-                {buyingGuide.comparisonTable.rows.map((row, idx) => (
-                  <tr key={idx}>
-                    {row.map((cell, cIdx) => (
-                      <td
-                        key={cIdx}
-                        className={`p-4 ${cIdx === 0 ? "font-semibold text-[#17130e]" : ""}`}
-                      >
-                        {cell}
-                      </td>
-                    ))}
-                  </tr>
+      {/* Upfront Cost Summary + Form F Strip */}
+      <section className="border-y border-black/[0.06] bg-[#f7f7f7] py-20">
+        <div className="mx-auto max-w-[1260px] px-4 sm:px-8">
+          <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 items-start">
+            <div className="lg:col-span-5 space-y-6">
+              <SectionEyebrow>UPFRONT TRANSACTION COSTS</SectionEyebrow>
+              <SplitHeading
+                primary="Know every fee"
+                muted="before signing Form F"
+                size="md"
+              />
+              <p className="text-sm leading-relaxed text-[#525252]">
+                On Dubai secondary resales, buyers budget 4% DLD transfer fee, DLD Trustee registration (AED 4,200 for properties ≥ AED 500K), Title Deed issuance (AED 580), and 2% brokerage commission (+ VAT).
+              </p>
+              <div className="grid grid-cols-2 gap-4">
+                {[
+                  { v: "4%", l: "DLD Transfer Fee" },
+                  { v: "AED 4,200", l: "DLD Trustee Office" },
+                  { v: "2–4 Wks", l: "Typical Cash Transfer" },
+                  { v: "100%", l: "Freehold Title Deed" },
+                ].map((m) => (
+                  <div key={m.l} className="rounded-2xl border border-black/[0.06] bg-white p-5">
+                    <p className="text-2xl font-medium tracking-[-0.03em] text-[#121212]">{m.v}</p>
+                    <p className="mt-1 text-xs text-[#737373]">{m.l}</p>
+                  </div>
                 ))}
-              </tbody>
-            </table>
-          </div>
+              </div>
+              <BracketLink href="/calculators" variant="light" size="sm">
+                Open DLD Cost Calculator
+              </BracketLink>
+            </div>
 
-          <div className="mt-6 flex flex-wrap gap-3">
-            <Link
-              href="/calculators"
-              className="rounded-full bg-[#17130e] px-6 py-3 text-xs font-bold uppercase tracking-[0.18em] text-white"
-            >
-              Calculate Exact DLD 4% & Mortgage Repayments
-            </Link>
-            <Link
-              href="/guides/buying"
-              className="rounded-full border border-[#e6dfd2] px-6 py-3 text-xs font-semibold uppercase tracking-[0.18em] text-[#17130e] hover:border-[#94652c]"
-            >
-              Read Full Step-by-Step Buying Guide
-            </Link>
+            <div className="lg:col-span-7">
+              <EnquiryForm
+                context="buying"
+                heading="Request a ready-home shortlist"
+                subheading="Tell us your target Dubai district, budget in AED, and cash or mortgage timeline."
+              />
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Buyer Consultation Form */}
-      <section className="mx-auto max-w-4xl px-4 py-16">
-        <EnquiryForm
-          context="property"
-          heading="Request a Custom Buyer Shortlist & DLD Comparable Pack"
-          subheading="Tell us your target communities, bedrooms, and whether you are purchasing in cash or with a UAE mortgage."
-        />
-      </section>
-    </>
+      <CtaBanner />
+    </div>
   );
 }

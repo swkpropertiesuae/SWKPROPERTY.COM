@@ -1,298 +1,275 @@
 "use client";
 
-import React, { Suspense, useMemo, useState } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
-import Link from "next/link";
+import React, { Suspense, useEffect, useMemo, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import {
-  BookmarkPlus,
-  Filter,
-  MapPin,
-  RotateCcw,
+  Bookmark,
+  Grid2x2,
+  Map as MapIcon,
   Search,
   Share2,
   SlidersHorizontal,
+  X,
 } from "lucide-react";
-import { LISTINGS, type PropertyListing } from "@/lib/listings";
+import {
+  LISTINGS,
+  type FurnishedState,
+  type ListingPurpose,
+  type PropertyType,
+} from "@/lib/listings";
 import { communities } from "@/lib/swk";
-import { developers } from "@/lib/developers";
-import { PropertyCard } from "@/components/site/property-card";
-import { LivelyPageHero } from "@/components/ui/lively-page-hero";
 import { usePrefs } from "@/lib/prefs";
+import { PropertyCard } from "@/components/site/property-card";
+import { MapEmbed } from "@/components/site/map-embed";
+import { AvenloPageHeader } from "@/components/avenlo/page-header";
+import { CtaBanner } from "@/components/avenlo/motion";
 
-function PropertiesSearchInner() {
+const QUICK_PILLS = [
+  { id: "all", label: "All" },
+  { id: "buy", label: "For Sale" },
+  { id: "rent", label: "For Rent" },
+  { id: "off-plan", label: "Off-Plan" },
+  { id: "Apartment", label: "Apartments" },
+  { id: "Villa", label: "Villas" },
+  { id: "Townhouse", label: "Townhouses" },
+  { id: "Penthouse", label: "Penthouses" },
+] as const;
+
+type QuickPillId = (typeof QUICK_PILLS)[number]["id"];
+
+const DEVELOPER_NAMES = Array.from(new Set(LISTINGS.map((l) => l.developer))).sort();
+const VIEW_OPTIONS = Array.from(new Set(LISTINGS.flatMap((l) => l.views))).sort();
+const FEATURE_OPTIONS = Array.from(new Set(LISTINGS.flatMap((l) => l.features))).sort();
+
+function PropertiesExplorer() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const { notify, trackEvent } = usePrefs();
 
-  // Initialize from URL query parameters (§04: Shareable search URLs)
-  const [purpose, setPurpose] = useState<string>(searchParams.get("purpose") || "all");
-  const [q, setQ] = useState<string>(searchParams.get("q") || "");
-  const [community, setCommunity] = useState<string>(searchParams.get("community") || "");
-  const [developer, setDeveloper] = useState<string>(searchParams.get("developer") || "");
-  const [propertyType, setPropertyType] = useState<string>(searchParams.get("type") || "");
-  const [minBeds, setMinBeds] = useState<string>(searchParams.get("beds") || "");
-  const [minBaths, setMinBaths] = useState<string>(searchParams.get("baths") || "");
-  const [minPrice, setMinPrice] = useState<string>(searchParams.get("minPrice") || "");
-  const [maxPrice, setMaxPrice] = useState<string>(searchParams.get("maxPrice") || "");
-  const [minArea, setMinArea] = useState<string>(searchParams.get("minArea") || "");
-  const [maxArea, setMaxArea] = useState<string>(searchParams.get("maxArea") || "");
-  const [furnished, setFurnished] = useState<string>(searchParams.get("furnished") || "");
-  const [status, setStatus] = useState<string>(searchParams.get("status") || "all");
-  const [sortBy, setSortBy] = useState<string>(searchParams.get("sort") || "relevance");
-
-  // Growth Filters (§05: Handover, Payment Plan, Down Payment, Service Charge, Views, Features, Pet, Metro, Map Zone)
-  const [showAdvanced, setShowAdvanced] = useState<boolean>(false);
-  const [viewFilter, setViewFilter] = useState<string>("");
-  const [featureFilters, setFeatureFilters] = useState<string[]>([]);
-  const [petFriendlyOnly, setPetFriendlyOnly] = useState<boolean>(false);
-  const [nearMetroOnly, setNearMetroOnly] = useState<boolean>(false);
-  const [maxServiceCharge, setMaxServiceCharge] = useState<string>("");
-  const [mapZone, setMapZone] = useState<string>("all");
+  const [query, setQuery] = useState(searchParams.get("q") || "");
+  const [purpose, setPurpose] = useState<"" | ListingPurpose>(
+    (searchParams.get("purpose") as ListingPurpose) || ""
+  );
+  const [propertyType, setPropertyType] = useState<"" | PropertyType>(
+    (searchParams.get("type") as PropertyType) || ""
+  );
+  const [community, setCommunity] = useState(searchParams.get("community") || "");
+  const [bedrooms, setBedrooms] = useState(searchParams.get("beds") || "");
+  const [maxPrice, setMaxPrice] = useState(searchParams.get("maxPrice") || "");
+  const [sortBy, setSortBy] = useState(searchParams.get("sort") || "featured");
   const [viewMode, setViewMode] = useState<"grid" | "map">("grid");
+  const [filtersOpen, setFiltersOpen] = useState(false);
 
-  const toggleFeature = (feat: string) => {
-    setFeatureFilters((prev) =>
-      prev.includes(feat) ? prev.filter((item) => item !== feat) : [...prev, feat]
-    );
+  // Advanced drawer filters (preserved from full repo spec)
+  const [developer, setDeveloper] = useState("");
+  const [minBaths, setMinBaths] = useState("");
+  const [furnished, setFurnished] = useState<"" | FurnishedState>("");
+  const [nearMetroOnly, setNearMetroOnly] = useState(false);
+  const [petFriendlyOnly, setPetFriendlyOnly] = useState(false);
+  const [maxServiceCharge, setMaxServiceCharge] = useState("");
+  const [selectedView, setSelectedView] = useState("");
+  const [selectedFeature, setSelectedFeature] = useState("");
+  const [mapZone, setMapZone] = useState<"" | "central" | "coastal" | "green-suburban" | "creek-east">("");
+
+  const activePill: QuickPillId = useMemo(() => {
+    if (purpose) return purpose;
+    if (
+      propertyType === "Apartment" ||
+      propertyType === "Villa" ||
+      propertyType === "Townhouse" ||
+      propertyType === "Penthouse"
+    ) {
+      return propertyType;
+    }
+    return "all";
+  }, [purpose, propertyType]);
+
+  const applyQuickPill = (id: QuickPillId) => {
+    if (id === "all") {
+      setPurpose("");
+      setPropertyType("");
+    } else if (id === "buy" || id === "rent" || id === "off-plan") {
+      setPurpose(id);
+      setPropertyType("");
+    } else {
+      setPurpose("");
+      setPropertyType(id);
+    }
   };
 
-  const syncUrlParams = () => {
-    const params = new URLSearchParams();
-    if (purpose !== "all") params.set("purpose", purpose);
-    if (q.trim()) params.set("q", q.trim());
-    if (community) params.set("community", community);
-    if (developer) params.set("developer", developer);
-    if (propertyType) params.set("type", propertyType);
-    if (minBeds) params.set("beds", minBeds);
-    if (minBaths) params.set("baths", minBaths);
-    if (minPrice) params.set("minPrice", minPrice);
-    if (maxPrice) params.set("maxPrice", maxPrice);
-    if (minArea) params.set("minArea", minArea);
-    if (maxArea) params.set("maxArea", maxArea);
-    if (furnished) params.set("furnished", furnished);
-    if (status !== "all") params.set("status", status);
-    if (sortBy !== "relevance") params.set("sort", sortBy);
-    router.replace(`/properties?${params.toString()}`, { scroll: false });
-  };
+  // Sync key URL params
+  useEffect(() => {
+    const p = new URLSearchParams();
+    if (query.trim()) p.set("q", query.trim());
+    if (purpose) p.set("purpose", purpose);
+    if (propertyType) p.set("type", propertyType);
+    if (community) p.set("community", community);
+    if (bedrooms) p.set("beds", bedrooms);
+    if (maxPrice) p.set("maxPrice", maxPrice);
+    if (sortBy && sortBy !== "featured") p.set("sort", sortBy);
+    const qs = p.toString();
+    router.replace(qs ? `/properties?${qs}` : "/properties", { scroll: false });
+  }, [query, purpose, propertyType, community, bedrooms, maxPrice, sortBy, router]);
 
-  const clearAllFilters = () => {
-    setPurpose("all");
-    setQ("");
-    setCommunity("");
-    setDeveloper("");
-    setPropertyType("");
-    setMinBeds("");
-    setMinBaths("");
-    setMinPrice("");
-    setMaxPrice("");
-    setMinArea("");
-    setMaxArea("");
-    setFurnished("");
-    setStatus("all");
-    setSortBy("relevance");
-    setViewFilter("");
-    setFeatureFilters([]);
-    setPetFriendlyOnly(false);
-    setNearMetroOnly(false);
-    setMaxServiceCharge("");
-    setMapZone("all");
-    router.replace("/properties", { scroll: false });
-  };
-
-  const filteredListings = useMemo(() => {
-    const query = q.trim().toLowerCase();
-
-    const list = LISTINGS.filter((item: PropertyListing) => {
-      if (purpose !== "all" && item.purpose !== purpose) return false;
-      if (community && item.communitySlug !== community) return false;
-      if (developer && item.developerSlug !== developer) return false;
+  const filtered = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    const list = LISTINGS.filter((item) => {
+      if (purpose && item.purpose !== purpose) return false;
       if (propertyType && item.propertyType !== propertyType) return false;
-      if (minBeds && item.bedrooms < Number(minBeds)) return false;
-      if (minBaths && item.bathrooms < Number(minBaths)) return false;
-      if (minPrice && item.priceAed < Number(minPrice)) return false;
-      if (maxPrice && item.priceAed > Number(maxPrice)) return false;
-      if (minArea && item.areaSqFt < Number(minArea)) return false;
-      if (maxArea && item.areaSqFt > Number(maxArea)) return false;
-      if (furnished && item.furnished !== furnished) return false;
-      if (status !== "all" && item.status !== status) return false;
-      if (viewFilter && !item.views.includes(viewFilter)) return false;
-      if (petFriendlyOnly && item.petPolicy !== "Pet-friendly") return false;
-      if (nearMetroOnly && !item.nearMetro) return false;
-      if (maxServiceCharge && item.serviceChargePerSqFt > Number(maxServiceCharge)) return false;
-      if (mapZone !== "all" && item.mapZone !== mapZone) return false;
-      if (featureFilters.length > 0) {
-        const hasAll = featureFilters.every((f) => item.features.includes(f));
-        if (!hasAll) return false;
+      if (community && item.communitySlug !== community) return false;
+      if (bedrooms !== "") {
+        const b = Number(bedrooms);
+        if (b === 4 ? item.bedrooms < 4 : item.bedrooms !== b) return false;
       }
-      if (query) {
-        const hay = `${item.title} ${item.subtitle} ${item.community} ${item.building} ${item.developer} ${item.reference}`.toLowerCase();
-        if (!hay.includes(query)) return false;
+      if (maxPrice && item.priceAed > Number(maxPrice)) return false;
+      if (developer && item.developer !== developer) return false;
+      if (minBaths && item.bathrooms < Number(minBaths)) return false;
+      if (furnished && item.furnished !== furnished) return false;
+      if (nearMetroOnly && !item.nearMetro) return false;
+      if (petFriendlyOnly && item.petPolicy !== "Pet-friendly") return false;
+      if (maxServiceCharge && item.serviceChargePerSqFt > Number(maxServiceCharge)) return false;
+      if (selectedView && !item.views.includes(selectedView)) return false;
+      if (selectedFeature && !item.features.includes(selectedFeature)) return false;
+      if (mapZone && item.mapZone !== mapZone) return false;
+      if (q) {
+        const hay =
+          `${item.title} ${item.community} ${item.building} ${item.developer} ${item.reference} ${item.propertyType}`.toLowerCase();
+        if (!hay.includes(q)) return false;
       }
       return true;
     });
 
-    const sorted = [...list];
-    if (sortBy === "price-asc") sorted.sort((a, b) => a.priceAed - b.priceAed);
-    else if (sortBy === "price-desc") sorted.sort((a, b) => b.priceAed - a.priceAed);
-    else if (sortBy === "newest")
-      sorted.sort((a, b) => b.listedAt.localeCompare(a.listedAt));
-
-    if (sorted.length === 0) {
-      trackEvent("search_no_results", {
-        purpose,
-        community: community || "all",
-        query: query || "none",
-      });
-    }
-
-    return sorted;
+    if (sortBy === "price-asc") return [...list].sort((a, b) => a.priceAed - b.priceAed);
+    if (sortBy === "price-desc") return [...list].sort((a, b) => b.priceAed - a.priceAed);
+    if (sortBy === "area-desc") return [...list].sort((a, b) => b.areaSqFt - a.areaSqFt);
+    return list;
   }, [
+    query,
     purpose,
-    q,
-    community,
-    developer,
     propertyType,
-    minBeds,
-    minBaths,
-    minPrice,
+    community,
+    bedrooms,
     maxPrice,
-    minArea,
-    maxArea,
+    developer,
+    minBaths,
     furnished,
-    status,
-    viewFilter,
-    petFriendlyOnly,
     nearMetroOnly,
+    petFriendlyOnly,
     maxServiceCharge,
+    selectedView,
+    selectedFeature,
     mapZone,
-    featureFilters,
     sortBy,
-    trackEvent,
   ]);
 
-  const handleCopyShareUrl = () => {
-    syncUrlParams();
-    if (typeof window !== "undefined" && navigator.clipboard) {
-      navigator.clipboard.writeText(window.location.href);
-      notify("Shareable search URL copied to clipboard");
-    }
+  const activeAdvancedCount = [
+    developer,
+    minBaths,
+    furnished,
+    nearMetroOnly ? "1" : "",
+    petFriendlyOnly ? "1" : "",
+    maxServiceCharge,
+    selectedView,
+    selectedFeature,
+    mapZone,
+  ].filter(Boolean).length;
+
+  const resetAll = () => {
+    setQuery("");
+    setPurpose("");
+    setPropertyType("");
+    setCommunity("");
+    setBedrooms("");
+    setMaxPrice("");
+    setDeveloper("");
+    setMinBaths("");
+    setFurnished("");
+    setNearMetroOnly(false);
+    setPetFriendlyOnly(false);
+    setMaxServiceCharge("");
+    setSelectedView("");
+    setSelectedFeature("");
+    setMapZone("");
+    setSortBy("featured");
   };
 
   const handleSaveSearch = () => {
-    syncUrlParams();
     try {
-      const saved = JSON.parse(localStorage.getItem("swk_saved_searches") || "[]");
-      saved.push({
-        label: `${purpose.toUpperCase()} · ${community || "All Dubai"} · ${propertyType || "All Types"}`,
-        url: typeof window !== "undefined" ? window.location.href : "/properties",
+      const existing = JSON.parse(localStorage.getItem("swk_saved_searches") || "[]");
+      const entry = {
+        id: Date.now(),
+        label: query || community || purpose || "All Dubai Properties",
+        url: window.location.pathname + window.location.search,
         savedAt: new Date().toISOString(),
-      });
-      localStorage.setItem("swk_saved_searches", JSON.stringify(saved.slice(-10)));
-      notify("Search criteria saved to your browser");
-    } catch {}
+      };
+      localStorage.setItem("swk_saved_searches", JSON.stringify([entry, ...existing].slice(0, 12)));
+      trackEvent("property_search", { results: filtered.length });
+      notify("Search saved to browser");
+    } catch {
+      notify("Could not save search");
+    }
+  };
+
+  const handleShareSearch = async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      notify("Search link copied");
+    } catch {
+      notify("Copy the URL from your browser bar");
+    }
   };
 
   return (
-    <div>
-      <div className="mx-auto max-w-7xl px-4 py-12">
-        {/* Save & Share Bar */}
-        <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
-          <div className="text-xs font-bold uppercase tracking-[0.2em] text-[#17130e]">
-            Interactive Property Filter &amp; Map Directory
-          </div>
+    <div className="bg-white">
+      <AvenloPageHeader
+        eyebrow="PROPERTIES · DUBAI & UAE"
+        title="Residences we are"
+        italic="advising on now"
+        lead="Ready apartments, beachfront villas, townhouses, annual leases, and off-plan releases across Dubai's premier freehold corridors."
+      />
 
-          <div className="flex flex-wrap items-center gap-2">
-            <button
-              type="button"
-              onClick={handleSaveSearch}
-              className="inline-flex items-center gap-1.5 rounded-full border border-[#e6dfd2] bg-white px-4 py-2 text-xs font-semibold text-[#17130e] shadow-sm hover:border-[#17130e]"
-            >
-              <BookmarkPlus className="h-3.5 w-3.5 text-[#17130e]" />
-              Save Search
-            </button>
-            <button
-              type="button"
-              onClick={handleCopyShareUrl}
-              className="inline-flex items-center gap-1.5 rounded-full border border-[#e6dfd2] bg-white px-4 py-2 text-xs font-semibold text-[#17130e] shadow-sm hover:border-[#17130e]"
-            >
-              <Share2 className="h-3.5 w-3.5 text-[#17130e]" />
-              Share Search URL
-            </button>
-          </div>
-        </div>
-
-      {/* Core Search & Filter Panel (§04) */}
-      <div className="rounded-3xl border border-[#e6dfd2] bg-white p-5 md:p-7 shadow-2xl">
-        {/* Purpose Tabs + View Mode Toggle */}
-        <div className="flex flex-wrap items-center justify-between gap-3 pb-5 border-b border-[#e6dfd2]">
-          <div className="inline-flex flex-wrap gap-1.5 rounded-2xl border border-[#e6dfd2] bg-[#faf7f2] p-1.5">
-            {[
-              { id: "all", label: "All Mandates" },
-              { id: "buy", label: "Buy (Ready)" },
-              { id: "rent", label: "Rent (Yearly / Monthly)" },
-              { id: "off-plan", label: "Off-Plan" },
-            ].map((t) => (
+      {/* Avenlo Pill Filter Bar + Minimal Controls */}
+      <section className="mx-auto max-w-[1260px] px-4 py-10 sm:px-8">
+        <div className="flex flex-wrap items-center justify-center gap-2">
+          {QUICK_PILLS.map((pill) => {
+            const active = activePill === pill.id;
+            return (
               <button
-                key={t.id}
+                key={pill.id}
                 type="button"
-                onClick={() => setPurpose(t.id)}
-                className={`rounded-xl px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] transition ${
-                  purpose === t.id
-                    ? "bg-[#17130e] text-white"
-                    : "text-[#4a4237] hover:text-[#94652c]"
+                onClick={() => applyQuickPill(pill.id)}
+                className={`cursor-pointer rounded-full px-5 py-2.5 text-xs font-medium transition-colors ${
+                  active
+                    ? "bg-[#121212] text-white"
+                    : "border border-black/10 bg-white text-[#525252] hover:border-[#121212] hover:text-[#121212]"
                 }`}
               >
-                {t.label}
+                {pill.label}
               </button>
-            ))}
-          </div>
-
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={() => setViewMode(viewMode === "grid" ? "map" : "grid")}
-              className="inline-flex items-center gap-1.5 rounded-xl border border-[#94652c]/35 bg-[#f6ead7] px-3.5 py-2 text-xs font-semibold text-[#94652c]"
-            >
-              <MapPin className="h-3.5 w-3.5" />
-              {viewMode === "grid" ? "Open Map & Zone Draw Filter" : "Switch to Grid View"}
-            </button>
-            <button
-              type="button"
-              onClick={() => setShowAdvanced((prev) => !prev)}
-              className="inline-flex items-center gap-1.5 rounded-xl border border-[#e6dfd2] bg-[#faf7f2] px-3.5 py-2 text-xs font-medium text-[#17130e] hover:border-[#94652c]"
-            >
-              <SlidersHorizontal className="h-3.5 w-3.5 text-[#94652c]" />
-              {showAdvanced ? "Hide Lifestyle Filters" : "More Filters"}
-            </button>
-          </div>
+            );
+          })}
         </div>
 
-        {/* Core Filter Inputs */}
-        <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6">
-          <div className="lg:col-span-2">
-            <label className="mb-1 block text-[11px] uppercase tracking-wider text-[#786e60]">
-              Keyword / Building / Ref
-            </label>
-            <div className="relative">
-              <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-[#94652c]" />
+        {/* Crisp Search, Community, Beds, Price & Utility Row */}
+        <div className="mt-8 rounded-2xl border border-black/[0.07] bg-[#f7f7f7] p-4 sm:p-5">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-12">
+            <div className="relative lg:col-span-4">
+              <Search className="pointer-events-none absolute top-1/2 left-3.5 h-4 w-4 -translate-y-1/2 text-[#8b8b8b]" />
               <input
-                type="text"
-                value={q}
-                onChange={(e) => setQ(e.target.value)}
-                placeholder="Burj Crown, Marina Gate, SWK-DXB..."
-                className="w-full rounded-xl border border-[#e6dfd2] bg-[#faf7f2] pl-9 pr-3 py-2.5 text-xs text-[#17130e]"
+                type="search"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="Search tower, community, developer or ref..."
+                aria-label="Search properties"
+                className="w-full rounded-lg border border-black/10 bg-white py-2.5 pr-3.5 pl-10 text-sm text-[#121212] placeholder:text-[#a7a7a7] focus:border-[#121212] focus:outline-none"
               />
             </div>
-          </div>
 
-          <div>
-            <label className="mb-1 block text-[11px] uppercase tracking-wider text-[#786e60]">
-              Community
-            </label>
             <select
+              aria-label="Filter by community"
               value={community}
               onChange={(e) => setCommunity(e.target.value)}
-              className="w-full rounded-xl border border-[#e6dfd2] bg-[#faf7f2] px-3 py-2.5 text-xs text-[#17130e]"
+              className="lg:col-span-2 rounded-lg border border-black/10 bg-white px-3 py-2.5 text-sm text-[#121212] focus:border-[#121212] focus:outline-none"
             >
               <option value="">All Communities</option>
               {communities.map((c) => (
@@ -301,406 +278,367 @@ function PropertiesSearchInner() {
                 </option>
               ))}
             </select>
-          </div>
 
-          <div>
-            <label className="mb-1 block text-[11px] uppercase tracking-wider text-[#786e60]">
-              Property Type
-            </label>
             <select
-              value={propertyType}
-              onChange={(e) => setPropertyType(e.target.value)}
-              className="w-full rounded-xl border border-[#e6dfd2] bg-[#faf7f2] px-3 py-2.5 text-xs text-[#17130e]"
+              aria-label="Filter by bedrooms"
+              value={bedrooms}
+              onChange={(e) => setBedrooms(e.target.value)}
+              className="lg:col-span-2 rounded-lg border border-black/10 bg-white px-3 py-2.5 text-sm text-[#121212] focus:border-[#121212] focus:outline-none"
             >
-              <option value="">All Types</option>
-              <option value="Apartment">Apartment</option>
-              <option value="Villa">Villa</option>
-              <option value="Townhouse">Townhouse</option>
-              <option value="Penthouse">Penthouse</option>
-            </select>
-          </div>
-
-          <div>
-            <label className="mb-1 block text-[11px] uppercase tracking-wider text-[#786e60]">
-              Min Bedrooms
-            </label>
-            <select
-              value={minBeds}
-              onChange={(e) => setMinBeds(e.target.value)}
-              className="w-full rounded-xl border border-[#e6dfd2] bg-[#faf7f2] px-3 py-2.5 text-xs text-[#17130e]"
-            >
-              <option value="">Any Beds</option>
-              <option value="1">1+ Bedroom</option>
-              <option value="2">2+ Bedrooms</option>
-              <option value="3">3+ Bedrooms</option>
+              <option value="">Any Bedrooms</option>
+              <option value="0">Studio</option>
+              <option value="1">1 Bedroom</option>
+              <option value="2">2 Bedrooms</option>
+              <option value="3">3 Bedrooms</option>
               <option value="4">4+ Bedrooms</option>
-              <option value="5">5+ Bedrooms</option>
             </select>
-          </div>
 
-          <div>
-            <label className="mb-1 block text-[11px] uppercase tracking-wider text-[#786e60]">
-              Sort Results
-            </label>
             <select
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value)}
-              className="w-full rounded-xl border border-[#e6dfd2] bg-[#faf7f2] px-3 py-2.5 text-xs text-[#17130e]"
-            >
-              <option value="relevance">Recommended / Verified</option>
-              <option value="price-asc">Price: Low to High</option>
-              <option value="price-desc">Price: High to Low</option>
-              <option value="newest">Newest Listed</option>
-            </select>
-          </div>
-        </div>
-
-        {/* Price, Area, Furnishing & Status Row */}
-        <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-6">
-          <div>
-            <label className="mb-1 block text-[11px] uppercase tracking-wider text-[#786e60]">
-              Min Price (AED)
-            </label>
-            <input
-              type="number"
-              placeholder="e.g. 150000"
-              value={minPrice}
-              onChange={(e) => setMinPrice(e.target.value)}
-              className="w-full rounded-xl border border-[#e6dfd2] bg-[#faf7f2] px-3 py-2 text-xs text-[#17130e]"
-            />
-          </div>
-          <div>
-            <label className="mb-1 block text-[11px] uppercase tracking-wider text-[#786e60]">
-              Max Price (AED)
-            </label>
-            <input
-              type="number"
-              placeholder="e.g. 10000000"
+              aria-label="Maximum AED budget"
               value={maxPrice}
               onChange={(e) => setMaxPrice(e.target.value)}
-              className="w-full rounded-xl border border-[#e6dfd2] bg-[#faf7f2] px-3 py-2 text-xs text-[#17130e]"
-            />
-          </div>
-          <div>
-            <label className="mb-1 block text-[11px] uppercase tracking-wider text-[#786e60]">
-              Min Area (sq ft)
-            </label>
-            <input
-              type="number"
-              placeholder="e.g. 900"
-              value={minArea}
-              onChange={(e) => setMinArea(e.target.value)}
-              className="w-full rounded-xl border border-[#e6dfd2] bg-[#faf7f2] px-3 py-2 text-xs text-[#17130e]"
-            />
-          </div>
-          <div>
-            <label className="mb-1 block text-[11px] uppercase tracking-wider text-[#786e60]">
-              Max Area (sq ft)
-            </label>
-            <input
-              type="number"
-              placeholder="e.g. 8000"
-              value={maxArea}
-              onChange={(e) => setMaxArea(e.target.value)}
-              className="w-full rounded-xl border border-[#e6dfd2] bg-[#faf7f2] px-3 py-2 text-xs text-[#17130e]"
-            />
-          </div>
-          <div>
-            <label className="mb-1 block text-[11px] uppercase tracking-wider text-[#786e60]">
-              Furnishing
-            </label>
-            <select
-              value={furnished}
-              onChange={(e) => setFurnished(e.target.value)}
-              className="w-full rounded-xl border border-[#e6dfd2] bg-[#faf7f2] px-3 py-2 text-xs text-[#17130e]"
+              className="lg:col-span-2 rounded-lg border border-black/10 bg-white px-3 py-2.5 text-sm text-[#121212] focus:border-[#121212] focus:outline-none"
             >
-              <option value="">Any Furnishing</option>
-              <option value="Furnished">Furnished</option>
-              <option value="Unfurnished">Unfurnished</option>
-              <option value="Partly furnished">Partly furnished</option>
+              <option value="">Any Budget (AED)</option>
+              <option value="500000">Up to AED 500K</option>
+              <option value="2000000">Up to AED 2M</option>
+              <option value="5000000">Up to AED 5M</option>
+              <option value="10000000">Up to AED 10M</option>
+              <option value="25000000">Up to AED 25M</option>
             </select>
-          </div>
-          <div>
-            <label className="mb-1 block text-[11px] uppercase tracking-wider text-[#786e60]">
-              Availability
-            </label>
-            <select
-              value={status}
-              onChange={(e) => setStatus(e.target.value)}
-              className="w-full rounded-xl border border-[#e6dfd2] bg-[#faf7f2] px-3 py-2 text-xs text-[#17130e]"
+
+            <button
+              type="button"
+              onClick={() => setFiltersOpen(true)}
+              className="lg:col-span-2 inline-flex cursor-pointer items-center justify-center gap-2 rounded-lg border border-black/12 bg-white px-4 py-2.5 text-xs font-medium uppercase tracking-[0.14em] text-[#121212] hover:bg-[#121212] hover:text-white transition-colors"
             >
-              <option value="all">All Statuses</option>
-              <option value="available">Available</option>
-              <option value="reserved">Reserved</option>
-              <option value="rented">Rented</option>
-              <option value="sold">Sold</option>
-            </select>
+              <SlidersHorizontal className="h-3.5 w-3.5" />
+              <span>More Filters{activeAdvancedCount > 0 ? ` (${activeAdvancedCount})` : ""}</span>
+            </button>
+          </div>
+
+          <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-black/[0.06] pt-3.5 text-xs text-[#525252]">
+            <div className="flex items-center gap-3">
+              <span className="font-medium text-[#121212]">
+                {filtered.length} {filtered.length === 1 ? "residence" : "residences"}
+              </span>
+              {(query || purpose || propertyType || community || bedrooms || maxPrice || activeAdvancedCount > 0) ? (
+                <button
+                  type="button"
+                  onClick={resetAll}
+                  className="cursor-pointer underline underline-offset-4 hover:text-[#121212]"
+                >
+                  Reset all
+                </button>
+              ) : null}
+            </div>
+
+            <div className="flex flex-wrap items-center gap-2">
+              <select
+                aria-label="Sort properties"
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
+                className="rounded-lg border border-black/10 bg-white px-2.5 py-1.5 text-xs text-[#121212]"
+              >
+                <option value="featured">Featured order</option>
+                <option value="price-asc">Price: Low to High</option>
+                <option value="price-desc">Price: High to Low</option>
+                <option value="area-desc">Largest Area</option>
+              </select>
+
+              <button
+                type="button"
+                onClick={handleSaveSearch}
+                className="inline-flex cursor-pointer items-center gap-1 rounded-lg border border-black/10 bg-white px-2.5 py-1.5 text-xs font-medium text-[#121212] hover:bg-[#ececec]"
+              >
+                <Bookmark className="h-3.5 w-3.5" />
+                <span>Save</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={handleShareSearch}
+                className="inline-flex cursor-pointer items-center gap-1 rounded-lg border border-black/10 bg-white px-2.5 py-1.5 text-xs font-medium text-[#121212] hover:bg-[#ececec]"
+              >
+                <Share2 className="h-3.5 w-3.5" />
+                <span>Share</span>
+              </button>
+
+              <div className="inline-flex rounded-lg border border-black/10 bg-white p-0.5">
+                <button
+                  type="button"
+                  onClick={() => setViewMode("grid")}
+                  className={`inline-flex cursor-pointer items-center gap-1 rounded-md px-2.5 py-1 text-xs font-medium ${
+                    viewMode === "grid" ? "bg-[#121212] text-white" : "text-[#525252]"
+                  }`}
+                >
+                  <Grid2x2 className="h-3.5 w-3.5" />
+                  <span>Grid</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setViewMode("map")}
+                  className={`inline-flex cursor-pointer items-center gap-1 rounded-md px-2.5 py-1 text-xs font-medium ${
+                    viewMode === "map" ? "bg-[#121212] text-white" : "text-[#525252]"
+                  }`}
+                >
+                  <MapIcon className="h-3.5 w-3.5" />
+                  <span>Map</span>
+                </button>
+              </div>
+            </div>
           </div>
         </div>
 
-        {/* §05 Growth & Lifestyle Filters Drawer */}
-        {showAdvanced && (
-          <div className="mt-5 border-t border-[#e6dfd2] pt-5 space-y-4">
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#94652c] flex items-center gap-1.5">
-              <Filter className="h-3.5 w-3.5" />
-              Additional Developer, Financial, View & Accessibility Filters
+        {/* Map View Mode */}
+        {viewMode === "map" ? (
+          <div className="mt-8 space-y-6">
+            <div className="flex flex-wrap gap-2">
+              {(
+                [
+                  ["", "All Dubai Corridors"],
+                  ["central", "Downtown & Business Bay"],
+                  ["coastal", "Palm Jumeirah & Marina"],
+                  ["green-suburban", "Dubai Hills & JVC"],
+                  ["creek-east", "Dubai Creek Harbour"],
+                ] as const
+              ).map(([z, label]) => (
+                <button
+                  key={label}
+                  type="button"
+                  onClick={() => setMapZone(z)}
+                  className={`cursor-pointer rounded-full px-4 py-2 text-xs font-medium ${
+                    mapZone === z
+                      ? "bg-[#121212] text-white"
+                      : "border border-black/10 bg-[#f7f7f7] text-[#525252]"
+                  }`}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+            <MapEmbed
+              lat={filtered[0]?.lat ?? 25.1972}
+              lng={filtered[0]?.lng ?? 55.2744}
+              zoom={12}
+              title="Dubai Property Corridors — SWK Properties"
+            />
+          </div>
+        ) : null}
+
+        {/* Results Grid (First 2 Large Featured Cards + 3-Col Grid per Avenlo) */}
+        {filtered.length === 0 ? (
+          <div className="mt-12 rounded-2xl border border-black/[0.07] bg-[#f7f7f7] p-12 text-center">
+            <h2 className="text-2xl font-medium tracking-[-0.03em] text-[#121212]">
+              No listings match those exact filters
+            </h2>
+            <p className="mt-2 text-sm text-[#737373]">
+              Clear a filter or ask our Sheikh Zayed Road desk for off-market stock in your target building.
             </p>
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-4">
+            <button
+              type="button"
+              onClick={resetAll}
+              className="mt-6 cursor-pointer rounded-full bg-[#121212] px-6 py-2.5 text-xs font-medium uppercase tracking-[0.14em] text-white"
+            >
+              Reset Filters
+            </button>
+          </div>
+        ) : (
+          <div className="mt-10 space-y-8">
+            {filtered.length >= 2 && viewMode === "grid" ? (
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                {filtered.slice(0, 2).map((listing) => (
+                  <PropertyCard key={listing.slug} listing={listing} featured />
+                ))}
+              </div>
+            ) : null}
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {(filtered.length >= 2 && viewMode === "grid" ? filtered.slice(2) : filtered).map(
+                (listing) => (
+                  <PropertyCard key={listing.slug} listing={listing} />
+                )
+              )}
+            </div>
+          </div>
+        )}
+      </section>
+
+      {/* Slide-Over More Filters Drawer */}
+      {filtersOpen ? (
+        <div
+          className="fixed inset-0 z-[95] flex justify-end bg-[#121212]/45 backdrop-blur-xs"
+          onClick={() => setFiltersOpen(false)}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="flex h-full w-full max-w-md flex-col bg-white text-[#121212] shadow-2xl"
+          >
+            <div className="flex items-center justify-between border-b border-black/[0.08] px-6 py-5">
+              <h2 className="text-lg font-medium tracking-[-0.02em]">Advanced Filters</h2>
+              <button
+                type="button"
+                onClick={() => setFiltersOpen(false)}
+                aria-label="Close advanced filters"
+                className="cursor-pointer rounded-full border border-black/10 p-2"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+
+            <div className="flex-1 space-y-5 overflow-y-auto p-6 text-sm">
               <div>
-                <label className="mb-1 block text-[11px] uppercase tracking-wider text-[#786e60]">
-                  Developer
-                </label>
+                <label className="mb-1.5 block text-xs font-medium text-[#525252]">Developer</label>
                 <select
                   value={developer}
                   onChange={(e) => setDeveloper(e.target.value)}
-                  className="w-full rounded-xl border border-[#e6dfd2] bg-[#faf7f2] px-3 py-2 text-xs text-[#17130e]"
+                  className="w-full rounded-lg border border-black/12 bg-white px-3 py-2.5 text-sm"
                 >
                   <option value="">All Developers</option>
-                  {developers.map((d) => (
-                    <option key={d.slug} value={d.slug}>
-                      {d.name}
+                  {DEVELOPER_NAMES.map((d) => (
+                    <option key={d} value={d}>
+                      {d}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="mb-1.5 block text-xs font-medium text-[#525252]">
+                    Min Bathrooms
+                  </label>
+                  <select
+                    value={minBaths}
+                    onChange={(e) => setMinBaths(e.target.value)}
+                    className="w-full rounded-lg border border-black/12 bg-white px-3 py-2.5 text-sm"
+                  >
+                    <option value="">Any</option>
+                    <option value="1">1+</option>
+                    <option value="2">2+</option>
+                    <option value="3">3+</option>
+                    <option value="4">4+</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="mb-1.5 block text-xs font-medium text-[#525252]">
+                    Furnishing
+                  </label>
+                  <select
+                    value={furnished}
+                    onChange={(e) => setFurnished(e.target.value as "" | FurnishedState)}
+                    className="w-full rounded-lg border border-black/12 bg-white px-3 py-2.5 text-sm"
+                  >
+                    <option value="">Any</option>
+                    <option value="Furnished">Furnished</option>
+                    <option value="Partly furnished">Partly furnished</option>
+                    <option value="Unfurnished">Unfurnished</option>
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label className="mb-1.5 block text-xs font-medium text-[#525252]">
+                  Primary View
+                </label>
+                <select
+                  value={selectedView}
+                  onChange={(e) => setSelectedView(e.target.value)}
+                  className="w-full rounded-lg border border-black/12 bg-white px-3 py-2.5 text-sm"
+                >
+                  <option value="">Any View</option>
+                  {VIEW_OPTIONS.map((v) => (
+                    <option key={v} value={v}>
+                      {v}
                     </option>
                   ))}
                 </select>
               </div>
 
               <div>
-                <label className="mb-1 block text-[11px] uppercase tracking-wider text-[#786e60]">
-                  Verified View
+                <label className="mb-1.5 block text-xs font-medium text-[#525252]">
+                  Feature / Amenity
                 </label>
                 <select
-                  value={viewFilter}
-                  onChange={(e) => setViewFilter(e.target.value)}
-                  className="w-full rounded-xl border border-[#e6dfd2] bg-[#faf7f2] px-3 py-2 text-xs text-[#17130e]"
+                  value={selectedFeature}
+                  onChange={(e) => setSelectedFeature(e.target.value)}
+                  className="w-full rounded-lg border border-black/12 bg-white px-3 py-2.5 text-sm"
                 >
-                  <option value="">Any View</option>
-                  <option value="Waterfront">Waterfront / Sea View</option>
-                  <option value="Burj Khalifa / Skyline">Burj Khalifa / Skyline</option>
-                  <option value="Park / Golf">Park / Golf View</option>
-                  <option value="Canal">Dubai Water Canal</option>
+                  <option value="">Any Feature</option>
+                  {FEATURE_OPTIONS.map((f) => (
+                    <option key={f} value={f}>
+                      {f}
+                    </option>
+                  ))}
                 </select>
               </div>
 
               <div>
-                <label className="mb-1 block text-[11px] uppercase tracking-wider text-[#786e60]">
-                  Max Service Charge (AED/sq ft)
+                <label className="mb-1.5 block text-xs font-medium text-[#525252]">
+                  Max Service Charge (AED / sq ft)
                 </label>
                 <input
                   type="number"
-                  placeholder="e.g. 25"
+                  min={0}
+                  max={60}
                   value={maxServiceCharge}
                   onChange={(e) => setMaxServiceCharge(e.target.value)}
-                  className="w-full rounded-xl border border-[#e6dfd2] bg-[#faf7f2] px-3 py-2 text-xs text-[#17130e]"
+                  placeholder="e.g. 25"
+                  className="w-full rounded-lg border border-black/12 bg-white px-3 py-2.5 text-sm"
                 />
               </div>
 
-              <div>
-                <label className="mb-1 block text-[11px] uppercase tracking-wider text-[#786e60]">
-                  Min Bathrooms
+              <div className="space-y-3 pt-2">
+                <label className="flex cursor-pointer items-center gap-2.5 text-sm">
+                  <input
+                    type="checkbox"
+                    checked={nearMetroOnly}
+                    onChange={(e) => setNearMetroOnly(e.target.checked)}
+                    className="h-4 w-4 accent-[#121212]"
+                  />
+                  <span>Near Dubai Metro station</span>
                 </label>
-                <select
-                  value={minBaths}
-                  onChange={(e) => setMinBaths(e.target.value)}
-                  className="w-full rounded-xl border border-[#e6dfd2] bg-[#faf7f2] px-3 py-2 text-xs text-[#17130e]"
-                >
-                  <option value="">Any Bathrooms</option>
-                  <option value="2">2+ Bathrooms</option>
-                  <option value="3">3+ Bathrooms</option>
-                  <option value="4">4+ Bathrooms</option>
-                </select>
+                <label className="flex cursor-pointer items-center gap-2.5 text-sm">
+                  <input
+                    type="checkbox"
+                    checked={petFriendlyOnly}
+                    onChange={(e) => setPetFriendlyOnly(e.target.checked)}
+                    className="h-4 w-4 accent-[#121212]"
+                  />
+                  <span>Pet-friendly building</span>
+                </label>
               </div>
             </div>
 
-            {/* Feature Checkboxes */}
-            <div className="flex flex-wrap items-center gap-2 pt-1">
-              {["Balcony", "Study", "Maid's room", "Parking", "Step-free access"].map((feat) => (
-                <button
-                  key={feat}
-                  type="button"
-                  onClick={() => toggleFeature(feat)}
-                  className={`rounded-full border px-3.5 py-1.5 text-xs transition ${
-                    featureFilters.includes(feat)
-                      ? "border-[#94652c] bg-[#17130e] text-white font-semibold"
-                      : "border-[#e6dfd2] bg-[#faf7f2] text-[#4a4237]"
-                  }`}
-                >
-                  {feat}
-                </button>
-              ))}
+            <div className="flex items-center justify-between gap-3 border-t border-black/[0.08] px-6 py-4">
               <button
                 type="button"
-                onClick={() => setPetFriendlyOnly((v) => !v)}
-                className={`rounded-full border px-3.5 py-1.5 text-xs transition ${
-                  petFriendlyOnly
-                    ? "border-[#94652c] bg-[#17130e] text-white font-semibold"
-                    : "border-[#e6dfd2] bg-[#faf7f2] text-[#4a4237]"
-                }`}
+                onClick={resetAll}
+                className="cursor-pointer text-xs font-medium text-[#525252] underline underline-offset-4"
               >
-                Pet-Friendly Only
+                Clear all
               </button>
               <button
                 type="button"
-                onClick={() => setNearMetroOnly((v) => !v)}
-                className={`rounded-full border px-3.5 py-1.5 text-xs transition ${
-                  nearMetroOnly
-                    ? "border-[#94652c] bg-[#17130e] text-white font-semibold"
-                    : "border-[#e6dfd2] bg-[#faf7f2] text-[#4a4237]"
-                }`}
+                onClick={() => setFiltersOpen(false)}
+                className="cursor-pointer rounded-full bg-[#121212] px-6 py-2.5 text-xs font-medium uppercase tracking-[0.14em] text-white"
               >
-                Near Dubai Metro
+                Show {filtered.length} Residences
               </button>
             </div>
           </div>
-        )}
-
-        {/* Map-Based & Draw-Zone Filter (§05) */}
-        {viewMode === "map" && (
-          <div className="mt-5 rounded-2xl border border-[#94652c]/30 bg-[#faf7f2] p-5">
-            <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
-              <div>
-                <h3 className="font-serif text-xl font-semibold text-[#17130e]">
-                  Interactive Dubai Corridor & Custom Area Polygon Filter
-                </h3>
-                <p className="text-xs text-[#786e60]">
-                  Select a drawn geographical zone on the Dubai map to isolate listings within that corridor:
-                </p>
-              </div>
-              <div className="flex flex-wrap gap-2">
-                {[
-                  { id: "all", label: "All Dubai Corridors" },
-                  { id: "central", label: "Draw Zone: Downtown / SZR / Business Bay" },
-                  { id: "coastal", label: "Draw Zone: Palm Jumeirah / Dubai Marina" },
-                  { id: "green-suburban", label: "Draw Zone: Dubai Hills / JVC" },
-                  { id: "creek-east", label: "Draw Zone: Dubai Creek Harbour" },
-                ].map((z) => (
-                  <button
-                    key={z.id}
-                    type="button"
-                    onClick={() => setMapZone(z.id)}
-                    className={`rounded-full px-3.5 py-1.5 text-xs font-medium transition ${
-                      mapZone === z.id
-                        ? "bg-[#17130e] text-white font-semibold"
-                        : "border border-[#e6dfd2] bg-[#faf7f2] text-[#4a4237]"
-                    }`}
-                  >
-                    {z.label}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
-              {filteredListings.map((item) => (
-                <Link
-                  key={item.slug}
-                  href={`/properties/${item.slug}`}
-                  className="rounded-xl border border-[#e6dfd2] bg-white p-3 hover:border-[#94652c]"
-                >
-                  <div className="flex items-center justify-between text-[10px] text-[#94652c]">
-                    <span>
-                      Lat {item.lat.toFixed(3)}° N · Lng {item.lng.toFixed(3)}° E
-                    </span>
-                    <span>{item.reference}</span>
-                  </div>
-                  <div className="mt-1 font-serif text-sm font-semibold text-[#17130e] truncate">
-                    {item.title}
-                  </div>
-                  <div className="text-[11px] text-[#786e60]">{item.community}</div>
-                </Link>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Results Count & Clear Filters Bar (§04) */}
-        <div className="mt-5 flex flex-wrap items-center justify-between gap-3 border-t border-[#e6dfd2] pt-4 text-xs">
-          <div className="text-[#4a4237]">
-            Showing <strong className="text-[#94652c]">{filteredListings.length}</strong> verified{" "}
-            {filteredListings.length === 1 ? "property" : "properties"}
-            {mapZone !== "all" ? ` in drawn zone (${mapZone})` : ""}
-          </div>
-          <button
-            type="button"
-            onClick={clearAllFilters}
-            className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#94652c] hover:underline"
-          >
-            <RotateCcw className="h-3.5 w-3.5" />
-            Clear All Filters
-          </button>
         </div>
-      </div>
+      ) : null}
 
-      {/* Results Grid or Helpful Zero-Result Recovery (§04) */}
-      {filteredListings.length > 0 ? (
-        <div className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {filteredListings.map((listing) => (
-            <PropertyCard key={listing.slug} listing={listing} />
-          ))}
-        </div>
-      ) : (
-        <div className="mt-10 rounded-3xl border border-[#94652c]/35 bg-white p-8 md:p-12 text-center">
-          <h2 className="font-serif text-2xl md:text-4xl font-semibold text-[#17130e]">
-            No Exact Matches for Those Combined Filters
-          </h2>
-          <p className="mx-auto mt-3 max-w-xl text-sm text-[#4a4237] leading-relaxed">
-            Many private secondary mandates and new developer allocations in Dubai are held off-portal or match slightly broader budget/bedroom criteria. Try one of the recovery options below:
-          </p>
-          <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
-            <button
-              type="button"
-              onClick={clearAllFilters}
-              className="rounded-full bg-[#17130e] px-6 py-3 text-xs font-bold uppercase tracking-[0.18em] text-white"
-            >
-              Reset All Filters ({LISTINGS.length} Verified Listings)
-            </button>
-            <Link
-              href="/off-plan"
-              className="rounded-full border border-[#e6dfd2] px-6 py-3 text-xs font-semibold uppercase tracking-[0.18em] text-[#17130e] hover:border-[#94652c]"
-            >
-              Browse All 108 Off-Plan Launches
-            </Link>
-            <Link
-              href="/contact"
-              className="rounded-full border border-[#94652c]/35 bg-[#f6ead7] px-6 py-3 text-xs font-semibold uppercase tracking-[0.18em] text-[#94652c]"
-            >
-              Request Custom Off-Market Shortlist
-            </Link>
-          </div>
-        </div>
-      )}
-      </div>
+      <CtaBanner />
     </div>
   );
 }
 
 export default function PropertiesPage() {
   return (
-    <>
-        <LivelyPageHero
-          badge="Buy, Rent & Off-Plan Search"
-          title="Dubai & UAE Property Search"
-          highlight="Buy Ready, Rent & Off-Plan"
-          description="Filter verified ready homes, Ejari-registered rentals, and developer off-plan allocations across Dubai and the UAE. Use the currency and sq ft / sq m controls in the top bar at any time."
-          backgroundImage="/img/hero/slides/01-dubai-horizon-desktop.webp"
-          primaryCta={{ label: "Browse Off-Plan Launches", href: "/off-plan" }}
-          secondaryCta={{ label: "Open DLD & Yield Calculators", href: "/calculators" }}
-        />
-      <Suspense
-        fallback={
-          // Server-rendered inventory index so crawlers and no-JS visitors still reach every listing.
-          <ul className="mx-auto grid max-w-7xl gap-2 px-4 py-12 text-sm sm:grid-cols-2">
-            {LISTINGS.map((l) => (
-              <li key={l.slug}>
-                <Link href={`/properties/${l.slug}`} className="text-[#17130e] hover:text-[#94652c]">
-                  {l.title} — {l.community}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        }
-      >
-        <PropertiesSearchInner />
-      </Suspense>
-    </>
+    <Suspense fallback={<div className="min-h-screen bg-white" />}>
+      <PropertiesExplorer />
+    </Suspense>
   );
 }

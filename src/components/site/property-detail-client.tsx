@@ -426,8 +426,8 @@ export function PropertyDetailClient({
                 Read full {listing.community} guide →
               </Link>
             </p>
-            <div className="overflow-hidden rounded-2xl border border-black/[0.08]">
-              <MapEmbed lat={listing.lat} lng={listing.lng} label={listing.building} />
+            <div className="overflow-hidden rounded-2xl">
+              <MapEmbed lat={listing.lat} lng={listing.lng} title={listing.building} />
             </div>
             <div className="rounded-2xl border border-black/[0.07] bg-[#f7f7f7] p-5">
               <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-[#8b8b8b]">

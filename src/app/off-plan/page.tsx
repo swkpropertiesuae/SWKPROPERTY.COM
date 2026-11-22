@@ -1,272 +1,258 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import Link from "next/link";
-import { Building2, MapPin, Search, ShieldCheck } from "lucide-react";
+import { ArrowUpRight, Search } from "lucide-react";
+import { developers, priorityProjects, projects } from "@/lib/developers";
 import { offPlanAreas } from "@/lib/areas";
-import { LivelyPageHero } from "@/components/ui/lively-page-hero";
-import Timeline from "@/components/ui/timeline";
-import { PropertyCard } from "@/components/site/property-card";
-import { EnquiryForm } from "@/components/site/enquiry-form";
-import { LISTINGS } from "@/lib/listings";
-import { collections, developers, projectCommunities, projects } from "@/lib/developers";
+import { AvenloPageHeader } from "@/components/avenlo/page-header";
+import { BracketLink } from "@/components/avenlo/bracket-button";
+import { CtaBanner, SectionEyebrow, SplitHeading } from "@/components/avenlo/motion";
 
-export default function OffPlanHubPage() {
-  const [search, setSearch] = useState("");
-  const [selectedDeveloper, setSelectedDeveloper] = useState("");
-  const [selectedCollection, setSelectedCollection] = useState("");
-  const [selectedCommunity, setSelectedCommunity] = useState("");
+const EMIRATES = ["All", "Dubai", "Abu Dhabi", "Sharjah", "Ras Al Khaimah"] as const;
 
-  const offPlanListings = LISTINGS.filter((l) => l.purpose === "off-plan");
+export default function OffPlanPage() {
+  const [emirate, setEmirate] = useState<(typeof EMIRATES)[number]>("All");
+  const [devSlug, setDevSlug] = useState("");
+  const [query, setQuery] = useState("");
+  const [onlyPriority, setOnlyPriority] = useState(false);
 
-  const q = search.trim().toLowerCase();
-  const filteredProjects = projects.filter((p) => {
-      if (selectedDeveloper && p.developerSlug !== selectedDeveloper) return false;
-      if (selectedCollection && p.collection !== selectedCollection) return false;
-      if (selectedCommunity && p.community !== selectedCommunity) return false;
+  const devMap = useMemo(() => new Map(developers.map((d) => [d.slug, d])), []);
+
+  const filtered = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    return projects.filter((p) => {
+      if (onlyPriority && !p.priorityTarget) return false;
+      if (devSlug && p.developerSlug !== devSlug) return false;
+      if (emirate !== "All") {
+        const d = devMap.get(p.developerSlug);
+        const matchEmirate =
+          d?.emirate === emirate ||
+          p.community.toLowerCase().includes(emirate.toLowerCase()) ||
+          (emirate === "Dubai" && d?.emirate === "UAE");
+        if (!matchEmirate) return false;
+      }
       if (q) {
-        const hay = `${p.name} ${p.developer} ${p.community} ${p.collection} ${p.summary}`.toLowerCase();
+        const hay = `${p.name} ${p.developer} ${p.community} ${p.collection} ${p.tags.join(" ")}`.toLowerCase();
         if (!hay.includes(q)) return false;
       }
       return true;
     });
+  }, [emirate, devSlug, query, onlyPriority, devMap]);
 
   return (
-    <div className="space-y-16 pb-20">
-      <LivelyPageHero
-        badge="108+ Developer Launches · Commission Paid by Developer"
-        title="108+ Verified Off-Plan Launches Across"
-        highlight="27+ UAE Master Developers"
-        description="Explore direct developer releases including Azizi Venice, Emaar The Oasis, DAMAC Islands, Sobha Century, Binghatti Maybach Benz, Ellington Berkeley Tower, The Meriva Dubai Islands, Masaar Sharjah, Yas Island, Saadiyat Island, and Al Marjan Island."
-        backgroundImage="/img/hero/slides/04-azizi-venice-desktop.webp"
-        primaryCta={{
-          label: `Browse All ${projects.length} Projects Below`,
-          href: "#projects-directory",
-        }}
-        secondaryCta={{
-          label: "Off-Plan Payment Calculator",
-          href: "/calculators",
-        }}
-        sideImages={[
-          {
-            src: "/img/hero/slides/02-imtiaz-kore-desktop.webp",
-            label: "Imtiaz Kore & Azizi Florence",
-            sublabel: "10%–20% Down · 60/40 & 50/50 Payment Plans",
-            href: "/off-plan/imtiaz-kore",
-          },
-          {
-            src: "/img/hero/slides/06-damac-islands-desktop.webp",
-            label: "DAMAC Islands & Emaar The Oasis",
-            sublabel: "Waterfront Lagoon Townhouses & Canal Villas",
-            href: "/off-plan/damac-islands",
-          },
+    <div className="bg-white">
+      <AvenloPageHeader
+        eyebrow="OFF-PLAN LAUNCHES · 27+ UAE DEVELOPERS"
+        title="New projects"
+        italic="rising now"
+        lead={`Track ${projects.length}+ verified off-plan developments across Dubai, Abu Dhabi, Sharjah, Ras Al Khaimah, and Umm Al Quwain—with 0% buyer agency commission on primary releases and RERA escrow verification.`}
+        breadcrumb={[
+          { label: "Home", href: "/" },
+          { label: "Off-Plan Launches" },
         ]}
+        actions={
+          <>
+            <BracketLink href="/calculators" variant="light" size="md">
+              Payment Plan Calculator
+            </BracketLink>
+            <BracketLink href="/developers" variant="light" size="md">
+              All 27+ Developers
+            </BracketLink>
+          </>
+        }
       />
 
-      {/* Featured Off-Plan Units with Complete DLD Escrow & Floor Plan Specs */}
-      <section className="mx-auto max-w-7xl px-4">
-        <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
-          <div>
-            <span className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.24em] text-[#94652c]">
-              <ShieldCheck className="h-4 w-4" />
-              Featured Allocations With Full Floor Plan & Escrow Data
-            </span>
-            <h2 className="mt-1 font-serif text-3xl md:text-4xl font-semibold text-[#17130e]">
-              Highlighted Off-Plan Unit Allocations
-            </h2>
-          </div>
-          <Link
-            href="/guides/investing"
-            className="text-xs font-semibold uppercase tracking-[0.18em] text-[#94652c] hover:underline"
-          >
-            Read Off-Plan Due Diligence Guide →
-          </Link>
-        </div>
-
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-          {offPlanListings.map((listing) => (
-            <PropertyCard key={listing.slug} listing={listing} />
+      {/* Emirate Filter Pills + Search & Developer Select */}
+      <section className="mx-auto max-w-[1260px] px-4 py-12 sm:px-8">
+        <div className="flex flex-wrap items-center justify-center gap-2">
+          {EMIRATES.map((em) => (
+            <button
+              key={em}
+              type="button"
+              onClick={() => setEmirate(em)}
+              className={`cursor-pointer rounded-full px-5 py-2.5 text-xs font-medium transition-colors ${
+                emirate === em
+                  ? "bg-[#121212] text-white"
+                  : "border border-black/10 bg-white text-[#525252] hover:border-[#121212] hover:text-[#121212]"
+              }`}
+            >
+              {em === "All" ? `All UAE (${projects.length})` : em}
+            </button>
           ))}
+          <button
+            type="button"
+            onClick={() => setOnlyPriority((v) => !v)}
+            className={`cursor-pointer rounded-full px-5 py-2.5 text-xs font-medium transition-colors ${
+              onlyPriority
+                ? "bg-[#121212] text-[#51fec0]"
+                : "border border-black/10 bg-[#f7f7f7] text-[#121212] hover:border-[#121212]"
+            }`}
+          >
+            2026 Priority Mandates ({priorityProjects.length})
+          </button>
         </div>
-      </section>
 
-      {/* Complete 108 Developer Off-Plan Projects Directory (§09) */}
-      <section id="projects-directory" className="mx-auto max-w-7xl px-4 scroll-mt-24">
-        <div className="rounded-3xl border border-[#e6dfd2] bg-white p-6 md:p-8">
-          <div className="flex flex-wrap items-end justify-between gap-4 pb-6 border-b border-[#e6dfd2]">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.26em] text-[#94652c]">
-                Complete UAE Developer Directory · {filteredProjects.length} of {projects.length} Projects
-              </p>
-              <h2 className="mt-1 font-serif text-3xl md:text-5xl font-semibold text-[#17130e]">
-                Filter Off-Plan & New Launch Developments
-              </h2>
-            </div>
-            {(search || selectedDeveloper || selectedCollection || selectedCommunity) && (
+        <div className="mt-8 grid grid-cols-1 gap-3 rounded-2xl border border-black/[0.07] bg-[#f7f7f7] p-4 sm:grid-cols-12">
+          <div className="relative sm:col-span-6">
+            <Search className="pointer-events-none absolute top-1/2 left-3.5 h-4 w-4 -translate-y-1/2 text-[#8b8b8b]" />
+            <input
+              type="search"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Search project, developer, island, or payment plan..."
+              aria-label="Search off-plan projects"
+              className="w-full rounded-lg border border-black/10 bg-white py-2.5 pr-4 pl-10 text-sm text-[#121212] placeholder:text-[#a7a7a7] focus:border-[#121212] focus:outline-none"
+            />
+          </div>
+
+          <select
+            aria-label="Filter by developer"
+            value={devSlug}
+            onChange={(e) => setDevSlug(e.target.value)}
+            className="sm:col-span-4 rounded-lg border border-black/10 bg-white px-3.5 py-2.5 text-sm text-[#121212] focus:border-[#121212] focus:outline-none"
+          >
+            <option value="">All 27+ Master Developers</option>
+            {developers.map((d) => (
+              <option key={d.slug} value={d.slug}>
+                {d.name} ({d.projectCount})
+              </option>
+            ))}
+          </select>
+
+          <div className="sm:col-span-2 flex items-center justify-between sm:justify-end gap-3 px-2 text-xs text-[#525252]">
+            <span className="font-medium text-[#121212]">{filtered.length} releases</span>
+            {(query || devSlug || emirate !== "All" || onlyPriority) ? (
               <button
                 type="button"
                 onClick={() => {
-                  setSearch("");
-                  setSelectedDeveloper("");
-                  setSelectedCollection("");
-                  setSelectedCommunity("");
+                  setEmirate("All");
+                  setDevSlug("");
+                  setQuery("");
+                  setOnlyPriority(false);
                 }}
-                className="text-xs font-semibold text-[#94652c] hover:underline"
+                className="cursor-pointer underline underline-offset-4"
               >
-                Reset Directory Filters
+                Reset
               </button>
-            )}
+            ) : null}
           </div>
+        </div>
 
-          {/* Filter Controls */}
-          <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
-            <div className="relative">
-              <Search className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-[#94652c]" />
-              <input
-                type="text"
-                placeholder="Search project, tower or area..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                className="w-full rounded-xl border border-[#e6dfd2] bg-[#faf7f2] pl-10 pr-3.5 py-2.5 text-xs text-[#17130e]"
-              />
-            </div>
-
-            <select
-              value={selectedDeveloper}
-              onChange={(e) => setSelectedDeveloper(e.target.value)}
-              className="rounded-xl border border-[#e6dfd2] bg-[#faf7f2] px-3.5 py-2.5 text-xs text-[#17130e]"
-            >
-              <option value="">All {developers.length} UAE Developers</option>
-              {developers.map((d) => (
-                <option key={d.slug} value={d.slug}>
-                  {d.name} ({d.projectCount})
-                </option>
-              ))}
-            </select>
-
-            <select
-              value={selectedCollection}
-              onChange={(e) => setSelectedCollection(e.target.value)}
-              className="rounded-xl border border-[#e6dfd2] bg-[#faf7f2] px-3.5 py-2.5 text-xs text-[#17130e]"
-            >
-              <option value="">All Collections</option>
-              {collections.map((c) => (
-                <option key={c} value={c}>
-                  {c}
-                </option>
-              ))}
-            </select>
-
-            <select
-              value={selectedCommunity}
-              onChange={(e) => setSelectedCommunity(e.target.value)}
-              className="rounded-xl border border-[#e6dfd2] bg-[#faf7f2] px-3.5 py-2.5 text-xs text-[#17130e]"
-            >
-              <option value="">All Project Communities</option>
-              {projectCommunities.map((c) => (
-                <option key={c} value={c}>
-                  {c}
-                </option>
-              ))}
-            </select>
+        {/* Project Grid */}
+        {filtered.length === 0 ? (
+          <div className="mt-12 rounded-2xl border border-black/[0.06] bg-[#f7f7f7] p-12 text-center">
+            <h2 className="text-2xl font-medium tracking-[-0.03em] text-[#121212]">
+              No matching off-plan launches
+            </h2>
+            <p className="mt-2 text-sm text-[#737373]">
+              Clear your search filter or ask our off-plan desk for upcoming private pre-launches.
+            </p>
           </div>
-
-          {/* Programmatic area hubs */}
-          <nav aria-label="Off-plan projects by area" className="mt-5 flex flex-wrap gap-2 text-xs">
-            {offPlanAreas.map((a) => (
-              <Link
-                key={a.slug}
-                href={`/off-plan/in/${a.slug}`}
-                className="rounded-full border border-[#e6dfd2] bg-white px-3 py-1.5 text-[#17130e] hover:border-[#94652c] hover:text-[#94652c]"
-              >
-                {a.name} ({a.projects.length})
-              </Link>
-            ))}
-          </nav>
-
-          {/* Render Notice Banner (§09) */}
-          <div className="mt-5 rounded-2xl border border-[#94652c]/25 bg-[#faf7f2] px-4 py-3 text-xs text-[#4a4237]">
-            <strong className="text-[#94652c]">Transparency & Render Notice:</strong> Project visuals shown below are official developer architectural renders for illustrative purposes. Unit prices, payment schedules, and handover dates are confirmed from live developer inventory upon enquiry.
-          </div>
-
-          {/* Projects Grid */}
-          <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {filteredProjects.map((proj) => {
-              const devObj = developers.find((d) => d.slug === proj.developerSlug);
+        ) : (
+          <div className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {filtered.map((proj) => {
+              const dev = devMap.get(proj.developerSlug);
               return (
                 <Link
                   key={proj.slug}
                   href={`/off-plan/${proj.slug}`}
-                  className="group flex flex-col justify-between overflow-hidden rounded-3xl border border-[#e6dfd2] bg-white shadow-sm transition hover:-translate-y-1 hover:border-[#94652c] hover:shadow-lg"
+                  className="group flex flex-col overflow-hidden rounded-2xl border border-black/[0.07] bg-white transition-all duration-300 hover:border-black/20 hover:shadow-[0_20px_50px_rgba(18,18,18,0.08)]"
                 >
-                  <div>
-                    <div className="relative h-56 w-full overflow-hidden bg-[#17130e]">
-                      <img
-                        src={proj.images[0]}
-                        alt={proj.name}
-                        loading="lazy"
-                        className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-[#17130e]/85 via-transparent to-black/30" />
-                      <div className="absolute top-3 left-3 right-3 flex items-center justify-between gap-2">
-                        <span className="rounded-full bg-[#17130e] px-3 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-[#dcb888]">
-                          {proj.collection}
-                        </span>
-                        <span className="rounded-full border border-white/25 bg-white/95 px-2.5 py-1 text-[10px] font-bold text-[#17130e] shadow-xs">
-                          Off-Plan Launch
-                        </span>
-                      </div>
-                      {devObj?.logo && (
-                        <div className="absolute bottom-3 right-3 rounded-lg bg-white px-2.5 py-1 shadow-md">
-                          <img
-                            src={devObj.logo}
-                            alt={proj.developer}
-                            className="h-4 w-16 object-contain"
-                          />
-                        </div>
-                      )}
+                  <div className="relative aspect-[16/10] w-full overflow-hidden bg-[#ececec]">
+                    <img
+                      src={proj.thumb || proj.image}
+                      alt={`${proj.name} by ${proj.developer}`}
+                      loading="lazy"
+                      className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
+                    />
+                    <div className="absolute top-3.5 left-3.5">
+                      <span className="inline-flex items-center gap-1.5 rounded-full bg-[#121212]/82 px-3 py-1 text-[10px] font-medium uppercase tracking-[0.16em] text-white backdrop-blur-md">
+                        <span className="h-1.5 w-1.5 rounded-[2px] bg-[#51fec0]" aria-hidden="true" />
+                        {proj.priorityTarget ? "2026 Priority" : "Off-Plan"}
+                      </span>
                     </div>
+                    <span className="absolute bottom-3 right-3 rounded-full bg-white/90 px-2.5 py-0.5 text-[10px] font-medium text-[#121212]">
+                      Developer Render
+                    </span>
+                  </div>
 
-                    <div className="p-5">
-                      <div className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[#94652c]">
-                        <Building2 className="h-3.5 w-3.5" />
-                        <span>{proj.developer}</span>
+                  <div className="flex flex-1 flex-col justify-between p-6">
+                    <div>
+                      <div className="flex items-center justify-between gap-2">
+                        {dev?.logo ? (
+                          <img
+                            src={dev.logo}
+                            alt={proj.developer}
+                            loading="lazy"
+                            className="h-5 w-auto max-w-[100px] object-contain opacity-80"
+                          />
+                        ) : (
+                          <span className="text-[11px] font-medium uppercase tracking-[0.16em] text-[#8b8b8b]">
+                            {proj.developer}
+                          </span>
+                        )}
+                        <span className="truncate text-[11px] text-[#8b8b8b]">{proj.community}</span>
                       </div>
-                      <h3 className="mt-1.5 font-serif text-2xl font-semibold text-[#17130e] group-hover:text-[#94652c]">
+                      <h2 className="mt-3 text-[22px] font-medium tracking-[-0.03em] text-[#121212] group-hover:text-[#525252]">
                         {proj.name}
-                      </h3>
-                      <div className="mt-1 flex items-center gap-1.5 text-xs text-[#786e60]">
-                        <MapPin className="h-3.5 w-3.5 text-[#94652c]" />
-                        <span>{proj.community}</span>
-                      </div>
-                      <p className="mt-3 line-clamp-3 text-xs text-[#4a4237] leading-relaxed">
+                      </h2>
+                      <p className="mt-2 line-clamp-2 text-xs leading-relaxed text-[#666666]">
                         {proj.summary}
                       </p>
                     </div>
-                  </div>
 
-                  <div className="flex items-center justify-between border-t border-[#e6dfd2] bg-[#faf7f2] px-5 py-3.5 text-xs font-bold uppercase tracking-[0.14em] text-[#17130e] group-hover:text-[#94652c]">
-                    <span>View Payment Plan &amp; Brochure</span>
-                    <span>→</span>
+                    <div className="mt-5 flex items-center justify-between gap-3 border-t border-black/[0.06] pt-4">
+                      <div className="flex flex-wrap gap-1.5">
+                        {proj.tags.slice(0, 2).map((tag) => (
+                          <span
+                            key={tag}
+                            className="rounded-full bg-[#f5f5f5] px-2.5 py-1 text-[10px] font-medium text-[#525252]"
+                          >
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                      <span className="inline-flex shrink-0 items-center gap-1 text-xs font-medium text-[#121212] group-hover:text-[#0e9f6e]">
+                        <span>View</span>
+                        <ArrowUpRight className="h-3.5 w-3.5" />
+                      </span>
+                    </div>
                   </div>
                 </Link>
               );
             })}
           </div>
+        )}
+      </section>
+
+      {/* Browse Launches by Community Corridor (pSEO Area Hubs) */}
+      <section className="border-t border-black/[0.06] bg-[#f7f7f7] py-20">
+        <div className="mx-auto max-w-[1260px] px-4 sm:px-8">
+          <SectionEyebrow>BROWSE BY CORRIDOR</SectionEyebrow>
+          <SplitHeading
+            primary="Off-plan launches"
+            muted="by Dubai & UAE area"
+            size="md"
+            inline
+            className="mt-4"
+          />
+          <div className="mt-8 flex flex-wrap gap-2.5">
+            {offPlanAreas.map((area) => (
+              <Link
+                key={area.slug}
+                href={`/off-plan/in/${area.slug}`}
+                className="inline-flex items-center gap-2 rounded-full border border-black/10 bg-white px-4 py-2 text-xs font-medium text-[#121212] transition-colors hover:border-[#121212] hover:bg-[#121212] hover:text-white"
+              >
+                <span>{area.name}</span>
+                <span className="font-mono text-[11px] opacity-60">{area.projects.length}</span>
+              </Link>
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* 21st.dev Timeline */}
-      <Timeline />
-
-      {/* Off-Plan Consultation & Brochure Form */}
-      <section className="mx-auto max-w-4xl px-4">
-        <EnquiryForm
-          context="brochure"
-          heading="Request Live Developer Inventory, Floor Plans & Escrow Details"
-          subheading="Receive current unit availability, construction milestone payment schedules, and DLD Oqood fee breakdowns."
-        />
-      </section>
+      <CtaBanner />
     </div>
   );
 }
