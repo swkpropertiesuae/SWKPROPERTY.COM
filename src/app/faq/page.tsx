@@ -1,16 +1,18 @@
-import type { Metadata } from "next"
-import Link from "next/link"
-import { HelpCircle } from "lucide-react"
-import { faqs } from "@/lib/swk"
-import { GUIDES } from "@/lib/guides"
-import { buildMetadata, faqSchema, breadcrumbSchema } from "@/lib/seo"
-import { JsonLd } from "@/components/seo/json-ld"
-import { EnquiryForm } from "@/components/site/enquiry-form"
+import type { Metadata } from "next";
+import { faqs } from "@/lib/swk";
+import { GUIDES } from "@/lib/guides";
+import { buildMetadata, faqSchema, breadcrumbSchema } from "@/lib/seo";
+import { JsonLd } from "@/components/seo/json-ld";
+import { Faq } from "@/components/site/faq";
+import { EnquiryForm } from "@/components/site/enquiry-form";
+import { AvenloPageHeader } from "@/components/avenlo/page-header";
+import { BracketLink } from "@/components/avenlo/bracket-button";
+import { CtaBanner } from "@/components/avenlo/motion";
 
 export const metadata: Metadata = buildMetadata({
-  title: "Frequently Asked Questions — Buying, Renting, Off-Plan & DLD Rules in Dubai",
+  title: "Dubai Real Estate FAQ — DLD Fees, Off-Plan & Ejari",
   description:
-    "Direct answers to common questions about buying ready or off-plan property in Dubai, DLD 4% fees, escrow and Oqood registration, UAE Golden Visa eligibility, Ejari leasing, and selling with RERA Form A.",
+    "Direct answers to common questions about buying ready or off-plan property in Dubai, DLD 4% fees, escrow and Oqood registration, UAE Golden Visa, and Ejari leasing.",
   path: "/faq",
   keywords: [
     "Dubai real estate FAQ",
@@ -18,16 +20,13 @@ export const metadata: Metadata = buildMetadata({
     "Oqood escrow Dubai FAQ",
     "SWK Properties RERA ORN 51517 FAQ",
   ],
-})
+});
 
 export default function FaqPage() {
-  const combinedFaqs = [
-    ...faqs,
-    ...GUIDES.flatMap((g) => g.faqs),
-  ]
+  const combinedFaqs = [...faqs, ...GUIDES.flatMap((g) => g.faqs)];
 
   return (
-    <div className="min-h-screen bg-[#faf7f2] text-[#17130e]">
+    <div className="bg-white">
       <JsonLd id="ld-faq-page" data={faqSchema(combinedFaqs)} />
       <JsonLd
         id="ld-faq-breadcrumb"
@@ -37,67 +36,38 @@ export default function FaqPage() {
         ])}
       />
 
-      <section className="border-b border-[#e6dfd2] bg-[#f4efe6] py-16">
-        <div className="mx-auto max-w-5xl px-4">
-          <span className="inline-flex items-center gap-2 rounded-full border border-[#94652c]/35 bg-[#f6ead7] px-4 py-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-[#94652c]">
-            <HelpCircle className="h-3.5 w-3.5" /> Answer-First AEO Knowledge Base · RERA ORN 51517
-          </span>
-          <h1 className="mt-4 font-hero-raleway text-3xl md:text-5xl font-light uppercase tracking-[0.08em] text-[#17130e]">
-            Frequently Asked Questions About Dubai & UAE Real Estate
-          </h1>
-          <p className="mt-3 text-sm md:text-base text-[#4a4237] leading-relaxed">
-            Plain-language answers covering off-plan escrow accounts, Oqood interim registration, secondary-market Form F transfers, Ejari tenancy rules, and RERA Form A seller onboarding.
-          </p>
-        </div>
+      <AvenloPageHeader
+        eyebrow="QUESTIONS & ANSWERS · RERA ORN 51517"
+        title="Clear answers on"
+        italic="Dubai property"
+        lead="Straight answers on DLD 4% fees, Oqood and RERA escrow accounts, Golden Visa thresholds, non-resident mortgages, Ejari leasing, and Form A/F transfers."
+        breadcrumb={[
+          { label: "Home", href: "/" },
+          { label: "FAQ" },
+        ]}
+        actions={
+          <BracketLink href="/calculators" variant="light" size="sm">
+            Try DLD &amp; Mortgage Calculator
+          </BracketLink>
+        }
+      />
+
+      <Faq
+        items={combinedFaqs}
+        eyebrow="ALL QUESTIONS"
+        primary="Everything buyers,"
+        muted="tenants & sellers ask"
+      />
+
+      <section className="mx-auto max-w-3xl px-4 py-16 sm:px-8">
+        <EnquiryForm
+          context="advisory"
+          heading="Still have a specific question?"
+          subheading="Write to our Sheikh Zayed Road desk and we will confirm the exact RERA or DLD rule for your case."
+        />
       </section>
 
-      <div className="mx-auto max-w-5xl px-4 py-14 space-y-12">
-        {/* General SWK & Regulatory FAQs */}
-        <section>
-          <h2 className="font-serif text-2xl md:text-3xl font-semibold text-[#94652c] mb-6">
-            Working With SWK Properties & Regulatory Verification
-          </h2>
-          <div className="space-y-4">
-            {faqs.map((f, i) => (
-              <div key={i} className="rounded-3xl border border-[#e6dfd2] bg-white p-6">
-                <h3 className="text-base font-semibold text-[#17130e]">{f.q}</h3>
-                <p className="mt-2 text-xs md:text-sm text-[#4a4237] leading-relaxed">{f.a}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* Guide-Specific FAQs (Buying, Renting, Selling, Investing) */}
-        {GUIDES.map((guide) => (
-          <section key={guide.slug}>
-            <div className="flex flex-wrap items-center justify-between gap-2 mb-6">
-              <h2 className="font-serif text-2xl md:text-3xl font-semibold text-[#94652c]">
-                {guide.eyebrow} Questions
-              </h2>
-              <Link
-                href={`/guides/${guide.slug}`}
-                className="text-xs font-semibold text-[#94652c] underline"
-              >
-                Read Full {guide.eyebrow} →
-              </Link>
-            </div>
-            <div className="space-y-4">
-              {guide.faqs.map((f, i) => (
-                <div key={i} className="rounded-3xl border border-[#e6dfd2] bg-white p-6">
-                  <h3 className="text-base font-semibold text-[#17130e]">{f.q}</h3>
-                  <p className="mt-2 text-xs md:text-sm text-[#4a4237] leading-relaxed">{f.a}</p>
-                </div>
-              ))}
-            </div>
-          </section>
-        ))}
-
-        <EnquiryForm
-          context="general"
-          subject="FAQ Page — Specific Question for SWK Advisory Desk"
-          heading="Have a Question Not Covered Above?"
-        />
-      </div>
+      <CtaBanner />
     </div>
-  )
+  );
 }

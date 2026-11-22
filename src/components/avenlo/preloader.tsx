@@ -17,18 +17,26 @@ export function AvenloPreloader() {
       return;
     }
 
-    setVisible(true);
-    let current = 0;
-    const step = window.setInterval(() => {
-      current = Math.min(100, current + 14);
-      setPct(current);
-      if (current >= 100) {
-        window.clearInterval(step);
-        window.setTimeout(() => setVisible(false), 180);
-      }
-    }, 55);
+    let stepId: number | undefined;
+    let hideId: number | undefined;
+    const rafId = window.requestAnimationFrame(() => {
+      setVisible(true);
+      let current = 0;
+      stepId = window.setInterval(() => {
+        current = Math.min(100, current + 16);
+        setPct(current);
+        if (current >= 100) {
+          if (stepId) window.clearInterval(stepId);
+          hideId = window.setTimeout(() => setVisible(false), 160);
+        }
+      }, 50);
+    });
 
-    return () => window.clearInterval(step);
+    return () => {
+      window.cancelAnimationFrame(rafId);
+      if (stepId) window.clearInterval(stepId);
+      if (hideId) window.clearTimeout(hideId);
+    };
   }, [reduced]);
 
   return (

@@ -1,214 +1,213 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { CheckCircle2, Cookie } from "lucide-react"
-import { usePrefs } from "@/lib/prefs"
+import * as React from "react";
+import { Check } from "lucide-react";
+import { usePrefs } from "@/lib/prefs";
+import { AvenloPageHeader } from "@/components/avenlo/page-header";
 
 const TRACKER_INVENTORY = [
   {
     name: "swk_cookie_consent",
     category: "Essential",
     storage: "localStorage",
-    purpose: "Stores your cookie and analytics consent choices so we do not prompt you on every page load.",
-    retention: "Until you change or clear it",
+    purpose: "Stores your cookie and analytics consent choices so you are not re-prompted on every visit.",
+    retention: "Until changed or cleared",
   },
   {
-    name: "swk_currency, swk_area_unit, swk_lang",
+    name: "swk_intro_seen",
+    category: "Essential",
+    storage: "sessionStorage",
+    purpose: "Prevents the brief architectural page-load reveal from repeating during the same browser session.",
+    retention: "Current browser tab session",
+  },
+  {
+    name: "swk_currency, swk_area_unit",
     category: "Preferences",
     storage: "localStorage",
-    purpose: "Remembers your display currency, area unit (sq ft / sq m) and language direction.",
+    purpose: "Remembers your display currency (AED/USD/EUR/GBP/INR/RUB) and area unit (sq ft / sq m).",
     retention: "Until cleared",
   },
   {
     name: "swk_saved_slugs, swk_compare_slugs, swk_saved_searches",
     category: "Preferences",
     storage: "localStorage",
-    purpose: "Keeps your shortlisted properties, comparison tray and saved searches in your own browser.",
+    purpose: "Stores shortlisted residences, comparison tray items, and saved search filters locally in your browser.",
     retention: "Until cleared",
   },
   {
     name: "swk_attribution",
     category: "Analytics",
     storage: "localStorage",
-    purpose: "Records first-touch and latest-touch UTM campaign parameters and referrer so enquiries can be attributed to a channel.",
+    purpose: "Records first-touch and latest-touch UTM referral parameters for enquiry channel attribution.",
     retention: "Until cleared",
   },
   {
-    name: "Google Tag Manager / Analytics / ad pixels (_ga, _gcl_*, _fbp)",
+    name: "Google Tag Manager / Analytics (_ga, _gcl_*)",
     category: "Analytics",
     storage: "Third-party cookies",
-    purpose: "Measures visits and campaign performance. Loaded in Google Consent Mode and only set after you accept analytics.",
-    retention: "Up to 13 months (per provider)",
+    purpose: "Measures site performance under Google Consent Mode v2 and remains disabled unless you opt in.",
+    retention: "Up to 13 months (per Google)",
   },
   {
     name: "Google Maps embeds",
     category: "Third-party",
     storage: "Third-party cookies",
-    purpose: "Displays office, community and property locations. Google may set cookies when a map loads.",
+    purpose: "Displays Dubai office, community, and property locations when a map iframe loads.",
     retention: "Per Google's policy",
   },
-]
+];
 
 export default function CookieSettingsPage() {
-  const { cookieConsent, updateCookieConsent } = usePrefs()
-  const [analytics, setAnalytics] = React.useState(cookieConsent?.analytics ?? false)
-  const [preferences, setPreferences] = React.useState(cookieConsent?.preferences ?? true)
-  const [savedToast, setSavedToast] = React.useState(false)
+  const { cookieConsent, updateCookieConsent } = usePrefs();
+  const [analytics, setAnalytics] = React.useState(cookieConsent?.analytics ?? false);
+  const [preferences, setPreferences] = React.useState(cookieConsent?.preferences ?? true);
+  const [savedToast, setSavedToast] = React.useState(false);
 
-  // Re-sync the form when stored consent loads (React "adjust state during render" pattern).
-  const [syncedConsent, setSyncedConsent] = React.useState(cookieConsent)
+  const [syncedConsent, setSyncedConsent] = React.useState(cookieConsent);
   if (cookieConsent !== syncedConsent) {
-    setSyncedConsent(cookieConsent)
+    setSyncedConsent(cookieConsent);
     if (cookieConsent) {
-      setAnalytics(cookieConsent.analytics)
-      setPreferences(cookieConsent.preferences)
+      setAnalytics(cookieConsent.analytics);
+      setPreferences(cookieConsent.preferences);
     }
   }
 
-  const handleSave = () => {
-    updateCookieConsent({ analytics, preferences })
-    setSavedToast(true)
-    setTimeout(() => setSavedToast(false), 3000)
-  }
+  const persist = (nextA: boolean, nextP: boolean) => {
+    setAnalytics(nextA);
+    setPreferences(nextP);
+    updateCookieConsent({ analytics: nextA, preferences: nextP });
+    setSavedToast(true);
+    setTimeout(() => setSavedToast(false), 3000);
+  };
 
   return (
-    <div className="min-h-screen bg-[#faf7f2] text-[#17130e]">
-      <div className="mx-auto max-w-4xl px-4 py-16 space-y-10">
-        <div>
-          <span className="inline-flex items-center gap-2 rounded-full border border-[#94652c]/35 bg-[#f6ead7] px-3.5 py-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-[#94652c]">
-            <Cookie className="h-3.5 w-3.5" /> Granular Consent & Tracker Inventory
-          </span>
-          <h1 className="mt-4 font-serif text-3xl md:text-5xl font-semibold text-[#17130e]">
-            Cookie Settings & Browser Storage Inventory
-          </h1>
-          <p className="mt-3 text-sm md:text-base text-[#4a4237] leading-relaxed">
-            Control how SWK Properties uses browser storage and analytics events. Essential storage is required for basic site security and consent memory; you can toggle Preferences and Analytics at any time.
-          </p>
-        </div>
+    <div className="bg-white">
+      <AvenloPageHeader
+        eyebrow="UAE PDPL · GRANULAR CONSENT & STORAGE"
+        title="Cookie Settings"
+        italic="& Storage Inventory"
+        lead="Control how SWK Properties uses browser storage and analytics. Essential storage stays active for security and consent memory; adjust Preferences and Analytics below anytime."
+        compact
+        breadcrumb={[
+          { label: "Home", href: "/" },
+          { label: "Cookies" },
+        ]}
+      />
 
-        {/* Interactive Toggles */}
-        <section className="rounded-3xl border border-[#e6dfd2] bg-white p-6 md:p-8 space-y-6">
-          <div className="flex items-start justify-between gap-4 border-b border-[#e6dfd2] pb-5">
+      <div className="mx-auto max-w-4xl px-4 py-14 sm:px-8 space-y-12">
+        {/* Interactive Consent Panel */}
+        <section className="rounded-2xl border border-black/[0.08] bg-[#f7f7f7] p-6 sm:p-8 space-y-6">
+          <div className="flex items-start justify-between gap-4 border-b border-black/[0.08] pb-5">
             <div>
-              <div className="text-sm font-semibold text-[#17130e]">
-                1. Strictly Necessary & Security Storage (Always Active)
-              </div>
-              <p className="mt-1 text-xs text-[#4a4237]">
-                Required for form spam protection, duplicate-submission prevention, and saving your privacy consent state.
+              <h2 className="text-base font-medium text-[#121212]">
+                1. Strictly Necessary &amp; Security Storage
+              </h2>
+              <p className="mt-1 text-xs leading-relaxed text-[#666666]">
+                Required for form spam protection, duplicate-submission prevention, and saving your privacy consent choice.
               </p>
             </div>
-            <span className="rounded-full border border-[#94652c]/35 bg-[#f6ead7] px-3 py-1 text-[11px] font-semibold text-[#94652c]">
+            <span className="shrink-0 rounded-full bg-[#121212] px-3 py-1 text-[10px] font-medium uppercase tracking-[0.16em] text-[#51fec0]">
               Always Active
             </span>
           </div>
 
-          <div className="flex items-start justify-between gap-4 border-b border-[#e6dfd2] pb-5">
+          <div className="flex items-start justify-between gap-4 border-b border-black/[0.08] pb-5">
             <div>
-              <div className="text-sm font-semibold text-[#17130e]">
-                2. Functional Preferences (Currency, sq ft/sq m & Saved Shortlist)
-              </div>
-              <p className="mt-1 text-xs text-[#4a4237]">
-                Remembers your preferred reference currency, area unit, and shortlisted properties across page visits.
+              <h2 className="text-base font-medium text-[#121212]">
+                2. Functional Preferences (Currency, sq ft/sq m &amp; Shortlist)
+              </h2>
+              <p className="mt-1 text-xs leading-relaxed text-[#666666]">
+                Remembers your preferred reference currency, area unit, saved searches, and shortlisted residences.
               </p>
             </div>
             <input
               type="checkbox"
               checked={preferences}
               onChange={(e) => setPreferences(e.target.checked)}
-              className="h-5 w-5 accent-[#e6cf9c]"
               aria-label="Enable Functional Preferences"
+              className="mt-1 h-5 w-5 shrink-0 cursor-pointer accent-[#121212]"
             />
           </div>
 
           <div className="flex items-start justify-between gap-4">
             <div>
-              <div className="text-sm font-semibold text-[#17130e]">
-                3. First-Party Analytics & Enquiry Attribution
-              </div>
-              <p className="mt-1 text-xs text-[#4a4237]">
-                Allows SWK Properties to measure search-filter usage, calculator interactions, and UTM campaign attribution without third-party ad retargeting.
+              <h2 className="text-base font-medium text-[#121212]">
+                3. Analytics &amp; Enquiry Attribution (Google Consent Mode v2)
+              </h2>
+              <p className="mt-1 text-xs leading-relaxed text-[#666666]">
+                Measures anonymous search, calculator, and UTM performance without sharing personal contact details.
               </p>
             </div>
             <input
               type="checkbox"
               checked={analytics}
               onChange={(e) => setAnalytics(e.target.checked)}
-              className="h-5 w-5 accent-[#e6cf9c]"
-              aria-label="Enable First-Party Analytics"
+              aria-label="Enable Analytics"
+              className="mt-1 h-5 w-5 shrink-0 cursor-pointer accent-[#121212]"
             />
           </div>
 
-          <div className="flex flex-wrap items-center gap-3 pt-4 border-t border-[#e6dfd2]">
+          <div className="flex flex-wrap items-center gap-3 border-t border-black/[0.08] pt-5">
             <button
               type="button"
-              onClick={handleSave}
-              className="rounded-full bg-[#17130e] px-6 py-2.5 text-xs font-bold uppercase tracking-[0.18em] text-white hover:bg-[#f3dfb1]"
+              onClick={() => persist(analytics, preferences)}
+              className="cursor-pointer rounded-full bg-[#121212] px-6 py-2.5 text-xs font-medium uppercase tracking-[0.14em] text-white hover:bg-[#2b2b2b]"
             >
-              Save My Preferences
+              Save Preferences
             </button>
             <button
               type="button"
-              onClick={() => {
-                setAnalytics(true)
-                setPreferences(true)
-                updateCookieConsent({ analytics: true, preferences: true })
-                setSavedToast(true)
-                setTimeout(() => setSavedToast(false), 3000)
-              }}
-              className="rounded-full border border-[#e6dfd2] px-5 py-2.5 text-xs font-semibold text-[#17130e] hover:border-[#94652c]"
+              onClick={() => persist(true, true)}
+              className="cursor-pointer rounded-full border border-black/15 bg-white px-5 py-2.5 text-xs font-medium text-[#121212] hover:bg-[#ececec]"
             >
               Accept All
             </button>
             <button
               type="button"
-              onClick={() => {
-                setAnalytics(false)
-                setPreferences(false)
-                updateCookieConsent({ analytics: false, preferences: false })
-                setSavedToast(true)
-                setTimeout(() => setSavedToast(false), 3000)
-              }}
-              className="rounded-full border border-[#e6dfd2] px-5 py-2.5 text-xs font-semibold text-[#4a4237] hover:border-white/40"
+              onClick={() => persist(false, false)}
+              className="cursor-pointer rounded-full border border-black/15 bg-white px-5 py-2.5 text-xs font-medium text-[#525252] hover:text-[#121212]"
             >
               Essential Only
             </button>
-            {savedToast && (
-              <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#94652c]">
-                <CheckCircle2 className="h-4 w-4" /> Preferences saved
+            {savedToast ? (
+              <span className="inline-flex items-center gap-1.5 text-xs font-medium text-[#0e9f6e]">
+                <Check className="h-4 w-4" /> Preferences saved
               </span>
-            )}
+            ) : null}
           </div>
         </section>
 
-        {/* Full Tracker & Storage Inventory Table (§54) */}
-        <section className="rounded-3xl border border-[#e6dfd2] bg-white p-6 md:p-8 overflow-x-auto">
-          <h2 className="font-serif text-2xl font-semibold text-[#17130e]">
-            Complete Cookie & LocalStorage Inventory
+        {/* Storage Inventory Table */}
+        <section className="space-y-4">
+          <h2 className="text-2xl font-medium tracking-[-0.03em] text-[#121212]">
+            Complete Cookie &amp; Browser Storage Inventory
           </h2>
-          <table className="mt-4 w-full text-left border-collapse text-xs">
-            <thead>
-              <tr className="border-b border-[#e6dfd2] text-[#94652c]">
-                <th className="py-3 pr-4">Key / Identifier</th>
-                <th className="py-3 pr-4">Category</th>
-                <th className="py-3 pr-4">Mechanism</th>
-                <th className="py-3 pr-4">Purpose</th>
-                <th className="py-3">Retention</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-[#e6dfd2] text-[#4a4237]">
-              {TRACKER_INVENTORY.map((row) => (
-                <tr key={row.name}>
-                  <td className="py-3 pr-4 font-mono text-[#94652c]">{row.name}</td>
-                  <td className="py-3 pr-4">{row.category}</td>
-                  <td className="py-3 pr-4">{row.storage}</td>
-                  <td className="py-3 pr-4">{row.purpose}</td>
-                  <td className="py-3">{row.retention}</td>
+          <div className="overflow-x-auto rounded-2xl border border-black/[0.08]">
+            <table className="w-full text-left text-xs">
+              <thead className="bg-[#f7f7f7] text-[#121212]">
+                <tr>
+                  <th className="p-4 font-medium">Key / Identifier</th>
+                  <th className="p-4 font-medium">Category</th>
+                  <th className="p-4 font-medium">Mechanism</th>
+                  <th className="p-4 font-medium">Purpose</th>
+                  <th className="p-4 font-medium">Retention</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody className="divide-y divide-black/[0.06] text-[#525252]">
+                {TRACKER_INVENTORY.map((row) => (
+                  <tr key={row.name}>
+                    <td className="p-4 font-mono text-[#121212]">{row.name}</td>
+                    <td className="p-4">{row.category}</td>
+                    <td className="p-4">{row.storage}</td>
+                    <td className="p-4 leading-relaxed">{row.purpose}</td>
+                    <td className="p-4">{row.retention}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </section>
       </div>
     </div>
-  )
+  );
 }

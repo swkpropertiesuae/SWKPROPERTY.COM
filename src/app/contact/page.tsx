@@ -1,14 +1,15 @@
-import type { Metadata } from "next"
-import { CheckCircle2, Clock, Mail, MapPin, Phone } from "lucide-react"
-import { SITE } from "@/lib/swk"
-import { buildMetadata, breadcrumbSchema } from "@/lib/seo"
-import { JsonLd } from "@/components/seo/json-ld"
-import { LivelyPageHero } from "@/components/ui/lively-page-hero"
-import { EnquiryForm } from "@/components/site/enquiry-form"
+import type { Metadata } from "next";
+import { Clock, Mail, MapPin, Phone, ShieldCheck } from "lucide-react";
+import { SITE } from "@/lib/swk";
+import { buildMetadata, breadcrumbSchema } from "@/lib/seo";
+import { JsonLd } from "@/components/seo/json-ld";
+import { EnquiryForm } from "@/components/site/enquiry-form";
 import { MapEmbed } from "@/components/site/map-embed";
+import { WhatsAppIcon } from "@/components/site/whatsapp-icon";
+import { AvenloPageHeader } from "@/components/avenlo/page-header";
 
 export const metadata: Metadata = buildMetadata({
-  title: "Contact SWK Properties — Sheikh Zayed Road Office, Dubai",
+  title: "Contact SWK Properties — Sheikh Zayed Road, Dubai",
   description:
     "Visit or contact SWK Properties at Office No 54, 27th Floor, Al Saqr Business Tower, Sheikh Zayed Road, Dubai. Call +971 56 433 0448 or book a private consultation.",
   path: "/contact",
@@ -18,20 +19,19 @@ export const metadata: Metadata = buildMetadata({
     "Sheikh Zayed Road property broker phone",
     "SWK Properties consultation",
   ],
-})
+});
 
-const CORRIDOR_DRIVE_TIMES = [
-  { destination: "DIFC Gate Village & Financial Centre Metro", time: "4 mins", mode: "Walk / Metro" },
-  { destination: "Downtown Dubai, Burj Khalifa & Dubai Mall", time: "8 mins", mode: "Sheikh Zayed Road" },
-  { destination: "Dubai International Airport (DXB)", time: "14 mins", mode: "E11 Highway" },
-  { destination: "Dubai Hills Estate & Mohammed Bin Rashid City", time: "16 mins", mode: "Al Khail Road" },
-  { destination: "Palm Jumeirah, Dubai Marina & Sobha Century", time: "18 mins", mode: "Sheikh Zayed Road" },
-  { destination: "Dubai South, Azizi Venice & Al Maktoum Airport", time: "28 mins", mode: "E311 / E611" },
-]
+const CORRIDOR_TIMES = [
+  { destination: "DIFC Gate Village & Financial Centre Metro", time: "4 mins" },
+  { destination: "Downtown Dubai & Burj Khalifa", time: "8 mins" },
+  { destination: "Dubai International Airport (DXB)", time: "14 mins" },
+  { destination: "Dubai Hills Estate & MBR City", time: "16 mins" },
+  { destination: "Palm Jumeirah & Dubai Marina", time: "18 mins" },
+];
 
 export default function ContactPage() {
   return (
-    <div className="min-h-screen bg-[#faf7f2] text-[#17130e]">
+    <div className="bg-white">
       <JsonLd
         id="ld-contact-breadcrumb"
         data={breadcrumbSchema([
@@ -40,171 +40,121 @@ export default function ContactPage() {
         ])}
       />
 
-      <LivelyPageHero
-        badge="Office 54 · 27th Floor · Al Saqr Business Tower"
-        title="Visit Our 27th-Floor Advisory Suite on"
-        highlight="Sheikh Zayed Road"
-        description="Speak directly with a senior consultant covering your target community or developer. We respond within one business day during Dubai Gulf Standard Time (GST / UTC+4)."
-        backgroundImage="/img/about/private-consultation-lounge.jpg"
-        primaryCta={{ label: "Call +971 56 433 0448", href: "tel:+971564330448" }}
-        secondaryCta={{ label: "Explore 108+ Projects", href: "/off-plan" }}
-        sideImages={[
-          {
-            src: "/img/hero/slides/01-dubai-horizon-desktop.webp",
-            label: "Sheikh Zayed Road · DIFC Corridor",
-            sublabel: "4 Mins from Financial Centre Metro Station",
-          },
-          {
-            src: "/img/hero/slides/04-azizi-venice-desktop.webp",
-            label: "25+ Multilingual Property Advisors",
-            sublabel: "English · Arabic · French · Hindi · Urdu",
-          },
+      <AvenloPageHeader
+        eyebrow="GET IN TOUCH · SHEIKH ZAYED ROAD"
+        title="Tell us what you"
+        italic="are looking for"
+        lead="Whether comparing 2026 off-plan launches, buying a ready home, arranging an annual lease, or instructing a sale, speak directly with our 27th-floor Dubai desk."
+        breadcrumb={[
+          { label: "Home", href: "/" },
+          { label: "Contact" },
         ]}
       />
 
-      {/* Contact Details + Photorealistic 27th-Floor Private Consultation Lounge */}
-      <section className="mx-auto max-w-7xl px-4 py-16 md:px-6">
+      {/* Avenlo 2-Column Contact Split: Left #F5F5F5 THE OFFICE + Right Crisp Form */}
+      <section className="mx-auto max-w-[1260px] px-4 py-16 sm:px-8">
         <div className="grid grid-cols-1 gap-10 lg:grid-cols-12 items-start">
-          <div className="lg:col-span-6 space-y-6">
-            <div className="overflow-hidden rounded-3xl border border-[#e6dfd2] bg-white shadow-sm">
-              <img
-                src="/img/about/private-consultation-lounge.jpg"
-                alt="SWK Properties Private Consultation Lounge on the 27th Floor of Al Saqr Business Tower, Sheikh Zayed Road"
-                className="h-72 w-full object-cover"
-              />
-              <div className="border-t border-[#e6dfd2] bg-white px-6 py-4 flex items-center justify-between">
-                <div>
-                  <span className="text-xs font-bold uppercase tracking-[0.2em] text-[#94652c] block">
-                    Private Consultation Suite · Office No 54
-                  </span>
-                  <span className="text-sm font-semibold text-[#17130e]">
-                    27th Floor, Al Saqr Business Tower, Sheikh Zayed Road
-                  </span>
-                </div>
-                <span className="inline-flex items-center gap-1 rounded-full bg-[#f6ead7] px-3 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-[#94652c]">
-                  <CheckCircle2 className="h-3 w-3" /> Verified HQ
-                </span>
-              </div>
-            </div>
+          {/* Left Column: THE OFFICE Card + Office Photo + Map */}
+          <div className="lg:col-span-5 space-y-6">
+            <div className="rounded-2xl border border-black/[0.06] bg-[#f5f5f5] p-7 sm:p-8 space-y-6">
+              <p className="text-[11px] font-medium uppercase tracking-[0.22em] text-[#8b8b8b]">
+                THE OFFICE
+              </p>
 
-            <div className="rounded-3xl border border-[#e6dfd2] bg-white p-7 space-y-5 shadow-sm">
-              <h2 className="font-serif text-2xl md:text-3xl font-semibold text-[#17130e]">
-                Direct Office Coordinates
-              </h2>
-
-              <div className="flex items-start gap-3.5 text-sm">
-                <MapPin className="h-5 w-5 shrink-0 text-[#94652c] mt-0.5" />
-                <div>
-                  <div className="text-xs font-bold uppercase tracking-[0.18em] text-[#94652c]">
-                    Dubai Headquarters
+              <div className="space-y-4 text-sm text-[#4a4a4a]">
+                <div className="flex items-start gap-3">
+                  <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-[#121212]" />
+                  <div>
+                    <p className="font-medium text-[#121212]">Al Saqr Business Tower</p>
+                    <p className="mt-0.5 leading-relaxed">{SITE.address.full}</p>
                   </div>
-                  <div className="mt-1 font-medium text-[#17130e]">{SITE.address.full}</div>
                 </div>
-              </div>
 
-              <div className="flex items-start gap-3.5 text-sm">
-                <Phone className="h-5 w-5 shrink-0 text-[#94652c] mt-0.5" />
-                <div>
-                  <div className="text-xs font-bold uppercase tracking-[0.18em] text-[#94652c]">
-                    Telephone &amp; Direct WhatsApp
-                  </div>
-                  <div className="mt-1 flex flex-wrap gap-3">
+                <div className="flex items-center gap-3">
+                  <Phone className="h-4 w-4 shrink-0 text-[#121212]" />
+                  <div className="flex flex-wrap items-center gap-2">
                     <a
-                      href={`tel:${SITE.phoneTel}`}
-                      className="font-semibold text-[#17130e] hover:text-[#94652c]"
+                      href={`tel:${SITE.phoneRaw}`}
+                      className="font-medium text-[#121212] hover:underline"
                     >
                       {SITE.phone}
                     </a>
-                    <span>·</span>
+                    <span className="text-[#cfcfcf]">·</span>
                     <a
-                      href={SITE.whatsapp}
+                      href={SITE.whatsappUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="font-semibold text-[#94652c] underline"
+                      className="inline-flex items-center gap-1 font-medium text-[#0e9f6e] hover:underline"
                     >
-                      Open WhatsApp Chat
+                      <WhatsAppIcon className="h-3.5 w-3.5" />
+                      WhatsApp
                     </a>
                   </div>
                 </div>
-              </div>
 
-              <div className="flex items-start gap-3.5 text-sm">
-                <Mail className="h-5 w-5 shrink-0 text-[#94652c] mt-0.5" />
-                <div>
-                  <div className="text-xs font-bold uppercase tracking-[0.18em] text-[#94652c]">
-                    Client Enquiries &amp; Advisory Desk
-                  </div>
+                <div className="flex items-center gap-3">
+                  <Mail className="h-4 w-4 shrink-0 text-[#121212]" />
                   <a
                     href={`mailto:${SITE.email}`}
-                    className="mt-1 block font-semibold text-[#17130e] hover:text-[#94652c]"
+                    className="font-medium text-[#121212] hover:underline"
                   >
                     {SITE.email}
                   </a>
                 </div>
-              </div>
 
-              <div className="flex items-start gap-3.5 text-sm">
-                <Clock className="h-5 w-5 shrink-0 text-[#94652c] mt-0.5" />
-                <div>
-                  <div className="text-xs font-bold uppercase tracking-[0.18em] text-[#94652c]">
-                    Business Hours (Asia/Dubai · GST / UTC+4)
-                  </div>
-                  <div className="mt-1 text-[#4a4237]">{SITE.hours.full}</div>
-                  <div className="text-xs text-[#786e60]">
-                    Private weekend viewings available by advance appointment.
+                <div className="flex items-start gap-3">
+                  <Clock className="mt-0.5 h-4 w-4 shrink-0 text-[#121212]" />
+                  <div>
+                    <p>{SITE.hours.weekdays}</p>
+                    <p>{SITE.hours.saturday}</p>
                   </div>
                 </div>
+              </div>
+
+              <div className="border-t border-black/[0.08] pt-5 flex items-center gap-2 text-xs text-[#525252]">
+                <ShieldCheck className="h-4 w-4 text-[#0e9f6e]" />
+                <span>
+                  <strong className="font-medium text-[#121212]">{SITE.legalName}</strong> · RERA ORN {SITE.reraOrn}
+                </span>
               </div>
             </div>
 
-            {/* Clean Access & Drive-Time Matrix (Replaces old NearbyWalk) */}
-            <MapEmbed lat={SITE.geo.lat} lng={SITE.geo.lng} zoom={16} title={`${SITE.legalName}, Al Saqr Business Tower, Sheikh Zayed Road`} />
-
-            <div className="rounded-3xl border border-[#e6dfd2] bg-white p-7 shadow-sm">
-              <div className="flex items-center justify-between gap-2 mb-4">
-                <div>
-                  <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#94652c]">
-                    Central Dubai Location
-                  </span>
-                  <h3 className="font-serif text-xl font-semibold text-[#17130e]">
-                    Travel Times From Al Saqr Business Tower
-                  </h3>
-                </div>
-                <a
-                  href={`https://www.google.com/maps?q=${SITE.geo.lat},${SITE.geo.lng}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-xs font-bold text-[#94652c] hover:underline"
-                >
-                  Google Maps →
-                </a>
-              </div>
-              <div className="divide-y divide-[#e6dfd2]">
-                {CORRIDOR_DRIVE_TIMES.map((row) => (
-                  <div key={row.destination} className="flex items-center justify-between py-2.5 text-xs">
-                    <span className="font-medium text-[#17130e]">{row.destination}</span>
-                    <div className="flex items-center gap-2 shrink-0">
-                      <span className="text-[#786e60]">{row.mode}</span>
-                      <span className="rounded-full bg-[#faf7f2] border border-[#e6dfd2] px-2.5 py-0.5 font-bold text-[#94652c]">
-                        {row.time}
-                      </span>
-                    </div>
+            <div className="overflow-hidden rounded-2xl border border-black/[0.07] bg-[#f7f7f7]">
+              <img
+                src="/img/about/private-consultation-lounge.jpg"
+                alt="SWK Properties Private Advisory Suite, 27th Floor, Al Saqr Business Tower"
+                loading="lazy"
+                className="h-56 w-full object-cover"
+              />
+              <div className="divide-y divide-black/[0.06] px-5 py-3 text-xs">
+                {CORRIDOR_TIMES.map((c) => (
+                  <div key={c.destination} className="flex items-center justify-between py-2.5">
+                    <span className="text-[#525252]">{c.destination}</span>
+                    <span className="font-mono font-medium text-[#121212]">{c.time}</span>
                   </div>
                 ))}
               </div>
             </div>
+
+            <MapEmbed
+              lat={SITE.geo.lat}
+              lng={SITE.geo.lng}
+              zoom={15}
+              title="SWK Properties — Al Saqr Business Tower, Sheikh Zayed Road"
+            />
           </div>
 
-          <div className="lg:col-span-6">
+          {/* Right Column: Crisp Avenlo Form */}
+          <div className="lg:col-span-7">
             <EnquiryForm
               context="general"
-              subject="Sheikh Zayed Road Office Consultation & Shortlist Request"
-              heading="Send an Enquiry or Schedule a Viewing"
-              subheading="Choose a general consultation or switch to 'Book a Property Viewing' to pick a date and Gulf Standard Time (GST) slot."
+              heading="Send us an enquiry"
+              subheading="Share your brief below. A senior advisor from our Sheikh Zayed Road office will reply within one Dubai business day."
+              defaultViewingPicker
             />
           </div>
         </div>
       </section>
     </div>
-  )
+  );
 }
