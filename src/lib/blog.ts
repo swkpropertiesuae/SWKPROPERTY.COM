@@ -116,6 +116,12 @@ const AUTHOR_BY_SLUG: Record<string, BlogArticle["author"]> = {
     slug: "mohammad-umar",
     credentials: "SWK Advisory Desk · RERA ORN 51517",
   },
+  "sanket-katariya": {
+    name: "Sanket Katariya",
+    role: "Sales Executive",
+    slug: "sanket-katariya",
+    credentials: "SWK Advisory Desk · RERA ORN 51517",
+  },
 }
 
 const AUTHOR_LIST = Object.values(AUTHOR_BY_SLUG)

@@ -20,6 +20,7 @@ const AGENT_COMMUNITIES: Record<string, string[]> = {
   "fareed-choudhary": ["Dubai Hills Estate", "Masaar Sharjah", "JVC", "Business Bay"],
   saifullah: ["Dubai South", "Al Jaddaf", "Dubailand", "Business Bay"],
   "mohammad-umar": ["Dubailand", "Dubai Islands", "Al Furjan", "Umm Al Quwain"],
+  "sanket-katariya": ["JVC", "DLRC", "Dubai Silicon Oasis", "Dubai South"],
   "mohd-shahid-khan": ["Sheikh Zayed Road", "Downtown Dubai", "Business Bay"],
 };
 

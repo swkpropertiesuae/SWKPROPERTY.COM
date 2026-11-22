@@ -93,6 +93,7 @@ const TEAM_LANGUAGES: Record<string, string[]> = {
   "issaadi-chahrazed": ["English", "French", "Arabic"],
   saifullah: ["English", "Urdu", "Hindi", "Pashto"],
   "mohammad-umar": ["English", "Urdu", "Hindi"],
+  "sanket-katariya": ["English", "Hindi", "Marathi"],
   "mohd-shahid-khan": ["English", "Hindi", "Urdu"],
 };
 

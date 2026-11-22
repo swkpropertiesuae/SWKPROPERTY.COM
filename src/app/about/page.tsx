@@ -89,6 +89,7 @@ const ADVISOR_HEADLINE_BY_SLUG: Record<string, string> = {
   "issaadi-chahrazed": "Waterfront & Lagoon Launches",
   saifullah: "High-Yield Urban Corridors",
   "mohammad-umar": "Island Masterplans & Resales",
+  "sanket-katariya": "Growth Corridors & High-Yield Homes",
   "mohd-shahid-khan": "SPA, Oqood & Developer Portals",
 };
 
