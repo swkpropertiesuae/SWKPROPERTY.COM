@@ -13,6 +13,10 @@ import {
   SectionEyebrow,
   SplitHeading,
 } from "@/components/avenlo/motion";
+import {
+  InteractiveImageGallery,
+  type GalleryItem,
+} from "@/components/ui/interactive-image-gallery";
 
 export const metadata: Metadata = buildMetadata({
   title: "About SWK Properties — Sheikh Zayed Road, Dubai",
@@ -27,11 +31,51 @@ export const metadata: Metadata = buildMetadata({
   ],
 });
 
-const STRIP_PHOTOS = [
-  { src: "/img/about/al-saqr-suite.webp", alt: "SWK Private Consultation Suite — 25th Floor, Al Saqr Building" },
-  { src: "/img/about/al-saqr-boardroom.webp", alt: "SWK Properties Dubai Advisory Gallery — Sheikh Zayed Road" },
-  { src: "/img/about/architectural-atrium.webp", alt: "Dubai contemporary architectural atrium" },
-  { src: "/img/about/waterfront-vertical.webp", alt: "Dubai waterfront skyline at golden hour" },
+const ABOUT_GALLERY_ITEMS: GalleryItem[] = [
+  {
+    id: "al-saqr-suite",
+    type: "image",
+    src: "/img/about/al-saqr-suite.webp",
+    alt: "SWK Private Consultation Suite — 25th Floor, Al Saqr Building",
+    label: "Private Suite",
+    sublabel: "25TH FLOOR · AL SAQR",
+  },
+  {
+    id: "about-note-1",
+    type: "text",
+    eyebrow: "SHEIKH ZAYED ROAD HQ",
+    text: "Operating from the 25th Floor of Al Saqr Building, our team pairs direct master-developer allocations with transparent DLD closing briefs.",
+  },
+  {
+    id: "al-saqr-boardroom",
+    type: "image",
+    src: "/img/about/al-saqr-boardroom.webp",
+    alt: "SWK Properties Dubai Advisory Gallery — Sheikh Zayed Road",
+    label: "Advisory Gallery",
+    sublabel: "SHEIKH ZAYED ROAD",
+  },
+  {
+    id: "architectural-atrium",
+    type: "image",
+    src: "/img/about/architectural-atrium.webp",
+    alt: "Dubai contemporary architectural atrium",
+    label: "Architectural Precision",
+    sublabel: "FLOOR-PLATE AUDITS",
+  },
+  {
+    id: "about-note-2",
+    type: "text",
+    eyebrow: "RERA ORN 51517",
+    text: "Every shortlist weighs delivered build track records, verified escrow status, and realistic net yields after Mollak service charges.",
+  },
+  {
+    id: "waterfront-vertical",
+    type: "image",
+    src: "/img/about/waterfront-vertical.webp",
+    alt: "Dubai waterfront skyline at golden hour",
+    label: "Waterfront & Skyline",
+    sublabel: "FIVE UAE EMIRATES",
+  },
 ];
 
 export default function AboutPage() {
@@ -66,25 +110,9 @@ export default function AboutPage() {
         }
       />
 
-      {/* Avenlo Arched / Editorial Horizontal Photo Strip */}
+      {/* 21st.dev Interactive Focus Image Gallery — Al Saqr HQ & Dubai Heritage */}
       <section className="mx-auto max-w-[1260px] px-4 py-12 sm:px-8">
-        <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-          {STRIP_PHOTOS.map((photo, idx) => (
-            <div
-              key={photo.src}
-              className={`overflow-hidden bg-[#f5f5f5] ${
-                idx % 2 === 0 ? "rounded-2xl" : "rounded-t-[100px] rounded-b-2xl"
-              }`}
-            >
-              <img
-                src={photo.src}
-                alt={photo.alt}
-                loading="lazy"
-                className="aspect-[4/5] w-full object-cover"
-              />
-            </div>
-          ))}
-        </div>
+        <InteractiveImageGallery items={ABOUT_GALLERY_ITEMS} />
       </section>
 
       {/* Scroll-Reveal Firm Philosophy */}

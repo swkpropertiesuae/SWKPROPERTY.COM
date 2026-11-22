@@ -37,6 +37,11 @@ import {
   TestimonialSlider,
   type SliderReview,
 } from "@/components/ui/testimonial-slider";
+import {
+  InteractiveImageGallery,
+  type GalleryItem,
+} from "@/components/ui/interactive-image-gallery";
+import { HoverExpand, type HoverExpandItem } from "@/components/ui/hover-expand";
 
 /* -------------------------------------------------------------------------- */
 /* 01. ACTIVE ARCHITECTURAL HERO OVER LIVE 21ST.DEV MESH DRIFT SHADER WAVES   */
@@ -267,8 +272,63 @@ export function AvenloHero() {
 }
 
 /* -------------------------------------------------------------------------- */
-/* 02. SCROLL-REVEAL EDITORIAL STATEMENT & 2-CARD GLASS CLIENT GROWTH BENTO   */
+/* 02. SCROLL-REVEAL EDITORIAL STATEMENT, GLASS BENTO & FOCUS GALLERY         */
 /* -------------------------------------------------------------------------- */
+const ARCHITECTURAL_MOSAIC_ITEMS: GalleryItem[] = [
+  {
+    id: "mosaic-lana",
+    type: "image",
+    src: "/img/projects/omniyat/the-lana.webp",
+    label: "The Lana Residences",
+    sublabel: "OMNIYAT · MARASI BAY",
+    href: "/off-plan/the-lana",
+  },
+  {
+    id: "mosaic-note-1",
+    type: "text",
+    eyebrow: "ARCHITECTURAL PRESENCE",
+    text: "We filter Dubai's expanding master-developer pipeline down to towers with enduring floor plates, verified escrow milestones, and real tenant liquidity.",
+  },
+  {
+    id: "mosaic-avarra",
+    type: "image",
+    src: "/img/projects/emaar/avarra-by-palace.webp",
+    label: "Avarra by Palace",
+    sublabel: "EMAAR · WATERFRONT",
+    href: "/off-plan/avarra-by-palace",
+  },
+  {
+    id: "mosaic-baccarat",
+    type: "image",
+    src: "/img/projects/hh-development/baccarat-residences-dubai.webp",
+    label: "Baccarat Residences",
+    sublabel: "H&H · DOWNTOWN DUBAI",
+    href: "/off-plan/baccarat-residences-dubai",
+  },
+  {
+    id: "mosaic-note-2",
+    type: "text",
+    eyebrow: "CLIENT CAPITAL GROWTH",
+    text: "From waterfront beachfront mansions to high-yield urban corridors, every acquisition is benchmarked against live DLD comparable transfers.",
+  },
+  {
+    id: "mosaic-armani",
+    type: "image",
+    src: "/img/projects/arada/armani-beach-residences.webp",
+    label: "Armani Beach Residences",
+    sublabel: "ARADA · PALM JUMEIRAH",
+    href: "/off-plan/armani-beach-residences",
+  },
+  {
+    id: "mosaic-waves",
+    type: "image",
+    src: "/img/projects/sobha/waves-opulence.webp",
+    label: "Waves Opulence",
+    sublabel: "SOBHA HARTLAND",
+    href: "/off-plan/waves-opulence",
+  },
+];
+
 export function EditorialBento() {
   const quotePool = useMemo(() => testimonials.slice(0, 3), []);
   const [activeQuote, setActiveQuote] = useState(0);
@@ -407,6 +467,14 @@ export function EditorialBento() {
               </div>
             </div>
           </div>
+        </div>
+
+        {/* 21st.dev Interactive Focus Image Gallery — Hover to Spotlight Any Landmark */}
+        <div className="mt-16">
+          <div className="mb-4 text-center">
+            <SectionEyebrow align="center">CURATED ARCHITECTURAL MOSAIC · HOVER TO FOCUS</SectionEyebrow>
+          </div>
+          <InteractiveImageGallery items={ARCHITECTURAL_MOSAIC_ITEMS} />
         </div>
       </div>
     </section>
@@ -792,21 +860,51 @@ const CORE_SERVICES = [
   },
 ];
 
-const BEYOND_CARDS = [
+const BEYOND_EXPAND_ITEMS: HoverExpandItem[] = [
   {
+    id: "mortgage-assistance",
     title: "Mortgage Assistance",
-    href: "/services/mortgage-assistance",
+    tag: "FINANCING DESK",
+    description:
+      "Pre-approval comparisons across UAE resident and non-resident banks before you sign Form F or commit to a developer milestone.",
     image: "/img/beyond/mortgage-villa.webp",
+    href: "/services/mortgage-assistance",
   },
   {
+    id: "property-management",
     title: "Property Management",
-    href: "/services/property-management",
+    tag: "LANDLORD ASSET CARE",
+    description:
+      "End-to-end tenant vetting, Ejari registration, snagging, and annual RERA rental index yield optimization for absentee owners.",
     image: "/img/beyond/management-lobby.webp",
+    href: "/services/property-management",
   },
   {
+    id: "legal-golden-visa",
     title: "Legal, Golden Visa & Fit-Out",
-    href: "/services/legal-documentation",
+    tag: "CONVEYANCING & RESIDENCY",
+    description:
+      "DLD Trustee transfers, Power of Attorney coordination, AED 2M+ 10-year UAE Golden Visa eligibility guidance, and turnkey fit-out partners.",
     image: "/img/beyond/legal-pavilion.webp",
+    href: "/services/legal-documentation",
+  },
+  {
+    id: "private-office-desk",
+    title: "Al Saqr Private Office",
+    tag: "25TH FLOOR · SHEIKH ZAYED RD",
+    description:
+      "Confidential portfolio reviews and direct master-developer allocation briefings hosted at our Sheikh Zayed Road headquarters.",
+    image: "/img/about/contact-reception.webp",
+    href: "/contact",
+  },
+  {
+    id: "branded-residences",
+    title: "Branded Residences Desk",
+    tag: "ULTRA-PRIME ALLOCATIONS",
+    description:
+      "Early-access floor plans across Four Seasons, Bugatti, Mercedes-Benz, Baccarat, Armani, and Dorchester Collection residences.",
+    image: "/img/projects/hh-development/four-seasons-branded-residences.webp",
+    href: "/off-plan",
   },
 ];
 
@@ -880,45 +978,26 @@ export function ServicesAndTrackRecord() {
           ))}
         </div>
 
-        {/* Part B: Support Beyond Buying and Selling */}
+        {/* Part B: Support Beyond Buying and Selling (21st.dev HoverExpand Spring Panels) */}
         <div className="mt-24">
-          <SplitHeading
-            tone="dark"
-            size="md"
-            primary="Support beyond"
-            muted="buying and selling"
-          />
-          <div className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-3">
-            {BEYOND_CARDS.map((card) => (
-              <SpotlightCard
-                key={card.title}
-                tone="dark"
-                spotlightColor="rgba(81, 254, 192, 0.18)"
-              >
-                <Link
-                  href={card.href}
-                  className="group relative flex min-h-[380px] sm:min-h-[430px] flex-col justify-between overflow-hidden p-6"
-                >
-                  <img
-                    src={card.image}
-                    alt={card.title}
-                    loading="lazy"
-                    className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-b from-[#08131f]/76 via-[#08131f]/20 to-[#08131f]/74" />
-                  <h3 className="relative z-10 text-2xl font-medium tracking-[-0.03em] text-white">
-                    {card.title}
-                  </h3>
-                  <div className="relative z-10">
-                    <span className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-2.5 text-[11px] font-medium uppercase tracking-[0.16em] text-[#121212] transition-colors group-hover:bg-[#51fec0]">
-                      <span>Learn More</span>
-                      <ArrowRight className="h-3.5 w-3.5" />
-                    </span>
-                  </div>
-                </Link>
-              </SpotlightCard>
-            ))}
+          <div className="flex flex-wrap items-end justify-between gap-4">
+            <SplitHeading
+              tone="dark"
+              size="md"
+              primary="Support beyond"
+              muted="buying and selling"
+            />
+            <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-[#51fec0]/85">
+              HOVER OR TAP ANY DESK TO EXPAND
+            </span>
           </div>
+          <HoverExpand
+            items={BEYOND_EXPAND_ITEMS}
+            orientation="horizontal"
+            expandedFlex={4.2}
+            collapsedFlex={1}
+            className="mt-10"
+          />
         </div>
 
         {/* Part C: Track Record Credentials + 2x2 Crisp White Stat Cards (No Restrictive Caps) */}
