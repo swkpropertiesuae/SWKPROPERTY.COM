@@ -2,23 +2,19 @@
 
 import React from "react";
 import Link from "next/link";
-import {
-  Bath,
-  BedDouble,
-  Building2,
-  CheckCircle2,
-  Heart,
-  MapPin,
-  Maximize2,
-  Scale,
-  ShieldCheck,
-} from "lucide-react";
+import { ArrowUpRight, Heart, Scale } from "lucide-react";
 import { type PropertyListing, isPermitVerified, permitLabel } from "@/lib/listings";
 import { usePrefs } from "@/lib/prefs";
 import { SITE } from "@/lib/swk";
 import { WhatsAppIcon } from "@/components/site/whatsapp-icon";
 
-export function PropertyCard({ listing }: { listing: PropertyListing }) {
+export function PropertyCard({
+  listing,
+  featured = false,
+}: {
+  listing: PropertyListing;
+  featured?: boolean;
+}) {
   const {
     formatPrice,
     formatArea,
@@ -33,185 +29,157 @@ export function PropertyCard({ listing }: { listing: PropertyListing }) {
   const isCompared = compareSlugs.includes(listing.slug);
 
   const waMessage = encodeURIComponent(
-    `Hello SWK Properties, I am enquiring about ${listing.title} in ${listing.community} (Ref: ${listing.reference}${permitLabel(listing) ? `, ${permitLabel(listing)}` : ""}). Please share current availability.`
+    `Hello SWK Properties, I am enquiring about ${listing.title} in ${listing.community} (Ref: ${listing.reference}${
+      permitLabel(listing) ? `, ${permitLabel(listing)}` : ""
+    }). Please share current availability.`
   );
 
+  const dotColor =
+    listing.purpose === "off-plan"
+      ? "bg-[#51fec0]"
+      : listing.status === "sold" || listing.status === "rented"
+      ? "bg-[#dc2626]"
+      : listing.status === "reserved"
+      ? "bg-[#a5ce3a]"
+      : "bg-[#62c584]";
+
+  const statusText =
+    listing.purpose === "off-plan"
+      ? "Off-Plan Launch"
+      : listing.purpose === "rent"
+      ? `For Rent · ${listing.rentalPeriod === "monthly" ? "Monthly" : "Yearly"}`
+      : "For Sale · Ready";
+
   return (
-    <article className="group relative flex flex-col overflow-hidden rounded-3xl border border-[#e6dfd2] bg-white transition-all duration-300 hover:-translate-y-1 hover:border-[#94652c]/50 hover:shadow-[0_24px_60px_rgba(23,19,14,0.12)]">
-      {/* Image Header */}
-      <div className="relative h-60 w-full overflow-hidden bg-[#f4efe6]">
-        <img
-          src={listing.images[0]}
-          alt={listing.title}
-          loading="lazy"
-          className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#17130e]/85 via-transparent to-[#17130e]/30" />
+    <article className="group flex flex-col overflow-hidden rounded-2xl border border-black/[0.07] bg-white transition-all duration-300 hover:border-black/20 hover:shadow-[0_20px_50px_rgba(18,18,18,0.08)]">
+      {/* Architectural Photo Frame */}
+      <div
+        className={`relative w-full overflow-hidden bg-[#f5f5f5] ${
+          featured ? "aspect-[16/10]" : "aspect-[4/3]"
+        }`}
+      >
+        <Link href={`/properties/${listing.slug}`} className="block h-full w-full">
+          <img
+            src={listing.images[0]}
+            alt={listing.title}
+            loading="lazy"
+            className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+          />
+        </Link>
 
-        {/* Top Badges (§06: availability, purpose, justified label, render notice) */}
-        <div className="absolute top-3.5 left-3.5 right-3.5 flex items-start justify-between gap-2">
-          <div className="flex flex-wrap items-center gap-1.5">
-            <span className="rounded-full bg-[#17130e] px-3 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-white shadow-sm">
-              {listing.purpose === "buy"
-                ? "For Sale · Ready"
-                : listing.purpose === "rent"
-                ? `For Rent · ${listing.rentalPeriod === "monthly" ? "Monthly" : "Yearly"}`
-                : "Off-Plan Launch"}
+        {/* Top Left Status Pill */}
+        <div className="pointer-events-none absolute top-3.5 left-3.5 flex flex-wrap items-center gap-1.5">
+          <span className="inline-flex items-center gap-2 rounded-full bg-[#121212]/82 px-3 py-1 text-[10px] font-medium uppercase tracking-[0.16em] text-white backdrop-blur-md">
+            <span className={`h-1.5 w-1.5 rounded-[2px] ${dotColor}`} aria-hidden="true" />
+            {statusText}
+          </span>
+          {listing.isRender ? (
+            <span className="rounded-full bg-white/90 px-2.5 py-1 text-[10px] font-medium text-[#121212] backdrop-blur-md">
+              Developer Render
             </span>
-            {listing.badge && (listing.badge !== "Verified Permit" || isPermitVerified(listing)) && (
-              <span className="rounded-full border border-[#c99a63]/50 bg-white/95 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.14em] text-[#94652c] backdrop-blur-md">
-                {listing.badge}
-              </span>
-            )}
-            {listing.isRender && (
-              <span className="rounded-full border border-white/30 bg-[#17130e]/80 px-2.5 py-1 text-[10px] font-medium text-white backdrop-blur-md">
-                Developer Render
-              </span>
-            )}
-          </div>
-
-          <div className="flex items-center gap-1.5">
-            <button
-              type="button"
-              onClick={() => toggleSaved(listing.slug)}
-              aria-label={isSaved ? "Remove from shortlist" : "Save to shortlist"}
-              title={isSaved ? "Saved in shortlist" : "Save to shortlist"}
-              className={`flex h-8 w-8 items-center justify-center rounded-full border backdrop-blur-md transition ${
-                isSaved
-                  ? "border-[#94652c] bg-[#94652c] text-white"
-                  : "border-white/30 bg-white/90 text-[#17130e] hover:border-[#94652c]"
-              }`}
-            >
-              <Heart className="h-3.5 w-3.5" fill={isSaved ? "currentColor" : "none"} />
-            </button>
-            <button
-              type="button"
-              onClick={() => toggleCompare(listing.slug)}
-              aria-label="Compare property"
-              title="Add to side-by-side comparison"
-              className={`flex h-8 w-8 items-center justify-center rounded-full border backdrop-blur-md transition ${
-                isCompared
-                  ? "border-[#17130e] bg-[#17130e] text-white"
-                  : "border-white/30 bg-white/90 text-[#17130e] hover:border-[#94652c]"
-              }`}
-            >
-              <Scale className="h-3.5 w-3.5" />
-            </button>
-          </div>
+          ) : null}
         </div>
 
-        {/* Bottom overlay: Reference & DLD Trakheesi Permit */}
-        <div className="absolute bottom-3 left-3.5 right-3.5 flex items-center justify-between text-[11px] text-white">
-          <span className="inline-flex items-center gap-1 rounded-full bg-[#17130e]/85 px-2.5 py-0.5 backdrop-blur-md">
-            <ShieldCheck className="h-3 w-3 text-emerald-700" />
-            {permitLabel(listing) ?? "Permit details on request"}
-          </span>
-          <span className="rounded-full bg-white/95 px-2.5 py-0.5 font-mono text-[10px] font-bold text-[#17130e]">
-            {listing.reference}
-          </span>
+        {/* Top Right Save & Compare Controls */}
+        <div className="absolute top-3.5 right-3.5 flex items-center gap-1.5">
+          <button
+            type="button"
+            onClick={() => toggleSaved(listing.slug)}
+            aria-label={isSaved ? "Remove from shortlist" : "Save to shortlist"}
+            className={`flex h-8 w-8 cursor-pointer items-center justify-center rounded-full backdrop-blur-md transition-colors ${
+              isSaved
+                ? "bg-[#121212] text-[#51fec0]"
+                : "bg-white/90 text-[#121212] hover:bg-[#121212] hover:text-white"
+            }`}
+          >
+            <Heart className="h-3.5 w-3.5" fill={isSaved ? "currentColor" : "none"} />
+          </button>
+          <button
+            type="button"
+            onClick={() => toggleCompare(listing.slug)}
+            aria-label="Compare property"
+            className={`flex h-8 w-8 cursor-pointer items-center justify-center rounded-full backdrop-blur-md transition-colors ${
+              isCompared
+                ? "bg-[#121212] text-[#51fec0]"
+                : "bg-white/90 text-[#121212] hover:bg-[#121212] hover:text-white"
+            }`}
+          >
+            <Scale className="h-3.5 w-3.5" />
+          </button>
         </div>
       </div>
 
-      {/* Card Body */}
-      <div className="flex flex-1 flex-col justify-between p-5">
+      {/* Clean Avenlo Editorial Body */}
+      <div className="flex flex-1 flex-col justify-between p-5 sm:p-6">
         <div>
-          {/* Price + Rental Terms */}
-          <div className="flex flex-wrap items-baseline justify-between gap-2">
-            <div className="font-serif text-2xl font-bold text-[#17130e]">
-              {formatPrice(listing.priceAed)}
-              {listing.purpose === "rent" && (
-                <span className="ml-1.5 font-sans text-xs font-semibold text-[#94652c]">
-                  / {listing.rentalPeriod === "monthly" ? "month" : `year (${listing.cheques || 2} cheques)`}
-                </span>
-              )}
-            </div>
-            <span className="inline-flex items-center gap-1 text-[11px] font-bold uppercase tracking-wider text-emerald-700">
-              <CheckCircle2 className="h-3 w-3" />
-              {listing.status}
-            </span>
+          <div className="flex items-center justify-between gap-2 text-[11px] font-medium uppercase tracking-[0.16em] text-[#8b8b8b]">
+            <span className="truncate">{listing.community}</span>
+            <span className="shrink-0 font-mono text-[10px]">{listing.reference}</span>
           </div>
 
-          {/* Title */}
           <Link
             href={`/properties/${listing.slug}`}
-            className="mt-2 block font-serif text-xl font-bold leading-snug text-[#17130e] transition group-hover:text-[#94652c]"
+            className="mt-2 block text-[20px] sm:text-[22px] font-medium leading-[1.2] tracking-[-0.025em] text-[#121212] transition-colors group-hover:text-[#525252]"
           >
             {listing.title}
           </Link>
 
-          {/* Community & Building */}
-          <div className="mt-1.5 flex items-center gap-1.5 text-xs font-medium text-[#4a4237]">
-            <MapPin className="h-3.5 w-3.5 shrink-0 text-[#94652c]" />
-            <span className="truncate">
-              {listing.building} · {listing.community}
-            </span>
-          </div>
+          <p className="mt-1.5 truncate text-xs text-[#737373]">
+            {listing.building} · {listing.developer}
+          </p>
 
-          {/* Core Specs: Property Type, Beds, Baths, Area */}
-          <div className="mt-4 grid grid-cols-3 gap-2 rounded-2xl border border-[#e6dfd2] bg-[#faf7f2] p-3 text-xs font-semibold text-[#17130e]">
-            <div className="flex items-center gap-1.5">
-              <BedDouble className="h-3.5 w-3.5 text-[#94652c]" />
-              <span>{listing.bedrooms === 0 ? "Studio" : `${listing.bedrooms} Beds`}</span>
+          {/* Price + Area Row */}
+          <div className="mt-4 flex flex-wrap items-baseline justify-between gap-2 border-t border-black/[0.06] pt-4">
+            <div className="text-lg font-medium tracking-[-0.02em] text-[#121212] tabular-nums">
+              {formatPrice(listing.priceAed)}
+              {listing.purpose === "rent" ? (
+                <span className="ml-1 text-xs font-normal text-[#8b8b8b]">
+                  / {listing.rentalPeriod === "monthly" ? "mo" : "yr"}
+                </span>
+              ) : null}
             </div>
-            <div className="flex items-center gap-1.5">
-              <Bath className="h-3.5 w-3.5 text-[#94652c]" />
-              <span>{listing.bathrooms} Baths</span>
-            </div>
-            <div className="flex items-center gap-1.5">
-              <Maximize2 className="h-3.5 w-3.5 text-[#94652c]" />
-              <span className="truncate">{formatArea(listing.areaSqFt)}</span>
+            <div className="text-xs font-medium text-[#525252] tabular-nums">
+              {listing.bedrooms === 0 ? "Studio" : `${listing.bedrooms} Bed`} · {listing.bathrooms} Bath · {formatArea(listing.areaSqFt)}
             </div>
           </div>
 
-          {/* Developer / Handover / Payment Plan */}
-          <div className="mt-3 flex flex-wrap items-center justify-between gap-2 text-[11px] font-medium text-[#786e60]">
-            <span className="inline-flex items-center gap-1 text-[#17130e]">
-              <Building2 className="h-3 w-3 text-[#94652c]" />
-              {listing.developer} · {listing.propertyType}
+          {/* Permit Honesty & Payment Plan */}
+          <div className="mt-3 flex flex-wrap items-center justify-between gap-2 text-[11px] text-[#8b8b8b]">
+            <span>
+              {isPermitVerified(listing)
+                ? permitLabel(listing)
+                : "Permit details on request"}
             </span>
-            <span className="font-semibold text-[#94652c]">
+            <span className="font-medium text-[#121212]">
               {listing.paymentPlan ? listing.paymentPlan.split(" (")[0] : listing.handover}
             </span>
           </div>
         </div>
 
-        {/* Agent & Actions Footer (§06) */}
-        <div className="mt-5 border-t border-[#e6dfd2] pt-4">
-          <div className="mb-3 flex items-center justify-between text-xs">
-            <Link
-              href={`/agents/${listing.agentSlug}`}
-              className="text-[#4a4237] hover:text-[#94652c]"
-            >
-              Consultant: <strong className="text-[#17130e]">{listing.agentName}</strong>
-            </Link>
-            <span className="text-[10px] font-medium text-[#786e60]">
-              Checked {listing.lastChecked}
-            </span>
-          </div>
-
-          <div className="grid grid-cols-2 gap-2.5">
-            <Link
-              href={`/properties/${listing.slug}`}
-              className="inline-flex items-center justify-center rounded-xl bg-[#17130e] px-4 py-2.5 text-xs font-bold uppercase tracking-[0.15em] text-white transition hover:bg-[#94652c]"
-            >
-              View Details
-            </Link>
-            <a
-              href={`https://wa.me/${SITE.phoneRaw.replace("+", "")}?text=${waMessage}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() =>
-                trackEvent("whatsapp_click", {
-                  location: "property_card",
-                  propertyRef: listing.reference,
-                })
-              }
-              className="inline-flex items-center justify-center gap-1.5 rounded-xl border border-emerald-600/35 bg-emerald-50 px-4 py-2.5 text-xs font-bold uppercase tracking-[0.14em] text-emerald-800 transition hover:bg-emerald-600 hover:text-white"
-            >
-              <WhatsAppIcon className="h-3.5 w-3.5" />
-              WhatsApp
-            </a>
-          </div>
+        {/* Footer Actions */}
+        <div className="mt-5 flex items-center justify-between gap-3 border-t border-black/[0.06] pt-4">
+          <Link
+            href={`/properties/${listing.slug}`}
+            className="inline-flex items-center gap-1.5 text-xs font-medium uppercase tracking-[0.14em] text-[#121212] hover:text-[#0e9f6e] transition-colors"
+          >
+            <span>View Residence</span>
+            <ArrowUpRight className="h-3.5 w-3.5" />
+          </Link>
+          <a
+            href={`https://wa.me/${SITE.phoneRaw.replace("+", "")}?text=${waMessage}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() =>
+              trackEvent("whatsapp_click", {
+                location: "property_card",
+                propertyRef: listing.reference,
+              })
+            }
+            className="inline-flex items-center gap-1.5 rounded-full border border-black/10 bg-[#f7f7f7] px-3.5 py-1.5 text-[11px] font-medium text-[#121212] transition-colors hover:bg-[#121212] hover:text-white"
+          >
+            <WhatsAppIcon className="h-3.5 w-3.5 text-[#0e9f6e]" />
+            <span>WhatsApp</span>
+          </a>
         </div>
       </div>
     </article>

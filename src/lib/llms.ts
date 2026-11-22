@@ -44,7 +44,7 @@ export function buildLlmsTxt() {
     link("Market insights", "/insights"),
     link("FAQ", "/faq"),
     link("About SWK Properties", "/about"),
-    link("Corporate Brand Kit", "/corporate-kit"),
+    link("RERA Advisory Team", "/agents"),
     link("List your property", "/list-your-property"),
     link("Contact", "/contact"),
     "",

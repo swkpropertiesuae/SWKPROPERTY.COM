@@ -25,7 +25,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/calculators",
     "/guides",
     "/about",
-    "/corporate-kit",
+    "/agents",
     "/contact",
     "/list-your-property",
     "/faq",
