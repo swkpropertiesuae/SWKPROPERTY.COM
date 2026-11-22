@@ -173,7 +173,7 @@ export function TestimonialSlider({
                 type="button"
                 onClick={handlePrev}
                 aria-label="Previous client review"
-                className="inline-flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border border-black/15 bg-white/90 text-[#121212] transition-all hover:border-[#121212] hover:bg-[#121212] hover:text-white"
+                className="inline-flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border border-black/15 bg-white/90 text-[#121212] transition-all duration-200 hover:-translate-y-0.5 hover:scale-105 hover:border-[#121212] hover:bg-[#121212] hover:text-[#51fec0] hover:shadow-lg"
               >
                 <ArrowLeft className="h-4 w-4" />
               </button>
@@ -181,7 +181,7 @@ export function TestimonialSlider({
                 type="button"
                 onClick={handleNext}
                 aria-label="Next client review"
-                className="inline-flex h-12 w-12 cursor-pointer items-center justify-center rounded-full bg-[#121212] text-white transition-all hover:bg-[#0e9f6e] hover:text-white"
+                className="inline-flex h-12 w-12 cursor-pointer items-center justify-center rounded-full bg-[#121212] text-white transition-all duration-200 hover:-translate-y-0.5 hover:scale-105 hover:bg-[#0e9f6e] hover:text-white hover:shadow-[0_12px_28px_rgba(14,159,110,0.35)]"
               >
                 <ArrowRight className="h-4 w-4" />
               </button>

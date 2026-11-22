@@ -278,7 +278,7 @@ export function FloatingChrome() {
           onClick={() => setPillOpen((v) => !v)}
           aria-expanded={pillOpen}
           aria-label="Open quick navigation menu"
-          className="inline-flex h-11 min-w-[205px] cursor-pointer items-center justify-between gap-6 rounded-xl border border-white/15 bg-[#121212]/78 px-4 text-xs font-medium text-white backdrop-blur-xl shadow-[0_14px_34px_rgba(18,18,18,0.28)] transition-colors hover:bg-[#121212]/92"
+          className="inline-flex h-11 min-w-[205px] cursor-pointer items-center justify-between gap-6 rounded-xl border border-white/18 bg-[#0b1522]/84 px-4 text-xs font-medium text-white backdrop-blur-xl shadow-[0_14px_34px_rgba(8,22,38,0.32)] transition-all duration-200 hover:-translate-y-0.5 hover:border-[#51fec0]/50 hover:bg-[#0b1522]/96 hover:shadow-[0_18px_42px_rgba(8,22,38,0.48)]"
         >
           <span className="inline-flex items-center gap-2">
             <img
@@ -309,7 +309,7 @@ export function FloatingChrome() {
           onClick={() => setAssistantOpen(!assistantOpen)}
           aria-label="Open SWK Property Concierge"
           title="Ask SWK Concierge"
-          className="hidden sm:inline-flex h-11 w-11 cursor-pointer items-center justify-center rounded-full border border-black/12 bg-white/95 text-[#121212] shadow-md backdrop-blur-md transition-colors hover:bg-[#121212] hover:text-white"
+          className="hidden sm:inline-flex h-11 w-11 cursor-pointer items-center justify-center rounded-full border border-white/80 bg-white/92 text-[#121212] shadow-md backdrop-blur-md transition-all duration-200 hover:-translate-y-0.5 hover:scale-105 hover:border-[#121212] hover:bg-[#121212] hover:text-[#51fec0] hover:shadow-xl"
         >
           <MessageSquare className="h-4 w-4" />
         </button>
@@ -321,7 +321,7 @@ export function FloatingChrome() {
           rel="noopener noreferrer"
           onClick={() => trackEvent("whatsapp_click", { location: "floating_corner" })}
           aria-label="Chat on WhatsApp"
-          className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-[#25D366] text-white shadow-[0_8px_22px_rgba(37,211,102,0.35)] transition-transform hover:scale-105"
+          className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-[#25D366] text-white shadow-[0_8px_22px_rgba(37,211,102,0.35)] transition-all duration-200 hover:-translate-y-0.5 hover:scale-110 hover:shadow-[0_14px_32px_rgba(37,211,102,0.58)]"
         >
           <WhatsAppIcon className="h-5 w-5" />
         </a>

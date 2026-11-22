@@ -184,10 +184,10 @@ export function SiteHeader() {
                 onClick={() => setOpenMenu((m) => (m === "properties" ? null : "properties"))}
                 aria-expanded={openMenu === "properties"}
                 aria-controls="swk-properties-panel"
-                className={`group inline-flex cursor-pointer items-center gap-1.5 text-[12px] font-medium uppercase tracking-[0.12em] transition-colors ${
+                className={`group inline-flex cursor-pointer items-center gap-1.5 rounded-full px-3 py-2 text-[12px] font-medium uppercase tracking-[0.12em] transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#0c233a]/[0.07] ${
                   openMenu === "properties" || propertiesActive
-                    ? "text-[#121212]"
-                    : "text-[#121212]/75 hover:text-[#121212]"
+                    ? "bg-[#0c233a]/[0.06] text-[#121212]"
+                    : "text-[#121212]/78 hover:text-[#121212]"
                 }`}
               >
                 <span
@@ -256,8 +256,8 @@ export function SiteHeader() {
                   href={item.href}
                   onClick={() => setOpenMenu(null)}
                   aria-current={active ? "page" : undefined}
-                  className={`group inline-flex items-center gap-1.5 text-[12px] font-medium uppercase tracking-[0.12em] transition-colors ${
-                    active ? "text-[#121212]" : "text-[#121212]/75 hover:text-[#121212]"
+                  className={`group inline-flex items-center gap-1.5 rounded-full px-3 py-2 text-[12px] font-medium uppercase tracking-[0.12em] transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#0c233a]/[0.07] ${
+                    active ? "bg-[#0c233a]/[0.06] text-[#121212]" : "text-[#121212]/78 hover:text-[#121212]"
                   }`}
                 >
                   <span
@@ -280,8 +280,8 @@ export function SiteHeader() {
                 onClick={() => setOpenMenu((m) => (m === "pages" ? null : "pages"))}
                 aria-expanded={openMenu === "pages"}
                 aria-controls="swk-pages-panel"
-                className={`group inline-flex cursor-pointer items-center gap-1.5 text-[12px] font-medium uppercase tracking-[0.12em] transition-colors ${
-                  openMenu === "pages" ? "text-[#121212]" : "text-[#121212]/75 hover:text-[#121212]"
+                className={`group inline-flex cursor-pointer items-center gap-1.5 rounded-full px-3 py-2 text-[12px] font-medium uppercase tracking-[0.12em] transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#0c233a]/[0.07] ${
+                  openMenu === "pages" ? "bg-[#0c233a]/[0.06] text-[#121212]" : "text-[#121212]/78 hover:text-[#121212]"
                 }`}
               >
                 <span

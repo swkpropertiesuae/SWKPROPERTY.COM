@@ -104,10 +104,10 @@ export function LogoCloudMarquee({
 
         <Link
           href="/developers"
-          className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-black/12 bg-white/90 px-4 py-2 text-xs font-medium text-[#121212] shadow-xs transition-all hover:border-[#121212] hover:bg-[#121212] hover:text-white"
+          className="group inline-flex shrink-0 items-center gap-1.5 rounded-full border border-black/12 bg-white/92 px-4 py-2 text-xs font-medium text-[#121212] shadow-xs transition-all duration-200 hover:-translate-y-0.5 hover:border-[#121212] hover:bg-[#121212] hover:text-white hover:shadow-[0_12px_26px_rgba(12,35,58,0.22)]"
         >
           <span>View Developer Directory</span>
-          <span aria-hidden="true">→</span>
+          <span aria-hidden="true" className="transition-transform duration-200 group-hover:translate-x-1">→</span>
         </Link>
       </div>
 

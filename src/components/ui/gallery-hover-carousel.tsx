@@ -84,7 +84,7 @@ export function GalleryHoverCarousel({
             onClick={() => scrollByStep(-1)}
             disabled={!canPrev}
             aria-label="Previous developer projects"
-            className="inline-flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-white/80 bg-white/85 text-[#121212] shadow-[0_8px_24px_rgba(12,56,96,0.1)] backdrop-blur-xl transition-all hover:bg-[#121212] hover:text-white hover:border-[#121212] disabled:cursor-not-allowed disabled:opacity-35"
+            className="inline-flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-white/85 bg-white/88 text-[#121212] shadow-[0_8px_24px_rgba(12,56,96,0.1)] backdrop-blur-xl transition-all duration-200 hover:-translate-y-0.5 hover:scale-105 hover:border-[#121212] hover:bg-[#121212] hover:text-[#51fec0] hover:shadow-[0_14px_30px_rgba(12,35,58,0.22)] disabled:cursor-not-allowed disabled:opacity-35"
           >
             <ChevronLeft className="h-4 w-4" />
           </button>
@@ -93,7 +93,7 @@ export function GalleryHoverCarousel({
             onClick={() => scrollByStep(1)}
             disabled={!canNext}
             aria-label="Next developer projects"
-            className="inline-flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-white/80 bg-white/85 text-[#121212] shadow-[0_8px_24px_rgba(12,56,96,0.1)] backdrop-blur-xl transition-all hover:bg-[#121212] hover:text-white hover:border-[#121212] disabled:cursor-not-allowed disabled:opacity-35"
+            className="inline-flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-white/85 bg-white/88 text-[#121212] shadow-[0_8px_24px_rgba(12,56,96,0.1)] backdrop-blur-xl transition-all duration-200 hover:-translate-y-0.5 hover:scale-105 hover:border-[#121212] hover:bg-[#121212] hover:text-[#51fec0] hover:shadow-[0_14px_30px_rgba(12,35,58,0.22)] disabled:cursor-not-allowed disabled:opacity-35"
           >
             <ChevronRight className="h-4 w-4" />
           </button>

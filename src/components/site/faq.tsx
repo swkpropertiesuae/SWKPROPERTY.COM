@@ -58,7 +58,7 @@ export function Faq({
                 return (
                   <div
                     key={f.q}
-                    className="rounded-2xl border border-white/80 bg-white/82 shadow-[0_14px_38px_rgba(12,56,96,0.08)] backdrop-blur-xl transition-all hover:bg-white/92"
+                    className="group/faq rounded-2xl border border-white/80 bg-white/84 shadow-[0_14px_38px_rgba(12,56,96,0.08)] backdrop-blur-xl transition-all duration-200 hover:-translate-y-0.5 hover:border-[#1b6aa7]/35 hover:bg-white/95 hover:shadow-[0_20px_48px_rgba(12,56,96,0.14)]"
                   >
                     <button
                       type="button"
@@ -66,12 +66,12 @@ export function Faq({
                       aria-expanded={open}
                       className="flex w-full cursor-pointer items-center justify-between gap-6 px-6 py-5 sm:px-7 sm:py-6 text-left"
                     >
-                      <span className="text-[16px] sm:text-[17px] font-medium tracking-[-0.02em] text-[#121212]">
+                      <span className="text-[16px] sm:text-[17px] font-medium tracking-[-0.02em] text-[#121212] transition-colors group-hover/faq:text-[#0e9f6e]">
                         {f.q}
                       </span>
                       <span
                         aria-hidden="true"
-                        className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-[#121212]"
+                        className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-black/10 bg-white/80 text-[#121212] transition-all duration-200 group-hover/faq:border-[#121212] group-hover/faq:bg-[#121212] group-hover/faq:text-[#51fec0]"
                       >
                         {open ? <Minus className="h-4 w-4" /> : <Plus className="h-4 w-4" />}
                       </span>

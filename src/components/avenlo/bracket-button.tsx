@@ -23,17 +23,17 @@ const SIZE_CLASSES: Record<BracketSize, string> = {
 
 const SURFACE_CLASSES: Record<BracketVariant, string> = {
   light:
-    "bg-white/88 text-[#121212] backdrop-blur-md shadow-[0_10px_28px_rgba(12,56,96,0.1)] hover:bg-[#121212] hover:text-white",
+    "bg-white/90 text-[#121212] backdrop-blur-md shadow-[0_10px_28px_rgba(12,56,96,0.1)] hover:-translate-y-0.5 hover:bg-[#121212] hover:text-white hover:shadow-[0_16px_36px_rgba(12,35,58,0.28)] active:translate-y-0 active:scale-[0.98]",
   dark:
-    "bg-[#121212]/88 text-white backdrop-blur-md hover:bg-white hover:text-[#121212]",
+    "bg-[#121212]/88 text-white backdrop-blur-md hover:-translate-y-0.5 hover:bg-[#51fec0] hover:text-[#0a1624] hover:shadow-[0_14px_34px_rgba(81,254,192,0.3)] active:translate-y-0 active:scale-[0.98]",
   white:
-    "bg-white text-[#121212] hover:bg-[#51fec0] hover:text-[#121212]",
+    "bg-white text-[#121212] shadow-[0_10px_28px_rgba(0,0,0,0.2)] hover:-translate-y-0.5 hover:bg-[#51fec0] hover:text-[#0a1624] hover:shadow-[0_16px_38px_rgba(81,254,192,0.34)] active:translate-y-0 active:scale-[0.98]",
 };
 
 const BRACKET_BORDER: Record<BracketVariant, string> = {
-  light: "border-[#0b2640]/35 group-hover/brk:border-[#121212]",
-  dark: "border-white/45 group-hover/brk:border-white",
-  white: "border-white/50 group-hover/brk:border-[#51fec0]",
+  light: "border-[#0b2640]/35 group-hover/brk:border-[#51fec0]",
+  dark: "border-white/45 group-hover/brk:border-[#51fec0]",
+  white: "border-white/60 group-hover/brk:border-[#51fec0]",
 };
 
 function CornerTicks({ variant }: { variant: BracketVariant }) {
@@ -43,28 +43,28 @@ function CornerTicks({ variant }: { variant: BracketVariant }) {
       <span
         aria-hidden="true"
         className={cn(
-          "pointer-events-none absolute -top-[4px] -left-[4px] h-[8px] w-[8px] border-t border-l transition-all duration-200 group-hover/brk:-top-[2px] group-hover/brk:-left-[2px]",
+          "pointer-events-none absolute -top-[4px] -left-[4px] h-[8px] w-[8px] border-t-2 border-l-2 transition-all duration-300 ease-out group-hover/brk:-top-[6px] group-hover/brk:-left-[6px]",
           color
         )}
       />
       <span
         aria-hidden="true"
         className={cn(
-          "pointer-events-none absolute -top-[4px] -right-[4px] h-[8px] w-[8px] border-t border-r transition-all duration-200 group-hover/brk:-top-[2px] group-hover/brk:-right-[2px]",
+          "pointer-events-none absolute -top-[4px] -right-[4px] h-[8px] w-[8px] border-t-2 border-r-2 transition-all duration-300 ease-out group-hover/brk:-top-[6px] group-hover/brk:-right-[6px]",
           color
         )}
       />
       <span
         aria-hidden="true"
         className={cn(
-          "pointer-events-none absolute -bottom-[4px] -left-[4px] h-[8px] w-[8px] border-b border-l transition-all duration-200 group-hover/brk:-bottom-[2px] group-hover/brk:-left-[2px]",
+          "pointer-events-none absolute -bottom-[4px] -left-[4px] h-[8px] w-[8px] border-b-2 border-l-2 transition-all duration-300 ease-out group-hover/brk:-bottom-[6px] group-hover/brk:-left-[6px]",
           color
         )}
       />
       <span
         aria-hidden="true"
         className={cn(
-          "pointer-events-none absolute -bottom-[4px] -right-[4px] h-[8px] w-[8px] border-b border-r transition-all duration-200 group-hover/brk:-bottom-[2px] group-hover/brk:-right-[2px]",
+          "pointer-events-none absolute -bottom-[4px] -right-[4px] h-[8px] w-[8px] border-b-2 border-r-2 transition-all duration-300 ease-out group-hover/brk:-bottom-[6px] group-hover/brk:-right-[6px]",
           color
         )}
       />
@@ -91,7 +91,7 @@ export function BracketLink({
   className,
 }: BracketLinkProps) {
   const innerClass = cn(
-    "group/brk relative inline-flex items-center justify-center gap-2 font-medium uppercase whitespace-nowrap transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#121212]",
+    "group/brk relative inline-flex items-center justify-center gap-2 font-medium uppercase whitespace-nowrap transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#121212]",
     SIZE_CLASSES[size],
     SURFACE_CLASSES[variant],
     fullWidth && "w-full",
@@ -147,7 +147,7 @@ export function BracketButton({
       onClick={onClick}
       aria-label={ariaLabel}
       className={cn(
-        "group/brk relative inline-flex cursor-pointer items-center justify-center gap-2 font-medium uppercase whitespace-nowrap transition-colors duration-200 disabled:cursor-not-allowed disabled:opacity-50 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#121212]",
+        "group/brk relative inline-flex cursor-pointer items-center justify-center gap-2 font-medium uppercase whitespace-nowrap transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] disabled:cursor-not-allowed disabled:opacity-50 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#121212]",
         SIZE_CLASSES[size],
         SURFACE_CLASSES[variant],
         fullWidth && "w-full",

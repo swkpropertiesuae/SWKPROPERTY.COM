@@ -200,22 +200,22 @@ input[type="range"].avenlo-range::-moz-range-thumb {
   transition: transform 180ms var(--ease-swiss), background-color 180ms ease;
 }
 
-/* Smooth Architectural & Bidirectional Logo Marquees */
+/* Smooth Architectural, Bidirectional Logo & Slow Infinite Residence Marquees */
 @keyframes avenlo-marquee {
   0% {
-    transform: translateX(0%);
+    transform: translate3d(0%, 0, 0);
   }
   100% {
-    transform: translateX(-50%);
+    transform: translate3d(-50%, 0, 0);
   }
 }
 
 @keyframes logo-marquee-reverse {
   0% {
-    transform: translateX(-50%);
+    transform: translate3d(-50%, 0, 0);
   }
   100% {
-    transform: translateX(0%);
+    transform: translate3d(0%, 0, 0);
   }
 }
 
@@ -230,11 +230,47 @@ input[type="range"].avenlo-range::-moz-range-thumb {
 }
 
 .animate-logo-marquee {
-  animation: avenlo-marquee 34s linear infinite;
+  animation: avenlo-marquee 38s linear infinite;
 }
 
 .animate-logo-marquee-reverse {
-  animation: logo-marquee-reverse 38s linear infinite;
+  animation: logo-marquee-reverse 42s linear infinite;
+}
+
+.animate-logo-marquee:hover,
+.animate-logo-marquee-reverse:hover {
+  animation-play-state: paused;
+}
+
+.animate-residence-marquee {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+  animation: avenlo-marquee 95s linear infinite;
+}
+
+.animate-residence-marquee:hover {
+  animation-play-state: paused;
+}
+
+/* Global luxury tactile hover micro-physics for buttons, pills & interactive controls */
+button:not(:disabled),
+a[class*="rounded-full"],
+a[class*="rounded-xl"],
+a[class*="rounded-lg"] {
+  transition-property: transform, box-shadow, background-color, border-color, color, opacity;
+  transition-duration: 240ms;
+  transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+button:not(:disabled):not([data-no-lift]):not([role="option"]):not([aria-roledescription="slide"]):hover,
+a[class*="rounded-full"]:hover {
+  filter: brightness(1.015);
+}
+
+button:not(:disabled):not([data-no-lift]):not([role="option"]):not([aria-roledescription="slide"]):active,
+a[class*="rounded-full"]:active {
+  transform: scale(0.975);
 }
 
 /* Subtle ViewTransition crossfade */
@@ -266,7 +302,8 @@ input[type="range"].avenlo-range::-moz-range-thumb {
 @media (prefers-reduced-motion: reduce) {
   .avenlo-marquee-track,
   .animate-logo-marquee,
-  .animate-logo-marquee-reverse {
+  .animate-logo-marquee-reverse,
+  .animate-residence-marquee {
     animation: none;
   }
   ::view-transition-old(*),

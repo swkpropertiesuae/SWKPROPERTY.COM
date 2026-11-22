@@ -39,7 +39,7 @@ export default function Home() {
       {/* 04 · Cue Collapsing Cards Accordion & Ambient Destination Spotlight Cards */}
       <FlagshipAccordionAndSpotlights />
 
-      {/* 05 · 21st.dev Dual-Spring Tilted Architectural Cascade Showcase */}
+      {/* 05 · Slow Infinite Horizontal Architectural Residence Marquee */}
       <FullBleedResidences />
 
       {/* 06 · Dubai Market Intelligence Suite: Interactive MarketCard + PeakChart */}

@@ -186,7 +186,7 @@ export function SiteFooter() {
                   <button
                     type="submit"
                     disabled={submitting}
-                    className="w-full cursor-pointer rounded-lg bg-white px-5 py-3 text-[12px] font-medium uppercase tracking-[0.16em] text-[#121212] transition-colors hover:bg-[#51fec0] disabled:opacity-50"
+                    className="w-full cursor-pointer rounded-lg bg-white px-5 py-3 text-[12px] font-semibold uppercase tracking-[0.16em] text-[#121212] transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#51fec0] hover:shadow-[0_12px_28px_rgba(81,254,192,0.32)] active:scale-[0.98] disabled:opacity-50"
                   >
                     {submitting ? "Subscribing..." : "Subscribe"}
                   </button>
@@ -323,10 +323,10 @@ export function SiteFooter() {
           <button
             type="button"
             onClick={scrollToTop}
-            className="inline-flex cursor-pointer items-center gap-2 rounded-full border border-white/10 bg-[#1e1e1e]/95 px-4 py-2 text-[11px] font-medium uppercase tracking-[0.16em] text-white/85 backdrop-blur-md transition-colors hover:bg-white hover:text-[#121212]"
+            className="group inline-flex cursor-pointer items-center gap-2 rounded-full border border-white/15 bg-[#1e1e1e]/95 px-4 py-2 text-[11px] font-medium uppercase tracking-[0.16em] text-white/90 backdrop-blur-md transition-all duration-200 hover:-translate-y-0.5 hover:border-[#51fec0] hover:bg-[#51fec0] hover:text-[#0a1624] hover:shadow-[0_10px_24px_rgba(81,254,192,0.3)]"
           >
             <span>Back to top</span>
-            <ArrowUp className="h-3.5 w-3.5" />
+            <ArrowUp className="h-3.5 w-3.5 transition-transform duration-200 group-hover:-translate-y-0.5" />
           </button>
         </div>
       </div>
