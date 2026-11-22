@@ -1,163 +1,204 @@
 "use client";
 
-import React, { useState } from "react";
-import { Building2, Compass, KeyRound, Landmark, ShieldCheck } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import Link from "next/link";
+import {
+  ArrowUpRight,
+  Building2,
+  Compass,
+  Crown,
+  Landmark,
+  Waves,
+} from "lucide-react";
+import { cn } from "@/lib/utils";
+
+/**
+ * 21st.dev Interactive Selector
+ * Staggered-entry architectural corridor selector with frosted-glass icon medallions,
+ * smooth flex expansion on click/hover, and direct Dubai collection links.
+ */
 
 export interface SelectorOption {
   title: string;
   description: string;
   image: string;
-  icon?: React.ReactNode;
+  href: string;
+  icon: React.ReactNode;
 }
 
-const defaultOptions: SelectorOption[] = [
+const DEFAULT_OPTIONS: SelectorOption[] = [
   {
-    title: "Off-Plan Launches",
-    description: "Escrow-registered developer releases & milestone plans",
-    image: "/img/communities/downtown-dubai.webp",
-    icon: <Landmark size={20} className="text-white" />,
+    title: "Island Waterfront Estates",
+    description: "Nakheel Jumeirah Park & private coastal villas",
+    image: "/img/projects/nakheel/jumeirah-park.webp",
+    href: "/off-plan/jumeirah-park",
+    icon: <Waves className="h-5 w-5 text-[#51fec0]" />,
   },
   {
-    title: "Waterfront Residences",
-    description: "Palm Jumeirah, Dubai Marina & Creek Harbour",
-    image: "/img/communities/palm-jumeirah.webp",
-    icon: <Compass size={20} className="text-white" />,
+    title: "Sculptural Sky Towers",
+    description: "Binghatti Skyrise architectural supertalls",
+    image: "/img/projects/binghatti/binghatti-skyrise.webp",
+    href: "/off-plan/binghatti-skyrise",
+    icon: <Building2 className="h-5 w-5 text-[#51fec0]" />,
   },
   {
-    title: "Ready Secondary Homes",
-    description: "DLD Trakheesi-permitted apartments & golf villas",
-    image: "/img/communities/dubai-hills-estate.webp",
-    icon: <Building2 size={20} className="text-white" />,
+    title: "Parkland Residences",
+    description: "Emaar Greencrest serene sanctuary living",
+    image: "/img/projects/emaar/greencrest.webp",
+    href: "/off-plan/greencrest",
+    icon: <Compass className="h-5 w-5 text-[#51fec0]" />,
   },
   {
-    title: "Executive Leasing",
-    description: "Annual & flexible Ejari-registered rentals",
-    image: "/img/communities/dubai-marina.webp",
-    icon: <KeyRound size={20} className="text-white" />,
+    title: "Championship Golf Views",
+    description: "Emaar Golf Vale fairway-facing residences",
+    image: "/img/projects/emaar/golf-vale.webp",
+    href: "/off-plan/golf-vale",
+    icon: <Crown className="h-5 w-5 text-[#51fec0]" />,
   },
   {
-    title: "Portfolio Management",
-    description: "Snagging, tenant care & net-yield reporting",
-    image: "/img/communities/business-bay.webp",
-    icon: <ShieldCheck size={20} className="text-white" />,
+    title: "Cultural Island Living",
+    description: "Aldar Saadiyat Grove museum district, Abu Dhabi",
+    image: "/img/projects/aldar/saadiyat-grove.webp",
+    href: "/off-plan/saadiyat-grove",
+    icon: <Landmark className="h-5 w-5 text-[#51fec0]" />,
   },
 ];
 
-const InteractiveSelector = ({
-  heading = "Tailored to Your Mandate",
-  subheading = "Select a segment to inspect how SWK Properties structures acquisitions, sales, and leasing across Dubai.",
-  options = defaultOptions,
+export function InteractiveSelector({
+  heading = "Live Across Every Dubai Lifestyle",
+  subheading = "Click any architectural corridor to explore curated waterfront, supertall, golf, and island releases.",
+  options = DEFAULT_OPTIONS,
+  className,
 }: {
   heading?: string;
   subheading?: string;
   options?: SelectorOption[];
-}) => {
-  const [activeIndex, setActiveIndex] = useState<number>(0);
+  className?: string;
+}) {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [animatedOptions, setAnimatedOptions] = useState<number[]>([]);
 
-  const handleOptionClick = (index: number) => {
-    if (index !== activeIndex) {
-      setActiveIndex(index);
-    }
-  };
+  useEffect(() => {
+    const timers: ReturnType<typeof setTimeout>[] = [];
+    options.forEach((_, i) => {
+      const timer = setTimeout(() => {
+        setAnimatedOptions((prev) => (prev.includes(i) ? prev : [...prev, i]));
+      }, 140 * i);
+      timers.push(timer);
+    });
+    return () => {
+      timers.forEach((timer) => clearTimeout(timer));
+    };
+  }, [options]);
 
   return (
-    <div className="relative flex flex-col items-center justify-center py-12 bg-transparent font-sans text-[#17130e]">
-      <div className="w-full max-w-3xl px-6 mb-8 text-center">
-        <p className="mb-2 text-xs font-bold uppercase tracking-[0.26em] text-[#17130e]">
-          SWK Advisory Segments · RERA ORN 51517
+    <div
+      className={cn(
+        "relative flex flex-col items-center justify-center rounded-3xl border border-white/15 bg-gradient-to-b from-[#08131f]/95 via-[#0c1a2c]/95 to-[#09121e]/96 px-4 py-14 sm:px-8 sm:py-16 text-white shadow-[0_28px_80px_rgba(6,18,32,0.34)] backdrop-blur-2xl",
+        className
+      )}
+    >
+      {/* Header */}
+      <div className="mx-auto mb-10 max-w-2xl text-center">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#51fec0]">
+          ARCHITECTURAL CORRIDORS · UAE
         </p>
-        <h2 className="font-serif text-3xl md:text-5xl font-bold text-[#17130e] mb-3 tracking-tight">
+        <h3 className="mt-3 text-3xl sm:text-4xl md:text-[44px] font-medium leading-[1.08] tracking-[-0.035em] text-white">
           {heading}
-        </h2>
-        <p className="text-base md:text-lg text-[#4a4237] max-w-2xl mx-auto">
-          {subheading}
-        </p>
+        </h3>
+        <p className="mt-3 text-sm sm:text-base text-white/72">{subheading}</p>
       </div>
 
-      <div className="options flex w-full max-w-[1100px] h-[420px] px-4 items-stretch overflow-x-auto md:overflow-hidden relative gap-2">
-        {options.map((option, index) => (
-          <div
-            key={index}
-            className={`option relative flex flex-col justify-end overflow-hidden rounded-2xl transition-all duration-700 ease-in-out ${
-              activeIndex === index ? "active" : ""
-            }`}
-            style={{
-              minWidth: "68px",
-              minHeight: "100px",
-              borderWidth: "1px",
-              borderStyle: "solid",
-              borderColor:
-                activeIndex === index
-                  ? "rgba(23,19,14, 0.85)"
-                  : "rgba(23,19,14, 0.18)",
-              cursor: "pointer",
-              backgroundColor: "#17130e",
-              boxShadow:
-                activeIndex === index
-                  ? "0 20px 60px rgba(23,19,14,0.35)"
-                  : "0 10px 30px rgba(23,19,14,0.18)",
-              flex: activeIndex === index ? "6 1 0%" : "1 1 0%",
-              zIndex: activeIndex === index ? 10 : 1,
-            }}
-            onClick={() => handleOptionClick(index)}
-          >
-            <img
-              src={option.image}
-              alt={option.title}
-              loading="eager"
-              decoding="sync"
-              className="pointer-events-none absolute inset-0 h-full w-full object-cover object-center transition-transform duration-700"
-              style={{
-                transform: activeIndex === index ? "scale(1.03)" : "scale(1.08)",
-              }}
-            />
-
+      {/* Expandable Selector Track */}
+      <div className="flex h-[420px] sm:h-[450px] w-full max-w-[1140px] flex-col sm:flex-row items-stretch gap-2.5 overflow-hidden">
+        {options.map((option, index) => {
+          const isActive = activeIndex === index;
+          const isAnimated = animatedOptions.includes(index);
+          return (
             <div
-              className="absolute inset-0 pointer-events-none transition-all duration-700 ease-in-out"
-              style={{
-                background:
-                  activeIndex === index
-                    ? "linear-gradient(to top, rgba(15,12,9,0.92) 0%, rgba(15,12,9,0.28) 55%, transparent 100%)"
-                    : "linear-gradient(to top, rgba(15,12,9,0.82) 0%, rgba(15,12,9,0.38) 100%)",
+              key={option.title}
+              role="button"
+              tabIndex={0}
+              aria-expanded={isActive}
+              onClick={() => setActiveIndex(index)}
+              onMouseEnter={() => setActiveIndex(index)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  setActiveIndex(index);
+                }
               }}
-            />
+              className="relative flex min-h-[64px] sm:min-w-[68px] cursor-pointer flex-col justify-end overflow-hidden rounded-2xl border-2 transition-all duration-700 ease-out"
+              style={{
+                opacity: isAnimated ? 1 : 0,
+                transform: isAnimated ? "translateX(0)" : "translateX(-32px)",
+                borderColor: isActive
+                  ? "rgba(255,255,255,0.88)"
+                  : "rgba(255,255,255,0.14)",
+                boxShadow: isActive
+                  ? "0 20px 60px rgba(0,0,0,0.52)"
+                  : "0 10px 30px rgba(0,0,0,0.28)",
+                flex: isActive ? "6.2 1 0%" : "1 1 0%",
+                zIndex: isActive ? 10 : 1,
+                willChange: "flex-grow, box-shadow",
+              }}
+            >
+              <img
+                src={option.image}
+                alt={option.title}
+                loading="lazy"
+                className="absolute inset-0 h-full w-full object-cover transition-transform duration-700"
+                style={{
+                  transform: isActive ? "scale(1)" : "scale(1.12)",
+                }}
+              />
 
-            <div className="label absolute left-0 right-0 bottom-5 flex items-center justify-start h-14 z-10 pointer-events-none px-4 gap-3 w-full">
-              <div className="icon min-w-[44px] max-w-[44px] h-[44px] flex items-center justify-center rounded-full bg-[#17130e]/90 backdrop-blur-md border border-white/35 flex-shrink-0">
-                {option.icon}
-              </div>
-              <div className="info text-white overflow-hidden">
-                <div
-                  className="main font-serif font-semibold text-xl text-white transition-all duration-500 ease-in-out truncate"
-                  style={{
-                    opacity: activeIndex === index ? 1 : 0,
-                    transform:
-                      activeIndex === index
-                        ? "translateX(0)"
-                        : "translateX(20px)",
-                  }}
-                >
-                  {option.title}
+              {/* Deep Cinematic Bottom Scrim */}
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-x-0 bottom-0 h-44 bg-gradient-to-t from-[#050d16]/92 via-[#050d16]/45 to-transparent transition-opacity duration-500"
+                style={{ opacity: isActive ? 1 : 0.65 }}
+              />
+
+              {/* Medallion Icon + Animated Label & Action */}
+              <div className="relative z-10 flex items-center justify-between gap-3 p-4 sm:p-5">
+                <div className="flex items-center gap-3.5 min-w-0">
+                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-white/25 bg-[#0a1624]/82 backdrop-blur-md shadow-md">
+                    {option.icon}
+                  </div>
+                  <div
+                    className="min-w-0 transition-all duration-500"
+                    style={{
+                      opacity: isActive ? 1 : 0,
+                      transform: isActive ? "translateX(0)" : "translateX(20px)",
+                    }}
+                  >
+                    <div className="truncate text-base sm:text-xl font-semibold tracking-[-0.02em] text-white">
+                      {option.title}
+                    </div>
+                    <div className="truncate text-xs sm:text-sm text-white/75">
+                      {option.description}
+                    </div>
+                  </div>
                 </div>
-                <div
-                  className="sub text-sm text-white/85 transition-all duration-500 ease-in-out truncate"
-                  style={{
-                    opacity: activeIndex === index ? 1 : 0,
-                    transform:
-                      activeIndex === index
-                        ? "translateX(0)"
-                        : "translateX(20px)",
-                  }}
-                >
-                  {option.description}
-                </div>
+
+                {isActive ? (
+                  <Link
+                    href={option.href}
+                    onClick={(e) => e.stopPropagation()}
+                    className="hidden md:inline-flex shrink-0 items-center gap-1.5 rounded-full bg-white px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-[#0a1624] transition-colors hover:bg-[#51fec0]"
+                  >
+                    <span>View</span>
+                    <ArrowUpRight className="h-3.5 w-3.5" />
+                  </Link>
+                ) : null}
               </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
-};
+}
 
 export default InteractiveSelector;

@@ -2,7 +2,7 @@
   {
     "name": "Mohammad Haseeb",
     "role": "Sales & Operations Manager",
-    "photo": "team/haseeb-portrait.webp",
+    "photo": "team/mohammad-haseeb-2026.webp",
     "bio": "Brings sales leadership and daily transaction operations together at SWK Properties, keeping property selection, developer allocations, and handover moving smoothly across Dubai's leading master developers.",
     "dealsCount": "140+ Verified Transactions",
     "experienceYears": "10+ Years in UAE Real Estate",
@@ -30,7 +30,7 @@
   {
     "name": "Mohammed Islam (Rex)",
     "role": "Assistant Director · UK & Dubai Advisory",
-    "photo": "team/mohammed-islam-portrait.webp",
+    "photo": "team/mohammed-islam-2026.webp",
     "bio": "Brings over a decade of international real estate experience across the United Kingdom and Dubai, with a proven track record in sales, investment advisory, and client relationships. With extensive market knowledge and a client-focused approach, he is committed to delivering trusted advice, personalised service, and exceptional results.",
     "dealsCount": "165+ Verified Transactions",
     "experienceYears": "14+ Years (UK & Dubai)",
@@ -86,7 +86,7 @@
   {
     "name": "Fareed Choudhary",
     "role": "Senior Property Consultant",
-    "photo": "team/fareed-portrait.webp",
+    "photo": "team/fareed-2026.webp",
     "bio": "Helps families and long-term investors look beyond brochure renders to how a residence performs in practice: floor-plate efficiency, school proximity, service charges, and long-term resale liquidity across established communities.",
     "dealsCount": "95+ Verified Transactions",
     "experienceYears": "3+ Years in UAE Advisory",
@@ -194,6 +194,34 @@
     "brn": ""
   },
   {
+    "name": "Sanket Katariya",
+    "role": "Sales Executive",
+    "photo": "team/sanket-katariya-2026.webp",
+    "bio": "Advises residential buyers and yield-focused investors across Jumeirah Village Circle, Dubai Land Residence Complex (DLRC), Dubai Silicon Oasis, and emerging Dubai masterplans. Known for sharp project research, clear AED payment-plan comparisons, and responsive viewing coordination.",
+    "dealsCount": "Active Advisory Desk",
+    "experienceYears": "Dubai Residential & Off-Plan Desk",
+    "topDevelopers": [
+      "Emaar",
+      "Binghatti",
+      "Azizi",
+      "DAMAC",
+      "Danube"
+    ],
+    "keyProjects": [
+      "Binghatti JVC Boutique",
+      "Azizi Venice",
+      "DAMAC Lagoons",
+      "Danube Greenz",
+      "Dubai South Residences"
+    ],
+    "specialties": [
+      "High-Yield Off-Plan Apartments",
+      "First-Time Dubai Buyer Guidance",
+      "DLRC, DSO & JVC Corridors"
+    ],
+    "brn": ""
+  },
+  {
     "name": "Mohd Shahid Khan",
     "role": "Office Admin & IT Executive",
     "photo": "team/shahid-portrait.webp",
@@ -208,7 +236,7 @@
       "Imtiaz"
     ],
     "keyProjects": [
-      "All 108+ Verified Developer Portals",
+      "UAE Master Developer Portals",
       "Oqood & Title Deed Documentation",
       "CRM & Client Data Security"
     ],

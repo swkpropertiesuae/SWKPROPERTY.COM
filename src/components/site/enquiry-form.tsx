@@ -2,19 +2,11 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import {
-  CheckCircle2,
-  Clock,
-  Phone,
-  ShieldCheck,
-  Sparkles,
-  Calendar,
-  ArrowRight,
-  AlertCircle,
-} from "lucide-react";
+import { AlertCircle, CheckCircle2, Phone } from "lucide-react";
 import { usePrefs } from "@/lib/prefs";
 import { SITE } from "@/lib/swk";
 import { WhatsAppIcon } from "@/components/site/whatsapp-icon";
+import { BracketButton } from "@/components/avenlo/bracket-button";
 
 export type EnquiryContextType =
   | "property"
@@ -46,30 +38,41 @@ export interface EnquiryFormProps {
 }
 
 const COUNTRY_CODES = [
-  { code: "+971", label: "🇦🇪 +971 (UAE)" },
-  { code: "+44", label: "🇬🇧 +44 (UK)" },
-  { code: "+1", label: "🇺🇸 +1 (US/CA)" },
-  { code: "+91", label: "🇮🇳 +91 (India)" },
-  { code: "+966", label: "🇸🇦 +966 (KSA)" },
-  { code: "+49", label: "🇩🇪 +49 (DE)" },
-  { code: "+33", label: "🇫🇷 +33 (FR)" },
-  { code: "+7", label: "🇷🇺 +7 (RU/KZ)" },
-  { code: "+65", label: "🇸🇬 +65 (SG)" },
-  { code: "+41", label: "🇨🇭 +41 (CH)" },
+  { code: "+971", label: "+971 (UAE)" },
+  { code: "+44", label: "+44 (UK)" },
+  { code: "+1", label: "+1 (US/CA)" },
+  { code: "+91", label: "+91 (IN)" },
+  { code: "+966", label: "+966 (KSA)" },
+  { code: "+49", label: "+49 (DE)" },
+  { code: "+33", label: "+33 (FR)" },
+  { code: "+7", label: "+7 (RU/KZ)" },
+  { code: "+65", label: "+65 (SG)" },
+  { code: "+41", label: "+41 (CH)" },
+];
+
+const INQUIRY_OPTIONS: { value: EnquiryContextType; label: string }[] = [
+  { value: "general", label: "General Advisory & Shortlist" },
+  { value: "investment", label: "Off-Plan Developer Launches" },
+  { value: "buying", label: "Buying Ready Property" },
+  { value: "renting", label: "Annual Leasing / Renting" },
+  { value: "selling", label: "Selling a Property (Form A)" },
+  { value: "renting-out", label: "Leasing Out / Management" },
+  { value: "viewing", label: "Schedule Private Viewing" },
 ];
 
 const GST_SLOTS = [
-  "10:00 GST (Morning)",
-  "11:30 GST (Late Morning)",
-  "14:00 GST (Afternoon)",
-  "16:30 GST (Late Afternoon)",
-  "18:00 GST (Early Evening)",
+  "10:00 GST",
+  "11:30 GST",
+  "14:00 GST",
+  "16:30 GST",
+  "18:00 GST",
 ];
 
 export function EnquiryForm({
   context = "general",
-  heading = "Request a Verified Shortlist or Private Consultation",
-  subheading = "Short, direct, and handled by a RERA-licensed SWK specialist at Al Saqr Business Tower. No automated spam.",
+  subject,
+  heading = "Send us an enquiry",
+  subheading = "Your note goes directly to the specialist covering your target Dubai community or developer.",
   propertyRef,
   propertyTitle,
   community,
@@ -80,470 +83,325 @@ export function EnquiryForm({
   compact = false,
   className = "",
 }: EnquiryFormProps) {
-  const { attribution, lang, trackEvent, notify } = usePrefs();
+  const { attribution, trackEvent } = usePrefs();
 
-  const [started, setStarted] = useState(false);
   const [name, setName] = useState("");
   const [countryCode, setCountryCode] = useState("+971");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
-  const [preferredContact, setPreferredContact] = useState<"WhatsApp" | "Phone Call" | "Email">("WhatsApp");
+  const [inquiryType, setInquiryType] = useState<EnquiryContextType>(context);
+  const [preferredContact, setPreferredContact] = useState<"WhatsApp" | "Phone" | "Email">("WhatsApp");
   const [message, setMessage] = useState(
-    propertyTitle
-      ? `I would like verified details, floor plans, and availability for ${propertyTitle}${propertyRef ? ` (Ref: ${propertyRef})` : ""}.`
-      : ""
+    subject ? `Enquiry regarding: ${subject}` : ""
   );
-  const [includeViewing, setIncludeViewing] = useState(defaultViewingPicker || context === "viewing");
+  const [showViewing, setShowViewing] = useState(defaultViewingPicker);
   const [viewingDate, setViewingDate] = useState("");
   const [viewingTimeGst, setViewingTimeGst] = useState(GST_SLOTS[1]);
-  const [viewingMode, setViewingMode] = useState<"In-Person Viewing (Dubai)" | "Live Video Walkthrough">(
-    "In-Person Viewing (Dubai)"
-  );
+  const [viewingMode, setViewingMode] = useState("In-person viewing (Dubai)");
   const [marketingConsent, setMarketingConsent] = useState(false);
   const [companyWebsite, setCompanyWebsite] = useState(""); // honeypot
 
+  const [started, setStarted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
-  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<{
     enquiryId: string;
-    submittedAtGst: string;
-    routing: { primaryAgent: string; primaryRole: string; backupAgent: string };
+    submittedAtGst?: string;
+    primaryAgent?: string;
   } | null>(null);
 
-  // Post-submit optional Step 2 Qualification
-  const [budgetRange, setBudgetRange] = useState("AED 2M – AED 5M");
-  const [timeline, setTimeline] = useState("Within 30–60 days");
-  const [financing, setFinancing] = useState("Cash Buyer");
-  const [residency, setResidency] = useState("Overseas Investor");
-  const [qualifiedSaved, setQualifiedSaved] = useState(false);
-
-  const visitorTz =
-    typeof Intl !== "undefined" ? Intl.DateTimeFormat().resolvedOptions().timeZone : "Local Time";
-
-  const handleFirstFocus = () => {
+  const onFocusStart = () => {
     if (!started) {
       setStarted(true);
-      trackEvent("form_start", {
-        context,
-        propertyRef: propertyRef || "none",
-        community: community || "all",
-      });
+      trackEvent("form_start", { context: inquiryType, propertyRef: propertyRef || "general" });
     }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setErrorMsg(null);
-    setSubmitting(true);
+    setError(null);
 
+    if (name.trim().length < 2) {
+      setError("Please enter your full name.");
+      return;
+    }
+    if (phone.replace(/[^\d+]/g, "").length < 7) {
+      setError("Please enter a valid phone or WhatsApp number.");
+      return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+      setError("Please enter a valid email address.");
+      return;
+    }
+
+    setSubmitting(true);
     try {
       const res = await fetch("/api/enquiries", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "content-type": "application/json" },
         body: JSON.stringify({
-          name,
+          name: name.trim(),
           countryCode,
-          phone,
-          email,
-          message,
-          context,
+          phone: phone.trim(),
+          email: email.trim(),
+          message: message.trim(),
+          context: inquiryType,
           preferredContact,
           marketingConsent,
-          viewingDate: includeViewing ? viewingDate : undefined,
-          viewingTimeGst: includeViewing ? viewingTimeGst : undefined,
-          viewingMode: includeViewing ? viewingMode : undefined,
+          viewingDate: showViewing ? viewingDate : undefined,
+          viewingTimeGst: showViewing ? viewingTimeGst : undefined,
+          viewingMode: showViewing ? viewingMode : undefined,
           propertyRef,
-          propertyTitle,
+          propertyTitle: propertyTitle || subject,
           community,
           developer,
           agentSlug,
-          pageUrl: typeof window !== "undefined" ? window.location.href : "",
-          language: lang,
+          pageUrl: typeof window !== "undefined" ? window.location.href : SITE.url,
           attribution,
           companyWebsite,
         }),
       });
-
-      const data = await res.json();
+      const data = (await res.json()) as {
+        ok?: boolean;
+        error?: string;
+        enquiryId?: string;
+        submittedAtGst?: string;
+        routing?: { primaryAgent?: string };
+      };
       if (!res.ok || !data.ok) {
-        setErrorMsg(data.error || "Please check your details and try again.");
-        setSubmitting(false);
-        return;
-      }
-
-      setResult({
-        enquiryId: data.enquiryId,
-        submittedAtGst: data.submittedAtGst,
-        routing: data.routing,
-      });
-
-      trackEvent("enquiry_success", {
-        enquiryId: data.enquiryId,
-        context,
-        propertyRef: propertyRef || "none",
-      });
-
-      if (context === "brochure") {
-        trackEvent("brochure_download", {
-          enquiryId: data.enquiryId,
-          propertyRef: propertyRef || "none",
+        setError(
+          data.error ||
+            `We could not submit right now. Message us directly on WhatsApp at ${SITE.phoneDisplay}.`
+        );
+      } else {
+        setResult({
+          enquiryId: data.enquiryId || "SWK-LOGGED",
+          submittedAtGst: data.submittedAtGst,
+          primaryAgent: data.routing?.primaryAgent || agentName,
+        });
+        trackEvent("enquiry_success", {
+          context: inquiryType,
+          propertyRef: propertyRef || "general",
         });
       }
-      if (includeViewing && viewingDate) {
-        trackEvent("viewing_booked", {
-          enquiryId: data.enquiryId,
-          viewingMode,
-          propertyRef: propertyRef || "none",
-        });
-      }
-
-      notify(`Enquiry confirmed (${data.enquiryId})`);
     } catch {
-      setErrorMsg(
-        "Network error. You can also reach us immediately on WhatsApp at +971 56 433 0448."
+      setError(
+        `Connection error. Please reach us directly on WhatsApp at ${SITE.phoneDisplay} or ${SITE.email}.`
       );
     } finally {
       setSubmitting(false);
     }
   };
 
-  const handleQualificationSave = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setQualifiedSaved(true);
-    // Send the qualification as a follow-up record linked to the original enquiry.
-    fetch("/api/enquiries", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        name,
-        countryCode,
-        phone,
-        email,
-        context,
-        propertyRef,
-        propertyTitle,
-        community,
-        developer,
-        agentSlug,
-        language: lang,
-        message: `Qualification for ${result?.enquiryId ?? "enquiry"}`,
-        qualification: { budgetRange, timeline, financing, residency },
-      }),
-    }).catch(() => undefined);
-    trackEvent("lead_qualified", {
-      enquiryId: result?.enquiryId || "unknown",
-      budgetRange,
-      timeline,
-      financing,
-      residency,
-    });
-    notify("Investment preferences added to your file");
-  };
+  const waFallback = `${SITE.whatsappUrl}?text=${encodeURIComponent(
+    `Hello SWK Properties, I am enquiring about ${propertyTitle || subject || community || "Dubai property advisory"}.`
+  )}`;
 
   if (result) {
-    const waText = encodeURIComponent(
-      `Hello SWK Properties, I just submitted enquiry ${result.enquiryId}${
-        propertyTitle ? ` regarding ${propertyTitle}` : ""
-      }. My name is ${name}.`
-    );
-
     return (
       <div
-        className={`rounded-3xl border border-[#e6dfd2] bg-white p-6 md:p-9 text-[#17130e] shadow-[0_24px_60px_rgba(23,19,14,0.12)] ${className}`}
+        className={`rounded-2xl border border-white/80 bg-white/86 backdrop-blur-xl shadow-[0_18px_48px_rgba(12,56,96,0.09)] p-6 sm:p-8 ${className}`}
       >
-        <div className="flex items-center gap-3 text-emerald-700 mb-4">
-          <CheckCircle2 className="h-6 w-6 shrink-0" />
-          <span className="text-xs font-bold uppercase tracking-[0.22em]">
-            Enquiry Logged & Routed · Ref {result.enquiryId}
-          </span>
+        <div className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-[#121212] text-[#51fec0]">
+          <CheckCircle2 className="h-5 w-5" />
         </div>
-
-        <h3 className="font-serif text-2xl md:text-3xl font-bold text-[#17130e]">
-          Thank you, {name}. Your mandate is with our desk.
+        <h3 className="mt-5 text-2xl font-medium tracking-[-0.03em] text-[#121212]">
+          Enquiry received
         </h3>
-        <p className="mt-2 text-sm text-[#4a4237] leading-relaxed">
-          Logged at <span className="font-semibold text-[#94652c]">{result.submittedAtGst}</span>. Assigned to{" "}
-          <strong className="text-[#17130e]">{result.routing.primaryAgent}</strong> (
-          {result.routing.primaryRole}) with backup coverage by {result.routing.backupAgent}.
+        <p className="mt-2 text-sm leading-relaxed text-[#525252]">
+          Reference <strong className="font-mono text-[#121212]">{result.enquiryId}</strong>
+          {result.primaryAgent ? ` has been routed to ${result.primaryAgent}` : " has been logged"}
+          {result.submittedAtGst ? ` (${result.submittedAtGst})` : ""}. Expect a clear response within one Dubai business day.
         </p>
 
-        <div className="mt-5 flex flex-wrap gap-3">
+        <div className="mt-6 flex flex-wrap items-center gap-3">
           <a
-            href={`https://wa.me/${SITE.phoneRaw.replace("+", "")}?text=${waText}`}
+            href={waFallback}
             target="_blank"
             rel="noopener noreferrer"
-            onClick={() =>
-              trackEvent("whatsapp_click", {
-                location: "enquiry_confirmation",
-                enquiryId: result.enquiryId,
-              })
-            }
-            className="inline-flex items-center gap-2 rounded-full bg-emerald-600 px-5 py-2.5 text-xs font-bold uppercase tracking-[0.16em] text-white hover:bg-emerald-700"
+            className="inline-flex items-center gap-2 rounded-full bg-[#121212] px-5 py-2.5 text-xs font-medium uppercase tracking-[0.14em] text-white hover:bg-[#2b2b2b]"
           >
-            <WhatsAppIcon className="h-4 w-4" />
-            Continue on WhatsApp Now
+            <WhatsAppIcon className="h-4 w-4 text-[#51fec0]" />
+            <span>Continue on WhatsApp</span>
           </a>
-          <Link
-            href={`/thank-you?ref=${encodeURIComponent(result.enquiryId)}&agent=${encodeURIComponent(
-              result.routing.primaryAgent
-            )}`}
-            className="inline-flex items-center gap-2 rounded-full border border-[#94652c]/40 bg-[#faf7f2] px-5 py-2.5 text-xs font-bold uppercase tracking-[0.16em] text-[#94652c] hover:bg-[#94652c] hover:text-white transition"
+          <button
+            type="button"
+            onClick={() => {
+              setResult(null);
+              setName("");
+              setPhone("");
+              setEmail("");
+              setMessage("");
+            }}
+            className="cursor-pointer rounded-full border border-black/12 px-5 py-2.5 text-xs font-medium uppercase tracking-[0.14em] text-[#121212] hover:bg-[#f7f7f7]"
           >
-            Open Confirmation & Guides
-            <ArrowRight className="h-3.5 w-3.5" />
-          </Link>
+            Send Another Note
+          </button>
         </div>
-
-        {/* Step 2 Optional Lead Qualification (§27) */}
-        {!qualifiedSaved ? (
-          <form
-            onSubmit={handleQualificationSave}
-            className="mt-7 border-t border-[#e6dfd2] pt-6 space-y-4"
-          >
-            <div className="flex items-center justify-between">
-              <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#94652c] flex items-center gap-1.5">
-                <Sparkles className="h-3.5 w-3.5" />
-                Optional Step 2: Tailor Your Shortlist (Takes 15 Seconds)
-              </p>
-              <span className="text-[11px] font-medium text-[#786e60]">100% Optional</span>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-              <label className="block">
-                <span className="text-[#4a4237] font-semibold mb-1 block">Target Budget Range</span>
-                <select
-                  value={budgetRange}
-                  onChange={(e) => setBudgetRange(e.target.value)}
-                  className="w-full rounded-xl border border-[#e6dfd2] bg-[#faf7f2] px-3 py-2.5 font-medium text-[#17130e]"
-                >
-                  <option>Up to AED 1.5M</option>
-                  <option>AED 1.5M – AED 3M</option>
-                  <option>AED 2M – AED 5M (Golden Visa Tier)</option>
-                  <option>AED 5M – AED 15M</option>
-                  <option>AED 15M+ Prime / Trophy</option>
-                </select>
-              </label>
-
-              <label className="block">
-                <span className="text-[#4a4237] font-semibold mb-1 block">Target Timeframe</span>
-                <select
-                  value={timeline}
-                  onChange={(e) => setTimeline(e.target.value)}
-                  className="w-full rounded-xl border border-[#e6dfd2] bg-[#faf7f2] px-3 py-2.5 font-medium text-[#17130e]"
-                >
-                  <option>Immediate / Within 14 days</option>
-                  <option>Within 30–60 days</option>
-                  <option>Within 3–6 months</option>
-                  <option>Researching 2026–2028 Off-Plan</option>
-                </select>
-              </label>
-
-              <label className="block">
-                <span className="text-[#4a4237] font-semibold mb-1 block">Purchase Structure</span>
-                <select
-                  value={financing}
-                  onChange={(e) => setFinancing(e.target.value)}
-                  className="w-full rounded-xl border border-[#e6dfd2] bg-[#faf7f2] px-3 py-2.5 font-medium text-[#17130e]"
-                >
-                  <option>Cash Buyer</option>
-                  <option>Developer Milestone Plan</option>
-                  <option>UAE Mortgage Finance</option>
-                  <option>Annual / Corporate Tenancy</option>
-                </select>
-              </label>
-
-              <label className="block">
-                <span className="text-[#4a4237] font-semibold mb-1 block">Buyer Profile</span>
-                <select
-                  value={residency}
-                  onChange={(e) => setResidency(e.target.value)}
-                  className="w-full rounded-xl border border-[#e6dfd2] bg-[#faf7f2] px-3 py-2.5 font-medium text-[#17130e]"
-                >
-                  <option>Overseas Investor</option>
-                  <option>UAE Resident (End-User)</option>
-                  <option>UAE Resident (Investor)</option>
-                  <option>Relocating to Dubai</option>
-                </select>
-              </label>
-            </div>
-
-            <button
-              type="submit"
-              className="rounded-full bg-[#17130e] px-6 py-2.5 text-xs font-bold uppercase tracking-[0.18em] text-white hover:bg-[#94652c]"
-            >
-              Attach Preferences to {result.enquiryId}
-            </button>
-          </form>
-        ) : (
-          <div className="mt-6 rounded-2xl border border-emerald-600/30 bg-emerald-50 p-4 text-xs font-medium text-emerald-900">
-            Preferences saved ({budgetRange} · {financing} · {timeline}). Your consultant will prepare matching DLD data sheets ahead of your call.
-          </div>
-        )}
       </div>
     );
   }
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      onFocus={handleFirstFocus}
-      className={`rounded-3xl border border-[#e6dfd2] bg-white p-6 md:p-8 text-[#17130e] shadow-[0_24px_60px_rgba(23,19,14,0.10)] ${className}`}
+    <div
+      className={`rounded-2xl border border-white/80 bg-white/86 backdrop-blur-xl shadow-[0_18px_48px_rgba(12,56,96,0.09)] ${
+        compact ? "p-5 sm:p-6" : "p-6 sm:p-8 md:p-10"
+      } ${className}`}
     >
-      {!compact && (
-        <div className="mb-6">
-          <div className="mb-2.5 inline-flex items-center gap-2 rounded-full border border-[#94652c]/30 bg-[#f6ead7] px-3 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-[#94652c]">
-            <ShieldCheck className="h-3.5 w-3.5" />
-            RERA Licensed Desk · ORN {SITE.reraOrn}
-          </div>
-          <h3 className="font-serif text-2xl md:text-3xl font-bold text-[#17130e]">
-            {heading}
-          </h3>
-          <p className="mt-1.5 text-sm text-[#4a4237] leading-relaxed">{subheading}</p>
-          {propertyTitle && (
-            <div className="mt-3 rounded-xl border border-[#94652c]/30 bg-[#faf7f2] px-3.5 py-2 text-xs font-medium text-[#94652c]">
-              Enquiring on: <strong className="text-[#17130e]">{propertyTitle}</strong>
-              {propertyRef ? ` · Ref: ${propertyRef}` : ""}
-              {agentName ? ` · Specialist: ${agentName}` : ""}
-            </div>
-          )}
-        </div>
-      )}
+      <div className="mb-6">
+        <h3 className="text-[22px] sm:text-[26px] font-medium tracking-[-0.03em] text-[#121212]">
+          {heading}
+        </h3>
+        {subheading ? (
+          <p className="mt-2 text-sm leading-relaxed text-[#737373]">{subheading}</p>
+        ) : null}
+      </div>
 
-      {/* Honeypot field hidden from screen and tab order */}
-      <div className="hidden" aria-hidden="true">
-        <label>
-          Company Website
+      <form onSubmit={handleSubmit} onFocus={onFocusStart} className="space-y-4" noValidate>
+        {/* Honeypot */}
+        <div className="hidden" aria-hidden="true">
+          <label htmlFor={`hp-${context}`}>Company Website</label>
           <input
+            id={`hp-${context}`}
             type="text"
             tabIndex={-1}
             autoComplete="off"
             value={companyWebsite}
             onChange={(e) => setCompanyWebsite(e.target.value)}
           />
-        </label>
-      </div>
-
-      {errorMsg && (
-        <div className="mb-4 flex items-start gap-2.5 rounded-xl border border-[#a52437]/40 bg-[#a52437]/10 p-3.5 text-xs font-medium text-[#a52437]">
-          <AlertCircle className="h-4 w-4 shrink-0 mt-0.5" />
-          <span>{errorMsg}</span>
         </div>
-      )}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <label className="block">
-          <span className="mb-1.5 block text-xs font-bold text-[#17130e]">
-            Full Name <span className="text-[#94652c]">*</span>
-          </span>
-          <input
-            type="text"
-            required
-            placeholder="e.g. Tariq Al Mansoori"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            className="w-full rounded-xl border border-[#e6dfd2] bg-[#faf7f2] px-3.5 py-2.5 text-sm font-medium text-[#17130e] placeholder:text-[#786e60]/60 focus:border-[#94652c] focus:bg-white focus:outline-none"
-          />
-        </label>
+        {/* Name & Phone Row */}
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div>
+            <label className="mb-1.5 block text-xs font-medium text-[#525252]">
+              Full name <span className="text-[#121212]">*</span>
+            </label>
+            <input
+              type="text"
+              required
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Your name"
+              autoComplete="name"
+              className="w-full rounded-lg border border-[#d4d4d4] bg-white px-4 py-3 text-sm text-[#121212] placeholder:text-[#a7a7a7] focus:border-[#121212] focus:outline-none"
+            />
+          </div>
 
-        <label className="block">
-          <span className="mb-1.5 block text-xs font-bold text-[#17130e]">
-            Email Address <span className="text-[#94652c]">*</span>
-          </span>
-          <input
-            type="email"
-            required
-            placeholder="name@company.com"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="w-full rounded-xl border border-[#e6dfd2] bg-[#faf7f2] px-3.5 py-2.5 text-sm font-medium text-[#17130e] placeholder:text-[#786e60]/60 focus:border-[#94652c] focus:bg-white focus:outline-none"
-          />
-        </label>
-      </div>
-
-      {/* International Phone with Country Code (§17) */}
-      <div className="mt-4">
-        <span className="mb-1.5 block text-xs font-bold text-[#17130e]">
-          Phone / WhatsApp Number (International Supported) <span className="text-[#94652c]">*</span>
-        </span>
-        <div className="flex gap-2">
-          <select
-            aria-label="Country code"
-            value={countryCode}
-            onChange={(e) => setCountryCode(e.target.value)}
-            className="w-36 shrink-0 rounded-xl border border-[#e6dfd2] bg-[#faf7f2] px-2.5 py-2.5 text-xs font-semibold text-[#17130e] focus:border-[#94652c] focus:bg-white focus:outline-none"
-          >
-            {COUNTRY_CODES.map((c) => (
-              <option key={c.code} value={c.code}>
-                {c.label}
-              </option>
-            ))}
-          </select>
-          <input
-            type="tel"
-            required
-            placeholder="56 433 0448"
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-            className="w-full rounded-xl border border-[#e6dfd2] bg-[#faf7f2] px-3.5 py-2.5 text-sm font-medium text-[#17130e] placeholder:text-[#786e60]/60 focus:border-[#94652c] focus:bg-white focus:outline-none"
-          />
+          <div>
+            <label className="mb-1.5 block text-xs font-medium text-[#525252]">
+              Phone / WhatsApp <span className="text-[#121212]">*</span>
+            </label>
+            <div className="flex gap-2">
+              <select
+                aria-label="Country code"
+                value={countryCode}
+                onChange={(e) => setCountryCode(e.target.value)}
+                className="w-[106px] shrink-0 rounded-lg border border-[#d4d4d4] bg-[#f7f7f7] px-2.5 py-3 text-xs font-medium text-[#121212] focus:border-[#121212] focus:outline-none"
+              >
+                {COUNTRY_CODES.map((c) => (
+                  <option key={c.code} value={c.code}>
+                    {c.label}
+                  </option>
+                ))}
+              </select>
+              <input
+                type="tel"
+                required
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                placeholder="50 000 0000"
+                autoComplete="tel-national"
+                className="min-w-0 flex-1 rounded-lg border border-[#d4d4d4] bg-white px-3.5 py-3 text-sm text-[#121212] placeholder:text-[#a7a7a7] focus:border-[#121212] focus:outline-none"
+              />
+            </div>
+          </div>
         </div>
-      </div>
 
-      {/* Preferred Contact Method (§17) */}
-      <div className="mt-4">
-        <span className="mb-1.5 block text-xs font-bold text-[#17130e]">
-          Preferred Contact Channel
-        </span>
-        <div className="grid grid-cols-3 gap-2">
-          {(["WhatsApp", "Phone Call", "Email"] as const).map((channel) => (
-            <button
-              key={channel}
-              type="button"
-              onClick={() => setPreferredContact(channel)}
-              className={`rounded-xl border px-3 py-2 text-xs font-bold transition ${
-                preferredContact === channel
-                  ? "border-[#17130e] bg-[#17130e] text-white"
-                  : "border-[#e6dfd2] bg-[#faf7f2] text-[#4a4237] hover:border-[#94652c]"
-              }`}
+        {/* Email & Inquiry Type */}
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div>
+            <label className="mb-1.5 block text-xs font-medium text-[#525252]">
+              Email address <span className="text-[#121212]">*</span>
+            </label>
+            <input
+              type="email"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="name@domain.com"
+              autoComplete="email"
+              className="w-full rounded-lg border border-[#d4d4d4] bg-white px-4 py-3 text-sm text-[#121212] placeholder:text-[#a7a7a7] focus:border-[#121212] focus:outline-none"
+            />
+          </div>
+
+          <div>
+            <label className="mb-1.5 block text-xs font-medium text-[#525252]">
+              Inquiry type
+            </label>
+            <select
+              value={inquiryType}
+              onChange={(e) => setInquiryType(e.target.value as EnquiryContextType)}
+              className="w-full rounded-lg border border-[#d4d4d4] bg-white px-3.5 py-3 text-sm text-[#121212] focus:border-[#121212] focus:outline-none"
             >
-              {channel}
-            </button>
-          ))}
+              {INQUIRY_OPTIONS.map((opt) => (
+                <option key={opt.value} value={opt.value}>
+                  {opt.label}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
-      </div>
 
-      {/* Optional Viewing Slot Picker in Asia/Dubai GST (§23) */}
-      <div className="mt-4 rounded-2xl border border-[#e6dfd2] bg-[#faf7f2] p-3.5">
-        <label className="flex items-center justify-between cursor-pointer text-xs">
-          <span className="flex items-center gap-2 font-bold text-[#17130e]">
-            <Calendar className="h-4 w-4 text-[#94652c]" />
-            Schedule a Viewing or Live Video Walkthrough (Asia/Dubai GST)
-          </span>
-          <input
-            type="checkbox"
-            checked={includeViewing}
-            onChange={(e) => setIncludeViewing(e.target.checked)}
-            className="h-4 w-4 accent-[#17130e]"
-          />
-        </label>
+        {/* Preferred Channel + Optional Viewing Toggle */}
+        <div className="flex flex-wrap items-center justify-between gap-3 pt-1">
+          <div className="flex items-center gap-1.5">
+            {(["WhatsApp", "Phone", "Email"] as const).map((ch) => (
+              <button
+                key={ch}
+                type="button"
+                onClick={() => setPreferredContact(ch)}
+                className={`cursor-pointer rounded-full px-3.5 py-1.5 text-xs font-medium transition-colors ${
+                  preferredContact === ch
+                    ? "bg-[#121212] text-white"
+                    : "border border-black/10 bg-[#f7f7f7] text-[#525252] hover:text-[#121212]"
+                }`}
+              >
+                {ch}
+              </button>
+            ))}
+          </div>
 
-        {includeViewing && (
-          <div className="mt-3 grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-3 border-t border-[#e6dfd2] text-xs">
-            <label className="block">
-              <span className="text-[#4a4237] font-semibold mb-1 block">Preferred Date</span>
+          <button
+            type="button"
+            onClick={() => setShowViewing((v) => !v)}
+            className="cursor-pointer text-xs font-medium text-[#525252] underline underline-offset-4 hover:text-[#121212]"
+          >
+            {showViewing ? "Hide viewing slot" : "+ Request viewing slot"}
+          </button>
+        </div>
+
+        {showViewing ? (
+          <div className="grid grid-cols-1 gap-3 rounded-xl border border-black/[0.08] bg-[#f7f7f7] p-4 sm:grid-cols-3">
+            <div>
+              <label className="mb-1 block text-[11px] font-medium text-[#525252]">
+                Preferred date
+              </label>
               <input
                 type="date"
                 value={viewingDate}
                 onChange={(e) => setViewingDate(e.target.value)}
-                className="w-full rounded-lg border border-[#e6dfd2] bg-white px-2.5 py-2 font-medium text-[#17130e]"
+                className="w-full rounded-lg border border-[#d4d4d4] bg-white px-3 py-2 text-xs text-[#121212]"
               />
-            </label>
-            <label className="block">
-              <span className="text-[#4a4237] font-semibold mb-1 block">Dubai Time (GST · UTC+4)</span>
+            </div>
+            <div>
+              <label className="mb-1 block text-[11px] font-medium text-[#525252]">
+                Time (Dubai GST)
+              </label>
               <select
                 value={viewingTimeGst}
                 onChange={(e) => setViewingTimeGst(e.target.value)}
-                className="w-full rounded-lg border border-[#e6dfd2] bg-white px-2.5 py-2 font-medium text-[#17130e]"
+                className="w-full rounded-lg border border-[#d4d4d4] bg-white px-3 py-2 text-xs text-[#121212]"
               >
                 {GST_SLOTS.map((slot) => (
                   <option key={slot} value={slot}>
@@ -551,93 +409,101 @@ export function EnquiryForm({
                   </option>
                 ))}
               </select>
-            </label>
-            <label className="block">
-              <span className="text-[#4a4237] font-semibold mb-1 block">Format</span>
+            </div>
+            <div>
+              <label className="mb-1 block text-[11px] font-medium text-[#525252]">
+                Format
+              </label>
               <select
                 value={viewingMode}
-                onChange={(e) =>
-                  setViewingMode(
-                    e.target.value as "In-Person Viewing (Dubai)" | "Live Video Walkthrough"
-                  )
-                }
-                className="w-full rounded-lg border border-[#e6dfd2] bg-white px-2.5 py-2 font-medium text-[#17130e]"
+                onChange={(e) => setViewingMode(e.target.value)}
+                className="w-full rounded-lg border border-[#d4d4d4] bg-white px-3 py-2 text-xs text-[#121212]"
               >
-                <option value="In-Person Viewing (Dubai)">In-Person Viewing (Dubai)</option>
-                <option value="Live Video Walkthrough">Live Video Walkthrough</option>
+                <option value="In-person viewing (Dubai)">In-person (Dubai)</option>
+                <option value="Live video walkthrough">Live video tour</option>
+                <option value="Office meeting (Sheikh Zayed Rd)">SZR Office Suite</option>
               </select>
-            </label>
-            <p className="sm:col-span-3 text-[11px] text-[#786e60] flex items-center gap-1.5">
-              <Clock className="h-3.5 w-3.5 text-[#94652c]" />
-              All physical viewings are anchored in Dubai Gulf Standard Time (Asia/Dubai, UTC+4). Your detected timezone: {visitorTz}.
-            </p>
+            </div>
           </div>
-        )}
-      </div>
+        ) : null}
 
-      {/* Requirement / Message */}
-      <label className="mt-4 block">
-        <span className="mb-1.5 block text-xs font-bold text-[#17130e]">
-          Requirements or Questions (Optional)
-        </span>
-        <textarea
-          rows={compact ? 2 : 3}
-          placeholder="Tell us your preferred bedrooms, communities, payment plan, or questions..."
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          className="w-full rounded-xl border border-[#e6dfd2] bg-[#faf7f2] px-3.5 py-2.5 text-sm font-medium text-[#17130e] placeholder:text-[#786e60]/60 focus:border-[#94652c] focus:bg-white focus:outline-none"
-        />
-      </label>
+        {/* Message */}
+        <div>
+          <label className="mb-1.5 block text-xs font-medium text-[#525252]">
+            Brief or notes
+          </label>
+          <textarea
+            rows={compact ? 3 : 4}
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            placeholder="Share target community, budget in AED, bedroom count, or timeline..."
+            className="w-full resize-y rounded-lg border border-[#d4d4d4] bg-white px-4 py-3 text-sm text-[#121212] placeholder:text-[#a7a7a7] focus:border-[#121212] focus:outline-none"
+          />
+        </div>
 
-      {/* Separate Marketing Opt-In & UAE PDPL Notice (§17, §53) */}
-      <div className="mt-4 space-y-2 text-[11px] text-[#786e60]">
-        <label className="flex items-start gap-2.5 cursor-pointer">
+        {/* Unticked UAE PDPL Marketing Opt-In (Mandatory Separation) */}
+        <label className="flex cursor-pointer items-start gap-2.5 text-xs leading-relaxed text-[#737373]">
           <input
             type="checkbox"
             checked={marketingConsent}
             onChange={(e) => setMarketingConsent(e.target.checked)}
-            className="mt-0.5 h-3.5 w-3.5 accent-[#17130e]"
+            className="mt-1 h-4 w-4 shrink-0 accent-[#121212]"
           />
           <span>
-            Optional: Send me verified Dubai off-plan launch alerts and quarterly DLD market reports. You can unsubscribe at any time.
+            Optional: keep me updated on new Dubai developer launches and market briefings. Submitting this form authorizes SWK Properties LLC to respond to your enquiry under our{" "}
+            <Link href="/privacy" className="text-[#121212] underline underline-offset-2">
+              UAE PDPL Privacy Policy
+            </Link>
+            .
           </span>
         </label>
-        <p className="leading-relaxed">
-          By submitting this enquiry, you authorise SWK Properties LLC (RERA ORN {SITE.reraOrn}) to contact you regarding your property mandate in accordance with the{" "}
-          <Link href="/privacy" className="font-semibold text-[#94652c] underline underline-offset-2">
-            UAE PDPL Privacy Policy
-          </Link>
-          .
-        </p>
-      </div>
 
-      <div className="mt-6 flex flex-wrap items-center justify-between gap-3">
-        <button
-          type="submit"
-          disabled={submitting}
-          className="inline-flex items-center justify-center gap-2 rounded-full bg-[#17130e] px-7 py-3.5 text-xs font-bold uppercase tracking-[0.18em] text-white shadow-sm transition hover:bg-[#94652c] disabled:opacity-50"
-        >
-          {submitting
-            ? "Logging Mandate..."
-            : context === "brochure"
-            ? "Request Verified Brochure & Floor Plans"
-            : includeViewing
-            ? "Confirm Viewing & Enquiry"
-            : "Submit Enquiry to SWK Desk"}
-          <ArrowRight className="h-4 w-4" />
-        </button>
-
-        <div className="flex items-center gap-3 text-xs font-semibold text-[#17130e]">
-          <a
-            href={`tel:${SITE.phoneRaw}`}
-            onClick={() => trackEvent("phone_click", { location: "enquiry_form" })}
-            className="inline-flex items-center gap-1.5 hover:text-[#94652c]"
+        {error ? (
+          <div
+            role="alert"
+            className="flex items-start gap-2.5 rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-xs text-rose-800"
           >
-            <Phone className="h-3.5 w-3.5 text-[#94652c]" />
-            {SITE.phone}
-          </a>
+            <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
+            <span>{error}</span>
+          </div>
+        ) : null}
+
+        <div className="pt-2">
+          <BracketButton
+            type="submit"
+            disabled={submitting}
+            variant="light"
+            size="lg"
+            fullWidth
+          >
+            {submitting ? "Sending enquiry..." : "Send Enquiry"}
+          </BracketButton>
         </div>
-      </div>
-    </form>
+
+        <div className="flex flex-wrap items-center justify-between gap-2 pt-2 text-xs text-[#8b8b8b]">
+          <span>Prefer direct contact?</span>
+          <div className="flex items-center gap-4">
+            <a
+              href={waFallback}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => trackEvent("whatsapp_click", { location: "enquiry_form" })}
+              className="inline-flex items-center gap-1.5 font-medium text-[#121212] hover:text-[#0e9f6e]"
+            >
+              <WhatsAppIcon className="h-3.5 w-3.5 text-[#0e9f6e]" />
+              <span>WhatsApp</span>
+            </a>
+            <a
+              href={`tel:${SITE.phoneRaw}`}
+              onClick={() => trackEvent("phone_click", { location: "enquiry_form" })}
+              className="inline-flex items-center gap-1 font-medium text-[#121212] hover:underline"
+            >
+              <Phone className="h-3.5 w-3.5" />
+              <span>{SITE.phone}</span>
+            </a>
+          </div>
+        </div>
+      </form>
+    </div>
   );
 }

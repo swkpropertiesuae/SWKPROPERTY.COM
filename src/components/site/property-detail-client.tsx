@@ -3,23 +3,13 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import {
-  AlertTriangle,
-  Bath,
-  BedDouble,
-  Building2,
-  Calendar,
-  CheckCircle2,
+  Check,
   ExternalLink,
   Heart,
-  MapPin,
-  Maximize2,
-  Phone,
   Scale,
   Share2,
   ShieldCheck,
 } from "lucide-react";
-import ViewfinderFlipCarousel from "@/components/ui/viewfinder-flip-carousel";
-import { NearbyWalk } from "@/components/ui/nearby-walk-menu";
 import { type PropertyListing, isPermitVerified, permitLabel } from "@/lib/listings";
 import { communityHref } from "@/lib/communities";
 import { EnquiryForm } from "@/components/site/enquiry-form";
@@ -27,7 +17,9 @@ import { PropertyCard } from "@/components/site/property-card";
 import { usePrefs } from "@/lib/prefs";
 import { SITE } from "@/lib/swk";
 import { MapEmbed } from "@/components/site/map-embed";
-import { WhatsAppIcon } from "@/components/site/whatsapp-icon";
+import { AvenloPageHeader } from "@/components/avenlo/page-header";
+import { BracketLink } from "@/components/avenlo/bracket-button";
+import { SectionEyebrow, SplitHeading, CtaBanner } from "@/components/avenlo/motion";
 
 export function PropertyDetailClient({
   listing,
@@ -47,10 +39,8 @@ export function PropertyDetailClient({
     notify,
   } = usePrefs();
 
-  const [reportOpen, setReportOpen] = useState(false);
-  const [reportReason, setReportReason] = useState("Price or availability update needed");
-  const [reportNote, setReportNote] = useState("");
-  const [reportSubmitted, setReportSubmitted] = useState(false);
+  const [activeTab, setActiveTab] = useState<"layout" | "specs" | "dld">("layout");
+  const [activeImage, setActiveImage] = useState(0);
 
   useEffect(() => {
     trackEvent("property_view", {
@@ -63,619 +53,437 @@ export function PropertyDetailClient({
 
   const isSaved = savedSlugs.includes(listing.slug);
   const isCompared = compareSlugs.includes(listing.slug);
+  const verified = isPermitVerified(listing);
 
-  const waMessage = encodeURIComponent(
-    `Hello SWK Properties, I am viewing ${listing.title} (${listing.community}, Ref: ${listing.reference}${permitLabel(listing) ? `, ${permitLabel(listing)}` : ""}) and would like to arrange a viewing or receive the full DLD cost sheet.`
-  );
-
-  const handleShare = () => {
-    if (typeof window !== "undefined" && navigator.clipboard) {
-      navigator.clipboard.writeText(window.location.href);
-      notify("Property link copied to clipboard");
+  const handleShare = async () => {
+    try {
+      const url = window.location.href;
+      if (navigator.share) {
+        await navigator.share({ title: listing.title, url });
+      } else {
+        await navigator.clipboard.writeText(url);
+        notify("Residence link copied");
+      }
+    } catch {
+      // cancelled
     }
   };
 
-  const handleReportSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const subject = `Listing report ${listing.reference}: ${reportReason}`;
-    const bodyText = `Listing: ${listing.title} (${listing.reference})\nURL: ${window.location.href}\nReason: ${reportReason}\n\n${reportNote}`;
-    window.location.href = `mailto:${SITE.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(bodyText)}`;
-    setReportSubmitted(true);
-    notify(`Report email prepared for ${listing.reference}`);
-  };
+  const allAmenities = [...listing.amenities, ...listing.features, ...listing.views].slice(0, 16);
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-10">
-      {/* Breadcrumb & Top Utility Bar */}
-      <div className="mb-6 flex flex-wrap items-center justify-between gap-3 text-xs text-[#786e60]">
-        <nav aria-label="Breadcrumb" className="flex flex-wrap items-center gap-2">
-          <Link href="/" className="hover:text-[#94652c]">Home</Link>
-          <span>/</span>
-          <Link href="/properties" className="hover:text-[#94652c]">Properties</Link>
-          <span>/</span>
-          <Link href={communityHref(listing.communitySlug)} className="hover:text-[#94652c]">
-            {listing.community}
-          </Link>
-          <span>/</span>
-          <span className="text-[#94652c]">{listing.reference}</span>
-        </nav>
-
-        <div className="flex flex-wrap items-center gap-2">
-          <button
-            type="button"
-            onClick={() => toggleSaved(listing.slug)}
-            className={`inline-flex items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-xs font-medium ${
-              isSaved
-                ? "border-[#94652c] bg-[#17130e] text-white"
-                : "border-[#e6dfd2] bg-[#faf7f2] text-[#17130e]"
-            }`}
-          >
-            <Heart className="h-3.5 w-3.5" fill={isSaved ? "currentColor" : "none"} />
-            {isSaved ? "Saved" : "Save"}
-          </button>
-          <button
-            type="button"
-            onClick={() => toggleCompare(listing.slug)}
-            className={`inline-flex items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-xs font-medium ${
-              isCompared
-                ? "border-[#94652c] bg-[#17130e] text-white"
-                : "border-[#e6dfd2] bg-[#faf7f2] text-[#17130e]"
-            }`}
-          >
-            <Scale className="h-3.5 w-3.5" />
-            Compare
-          </button>
-          <button
-            type="button"
-            onClick={handleShare}
-            className="inline-flex items-center gap-1.5 rounded-full border border-[#e6dfd2] bg-[#faf7f2] px-3.5 py-1.5 text-xs font-medium text-[#17130e] hover:border-[#94652c]"
-          >
-            <Share2 className="h-3.5 w-3.5 text-[#94652c]" />
-            Share Link
-          </button>
-        </div>
-      </div>
-
-      {/* §07 Title, Price, Transaction Type, Status & Reference Header */}
-      <div className="rounded-3xl border border-[#e6dfd2] bg-white p-6 md:p-8">
-        <div className="flex flex-wrap items-start justify-between gap-6">
-          <div className="max-w-3xl space-y-2.5">
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="rounded-full bg-[#17130e] px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-white">
-                {listing.purpose === "buy"
-                  ? "For Sale · Secondary Market"
-                  : listing.purpose === "rent"
-                  ? `For Rent · ${listing.rentalPeriod === "monthly" ? "Monthly" : "Annual Lease"}`
-                  : "Off-Plan Developer Release"}
-              </span>
-              <span className="inline-flex items-center gap-1 rounded-full border border-emerald-500/35 bg-emerald-500/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-wider text-emerald-700">
-                <CheckCircle2 className="h-3 w-3" />
-                Status: {listing.status}
-              </span>
-              <span className="rounded-full border border-[#e6dfd2] bg-[#faf7f2] px-3 py-1 font-mono text-[11px] text-[#94652c]">
-                Ref: {listing.reference}
-              </span>
-              {listing.isRender && (
-                <span className="rounded-full border border-amber-400/35 bg-amber-400/10 px-3 py-1 text-[10px] font-medium text-amber-800">
-                  Visuals Include Developer Architectural Renders
-                </span>
-              )}
-            </div>
-
-            <h1 className="font-serif text-3xl md:text-5xl font-semibold text-[#17130e]">
-              {listing.title}
-            </h1>
-            <p className="text-sm md:text-base text-[#4a4237]">{listing.subtitle}</p>
-
-            <div className="flex flex-wrap items-center gap-4 pt-1 text-xs text-[#4a4237]">
-              <span className="inline-flex items-center gap-1.5">
-                <MapPin className="h-4 w-4 text-[#94652c]" />
-                {listing.building} · {listing.community}, Dubai
-              </span>
-              <span className="inline-flex items-center gap-1.5">
-                <Building2 className="h-4 w-4 text-[#94652c]" />
-                Developer: {listing.developer}
-              </span>
-            </div>
-          </div>
-
-          {/* Price Box */}
-          <div className="rounded-2xl border border-[#94652c]/35 bg-[#faf7f2] p-5 text-left md:text-right min-w-[260px]">
-            <div className="text-[11px] uppercase tracking-[0.2em] text-[#94652c]">
-              {listing.purpose === "rent"
-                ? `Annual Rent (${listing.cheques || 2} Cheques)`
-                : listing.purpose === "off-plan"
-                ? "Indicative Launch Price"
-                : "Asking Price"}
-            </div>
-            <div className="mt-1 font-serif text-3xl font-bold text-[#17130e]">
+    <div className="bg-transparent">
+      {/* Avenlo Centered Residence Header */}
+      <AvenloPageHeader
+        eyebrow={`${listing.community}, Dubai`}
+        title={listing.title}
+        breadcrumb={[
+          { label: "Home", href: "/" },
+          { label: "Properties", href: "/properties" },
+          { label: listing.community, href: communityHref(listing.communitySlug) },
+        ]}
+        meta={
+          <>
+            <span>{formatArea(listing.areaSqFt)}</span>
+            <span className="text-[#cfcfcf]">·</span>
+            <span className="text-[#121212] font-semibold">
               {formatPrice(listing.priceAed)}
+              {listing.purpose === "rent"
+                ? ` / ${listing.rentalPeriod === "monthly" ? "month" : "year"}`
+                : ""}
+            </span>
+            <span className="text-[#cfcfcf]">·</span>
+            <span className="font-mono text-xs text-[#8b8b8b]">{listing.reference}</span>
+          </>
+        }
+        actions={
+          <>
+            <BracketLink href="#enquire" variant="light" size="md">
+              Talk to an Agent
+            </BracketLink>
+            <BracketLink href="/calculators" variant="light" size="md">
+              See Mortgage Details
+            </BracketLink>
+            <div className="flex items-center gap-2 ml-1">
+              <button
+                type="button"
+                onClick={() => toggleSaved(listing.slug)}
+                aria-label="Save property"
+                className={`inline-flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border transition-colors ${
+                  isSaved
+                    ? "border-[#121212] bg-[#121212] text-[#51fec0]"
+                    : "border-black/12 bg-white text-[#121212] hover:bg-[#f7f7f7]"
+                }`}
+              >
+                <Heart className="h-4 w-4" fill={isSaved ? "currentColor" : "none"} />
+              </button>
+              <button
+                type="button"
+                onClick={() => toggleCompare(listing.slug)}
+                aria-label="Compare property"
+                className={`inline-flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border transition-colors ${
+                  isCompared
+                    ? "border-[#121212] bg-[#121212] text-[#51fec0]"
+                    : "border-black/12 bg-white text-[#121212] hover:bg-[#f7f7f7]"
+                }`}
+              >
+                <Scale className="h-4 w-4" />
+              </button>
+              <button
+                type="button"
+                onClick={handleShare}
+                aria-label="Share property"
+                className="inline-flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-black/12 bg-white text-[#121212] hover:bg-[#f7f7f7]"
+              >
+                <Share2 className="h-4 w-4" />
+              </button>
             </div>
-            <div className="mt-1 text-xs text-[#786e60]">
-              AED {Math.round(listing.priceAed / listing.areaSqFt).toLocaleString("en-US")} per sq ft · Service Charge ~AED {listing.serviceChargePerSqFt}/sq ft
-            </div>
-          </div>
-        </div>
+          </>
+        }
+      />
 
-        {/* Key Specs Bar */}
-        <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-6 border-t border-[#e6dfd2] pt-5 text-xs">
-          <div className="rounded-2xl border border-[#e6dfd2] bg-[#faf7f2] p-3">
-            <span className="text-[#786e60] block">Property Type</span>
-            <strong className="mt-1 block text-sm text-[#17130e]">{listing.propertyType}</strong>
-          </div>
-          <div className="rounded-2xl border border-[#e6dfd2] bg-[#faf7f2] p-3">
-            <span className="text-[#786e60] block">Bedrooms</span>
-            <strong className="mt-1 flex items-center gap-1.5 text-sm text-[#17130e]">
-              <BedDouble className="h-4 w-4 text-[#94652c]" />
-              {listing.bedrooms === 0 ? "Studio" : `${listing.bedrooms} Bedrooms`}
-            </strong>
-          </div>
-          <div className="rounded-2xl border border-[#e6dfd2] bg-[#faf7f2] p-3">
-            <span className="text-[#786e60] block">Bathrooms</span>
-            <strong className="mt-1 flex items-center gap-1.5 text-sm text-[#17130e]">
-              <Bath className="h-4 w-4 text-[#94652c]" />
-              {listing.bathrooms} Bathrooms
-            </strong>
-          </div>
-          <div className="rounded-2xl border border-[#e6dfd2] bg-[#faf7f2] p-3">
-            <span className="text-[#786e60] block">Built-Up Area</span>
-            <strong className="mt-1 flex items-center gap-1.5 text-sm text-[#17130e]">
-              <Maximize2 className="h-4 w-4 text-[#94652c]" />
-              {formatArea(listing.areaSqFt)}
-            </strong>
-          </div>
-          <div className="rounded-2xl border border-[#e6dfd2] bg-[#faf7f2] p-3">
-            <span className="text-[#786e60] block">Furnishing</span>
-            <strong className="mt-1 block text-sm text-[#17130e]">{listing.furnished}</strong>
-          </div>
-          <div className="rounded-2xl border border-[#e6dfd2] bg-[#faf7f2] p-3">
-            <span className="text-[#786e60] block">Completion / Handover</span>
-            <strong className="mt-1 flex items-center gap-1 text-sm text-[#94652c]">
-              <Calendar className="h-3.5 w-3.5" />
-              {listing.completion}
-            </strong>
-          </div>
-        </div>
-      </div>
-
-      {/* §07 Photo Gallery + 21st.dev ViewfinderFlipCarousel */}
-      <div className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-12">
-        <div className="md:col-span-7 overflow-hidden rounded-3xl border border-[#e6dfd2]">
+      {/* Full-Width Hero Residence Image + 4-Stat Architectural Bar */}
+      <section className="mx-auto max-w-[1260px] px-4 py-10 sm:px-8 sm:py-14">
+        <div className="relative overflow-hidden rounded-2xl bg-[#f5f5f5]">
           <img
-            src={listing.images[0]}
+            src={listing.images[activeImage] ?? listing.images[0]}
             alt={listing.title}
-            className="h-[380px] md:h-[460px] w-full object-cover"
+            className="h-[340px] sm:h-[520px] md:h-[620px] w-full object-cover"
           />
+          {listing.isRender ? (
+            <span className="absolute bottom-4 left-4 rounded-full bg-[#121212]/80 px-3.5 py-1.5 text-[11px] font-medium text-white backdrop-blur-md">
+              Developer Architectural Render
+            </span>
+          ) : null}
         </div>
-        <div className="md:col-span-5 grid grid-cols-2 gap-4">
-          {listing.images.slice(1, 5).map((img, i) => (
-            <div key={i} className="overflow-hidden rounded-2xl border border-[#e6dfd2]">
-              <img
-                src={img}
-                alt={`${listing.title} view ${i + 2}`}
-                className="h-[180px] md:h-[220px] w-full object-cover"
-              />
+
+        {/* 4-Stat Bar */}
+        <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-4">
+          {[
+            {
+              label: "Bedrooms & Baths",
+              value: `${listing.bedrooms === 0 ? "Studio" : `${listing.bedrooms} BR`} · ${listing.bathrooms} Bath`,
+            },
+            { label: "Total Area", value: formatArea(listing.areaSqFt) },
+            { label: "Completion", value: listing.handover },
+            {
+              label: "Est. Service Charge",
+              value: `AED ${listing.serviceChargePerSqFt}/sq ft`,
+            },
+          ].map((stat) => (
+            <div
+              key={stat.label}
+              className="rounded-2xl border border-white/80 bg-white/80 backdrop-blur-xl shadow-[0_14px_40px_rgba(12,56,96,0.08)] p-5"
+            >
+              <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-[#8b8b8b]">
+                {stat.label}
+              </p>
+              <p className="mt-2 text-lg font-medium tracking-[-0.02em] text-[#121212]">
+                {stat.value}
+              </p>
             </div>
           ))}
         </div>
-      </div>
+      </section>
 
-      <div className="mt-6 overflow-hidden rounded-3xl border border-[#e6dfd2] bg-[#f4efe6] py-6">
-        <ViewfinderFlipCarousel
-          height="420px"
-          background="transparent"
-          items={listing.images.map((src, i) => ({
-            title: `${listing.building} · View 0${i + 1}`,
-            src,
-            alt: `${listing.title} gallery ${i + 1}`,
-          }))}
-        />
-      </div>
-
-      {/* Main Two-Column Content: Left (Description, Floor Plan, Amenities, DLD Permit & Madmoun QR, Map) | Right (Agent Card & Viewing/Enquiry Form) */}
-      <div className="mt-10 grid grid-cols-1 gap-10 lg:grid-cols-12 items-start">
-        <div className="lg:col-span-7 space-y-8">
-          {/* Honest Description */}
-          <section className="rounded-3xl border border-[#e6dfd2] bg-white p-6 md:p-8">
-            <h2 className="font-serif text-2xl md:text-3xl font-semibold text-[#17130e]">
-              Property Overview & Verification Notes
+      {/* Editorial Narrative & Key Highlights */}
+      <section className="mx-auto max-w-[1260px] px-4 py-12 sm:px-8">
+        <div className="grid grid-cols-1 gap-12 lg:grid-cols-12">
+          <div className="lg:col-span-7 space-y-5">
+            <SectionEyebrow>THE RESIDENCE</SectionEyebrow>
+            <h2 className="text-3xl sm:text-4xl font-medium tracking-[-0.035em] text-[#121212]">
+              {listing.subtitle}
             </h2>
-            <div className="mt-4 space-y-4 text-sm md:text-base text-[#4a4237] leading-relaxed">
+            <div className="space-y-4 text-[16px] leading-[1.7] text-[#4a4a4a]">
               {listing.description.map((para, idx) => (
                 <p key={idx}>{para}</p>
               ))}
             </div>
+          </div>
 
-            <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-3 border-t border-[#e6dfd2] pt-5 text-xs">
-              <div>
-                <span className="text-[#786e60]">Handover / Availability:</span>{" "}
-                <strong className="text-[#17130e]">{listing.handover}</strong>
-              </div>
-              {listing.paymentPlan && (
-                <div>
-                  <span className="text-[#786e60]">Payment Plan:</span>{" "}
-                  <strong className="text-[#94652c]">{listing.paymentPlan}</strong>
-                </div>
-              )}
-              <div>
-                <span className="text-[#786e60]">Parking Allocation:</span>{" "}
-                <strong className="text-[#17130e]">{listing.parkingSpaces} Covered Spaces</strong>
-              </div>
-              <div>
-                <span className="text-[#786e60]">Pet Policy:</span>{" "}
-                <strong className="text-[#17130e]">{listing.petPolicy}</strong>
-              </div>
-              <div>
-                <span className="text-[#786e60]">Verified Views:</span>{" "}
-                <strong className="text-[#94652c]">{listing.views.join(" · ")}</strong>
-              </div>
-              {listing.metroStation && (
-                <div>
-                  <span className="text-[#786e60]">Nearest Rail / Metro:</span>{" "}
-                  <strong className="text-[#17130e]">{listing.metroStation}</strong>
-                </div>
-              )}
-            </div>
-          </section>
-
-          {/* §07 Floor Plan & Room Dimensions Breakdown */}
-          <section className="rounded-3xl border border-[#e6dfd2] bg-white p-6 md:p-8">
-            <div className="flex flex-wrap items-center justify-between gap-2">
-              <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#94652c]">
-                  Architectural Layout & Suite Dimensions
-                </p>
-                <h2 className="mt-1 font-serif text-2xl font-semibold text-[#17130e]">
-                  Floor Plan: {listing.floorPlan.label}
-                </h2>
-              </div>
-              <span className="rounded-full border border-[#94652c]/35 bg-[#f6ead7] px-3.5 py-1 text-xs font-semibold text-[#94652c]">
-                Total: {formatArea(listing.floorPlan.totalAreaSqFt)}
-              </span>
-            </div>
-
-            <div className="mt-5 grid grid-cols-3 gap-3 text-center text-xs">
-              <div className="rounded-2xl border border-[#e6dfd2] bg-[#faf7f2] p-3">
-                <span className="text-[#786e60] block">Internal Suite Area</span>
-                <strong className="mt-1 block text-sm text-[#17130e]">
-                  {formatArea(listing.floorPlan.internalSqFt)}
-                </strong>
-              </div>
-              <div className="rounded-2xl border border-[#e6dfd2] bg-[#faf7f2] p-3">
-                <span className="text-[#786e60] block">Balcony / Terrace</span>
-                <strong className="mt-1 block text-sm text-[#17130e]">
-                  {formatArea(listing.floorPlan.balconySqFt)}
-                </strong>
-              </div>
-              <div className="rounded-2xl border border-[#e6dfd2] bg-[#faf7f2] p-3">
-                <span className="text-[#786e60] block">Floor Level</span>
-                <strong className="mt-1 block text-sm text-[#94652c]">
-                  {listing.floorLevel || "Mid-High"}
-                </strong>
-              </div>
-            </div>
-
-            <div className="mt-5 overflow-hidden rounded-2xl border border-[#e6dfd2]">
-              <table className="w-full text-left text-xs">
-                <thead className="bg-[#faf7f2] text-[#94652c]">
-                  <tr>
-                    <th className="p-3 font-semibold">Room / Zone</th>
-                    <th className="p-3 font-semibold">Approximate Dimensions</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-[#e6dfd2]">
-                  {listing.floorPlan.rooms.map((rm) => (
-                    <tr key={rm.name}>
-                      <td className="p-3 font-medium text-[#17130e]">{rm.name}</td>
-                      <td className="p-3 font-mono text-[#4a4237]">{rm.dimensions}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </section>
-
-          {/* §07 Amenities, Features & Accessibility */}
-          <section className="rounded-3xl border border-[#e6dfd2] bg-white p-6 md:p-8 space-y-6">
-            <div>
-              <h2 className="font-serif text-2xl font-semibold text-[#17130e]">
-                Key Features, Building Amenities & Accessibility
-              </h2>
-              <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs">
-                {[...listing.features, ...listing.amenities].map((item) => (
-                  <div
-                    key={item}
-                    className="flex items-center gap-2 rounded-xl border border-[#e6dfd2] bg-[#faf7f2] px-3.5 py-2.5 text-[#4a4237]"
-                  >
-                    <CheckCircle2 className="h-4 w-4 shrink-0 text-[#94652c]" />
-                    <span>{item}</span>
+          <div className="lg:col-span-5">
+            <div className="rounded-2xl border border-white/80 bg-white/80 backdrop-blur-xl shadow-[0_14px_40px_rgba(12,56,96,0.08)] p-6 sm:p-8 space-y-5">
+              <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-[#8b8b8b]">
+                KEY PARTICULARS
+              </p>
+              <dl className="divide-y divide-black/[0.08] text-sm">
+                {[
+                  ["Developer", listing.developer],
+                  ["Building", listing.building],
+                  ["Property Type", listing.propertyType],
+                  ["Furnishing", listing.furnished],
+                  ["Parking", `${listing.parkingSpaces} allocated space(s)`],
+                  ["Pet Policy", listing.petPolicy],
+                  ["Payment Plan", listing.paymentPlan || "Standard transfer / mortgage"],
+                  ["DLD Permit", verified ? permitLabel(listing) || "Verified" : "Available on request"],
+                ].map(([k, v]) => (
+                  <div key={k} className="flex items-center justify-between gap-4 py-3">
+                    <dt className="text-[#737373]">{k}</dt>
+                    <dd className="text-right font-medium text-[#121212]">{v}</dd>
                   </div>
                 ))}
-              </div>
-            </div>
+              </dl>
 
-            <div className="border-t border-[#e6dfd2] pt-4">
-              <h3 className="text-xs font-semibold uppercase tracking-[0.2em] text-[#94652c]">
-                Step-Free & Accessibility Features
-              </h3>
-              <ul className="mt-2 flex flex-wrap gap-2 text-xs text-[#4a4237]">
-                {listing.accessibility.map((acc) => (
-                  <li
-                    key={acc}
-                    className="rounded-full border border-[#e6dfd2] bg-[#faf7f2] px-3 py-1"
-                  >
-                    {acc}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </section>
-
-          {/* §08 Dubai Listing Verification & Regulatory Compliance (Trakheesi Permit + Madmoun QR + Report Incorrect Listing) */}
-          <section className="rounded-3xl border border-[#94652c]/35 bg-[#f6ead7]/55 p-6 md:p-8">
-            <div className="flex flex-wrap items-start justify-between gap-6">
-              <div className="space-y-2 max-w-xl">
-                <div className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.22em] text-emerald-600">
-                  <ShieldCheck className="h-4 w-4" />
-                  Dubai Land Department (DLD) & RERA Compliance
+              <div className="rounded-xl border border-black/[0.08] bg-white p-4 text-xs text-[#525252]">
+                <div className="flex items-center gap-2 font-medium text-[#121212]">
+                  <ShieldCheck className="h-4 w-4 text-[#0e9f6e]" />
+                  <span>RERA ORN {SITE.reraOrn}</span>
                 </div>
-                <h2 className="font-serif text-2xl font-semibold text-[#17130e]">
-                  Trakheesi Permit & Madmoun QR Verification
-                </h2>
-                {isPermitVerified(listing) ? (
-                  <>
-                    <p className="text-xs text-[#4a4237] leading-relaxed">
-                      This listing is advertised under the Dubai Land Department Trakheesi permit below. Scan the DLD QR code on our portal listings or verify the permit number on dubailand.gov.ae.
-                    </p>
-                    <div className="mt-4 grid grid-cols-2 sm:grid-cols-3 gap-3 pt-2 text-xs">
-                      <div className="rounded-xl border border-[#e6dfd2] bg-[#faf7f2] p-3">
-                        <span className="text-[#786e60] block">Trakheesi / Project Permit</span>
-                        <strong className="mt-0.5 block font-mono text-sm text-[#94652c]">
-                          #{listing.dld.permitNumber}
-                        </strong>
-                      </div>
-                      <div className="rounded-xl border border-[#e6dfd2] bg-[#faf7f2] p-3">
-                        <span className="text-[#786e60] block">Brokerage RERA ORN</span>
-                        <strong className="mt-0.5 block font-mono text-sm text-[#17130e]">
-                          {listing.dld.orn}
-                        </strong>
-                      </div>
-                      <div className="rounded-xl border border-[#e6dfd2] bg-[#faf7f2] p-3">
-                        <span className="text-[#786e60] block">Broker BRN</span>
-                        <strong className="mt-0.5 block font-mono text-sm text-[#17130e]">
-                          {listing.dld.brn}
-                        </strong>
-                      </div>
-                      <div className="rounded-xl border border-[#e6dfd2] bg-[#faf7f2] p-3">
-                        <span className="text-[#786e60] block">Permit Validity</span>
-                        <strong className="mt-0.5 block text-[#17130e]">
-                          Until {listing.dld.permitExpiry}
-                        </strong>
-                      </div>
-                      <div className="rounded-xl border border-[#e6dfd2] bg-[#faf7f2] p-3">
-                        <span className="text-[#786e60] block">Last Checked Date</span>
-                        <strong className="mt-0.5 block text-emerald-700">
-                          {listing.lastChecked}
-                        </strong>
-                      </div>
-                      <div className="rounded-xl border border-[#e6dfd2] bg-[#faf7f2] p-3">
-                        <span className="text-[#786e60] block">Madmoun Reference</span>
-                        <strong className="mt-0.5 block font-mono text-[11px] text-[#94652c]">
-                          {listing.dld.madmounQrId}
-                        </strong>
-                      </div>
-                    </div>
-
-                    {listing.dld.escrowBank && (
-                      <p className="pt-2 text-xs text-[#94652c]">
-                        <strong>Project Escrow Account:</strong> {listing.dld.escrowBank}
-                      </p>
-                    )}
-                  </>
-                ) : (
-                  <p className="rounded-xl border border-amber-300 bg-amber-50 p-3 text-xs leading-relaxed text-amber-900">
-                    The DLD Trakheesi advertising permit for this listing is being issued or re-verified. Permit number, broker BRN and
-                    Madmoun QR are shared on request, and SWK Properties (RERA ORN {SITE.reraOrn}) does not take reservations before the
-                    permit is verified.
-                  </p>
-                )}
-
-                <div className="pt-3 flex flex-wrap items-center gap-4 text-xs">
+                <p className="mt-1.5 leading-relaxed">
+                  {verified
+                    ? `Trakheesi Permit ${listing.dld.permitNumber} · Last verified ${listing.lastChecked}.`
+                    : "Official DLD Trakheesi permit & Title Deed / Oqood verification provided prior to viewing or deposit."}{" "}
                   <a
                     href={listing.dld.verificationUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 font-semibold text-[#94652c] hover:underline"
+                    className="inline-flex items-center gap-1 font-medium text-[#121212] underline"
                   >
-                    Verify on Dubai Land Department (dubailand.gov.ae)
-                    <ExternalLink className="h-3.5 w-3.5" />
+                    DLD Portal <ExternalLink className="h-3 w-3" />
                   </a>
-                  <button
-                    type="button"
-                    onClick={() => setReportOpen((v) => !v)}
-                    className="inline-flex items-center gap-1.5 text-[#4a4237] hover:text-amber-800"
-                  >
-                    <AlertTriangle className="h-3.5 w-3.5 text-amber-700" />
-                    Report an Incorrect Listing
-                  </button>
-                </div>
-              </div>
-
-            </div>
-
-            {/* Report Incorrect Listing Form (§08) */}
-            {reportOpen && (
-              <div className="mt-5 border-t border-[#e6dfd2] pt-4">
-                {reportSubmitted ? (
-                  <p className="text-xs text-emerald-700">
-                    Thank you. Please send the email we prepared for {listing.reference}; our compliance team re-verifies reported listings within 1 business day.
-                  </p>
-                ) : (
-                  <form onSubmit={handleReportSubmit} className="space-y-3 text-xs">
-                    <p className="font-semibold text-[#94652c]">
-                      Report an issue with {listing.reference}:
-                    </p>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                      <select
-                        value={reportReason}
-                        onChange={(e) => setReportReason(e.target.value)}
-                        className="rounded-xl border border-[#e6dfd2] bg-[#faf7f2] px-3 py-2 text-[#17130e]"
-                      >
-                        <option>Price or availability update needed</option>
-                        <option>Property has been sold or leased</option>
-                        <option>Specification or floor plan correction</option>
-                        <option>Other compliance inquiry</option>
-                      </select>
-                      <input
-                        type="text"
-                        placeholder="Optional note or your contact email..."
-                        value={reportNote}
-                        onChange={(e) => setReportNote(e.target.value)}
-                        className="rounded-xl border border-[#e6dfd2] bg-[#faf7f2] px-3 py-2 text-[#17130e]"
-                      />
-                    </div>
-                    <button
-                      type="submit"
-                      className="rounded-full bg-[#17130e] px-4 py-2 text-[11px] font-bold uppercase tracking-wider text-white"
-                    >
-                      Submit Compliance Report
-                    </button>
-                  </form>
-                )}
-              </div>
-            )}
-          </section>
-
-          <MapEmbed lat={listing.lat} lng={listing.lng} zoom={15} title={`${listing.building}, ${listing.community} — map`} />
-
-          {/* §07 Neighbourhood & Transit Map */}
-          <section className="overflow-hidden rounded-3xl border border-[#e6dfd2] bg-white p-6">
-            <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
-              <div>
-                <h2 className="font-serif text-2xl font-semibold text-[#17130e]">
-                  Location & Neighbourhood Connectivity: {listing.community}
-                </h2>
-                <p className="text-xs text-[#786e60]">
-                  Coordinates: {listing.lat.toFixed(4)}° N, {listing.lng.toFixed(4)}° E
                 </p>
               </div>
-              <Link
-                href={communityHref(listing.communitySlug)}
-                className="text-xs font-semibold text-[#94652c] hover:underline"
-              >
-                Open {listing.community} Guide →
-              </Link>
             </div>
-            <NearbyWalk
-              origin={listing.building}
-              defaultTheme="classic"
-              formatWalk={(m) => `${m} min transit`}
-              hint={`Connectivity from ${listing.building} (${listing.community})`}
+          </div>
+        </div>
+      </section>
+
+      {/* Multi-Photo Gallery ("A look around, before you visit") */}
+      {listing.images.length > 1 ? (
+        <section className="bg-white/24 backdrop-blur-[2px] py-16">
+          <div className="mx-auto max-w-[1260px] px-4 sm:px-8">
+            <SectionEyebrow>GALLERY</SectionEyebrow>
+            <SplitHeading
+              primary="A look around,"
+              muted="before you visit"
+              size="md"
+              inline
+              className="mt-4"
             />
-          </section>
-        </div>
-
-        {/* Right Column: Assigned Agent Profile Card + Viewing Booking & Enquiry Form */}
-        <div className="lg:col-span-5 space-y-6 lg:sticky lg:top-24">
-          {/* Assigned Agent Card (§07, §14) */}
-          <div className="rounded-3xl border border-[#94652c]/35 bg-white p-6">
-            <div className="flex items-center justify-between gap-4">
-              <div>
-                <span className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#94652c]">
-                  Assigned Mandate Specialist
-                </span>
-                <h3 className="mt-1 font-serif text-2xl font-semibold text-[#17130e]">
-                  <Link href={`/agents/${listing.agentSlug}`} className="hover:text-[#94652c]">
-                    {listing.agentName}
-                  </Link>
-                </h3>
-                <p className="text-xs text-[#4a4237]">
-                  {listing.agentRole}
-                  {isPermitVerified(listing) ? ` · BRN ${listing.dld.brn}` : ""} · ORN {SITE.reraOrn}
-                </p>
-                <p className="mt-1 text-[11px] text-[#786e60]">
-                  Languages: {listing.agentLanguages.join(", ")}
-                </p>
-              </div>
-              <Link
-                href={`/agents/${listing.agentSlug}`}
-                className="rounded-full border border-[#94652c]/35 px-3.5 py-1.5 text-[11px] font-semibold text-[#94652c] hover:bg-[#f6ead7]"
-              >
-                View Profile
-              </Link>
+            <div className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              {listing.images.map((src, i) => (
+                <button
+                  key={`${src}-${i}`}
+                  type="button"
+                  onClick={() => {
+                    setActiveImage(i);
+                    window.scrollTo({ top: 260, behavior: "smooth" });
+                  }}
+                  className={`group cursor-pointer overflow-hidden rounded-2xl border transition-all ${
+                    activeImage === i ? "border-[#121212]" : "border-black/[0.06]"
+                  }`}
+                >
+                  <img
+                    src={src}
+                    alt={`${listing.title} view ${i + 1}`}
+                    loading="lazy"
+                    className="aspect-[4/3] w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                </button>
+              ))}
             </div>
-
-            <div className="mt-4 grid grid-cols-2 gap-2.5">
-              <a
-                href={`https://wa.me/${SITE.phoneRaw.replace("+", "")}?text=${waMessage}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() =>
-                  trackEvent("whatsapp_click", {
-                    location: "property_detail_agent_card",
-                    propertyRef: listing.reference,
-                  })
-                }
-                className="inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-500 px-4 py-3 text-xs font-bold uppercase tracking-[0.14em] text-black hover:bg-emerald-400"
-              >
-                <WhatsAppIcon className="h-4 w-4" />
-                WhatsApp Agent
-              </a>
-              <a
-                href={`tel:${listing.agentPhone}`}
-                onClick={() =>
-                  trackEvent("phone_click", {
-                    location: "property_detail_agent_card",
-                    propertyRef: listing.reference,
-                  })
-                }
-                className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#e6dfd2] bg-[#faf7f2] px-4 py-3 text-xs font-semibold uppercase tracking-[0.14em] text-[#17130e] hover:border-[#94652c]"
-              >
-                <Phone className="h-4 w-4 text-[#94652c]" />
-                Call Direct
-              </a>
-            </div>
-          </div>
-
-          {/* Viewing Booking & Property Enquiry Form (§07, §23) */}
-          <EnquiryForm
-            context="property"
-            heading={`Enquire or Book a Viewing`}
-            subheading={`Ref ${listing.reference} · Physical viewings anchored in Asia/Dubai (GST)`}
-            propertyRef={listing.reference}
-            propertyTitle={listing.title}
-            community={listing.community}
-            developer={listing.developer}
-            agentSlug={listing.agentSlug}
-            agentName={listing.agentName}
-            defaultViewingPicker={true}
-          />
-        </div>
-      </div>
-
-      {/* §07 Similar Properties */}
-      {similarListings.length > 0 && (
-        <section className="mt-16 border-t border-[#e6dfd2] pt-14">
-          <div className="mb-8 flex items-end justify-between">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#94652c]">
-                Related Verified Inventory
-              </p>
-              <h2 className="mt-1 font-serif text-3xl font-semibold text-[#17130e]">
-                Similar Properties in Dubai
-              </h2>
-            </div>
-            <Link href="/properties" className="text-xs font-semibold text-[#94652c] hover:underline">
-              Search All Inventory →
-            </Link>
-          </div>
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-            {similarListings.map((sim) => (
-              <PropertyCard key={sim.slug} listing={sim} />
-            ))}
           </div>
         </section>
-      )}
+      ) : null}
+
+      {/* 16-Item Amenities Grid */}
+      <section className="mx-auto max-w-[1260px] px-4 py-16 sm:px-8">
+        <SectionEyebrow>AMENITIES &amp; FEATURES</SectionEyebrow>
+        <SplitHeading
+          primary="Everything included"
+          muted="in the building"
+          size="md"
+          inline
+          className="mt-4"
+        />
+        <div className="mt-8 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          {allAmenities.map((item) => (
+            <div
+              key={item}
+              className="flex items-center gap-3 rounded-xl border border-black/[0.06] bg-[#f7f7f7] px-4 py-3.5 text-sm text-[#121212]"
+            >
+              <Check className="h-4 w-4 shrink-0 text-[#0e9f6e]" />
+              <span>{item}</span>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Interactive Tabbed Floor Plan & Dimensions (Avenlo Signature) */}
+      <section className="border-y border-white/60 bg-white/24 backdrop-blur-[2px] py-16">
+        <div className="mx-auto max-w-[1260px] px-4 sm:px-8">
+          <div className="flex flex-wrap items-end justify-between gap-6">
+            <div>
+              <SectionEyebrow>FLOOR PLAN &amp; DIMENSIONS</SectionEyebrow>
+              <SplitHeading
+                primary={listing.floorPlan.label}
+                muted={`${formatArea(listing.floorPlan.totalAreaSqFt)}`}
+                size="md"
+                className="mt-4"
+              />
+            </div>
+
+            <div className="flex flex-wrap gap-2">
+              {(
+                [
+                  ["layout", "Room Dimensions"],
+                  ["specs", "Area Split"],
+                  ["dld", "Accessibility & Access"],
+                ] as const
+              ).map(([key, label]) => (
+                <button
+                  key={key}
+                  type="button"
+                  onClick={() => setActiveTab(key)}
+                  className={`cursor-pointer rounded-full px-5 py-2.5 text-xs font-medium transition-colors ${
+                    activeTab === key
+                      ? "bg-[#121212] text-white"
+                      : "border border-black/10 bg-white text-[#525252] hover:text-[#121212]"
+                  }`}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="mt-8 rounded-2xl border border-white/80 bg-white/84 backdrop-blur-xl shadow-[0_14px_40px_rgba(12,56,96,0.08)] p-6 sm:p-8">
+            {activeTab === "layout" ? (
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                {listing.floorPlan.rooms.map((room) => (
+                  <div
+                    key={room.name}
+                    className="flex items-center justify-between rounded-xl border border-black/[0.06] bg-[#f7f7f7] px-5 py-4"
+                  >
+                    <span className="text-sm font-medium text-[#121212]">{room.name}</span>
+                    <span className="font-mono text-xs text-[#737373]">{room.dimensions}</span>
+                  </div>
+                ))}
+              </div>
+            ) : activeTab === "specs" ? (
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+                <div className="rounded-xl bg-[#f7f7f7] p-5">
+                  <p className="text-xs uppercase tracking-[0.18em] text-[#8b8b8b]">Internal Area</p>
+                  <p className="mt-2 text-2xl font-medium text-[#121212]">
+                    {formatArea(listing.floorPlan.internalSqFt)}
+                  </p>
+                </div>
+                <div className="rounded-xl bg-[#f7f7f7] p-5">
+                  <p className="text-xs uppercase tracking-[0.18em] text-[#8b8b8b]">Balcony / Terrace</p>
+                  <p className="mt-2 text-2xl font-medium text-[#121212]">
+                    {formatArea(listing.floorPlan.balconySqFt)}
+                  </p>
+                </div>
+                <div className="rounded-xl bg-[#121212] p-5 text-white">
+                  <p className="text-xs uppercase tracking-[0.18em] text-[#8b8b8b]">Total Suite Area</p>
+                  <p className="mt-2 text-2xl font-medium text-[#51fec0]">
+                    {formatArea(listing.floorPlan.totalAreaSqFt)}
+                  </p>
+                </div>
+              </div>
+            ) : (
+              <div className="space-y-3 text-sm text-[#4a4a4a]">
+                {listing.accessibility.map((item) => (
+                  <div key={item} className="flex items-center gap-2.5">
+                    <Check className="h-4 w-4 text-[#0e9f6e]" />
+                    <span>{item}</span>
+                  </div>
+                ))}
+                {listing.metroStation ? (
+                  <p className="pt-2 text-xs text-[#737373]">
+                    Nearest Metro: <strong className="text-[#121212]">{listing.metroStation}</strong>
+                  </p>
+                ) : null}
+              </div>
+            )}
+
+            <div className="mt-8 flex flex-wrap items-center gap-4 border-t border-black/[0.06] pt-6">
+              <BracketLink href="#enquire" variant="light" size="sm">
+                Book a Viewing
+              </BracketLink>
+              <BracketLink href={`tel:${SITE.phoneRaw}`} external variant="light" size="sm">
+                Call Us Now
+              </BracketLink>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Location Map + Advisor Enquiry */}
+      <section id="enquire" className="mx-auto max-w-[1260px] px-4 py-16 sm:px-8">
+        <div className="grid grid-cols-1 gap-10 lg:grid-cols-12">
+          <div className="lg:col-span-5 space-y-6">
+            <SectionEyebrow>THE NEIGHBOURHOOD</SectionEyebrow>
+            <h2 className="text-3xl font-medium tracking-[-0.03em] text-[#121212]">
+              {listing.community}
+            </h2>
+            <p className="text-sm leading-relaxed text-[#525252]">
+              Inspect proximity to Sheikh Zayed Road, Metro access, schools, and dining around {listing.building}.{" "}
+              <Link
+                href={communityHref(listing.communitySlug)}
+                className="font-medium text-[#121212] underline underline-offset-4"
+              >
+                Read full {listing.community} guide →
+              </Link>
+            </p>
+            <div className="overflow-hidden rounded-2xl">
+              <MapEmbed lat={listing.lat} lng={listing.lng} title={listing.building} />
+            </div>
+            <div className="rounded-2xl border border-white/80 bg-white/80 backdrop-blur-xl shadow-[0_14px_40px_rgba(12,56,96,0.08)] p-5">
+              <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-[#8b8b8b]">
+                ASSIGNED ADVISOR
+              </p>
+              <Link
+                href={`/agents/${listing.agentSlug}`}
+                className="mt-2 block text-lg font-medium text-[#121212] hover:underline"
+              >
+                {listing.agentName}
+              </Link>
+              <p className="text-xs text-[#737373]">
+                {listing.agentRole} · {listing.agentLanguages.join(", ")}
+              </p>
+            </div>
+          </div>
+
+          <div className="lg:col-span-7">
+            <EnquiryForm
+              context="property"
+              heading={`Enquire about ${listing.title}`}
+              subheading="Request verified floor plans, RERA service-charge statements, and a private viewing."
+              propertyRef={listing.reference}
+              propertyTitle={listing.title}
+              community={listing.community}
+              developer={listing.developer}
+              agentSlug={listing.agentSlug}
+              agentName={listing.agentName}
+              defaultViewingPicker
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* Similar Residences */}
+      {similarListings.length > 0 ? (
+        <section className="border-t border-white/60 bg-white/24 backdrop-blur-[2px] py-16">
+          <div className="mx-auto max-w-[1260px] px-4 sm:px-8">
+            <SectionEyebrow>MORE ON OUR BOOKS</SectionEyebrow>
+            <SplitHeading
+              primary="Similar Dubai"
+              muted="residences"
+              size="md"
+              inline
+              className="mt-4"
+            />
+            <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {similarListings.slice(0, 3).map((item) => (
+                <PropertyCard key={item.slug} listing={item} />
+              ))}
+            </div>
+          </div>
+        </section>
+      ) : null}
+
+      <CtaBanner />
     </div>
   );
 }

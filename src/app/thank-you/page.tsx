@@ -1,95 +1,83 @@
-import type { Metadata } from "next"
-import Link from "next/link"
-import { BookOpen, CheckCircle2, Clock, Phone, ShieldCheck } from "lucide-react"
-import { SITE } from "@/lib/swk"
-import { buildMetadata } from "@/lib/seo"
+import type { Metadata } from "next";
+import { Check } from "lucide-react";
+import { SITE } from "@/lib/swk";
+import { buildMetadata } from "@/lib/seo";
+import { BracketLink } from "@/components/avenlo/bracket-button";
+import { SectionEyebrow } from "@/components/avenlo/motion";
 
 export const metadata: Metadata = buildMetadata({
-  title: "Enquiry Confirmed — Thank You | SWK Properties Dubai",
+  title: "Enquiry Confirmed — Thank You",
   description:
-    "Your enquiry or viewing request has been logged by SWK Properties (RERA ORN 51517). Review your reference number, response SLA, and next steps.",
+    "Your enquiry has been logged by SWK Properties (RERA ORN 51517). Review your reference number and next steps.",
   path: "/thank-you",
   noIndex: true,
-})
+});
 
 export default async function ThankYouPage({
   searchParams,
 }: {
-  searchParams: Promise<{ ref?: string; agent?: string; backup?: string }>
+  searchParams: Promise<{ ref?: string; agent?: string; backup?: string }>;
 }) {
-  const sp = await searchParams
-  const referenceId = sp.ref || "SWK-ENQ-VERIFIED"
-  const assignedAgent = sp.agent || "Mohammad Haseeb (Senior Property Consultant)"
-  const backupAgent = sp.backup || "SWK Sheikh Zayed Road Desk"
+  const sp = await searchParams;
+  const referenceId = sp.ref || "SWK-ENQ-VERIFIED";
+  const assignedAgent = sp.agent || "Mohammad Haseeb (Sales & Operations Manager)";
+  const backupAgent = sp.backup || "SWK Sheikh Zayed Road Desk";
 
   return (
-    <div className="min-h-screen bg-[#faf7f2] text-[#17130e] py-20">
-      <div className="mx-auto max-w-3xl px-4">
-        <div className="rounded-3xl border border-[#94652c]/40 bg-white p-8 md:p-12 text-center space-y-6">
-          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-[#f6ead7] text-[#94652c]">
-            <CheckCircle2 className="h-9 w-9" />
+    <section className="flex min-h-[75vh] items-center justify-center bg-white/20 backdrop-blur-[2px] bg-arch-grid-fade px-4 py-20 sm:px-8">
+      <div className="w-full max-w-2xl rounded-2xl border border-white/80 bg-white/86 backdrop-blur-xl shadow-[0_18px_48px_rgba(12,56,96,0.09)] p-8 sm:p-12 text-center shadow-[0_24px_60px_rgba(18,18,18,0.06)]">
+        <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-[#121212] text-[#51fec0]">
+          <Check className="h-6 w-6" />
+        </div>
+
+        <div className="mt-6">
+          <SectionEyebrow align="center">REFERENCE · {referenceId}</SectionEyebrow>
+        </div>
+
+        <h1 className="mt-5 text-[36px] sm:text-[48px] font-medium leading-[1.05] tracking-[-0.04em] text-[#121212]">
+          Your request is with our{" "}
+          <span className="italic font-light">Dubai desk</span>
+        </h1>
+
+        <p className="mx-auto mt-4 max-w-lg text-sm sm:text-base leading-relaxed text-[#525252]">
+          Routed to <strong className="font-medium text-[#121212]">{assignedAgent}</strong> (backup coverage: {backupAgent}) at 25th Floor, Al Saqr Building, Sheikh Zayed Road.
+        </p>
+
+        <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 rounded-2xl bg-[#f7f7f7] p-5 text-left text-xs text-[#525252]">
+          <div>
+            <p className="font-medium text-[#121212]">Response Window</p>
+            <p className="mt-1 leading-relaxed">
+              Within 2 hours during Dubai business hours ({SITE.hours.full}), or first thing the next business morning.
+            </p>
           </div>
-
-          <span className="inline-flex items-center gap-2 rounded-full border border-[#94652c]/35 bg-[#f6ead7] px-4 py-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-[#94652c]">
-            <ShieldCheck className="h-3.5 w-3.5" /> Reference: {referenceId}
-          </span>
-
-          <h1 className="font-serif text-3xl md:text-5xl font-semibold text-[#17130e]">
-            Thank You — Your Request Is With Our Advisory Desk
-          </h1>
-
-          <p className="text-sm md:text-base text-[#4a4237] max-w-xl mx-auto leading-relaxed">
-            Your enquiry has been routed to <strong className="text-[#94652c]">{assignedAgent}</strong> (with backup coverage by{" "}
-            <strong className="text-[#17130e]">{backupAgent}</strong>) at our Sheikh Zayed Road headquarters.
-          </p>
-
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 text-left rounded-2xl border border-[#e6dfd2] bg-[#faf7f2] p-5 text-xs">
-            <div className="flex items-start gap-3">
-              <Clock className="h-4 w-4 shrink-0 text-[#94652c] mt-0.5" />
-              <div>
-                <strong className="block text-[#17130e]">Expected Response SLA</strong>
-                <span className="text-[#4a4237]">
-                  Within 2 hours during Dubai business hours (Mon–Sat, 9:00 AM – 7:00 PM GST / UTC+4), or first thing the next business morning.
-                </span>
-              </div>
-            </div>
-            <div className="flex items-start gap-3">
-              <Phone className="h-4 w-4 shrink-0 text-[#94652c] mt-0.5" />
-              <div>
-                <strong className="block text-[#17130e]">Need Immediate Assistance?</strong>
-                <span className="text-[#4a4237]">
-                  Call <a href={`tel:${SITE.phoneTel}`} className="text-[#94652c] underline">{SITE.phone}</a> or message us on WhatsApp quoting <span className="font-mono text-[#94652c]">{referenceId}</span>.
-                </span>
-              </div>
-            </div>
-          </div>
-
-          <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
-            <a
-              href={`${SITE.whatsapp}?text=${encodeURIComponent(
-                `Hello SWK Properties, I just submitted enquiry ${referenceId} and would like to connect on WhatsApp.`
-              )}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="rounded-full bg-[#17130e] px-6 py-3 text-xs font-bold uppercase tracking-[0.18em] text-white hover:bg-[#f3dfb1]"
-            >
-              Continue on WhatsApp →
-            </a>
-            <Link
-              href="/properties"
-              className="rounded-full border border-[#e6dfd2] px-6 py-3 text-xs font-semibold uppercase tracking-[0.18em] text-[#17130e] hover:border-[#94652c]"
-            >
-              Browse Verified Properties
-            </Link>
-            <Link
-              href="/guides/buying"
-              className="inline-flex items-center gap-1.5 rounded-full border border-[#e6dfd2] px-5 py-3 text-xs font-semibold uppercase tracking-[0.18em] text-[#94652c]"
-            >
-              <BookOpen className="h-3.5 w-3.5" /> Read Dubai Buying Guide
-            </Link>
+          <div>
+            <p className="font-medium text-[#121212]">Direct Desk</p>
+            <p className="mt-1 leading-relaxed">
+              Call{" "}
+              <a href={`tel:${SITE.phoneTel}`} className="font-medium text-[#121212] underline">
+                {SITE.phone}
+              </a>{" "}
+              quoting <span className="font-mono">{referenceId}</span>.
+            </p>
           </div>
         </div>
+
+        <div className="mt-9 flex flex-wrap items-center justify-center gap-4">
+          <BracketLink
+            href={`${SITE.whatsapp}?text=${encodeURIComponent(
+              `Hello SWK Properties, I just submitted enquiry ${referenceId} and would like to connect.`
+            )}`}
+            external
+            variant="dark"
+            size="md"
+          >
+            Continue on WhatsApp
+          </BracketLink>
+          <BracketLink href="/off-plan" variant="light" size="md">
+            Explore 2026 Launches
+          </BracketLink>
+        </div>
       </div>
-    </div>
-  )
+    </section>
+  );
 }

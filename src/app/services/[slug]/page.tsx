@@ -1,12 +1,15 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { CheckCircle2, ShieldCheck, Users } from "lucide-react";
+import { ArrowUpRight, Check } from "lucide-react";
 import { getServicePage, servicePages } from "@/lib/services";
 import { EnquiryForm } from "@/components/site/enquiry-form";
+import { Faq } from "@/components/site/faq";
 import { JsonLd } from "@/components/seo/json-ld";
 import { breadcrumbLd, buildMeta, faqLd, serviceLd } from "@/lib/seo";
-import { SITE } from "@/lib/swk";
+import { AvenloPageHeader } from "@/components/avenlo/page-header";
+import { BracketLink } from "@/components/avenlo/bracket-button";
+import { CtaBanner, SectionEyebrow, SplitHeading } from "@/components/avenlo/motion";
 
 export function generateStaticParams() {
   return servicePages.map((s) => ({ slug: s.slug }));
@@ -28,16 +31,11 @@ export async function generateMetadata({
   }
 
   return buildMeta({
-    title: `${svc.title} in Dubai | Process, Scope & Fees`,
+    title: `${svc.title} in Dubai | SWK Advisory`,
     description: `${svc.tagline}. ${svc.description}`,
     path: `/services/${svc.slug}`,
     image: svc.heroImage,
-    keywords: [
-      svc.title,
-      `${svc.shortTitle} Dubai`,
-      `SWK Properties ${svc.shortTitle}`,
-      "RERA licensed brokerage Dubai",
-    ],
+    keywords: svc.keywords,
   });
 }
 
@@ -51,7 +49,7 @@ export default async function ServiceDetailPage({
   if (!svc) notFound();
 
   return (
-    <>
+    <div className="bg-transparent">
       <JsonLd
         data={[
           breadcrumbLd([
@@ -68,139 +66,164 @@ export default async function ServiceDetailPage({
         ]}
       />
 
-      <div className="mx-auto max-w-7xl px-4 py-10 space-y-14">
-        <nav aria-label="Breadcrumb" className="flex flex-wrap items-center gap-2 text-xs text-[#786e60]">
-          <Link href="/" className="hover:text-[#94652c]">Home</Link>
-          <span>/</span>
-          <Link href="/services" className="hover:text-[#94652c]">Services</Link>
-          <span>/</span>
-          <span className="text-[#94652c]">{svc.shortTitle}</span>
-        </nav>
+      <AvenloPageHeader
+        eyebrow={`SERVICE · ${svc.eyebrow.toUpperCase()}`}
+        title={svc.title}
+        lead={svc.tagline}
+        breadcrumb={[
+          { label: "Home", href: "/" },
+          { label: "Services", href: "/services" },
+          { label: svc.title },
+        ]}
+        actions={
+          <BracketLink href="#enquire" variant="light" size="md">
+            {svc.ctaLabel}
+          </BracketLink>
+        }
+      />
 
-        {/* §12 Service Header */}
-        <section className="rounded-3xl border border-[#e6dfd2] bg-white p-6 md:p-10">
-          <div className="grid grid-cols-1 gap-8 lg:grid-cols-12 items-center">
-            <div className="lg:col-span-7 space-y-4">
-              <span className="inline-flex items-center gap-2 rounded-full border border-[#94652c]/35 bg-[#f6ead7] px-3.5 py-1 text-xs font-semibold uppercase tracking-[0.22em] text-[#94652c]">
-                <ShieldCheck className="h-4 w-4" />
-                SWK Practice Area · RERA ORN {SITE.reraOrn}
-              </span>
-              <h1 className="font-serif text-3xl md:text-5xl font-semibold text-[#17130e]">
-                {svc.title}
-              </h1>
-              <p className="text-base md:text-lg font-medium text-[#94652c]">{svc.tagline}</p>
-              <p className="text-sm md:text-base text-[#4a4237] leading-relaxed">
-                {svc.description}
-              </p>
-            </div>
-            <div className="lg:col-span-5 overflow-hidden rounded-2xl border border-[#e6dfd2]">
+      {/* Avenlo 4-Row Metadata Table + Editorial Intro */}
+      <section className="mx-auto max-w-[1260px] px-4 py-16 sm:px-8">
+        <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 items-start">
+          <div className="lg:col-span-6 space-y-6">
+            <div className="overflow-hidden rounded-2xl bg-[#f5f5f5]">
               <img
                 src={svc.heroImage}
                 alt={svc.title}
-                className="h-64 md:h-80 w-full object-cover"
+                className="aspect-[16/10] w-full object-cover"
               />
             </div>
-          </div>
-        </section>
-
-        {/* §12 Who It Is For + What Is Included + Fee Transparency */}
-        <section className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-          <div className="rounded-3xl border border-[#e6dfd2] bg-white p-6">
-            <h2 className="font-serif text-2xl font-semibold text-[#17130e] flex items-center gap-2">
-              <Users className="h-5 w-5 text-[#94652c]" />
-              Who This Service Is For
-            </h2>
-            <ul className="mt-4 space-y-3 text-xs md:text-sm text-[#4a4237]">
-              {svc.whoItIsFor.map((item) => (
-                <li key={item} className="flex items-start gap-2">
-                  <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-[#17130e]" />
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
+            <p className="text-[16px] leading-[1.7] text-[#4a4a4a]">{svc.intro}</p>
           </div>
 
-          <div className="rounded-3xl border border-[#e6dfd2] bg-white p-6">
-            <h2 className="font-serif text-2xl font-semibold text-[#17130e] flex items-center gap-2">
-              <CheckCircle2 className="h-5 w-5 text-emerald-600" />
-              What Is Included
-            </h2>
-            <ul className="mt-4 space-y-3 text-xs md:text-sm text-[#4a4237]">
-              {svc.whatIsIncluded.map((item) => (
-                <li key={item} className="flex items-start gap-2">
-                  <CheckCircle2 className="h-4 w-4 shrink-0 text-[#94652c] mt-0.5" />
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="rounded-3xl border border-[#94652c]/35 bg-[#16140f] p-6">
-            <h2 className="font-serif text-2xl font-semibold text-[#17130e] flex items-center gap-2">
-              <ShieldCheck className="h-5 w-5 text-[#94652c]" />
-              Fee & Regulatory Transparency
-            </h2>
-            <p className="mt-4 text-xs md:text-sm text-[#4a4237] leading-relaxed">
-              {svc.feeTransparency}
-            </p>
-            <div className="mt-5 rounded-2xl border border-[#e6dfd2] bg-[#faf7f2] p-3.5 text-xs text-[#94652c]">
-              No hidden retainers. All third-party government fees (DLD, Trustee, Ejari, NOC) are receipted directly at official tariff rates.
+          <div className="lg:col-span-6">
+            <div className="rounded-2xl border border-white/80 bg-white/80 backdrop-blur-xl shadow-[0_14px_40px_rgba(12,56,96,0.08)] p-6 sm:p-8">
+              <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-[#8b8b8b]">
+                MANDATE SPECIFICATION
+              </p>
+              <dl className="mt-4 divide-y divide-black/[0.08] text-sm">
+                <div className="py-4">
+                  <dt className="text-xs font-medium uppercase tracking-[0.14em] text-[#8b8b8b]">
+                    Best For
+                  </dt>
+                  <dd className="mt-1.5 text-[#121212]">{svc.whoFor.join(" · ")}</dd>
+                </div>
+                <div className="py-4">
+                  <dt className="text-xs font-medium uppercase tracking-[0.14em] text-[#8b8b8b]">
+                    Coverage
+                  </dt>
+                  <dd className="mt-1.5 text-[#121212]">
+                    Dubai, Abu Dhabi, Sharjah, Ras Al Khaimah &amp; Umm Al Quwain
+                  </dd>
+                </div>
+                <div className="py-4">
+                  <dt className="text-xs font-medium uppercase tracking-[0.14em] text-[#8b8b8b]">
+                    Stages
+                  </dt>
+                  <dd className="mt-1.5 text-[#121212]">
+                    {svc.process.length} structured milestones from brief to completion
+                  </dd>
+                </div>
+                <div className="py-4">
+                  <dt className="text-xs font-medium uppercase tracking-[0.14em] text-[#8b8b8b]">
+                    Fee Transparency
+                  </dt>
+                  <dd className="mt-1.5 leading-relaxed text-[#525252]">{svc.fees}</dd>
+                </div>
+              </dl>
             </div>
           </div>
-        </section>
+        </div>
 
-        {/* §12 Step-by-Step Process */}
-        <section className="rounded-3xl border border-[#e6dfd2] bg-white p-6 md:p-10">
-          <p className="text-xs font-semibold uppercase tracking-[0.26em] text-[#94652c]">
-            Documented Workflow
-          </p>
-          <h2 className="mt-1 font-serif text-3xl md:text-4xl font-semibold text-[#17130e]">
-            Step-by-Step {svc.shortTitle} Process
-          </h2>
+        {/* Scope Deliverables & Step-by-Step Process */}
+        <div className="mt-16 grid grid-cols-1 gap-8 lg:grid-cols-12">
+          <div className="lg:col-span-6 rounded-2xl border border-white/80 bg-white/84 backdrop-blur-xl shadow-[0_16px_44px_rgba(12,56,96,0.08)] p-7 sm:p-8">
+            <SectionEyebrow>WHAT IS INCLUDED</SectionEyebrow>
+            <ul className="mt-6 space-y-3.5 text-sm text-[#121212]">
+              {svc.scope.map((item) => (
+                <li key={item} className="flex items-start gap-3">
+                  <Check className="mt-0.5 h-4 w-4 shrink-0 text-[#0e9f6e]" />
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
 
-          <div className="mt-8 grid grid-cols-1 gap-5 md:grid-cols-5">
-            {svc.steps.map((st, idx) => (
-              <div
-                key={st.title}
-                className="rounded-2xl border border-[#e6dfd2] bg-[#faf7f2] p-5 flex flex-col justify-between"
-              >
-                <div>
-                  <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-[#17130e] text-xs font-bold text-white">
-                    0{idx + 1}
+          <div className="lg:col-span-6 rounded-2xl border border-white/80 bg-white/80 backdrop-blur-xl shadow-[0_14px_40px_rgba(12,56,96,0.08)] p-7 sm:p-8">
+            <SectionEyebrow>HOW IT RUNS</SectionEyebrow>
+            <ol className="mt-6 space-y-4">
+              {svc.process.map((step, i) => (
+                <li key={step.step} className="flex items-start gap-4">
+                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-dashed border-[#cfcfcf] bg-white font-mono text-xs text-[#121212]">
+                    0{i + 1}
                   </span>
-                  <h3 className="mt-3 font-serif text-xl font-semibold text-[#17130e]">
-                    {st.title}
-                  </h3>
-                  <p className="mt-2 text-xs text-[#4a4237] leading-relaxed">{st.body}</p>
-                </div>
-              </div>
-            ))}
+                  <div>
+                    <p className="text-sm font-medium text-[#121212]">{step.step}</p>
+                    <p className="mt-1 text-xs leading-relaxed text-[#666666]">{step.text}</p>
+                  </div>
+                </li>
+              ))}
+            </ol>
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* §12 Service FAQs */}
-        <section className="rounded-3xl border border-[#e6dfd2] bg-white p-6 md:p-10">
-          <h2 className="font-serif text-2xl md:text-3xl font-semibold text-[#17130e]">
-            Frequently Asked Questions: {svc.shortTitle}
-          </h2>
-          <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2">
-            {svc.faqs.map((f) => (
-              <div key={f.q} className="rounded-2xl border border-[#e6dfd2] bg-[#faf7f2] p-5">
-                <h3 className="font-serif text-lg font-semibold text-[#94652c]">{f.q}</h3>
-                <p className="mt-2 text-xs md:text-sm text-[#4a4237] leading-relaxed">{f.a}</p>
-              </div>
-            ))}
-          </div>
-        </section>
+      {svc.faqs.length > 0 ? (
+        <Faq
+          items={svc.faqs}
+          eyebrow={`${svc.eyebrow.toUpperCase()} QUESTIONS`}
+          primary="Common questions"
+          muted="about this desk"
+          compact
+        />
+      ) : null}
 
-        <section className="mx-auto max-w-4xl">
-          <EnquiryForm
-            context={svc.slug === "property-management" || svc.slug === "leasing-rental" ? "renting-out" : "general"}
-            heading={svc.ctaLabel}
-            subheading={`Speak directly with our ${svc.shortTitle} desk at Al Saqr Business Tower, Sheikh Zayed Road.`}
+      {/* Direct Service Enquiry */}
+      <section id="enquire" className="mx-auto max-w-4xl px-4 py-16 sm:px-8">
+        <EnquiryForm
+          context="advisory"
+          subject={svc.title}
+          heading={svc.ctaLabel}
+          subheading="Tell us your brief and a dedicated SWK advisor will reply within one Dubai business day."
+        />
+      </section>
+
+      {/* Bottom Numbered 01-08 Sibling Services Cross-Links (Avenlo Pattern) */}
+      <section className="border-t border-white/60 bg-white/24 backdrop-blur-[2px] py-16">
+        <div className="mx-auto max-w-[1260px] px-4 sm:px-8">
+          <SectionEyebrow>ALL ADVISORY DESKS</SectionEyebrow>
+          <SplitHeading
+            primary="Explore our other"
+            muted="seven desks"
+            size="md"
+            inline
+            className="mt-4"
           />
-        </section>
-      </div>
-    </>
+          <div className="mt-8 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            {servicePages.map((s, idx) => (
+              <Link
+                key={s.slug}
+                href={`/services/${s.slug}`}
+                className={`flex items-center justify-between rounded-xl border p-4 text-sm font-medium transition-colors ${
+                  s.slug === svc.slug
+                    ? "border-[#121212] bg-[#121212] text-white"
+                    : "border-black/[0.07] bg-white text-[#121212] hover:border-[#121212]"
+                }`}
+              >
+                <span>
+                  <span className="mr-2 font-mono text-xs opacity-60">
+                    {String(idx + 1).padStart(2, "0")}
+                  </span>
+                  {s.title}
+                </span>
+                <ArrowUpRight className="h-3.5 w-3.5 shrink-0 opacity-60" />
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <CtaBanner />
+    </div>
   );
 }

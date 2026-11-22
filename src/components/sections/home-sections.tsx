@@ -1,1596 +1,1501 @@
-"use client"
+"use client";
 
-import { communityHref } from "@/lib/communities";
-import * as React from "react"
-import Link from "next/link"
-import { AnimatePresence, motion } from "framer-motion"
+import React, { useMemo, useState } from "react";
+import Link from "next/link";
+import { AnimatePresence, motion } from "framer-motion";
+import { ArrowRight, ArrowUpRight, Play, X } from "lucide-react";
 import {
-  ArrowRight,
-  ArrowUpRight,
-  Award,
-  Building2,
-  CheckCircle2,
-  Compass,
-  FileCheck2,
-  Globe,
-  Home,
-  KeyRound,
-  Landmark,
-  MapPin,
-  Phone,
-  ShieldCheck,
-  TrendingUp,
-  X,
-} from "lucide-react"
-
-import DishOrbitCarousel from "@/components/ui/dish-orbit-carousel"
-import InteractiveSelector from "@/components/ui/interactive-selector"
-import { TestimonialInfiniteMarquee } from "@/components/ui/infinite-moving-cards"
-import { SectionHeading } from "@/components/site/site-footer"
-import {
-  SITE,
   communities,
-  gallery,
-  horizontalTestimonials,
-  services,
+  SITE,
+  stats,
   team,
   testimonials,
-} from "@/lib/swk"
-import { WhatsAppIcon } from "@/components/site/whatsapp-icon";
+  horizontalTestimonials,
+} from "@/lib/swk";
+import { developers, projects, type Project } from "@/lib/developers";
+import { blogIndex } from "@/lib/blog";
+import { BracketLink } from "@/components/avenlo/bracket-button";
+import {
+  BlurReveal,
+  LiveStatusDot,
+  ScrollRevealStatement,
+  SectionEyebrow,
+  SplitHeading,
+} from "@/components/avenlo/motion";
+import { SpotlightCard } from "@/components/ui/spotlight-card";
+import {
+  GalleryHoverCarousel,
+  type GalleryHoverCarouselItem,
+} from "@/components/ui/gallery-hover-carousel";
+import { LogoCloudMarquee } from "@/components/ui/logo-cloud-marquee";
+import { CommunityFlipCard } from "@/components/ui/perspective-flip-card";
+import {
+  AnimatedTestimonials,
+  type Testimonial,
+} from "@/components/ui/animated-testimonials";
+import {
+  InteractiveImageGallery,
+  type GalleryItem,
+} from "@/components/ui/interactive-image-gallery";
+import { HoverExpand, type HoverExpandItem } from "@/components/ui/hover-expand";
+import {
+  SignatureHorizontalDeck,
+  type SignatureDeckItem,
+} from "@/components/ui/signature-horizontal-deck";
 
-/* ------------------------------------------------------------------ Dish Orbit Carousel Dubai Real Estate Hero (21st.dev kedhareswer/dish-orbit-carousel) */
-export function Hero() {
-  return (
-    <div className="relative bg-[#0e0b08]">
-      <DishOrbitCarousel />
-    </div>
-  )
-}
+/* -------------------------------------------------------------------------- */
+/* 01. ACTIVE ARCHITECTURAL HERO OVER LIVE 21ST.DEV MESH DRIFT SHADER WAVES   */
+/* -------------------------------------------------------------------------- */
+export function AvenloHero() {
+  const [briefOpen, setBriefOpen] = useState(false);
 
-/* ----------------------------------------------------------------- TrustBar (18+ Years, 27+ Developers, 108+ Verified Projects — No RERA Number) */
-export function TrustBar() {
-  const items = [
-    ["18+", "Years of Experience"],
-    ["27+", "Partner Developers"],
-    ["108+", "Verified Projects"],
-    ["5", "UAE Emirates Covered"],
-  ]
   return (
-    <section className="border-y border-[#e6dfd2] bg-white">
-      <div className="mx-auto grid max-w-7xl grid-cols-2 gap-y-8 px-4 py-10 md:grid-cols-4 md:px-6">
-        {items.map(([n, l]) => (
-          <div key={l} className="text-center">
-            <div className="font-hero-raleway font-light text-4xl text-[#17130e] md:text-5xl">
-              {n}
-            </div>
-            <div className="mt-2 text-xs font-bold tracking-[0.22em] text-[#94652c] uppercase">
-              {l}
-            </div>
+    <section className="relative overflow-hidden bg-transparent pt-14 pb-0 sm:pt-20">
+      {/* Subtle Architectural Grid Hairlines + Crisp Editorial Contrast Veil (Lets Live Waves Shine!) */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 z-0 bg-arch-grid opacity-55"
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 top-0 z-0 h-[520px] bg-[radial-gradient(ellipse_at_top,rgba(255,255,255,0.62)_0%,rgba(255,255,255,0.16)_58%,transparent_100%)]"
+      />
+
+      <div className="relative z-10 mx-auto max-w-[1260px] px-4 sm:px-8">
+        {/* Centered Eyebrow + Monumental Mixed Roman/Italic H1 */}
+        <div className="mx-auto max-w-5xl text-center">
+          <div className="inline-flex items-center gap-2.5 rounded-full border border-white/80 bg-white/72 px-4 py-1.5 shadow-[0_8px_24px_rgba(12,56,96,0.08)] backdrop-blur-xl">
+            <span className="relative flex h-2 w-2" aria-hidden="true">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#0e9f6e] opacity-75" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-[#0e9f6e]" />
+            </span>
+            <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#0c233a]">
+              RERA ORN {SITE.reraOrn} · DUBAI &amp; UAE REAL ESTATE
+            </span>
           </div>
-        ))}
-      </div>
-    </section>
-  )
-}
 
-/* ----------------------------------------------------------- Communities (Continuous Infinite Marquee Animation) */
-const EXTRA_UAE_COMMUNITIES = [
-  {
-    id: "dubai-south-azizi-venice",
-    slug: "dubai-south",
-    name: "Dubai South & Azizi Venice",
-    blurb: "Crystal lagoon living beside Al Maktoum International Airport and Expo City Dubai.",
-    image: "/img/projects/azizi/azizi-venice.webp",
-  },
-  {
-    id: "the-oasis-dubailand",
-    slug: "dubai-hills-estate",
-    name: "The Oasis & DAMAC Islands",
-    blurb: "Low-density waterfront villas, swimmable canals, and tropical island masterplans in Dubailand.",
-    image: "/img/projects/damac/damac-islands.webp",
-  },
-  {
-    id: "al-marjan-island-rak",
-    slug: "palm-jumeirah",
-    name: "Al Marjan Island & Al Hamra (RAK)",
-    blurb: "Ras Al Khaimah's freehold coral islands, Address beachfront towers, and championship golf marina.",
-    image: "/img/projects/emaar/avarra-by-palace.webp",
-  },
-  {
-    id: "yas-saadiyat-abu-dhabi",
-    slug: "dubai-creek-harbour",
-    name: "Yas & Saadiyat Island (Abu Dhabi)",
-    blurb: "Manchester City Yas Residences, museum district lagoons, and waterfront canal homes.",
-    image: "/img/projects/aldar/yas-bay.webp",
-  },
-  {
-    id: "siniya-island-uaq",
-    slug: "dubai-marina",
-    name: "Siniya Island & Downtown UAQ",
-    blurb: "Sobha Realty's natural mangrove island villas and 11-km coastal masterplan in Umm Al Quwain.",
-    image: "/img/projects/sobha/sobha-sanctuary.webp",
-  },
-]
+          <h1 className="mt-7 text-[46px] sm:text-[74px] md:text-[102px] lg:text-[124px] font-medium leading-[0.95] tracking-[-0.048em] text-[#0a1624] drop-shadow-[0_1px_0_rgba(255,255,255,0.5)]">
+            Own the{" "}
+            <span className="italic font-light text-[#0f3457]">skyline</span>
+            <br />
+            before it rises
+          </h1>
 
-export function Communities() {
-  const allCommunityCards = [
-    ...communities.map((c) => ({
-      id: c.id,
-      name: c.name,
-      blurb: c.blurb,
-      href: communityHref(c.slug),
-      image: c.image,
-    })),
-    ...EXTRA_UAE_COMMUNITIES.map((c) => ({
-      id: c.id,
-      name: c.name,
-      blurb: c.blurb,
-      href: `/off-plan`,
-      image: c.image,
-    })),
-  ]
-
-  const row1 = [...allCommunityCards, ...allCommunityCards]
-  const row2 = [...allCommunityCards.slice().reverse(), ...allCommunityCards.slice().reverse()]
-
-  return (
-    <section id="communities" className="scroll-mt-20 border-b border-[#e6dfd2] bg-white py-24 overflow-hidden">
-      <div className="mx-auto max-w-7xl px-4 md:px-6 mb-12 flex flex-wrap items-end justify-between gap-6">
-        <div>
-          <p className="text-xs font-bold uppercase tracking-[0.26em] text-[#94652c]">
-            03 · Freehold Neighbourhoods &amp; Island Masterplans
-          </p>
-          <h2 className="mt-2 font-serif text-3xl md:text-5xl font-semibold text-[#17130e] leading-[1.08]">
-            Explore Dubai &amp; UAE Communities
-          </h2>
-          <p className="mt-2.5 max-w-2xl text-sm md:text-base text-[#4a4237] leading-relaxed">
-            From Downtown Dubai, Dubai Hills Estate, and Dubai South to Yas Island, Masaar in Sharjah, Siniya Island, and Al Marjan Island—inspect the districts our team advises on daily.
-          </p>
-        </div>
-        <Link
-          href="/communities"
-          className="inline-flex items-center gap-2 rounded-full bg-[#17130e] px-7 py-3.5 text-xs font-bold uppercase tracking-[0.18em] text-white transition hover:bg-[#94652c]"
-        >
-          <span>All Community Guides</span>
-          <ArrowRight className="h-4 w-4 text-[#dcb888]" />
-        </Link>
-      </div>
-
-      <style>{`
-        @keyframes swk-marquee-left {
-          0% { transform: translateX(0%); }
-          100% { transform: translateX(-50%); }
-        }
-        @keyframes swk-marquee-right {
-          0% { transform: translateX(-50%); }
-          100% { transform: translateX(0%); }
-        }
-        .swk-track-left {
-          display: flex;
-          width: max-content;
-          animation: swk-marquee-left 120s linear infinite;
-        }
-        .swk-track-right {
-          display: flex;
-          width: max-content;
-          animation: swk-marquee-right 132s linear infinite;
-        }
-        .swk-track-left:hover,
-        .swk-track-right:hover {
-          animation-play-state: paused;
-        }
-      `}</style>
-
-      {/* Row 1: Continuous Infinite Marquee Moving Left */}
-      <div className="relative w-full overflow-hidden py-2">
-        <div className="swk-track-left gap-6 px-4">
-          {row1.map((item, idx) => (
+          <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-5">
+            <BracketLink href="/contact" variant="light" size="lg">
+              Work With Us
+            </BracketLink>
             <Link
-              key={`${item.id}-r1-${idx}`}
-              href={item.href}
-              className="group relative flex h-[320px] w-[360px] shrink-0 flex-col justify-end overflow-hidden rounded-3xl border border-[#e6dfd2] bg-[#17130e] p-6 text-white shadow-md transition-all duration-300 hover:-translate-y-1 hover:border-[#94652c]"
-            >
-              <img
-                src={item.image}
-                alt={item.name}
-                className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#17130e]/95 via-[#17130e]/40 to-transparent" />
-              <div className="relative z-10">
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-[#dcb888]/20 border border-[#dcb888]/40 px-3 py-0.5 text-[10px] font-bold uppercase tracking-[0.18em] text-[#dcb888]">
-                  <MapPin className="h-3 w-3" />
-                  Freehold Corridor
-                </span>
-                <h3 className="mt-2 font-serif text-2xl font-semibold text-white group-hover:text-[#dcb888]">
-                  {item.name}
-                </h3>
-                <p className="mt-1 line-clamp-2 text-xs text-white/85 leading-relaxed">
-                  {item.blurb}
-                </p>
-              </div>
-            </Link>
-          ))}
-        </div>
-      </div>
-
-      {/* Row 2: Continuous Counter-Scrolling Marquee Moving Right */}
-      <div className="relative mt-6 w-full overflow-hidden py-2">
-        <div className="swk-track-right gap-6 px-4">
-          {row2.map((item, idx) => (
-            <Link
-              key={`${item.id}-r2-${idx}`}
-              href={item.href}
-              className="group flex w-[380px] shrink-0 items-center gap-4 rounded-2xl border border-[#e6dfd2] bg-[#faf7f2] p-3.5 transition hover:border-[#94652c] hover:bg-white hover:shadow-md"
-            >
-              <img
-                src={item.image}
-                alt={item.name}
-                className="h-20 w-24 shrink-0 rounded-xl object-cover"
-              />
-              <div className="min-w-0 flex-1">
-                <div className="flex items-center justify-between gap-2">
-                  <h4 className="truncate font-serif text-lg font-semibold text-[#17130e] group-hover:text-[#94652c]">
-                    {item.name}
-                  </h4>
-                  <ArrowUpRight className="h-4 w-4 shrink-0 text-[#94652c]" />
-                </div>
-                <p className="mt-1 line-clamp-2 text-xs text-[#4a4237]">
-                  {item.blurb}
-                </p>
-              </div>
-            </Link>
-          ))}
-        </div>
-      </div>
-    </section>
-  )
-}
-
-/* ---------------------------------------------------------------- Aerial (Interactive Aerial Masterplan & Corridor Explorer) */
-const AERIAL_ZONES = [
-  {
-    id: "dubai-central",
-    badge: "Central Spine · Sheikh Zayed Road & Downtown",
-    title: "Downtown Dubai, Business Bay & Sobha Century",
-    emirate: "Dubai",
-    image: "/img/communities/downtown-dubai.webp",
-    priceBand: "AED 1.85M – 45M+",
-    paymentPlans: "60/40 · 70/30 · 80/20",
-    flagshipLaunches: [
-      "Binghatti Maybach Mercedes-Benz Places",
-      "Sobha Century (Sheikh Zayed Road)",
-      "Samana Downtown One",
-      "Avarra by Palace (Emaar)",
-    ],
-    summary:
-      "The vertical spine of Dubai stretching from our 27th-floor headquarters at Al Saqr Business Tower through DIFC and Burj Khalifa to the Dubai Water Canal. High global liquidity, year-round corporate tenant demand, and iconic branded towers.",
-    hotspots: [
-      { x: "34%", y: "42%", label: "Binghatti Maybach · Downtown" },
-      { x: "58%", y: "55%", label: "Samana Downtown One" },
-      { x: "22%", y: "66%", label: "Sobha Century · SZR Corridor" },
-    ],
-  },
-  {
-    id: "dubai-lagoon",
-    badge: "Lagoon & Villa Sanctuaries · Dubai South & Dubailand",
-    title: "Azizi Venice, Emaar The Oasis & DAMAC Islands",
-    emirate: "Dubai",
-    image: "/img/projects/azizi/azizi-venice.webp",
-    priceBand: "AED 1.15M – 18M+",
-    paymentPlans: "50/50 · 75/25 · 80/20 · 1% Monthly",
-    flagshipLaunches: [
-      "Azizi Venice (Dubai South)",
-      "Emaar The Oasis (Dubailand)",
-      "DAMAC Islands (Dubailand)",
-      "Dubai Hills Estate & Danube Greenz",
-    ],
-    summary:
-      "Master-planned swimmable crystal lagoons, golf estates, and botanical villa sanctuaries positioned along the Al Maktoum Airport and Dubailand growth corridors—our highest-volume segment for capital appreciation.",
-    hotspots: [
-      { x: "28%", y: "48%", label: "Azizi Venice · 18km Crystal Lagoon" },
-      { x: "62%", y: "38%", label: "Emaar The Oasis · Waterfront Mansions" },
-      { x: "52%", y: "68%", label: "DAMAC Islands & Lunaya Bloom Villas" },
-    ],
-  },
-  {
-    id: "dubai-islands",
-    badge: "Coastal & Island Masterplans · Dubai",
-    title: "The Meriva on Dubai Islands, Palm Jumeirah & Creek",
-    emirate: "Dubai",
-    image: "/img/projects/nakheel/dubai-islands.webp",
-    priceBand: "AED 2.2M – 60M+",
-    paymentPlans: "70/30 · 80/20 · 60/40",
-    flagshipLaunches: [
-      "The Meriva — Dubai Islands by Ellington",
-      "Ellington Berkeley Tower",
-      "Azizi Leily (Al Jaddaf Creek Corridor)",
-      "Sobha River Core (Hartland II)",
-    ],
-    summary:
-      "Waterfront living across Dubai's new coastal archipelagos and creekside sanctuaries, led by Ellington's design-led beachfront release on Dubai Islands and Sobha's riverfront boardwalks.",
-    hotspots: [
-      { x: "42%", y: "36%", label: "The Meriva · Dubai Islands by Ellington" },
-      { x: "66%", y: "58%", label: "Sobha River Core & Azizi Leily" },
-      { x: "25%", y: "62%", label: "Ellington Berkeley Tower" },
-    ],
-  },
-  {
-    id: "rak-uaq",
-    badge: "Northern Emirates Island Boom · RAK & Umm Al Quwain",
-    title: "Al Marjan Island, Siniya Island & Al Hamra Waterfront",
-    emirate: "Ras Al Khaimah & UAQ",
-    image: "/img/projects/sobha/sobha-seahaven.webp",
-    priceBand: "AED 1.35M – 28M+",
-    paymentPlans: "60/40 · 70/30 · 80/20",
-    flagshipLaunches: [
-      "Address Residences Al Marjan Island",
-      "Quattro Del Mar & Al Hamra Waterfront (RAK)",
-      "Sobha Siniya Island (Umm Al Quwain)",
-      "Downtown Umm Al Quwain",
-    ],
-    summary:
-      "Anchored by the multi-billion-dollar integrated resort transformation of Al Marjan Island in Ras Al Khaimah and Sobha's natural mangrove sanctuary on Siniya Island in Umm Al Quwain.",
-    hotspots: [
-      { x: "32%", y: "44%", label: "Address Residences · Al Marjan Island" },
-      { x: "58%", y: "52%", label: "Quattro Del Mar & Al Hamra Waterfront" },
-      { x: "74%", y: "64%", label: "Sobha Siniya Island & Downtown UAQ" },
-    ],
-  },
-  {
-    id: "abudhabi-sharjah",
-    badge: "Capital & Cultural Hubs · Abu Dhabi & Sharjah",
-    title: "Manchester City Yas Residences, Saadiyat & Masaar",
-    emirate: "Abu Dhabi & Sharjah",
-    image: "/img/projects/aldar/saadiyat-lagoons.webp",
-    priceBand: "AED 1.1M – 22M+",
-    paymentPlans: "50/50 · 60/40 · 65/35",
-    flagshipLaunches: [
-      "Manchester City Yas Residences (Yas Island)",
-      "Saadiyat Island & Yas Island Waterfront",
-      "Masaar Woodland Villas (Sharjah)",
-      "Alif — Aljada Boulevard (Sharjah)",
-    ],
-    summary:
-      "From branded canal residences on Yas Island and cultural district villas on Saadiyat Island in Abu Dhabi to Arada's 50,000-tree forested sanctuary of Masaar and Alif in Sharjah.",
-    hotspots: [
-      { x: "36%", y: "46%", label: "Manchester City Yas Residences" },
-      { x: "64%", y: "40%", label: "Saadiyat Island Sanctuary" },
-      { x: "48%", y: "70%", label: "Masaar & Alif · Sharjah" },
-    ],
-  },
-]
-
-export function Aerial() {
-  const [activeZoneIdx, setActiveZoneIdx] = React.useState(0)
-  const activeZone = AERIAL_ZONES[activeZoneIdx]
-
-  return (
-    <section id="aerial" className="scroll-mt-20 border-b border-[#e6dfd2] bg-[#f4efe6] py-24">
-      <div className="mx-auto max-w-7xl px-4 md:px-6">
-        <div className="flex flex-wrap items-end justify-between gap-6 mb-10">
-          <SectionHeading
-            eyebrow="Interactive Aerial Masterplan Explorer"
-            title={
-              <>
-                Inspect the UAE{" "}
-                <em className="text-[#94652c] not-italic">From Above.</em>
-              </>
-            }
-            lead="Select any of our 5 priority aerial corridors below to inspect live hotspot pins, price bands, payment structures, and flagship developer launches."
-          />
-
-          <div className="flex flex-wrap gap-2">
-            {AERIAL_ZONES.map((zone, idx) => {
-              const selected = idx === activeZoneIdx
-              return (
-                <button
-                  key={zone.id}
-                  type="button"
-                  onClick={() => setActiveZoneIdx(idx)}
-                  className={`rounded-full border px-4 py-2 text-xs font-bold uppercase tracking-[0.14em] transition-all ${
-                    selected
-                      ? "border-[#17130e] bg-[#17130e] text-white shadow-sm"
-                      : "border-[#e6dfd2] bg-white text-[#17130e] hover:border-[#94652c] hover:text-[#94652c]"
-                  }`}
-                >
-                  {zone.emirate} · 0{idx + 1}
-                </button>
-              )
-            })}
-          </div>
-        </div>
-
-        {/* Interactive Aerial Viewport + Telemetry Panel */}
-        <div className="grid grid-cols-1 gap-8 lg:grid-cols-12 items-stretch">
-          {/* Left: Interactive Aerial Map Viewport with Animated Hotspot Pins */}
-          <div className="lg:col-span-7 relative min-h-[420px] md:min-h-[500px] overflow-hidden rounded-3xl border border-[#e6dfd2] bg-[#17130e] shadow-lg">
-            <AnimatePresence initial={false} mode="wait">
-              <motion.img
-                key={activeZone.image}
-                src={activeZone.image}
-                alt={activeZone.title}
-                loading="eager"
-                decoding="sync"
-                initial={{ opacity: 0, scale: 1.04 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.45 }}
-                className="absolute inset-0 h-full w-full object-cover"
-              />
-            </AnimatePresence>
-            <div className="absolute inset-0 bg-gradient-to-t from-[#17130e]/90 via-[#17130e]/25 to-[#17130e]/30" />
-
-            {/* Top Radar Bar */}
-            <div className="absolute top-4 left-4 right-4 flex flex-wrap items-center justify-between gap-2 z-10">
-              <span className="inline-flex items-center gap-2 rounded-full bg-[#17130e]/90 border border-[#dcb888]/40 px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-[#dcb888] backdrop-blur-md">
-                <Compass className="h-3.5 w-3.5 animate-spin" style={{ animationDuration: "12s" }} />
-                {activeZone.badge}
-              </span>
-              <span className="rounded-full bg-white/95 px-3.5 py-1.5 text-xs font-bold text-[#17130e] shadow-sm">
-                {activeZone.priceBand}
-              </span>
-            </div>
-
-            {/* Interactive Pulsing Hotspot Pins with Official SWK Portal Map Pin */}
-            {activeZone.hotspots.map((spot) => (
-              <div
-                key={spot.label}
-                style={{ left: spot.x, top: spot.y }}
-                className="absolute -translate-x-1/2 -translate-y-1/2 z-20 group"
-              >
-                <div className="flex items-center gap-2 rounded-full border border-[#dcb888] bg-[#17130e]/95 px-3 py-1.5 text-[11px] font-semibold text-white shadow-xl backdrop-blur-md transition-transform duration-300 hover:scale-105">
-                  <img
-                    src="/brand/swk-emblem.svg"
-                    alt=""
-                    className="h-4 w-3.5 object-contain shrink-0"
-                  />
-                  <span className="whitespace-nowrap">{spot.label}</span>
-                </div>
-              </div>
-            ))}
-
-            {/* Bottom Caption Overlay */}
-            <div className="absolute bottom-5 left-5 right-5 z-10 flex flex-wrap items-end justify-between gap-4 text-white">
-              <div className="max-w-xl">
-                <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#dcb888]">
-                  Aerial Sector 0{activeZoneIdx + 1} · {activeZone.emirate}
-                </p>
-                <h3 className="mt-1 font-serif text-2xl md:text-3xl font-semibold">
-                  {activeZone.title}
-                </h3>
-              </div>
-              <Link
-                href="/off-plan"
-                className="inline-flex items-center gap-2 rounded-full bg-[#dcb888] px-5 py-2.5 text-xs font-bold uppercase tracking-[0.16em] text-[#17130e] transition hover:bg-white"
-              >
-                <span>Inspect Corridor Releases</span>
-                <ArrowUpRight className="h-4 w-4" />
-              </Link>
-            </div>
-          </div>
-
-          {/* Right: Corridor Intelligence & Target Projects Panel */}
-          <div className="lg:col-span-5 flex flex-col justify-between rounded-3xl border border-[#e6dfd2] bg-white p-6 md:p-8 shadow-sm">
-            <div>
-              <div className="flex items-center justify-between border-b border-[#e6dfd2] pb-4">
-                <div>
-                  <span className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#94652c]">
-                    Corridor Briefing
-                  </span>
-                  <h4 className="mt-1 font-serif text-2xl font-semibold text-[#17130e]">
-                    {activeZone.emirate} Growth Matrix
-                  </h4>
-                </div>
-                <span className="rounded-xl bg-[#faf7f2] border border-[#e6dfd2] px-3 py-1.5 text-xs font-bold text-[#94652c]">
-                  {activeZone.paymentPlans}
-                </span>
-              </div>
-
-              <p className="mt-4 text-sm text-[#4a4237] leading-relaxed">
-                {activeZone.summary}
-              </p>
-
-              <div className="mt-6">
-                <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#17130e] mb-3">
-                  Priority Target Projects in This Corridor:
-                </p>
-                <div className="space-y-2.5">
-                  {activeZone.flagshipLaunches.map((launch) => (
-                    <Link
-                      key={launch}
-                      href="/off-plan"
-                      className="flex items-center justify-between rounded-2xl border border-[#e6dfd2] bg-[#faf7f2] px-4 py-3 text-xs font-semibold text-[#17130e] transition hover:border-[#94652c] hover:bg-white"
-                    >
-                      <span className="flex items-center gap-2">
-                        <CheckCircle2 className="h-4 w-4 text-[#94652c]" />
-                        {launch}
-                      </span>
-                      <span className="text-[#94652c]">View Allocation →</span>
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            <div className="mt-6 flex flex-wrap items-center justify-between gap-3 border-t border-[#e6dfd2] pt-5">
-              <Link
-                href="/contact"
-                className="inline-flex items-center gap-2 rounded-full bg-[#17130e] px-6 py-3 text-xs font-bold uppercase tracking-[0.16em] text-white transition hover:bg-[#94652c]"
-              >
-                <span>Request Corridor Price Sheet</span>
-                <ArrowRight className="h-4 w-4 text-[#dcb888]" />
-              </Link>
-              <a
-                href={SITE.whatsappUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 text-xs font-bold text-[#94652c] hover:underline"
-              >
-                <WhatsAppIcon className="h-4 w-4" />
-                Ask on WhatsApp
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  )
-}
-
-/* ------------------------------------------------------------ Residences (Continuous Infinite Horizontal Animation) */
-const VISUALISATION_SHOWCASE = [
-  {
-    title: "Azizi Venice · Crystal Lagoon Mansions & Boulevard",
-    location: "Dubai South",
-    tag: "50/50 Payment Plan",
-    src: "/img/projects/azizi/azizi-venice.webp",
-  },
-  {
-    title: "Emaar The Oasis · Swimmable Canal Villas",
-    location: "Dubailand",
-    tag: "80/20 Payment Plan",
-    src: "/img/projects/emaar/greencrest.webp",
-  },
-  {
-    title: "DAMAC Islands · Tropical Waterfront Townhouses",
-    location: "Dubailand",
-    tag: "75/25 Payment Plan",
-    src: "/img/projects/damac/damac-islands.webp",
-  },
-  {
-    title: "Binghatti Maybach & Mercedes-Benz Places",
-    location: "Downtown Dubai",
-    tag: "70/30 Payment Plan",
-    src: "/img/projects/binghatti/mercedes-benz-places.webp",
-  },
-  {
-    title: "Sobha Century · Sheikh Zayed Road Sky Towers",
-    location: "Sheikh Zayed Road",
-    tag: "60/40 Payment Plan",
-    src: "/img/projects/sobha/sobha-seahaven.webp",
-  },
-  {
-    title: "The Meriva · Dubai Islands by Ellington",
-    location: "Dubai Islands",
-    tag: "70/30 Payment Plan",
-    src: "/img/projects/nakheel/dubai-islands.webp",
-  },
-  {
-    title: "Address Residences · Al Marjan Island Beachfront",
-    location: "Ras Al Khaimah",
-    tag: "80/20 Payment Plan",
-    src: "/img/projects/emaar/avarra-by-palace.webp",
-  },
-  {
-    title: "Sobha Siniya Island & Downtown Umm Al Quwain",
-    location: "Umm Al Quwain",
-    tag: "60/40 Payment Plan",
-    src: "/img/projects/sobha/sobha-sanctuary.webp",
-  },
-  {
-    title: "Manchester City Yas Residences & Saadiyat Lagoons",
-    location: "Abu Dhabi",
-    tag: "60/40 Payment Plan",
-    src: "/img/projects/aldar/yas-bay.webp",
-  },
-  {
-    title: "Masaar Woodland Villas & Alif Boulevard",
-    location: "Sharjah",
-    tag: "50/50 Payment Plan",
-    src: "/img/projects/arada/masaar.webp",
-  },
-]
-
-export function Residences() {
-  const infiniteItems = [...VISUALISATION_SHOWCASE, ...VISUALISATION_SHOWCASE]
-
-  return (
-    <section id="residences" className="scroll-mt-20 bg-[#faf7f2] py-24 border-b border-[#e6dfd2] overflow-hidden">
-      <div className="mx-auto max-w-7xl px-4 md:px-6 mb-12 flex flex-wrap items-end justify-between gap-6">
-        <SectionHeading
-          eyebrow="Architectural Visualisations · Continuous Infinite Stream"
-          title={
-            <>
-              Residences Built to Be{" "}
-              <em className="text-[#94652c] not-italic">Remembered.</em>
-            </>
-          }
-          lead="Verified architectural visualisations across our priority launches in Dubai, Abu Dhabi, Sharjah, Ras Al Khaimah, and Umm Al Quwain. Hover any residence to pause and inspect."
-        />
-        <Link
-          href="/off-plan"
-          className="inline-flex items-center gap-2 rounded-full border border-[#17130e] bg-white px-6 py-3 text-xs font-bold uppercase tracking-[0.18em] text-[#17130e] transition hover:bg-[#17130e] hover:text-white"
-        >
-          <span>View All 108+ Projects</span>
-          <ArrowRight className="h-4 w-4" />
-        </Link>
-      </div>
-
-      {/* Continuous Infinite Horizontal Moving Gallery */}
-      <div className="relative w-full overflow-hidden py-3">
-        <div className="swk-track-left gap-6 px-4">
-          {infiniteItems.map((item, idx) => (
-            <Link
-              key={`${item.title}-${idx}`}
               href="/off-plan"
-              className="group relative flex h-[400px] w-[440px] shrink-0 flex-col justify-between overflow-hidden rounded-3xl border border-[#e6dfd2] bg-[#17130e] p-6 text-white shadow-lg transition-all duration-300 hover:-translate-y-1.5 hover:border-[#94652c]"
+              className="group inline-flex items-center gap-2 rounded-full border border-white/85 bg-white/74 px-6 py-3.5 text-xs font-semibold uppercase tracking-[0.16em] text-[#0c233a] shadow-[0_10px_28px_rgba(12,56,96,0.1)] backdrop-blur-xl transition-all duration-300 hover:-translate-y-0.5 hover:border-[#121212] hover:bg-[#121212] hover:text-white hover:shadow-[0_16px_36px_rgba(12,35,58,0.26)]"
             >
-              <img
-                src={item.src}
-                alt={item.title}
-                className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#17130e]/95 via-[#17130e]/25 to-[#17130e]/35" />
-
-              <div className="relative z-10 flex items-center justify-between gap-2">
-                <span className="rounded-full bg-[#17130e]/85 border border-[#dcb888]/40 px-3.5 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-[#dcb888] backdrop-blur-md">
-                  {item.location}
-                </span>
-                <span className="rounded-full bg-white/95 px-3 py-1 text-[10px] font-bold text-[#17130e]">
-                  {item.tag}
-                </span>
-              </div>
-
-              <div className="relative z-10">
-                <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#dcb888]">
-                  SWK Priority Launch Visualisation
-                </p>
-                <h3 className="mt-1 font-serif text-2xl font-semibold text-white group-hover:text-[#dcb888]">
-                  {item.title}
-                </h3>
-                <div className="mt-3 inline-flex items-center gap-1.5 text-xs font-bold text-[#dcb888]">
-                  <span>Request Floor Plans &amp; Availability</span>
-                  <ArrowUpRight className="h-4 w-4" />
-                </div>
-              </div>
+              <span>Explore Iconic UAE Launches</span>
+              <ArrowUpRight className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-[#51fec0]" />
             </Link>
-          ))}
-        </div>
-      </div>
-    </section>
-  )
-}
-
-/* -------------------------------------------------------------- Services (Redesigned Interactive 6-Pillar Advisory Showcase + Refined Buttons) */
-const SERVICE_ICONS = [Landmark, Home, KeyRound, Building2, TrendingUp, FileCheck2]
-const SERVICE_DELIVERABLES = [
-  [
-    "Direct launch-day unit allocations across 27+ partner developers",
-    "Zero agency commission on primary off-plan purchases",
-    "Side-by-side payment plan & construction milestone comparison",
-  ],
-  [
-    "Live comparable transfer analysis before you submit an offer",
-    "Full Form F (MOU) drafting, NOC coordination & DLD Trustee transfer",
-    "Itemised upfront cost sheet (4% DLD, trustee & agency fees)",
-  ],
-  [
-    "Tenant vetting, corporate lease structuring & cheque schedule management",
-    "Full Ejari registration, DEWA activation & move-in inspection",
-    "Annual renewal benchmarking against official rental index",
-  ],
-  [
-    "Dedicated landlord asset management for overseas & local owners",
-    "Preventive maintenance, snagging & tenant relationship desk",
-    "Structured annual rent collection and expense statements",
-  ],
-  [
-    "Multi-unit portfolio structuring for family offices & funds",
-    "10-Year UAE Golden Visa (AED 2M+) property qualification support",
-    "Cross-emirate allocation across Dubai, Abu Dhabi, RAK & UAQ",
-  ],
-  [
-    "Independent technical snagging inspection prior to developer handover",
-    "Bank-agnostic UAE resident & non-resident mortgage introductions",
-    "Title Deed & Oqood registration verification from start to keys",
-  ],
-]
-
-export function Services() {
-  const [activeServiceIdx, setActiveServiceIdx] = React.useState(0)
-  const activeService = services[activeServiceIdx] ?? services[0]
-  const ActiveIcon = SERVICE_ICONS[activeServiceIdx % SERVICE_ICONS.length]
-  const activeImage = gallery[[0, 3, 7, 9, 2, 12][activeServiceIdx % 6]]
-  const deliverables = SERVICE_DELIVERABLES[activeServiceIdx % SERVICE_DELIVERABLES.length]
-
-  return (
-    <section id="services" className="scroll-mt-20 bg-white py-24 border-b border-[#e6dfd2]">
-      <div className="mx-auto max-w-7xl px-4 md:px-6">
-        <div className="flex flex-wrap items-end justify-between gap-6 mb-12">
-          <SectionHeading
-            eyebrow="05 · End-to-End Real Estate Advisory"
-            title={
-              <>
-                One Partner,{" "}
-                <em className="text-[#94652c] not-italic">From Shortlist to Keys.</em>
-              </>
-            }
-            lead="Six specialist divisions under one roof on Sheikh Zayed Road—covering primary off-plan launches, ready resales, Ejari leasing, portfolio management, and handover snagging."
-          />
-
-          <Link
-            href="/services"
-            className="inline-flex items-center gap-2.5 rounded-xl bg-[#17130e] px-6 py-3.5 text-xs font-bold uppercase tracking-[0.16em] text-white shadow-sm transition hover:bg-[#94652c]"
-          >
-            <span>Explore All 6 Advisory Divisions</span>
-            <ArrowRight className="h-4 w-4 text-[#dcb888]" />
-          </Link>
-        </div>
-
-        {/* Interactive 6-Pillar Selector Grid + Active Spotlight Card */}
-        <div className="grid grid-cols-1 gap-8 lg:grid-cols-12 items-stretch">
-          {/* Left: 6 Interactive Service Pillar Cards */}
-          <div className="lg:col-span-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-3">
-            {services.map((s, idx) => {
-              const Icon = SERVICE_ICONS[idx % SERVICE_ICONS.length]
-              const isSelected = idx === activeServiceIdx
-              return (
-                <button
-                  key={s.title}
-                  type="button"
-                  onClick={() => setActiveServiceIdx(idx)}
-                  className={`group flex items-center justify-between gap-4 rounded-2xl border p-4 text-left transition-all ${
-                    isSelected
-                      ? "border-[#17130e] bg-[#17130e] text-white shadow-md"
-                      : "border-[#e6dfd2] bg-[#faf7f2] text-[#17130e] hover:border-[#94652c] hover:bg-white"
-                  }`}
-                >
-                  <div className="flex items-center gap-3.5 min-w-0">
-                    <div
-                      className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border transition ${
-                        isSelected
-                          ? "border-[#dcb888]/40 bg-[#dcb888]/15 text-[#dcb888]"
-                          : "border-[#e6dfd2] bg-white text-[#94652c] group-hover:border-[#94652c]"
-                      }`}
-                    >
-                      <Icon className="h-5 w-5" />
-                    </div>
-                    <div className="min-w-0">
-                      <span
-                        className={`block text-[10px] font-bold uppercase tracking-[0.2em] ${
-                          isSelected ? "text-[#dcb888]" : "text-[#94652c]"
-                        }`}
-                      >
-                        Division 0{idx + 1}
-                      </span>
-                      <span className="block truncate font-serif text-lg font-semibold">
-                        {s.title}
-                      </span>
-                    </div>
-                  </div>
-                  <ArrowRight
-                    className={`h-4 w-4 shrink-0 transition-transform ${
-                      isSelected ? "translate-x-1 text-[#dcb888]" : "text-[#786e60] group-hover:translate-x-1"
-                    }`}
-                  />
-                </button>
-              )
-            })}
           </div>
+        </div>
 
-          {/* Right: Active Service Spotlight Panel with Architectural Photography & Clean Tactile Buttons */}
-          <div className="lg:col-span-7 flex flex-col justify-between overflow-hidden rounded-3xl border border-[#e6dfd2] bg-[#faf7f2] shadow-sm">
-            <div className="relative h-64 md:h-72 w-full overflow-hidden bg-[#17130e]">
-              <AnimatePresence initial={false} mode="wait">
-                <motion.img
-                  key={activeImage}
-                  src={activeImage}
-                  alt={activeService.title}
-                  loading="eager"
-                  decoding="sync"
-                  initial={{ opacity: 0, scale: 1.04 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.4 }}
-                  className="h-full w-full object-cover"
-                />
-              </AnimatePresence>
-              <div className="absolute inset-0 bg-gradient-to-t from-[#17130e]/90 via-[#17130e]/35 to-transparent" />
-              <div className="absolute bottom-5 left-6 right-6 flex items-end justify-between gap-4 text-white">
-                <div>
-                  <span className="inline-flex items-center gap-1.5 rounded-full bg-[#dcb888]/20 border border-[#dcb888]/40 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-[#dcb888]">
-                    <ActiveIcon className="h-3.5 w-3.5" />
-                    0{activeServiceIdx + 1} · SWK Advisory Division
-                  </span>
-                  <h3 className="mt-2 font-serif text-2xl md:text-4xl font-semibold">
-                    {activeService.title}
-                  </h3>
-                </div>
-              </div>
-            </div>
-
-            <div className="p-6 md:p-8 space-y-6">
-              <p className="text-sm md:text-base text-[#4a4237] leading-relaxed">
-                {activeService.description}
-              </p>
-
-              <div className="rounded-2xl border border-[#e6dfd2] bg-white p-5 space-y-2.5">
-                <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#94652c]">
-                  What Our Team Delivers For You:
-                </p>
-                {deliverables.map((item) => (
-                  <div key={item} className="flex items-start gap-2.5 text-xs md:text-sm text-[#17130e]">
-                    <CheckCircle2 className="h-4 w-4 shrink-0 text-[#94652c] mt-0.5" />
-                    <span>{item}</span>
+        {/* Asymmetric Lower Meta Row: Full Advisory Team Showcase (No Employee Count) + Market Brief */}
+        <div className="mt-14 sm:mt-20 grid grid-cols-1 items-end gap-8 md:grid-cols-12">
+          {/* Left: Full SWK Advisory Team Portraits (All Staff, Zero Headcount Mentioned) */}
+          <div className="md:col-span-6 flex flex-col items-start gap-4">
+            <Link
+              href="/agents"
+              className="group inline-flex flex-wrap items-center gap-2 rounded-2xl border border-white/85 bg-white/82 p-2.5 shadow-[0_18px_46px_rgba(12,56,96,0.12)] backdrop-blur-2xl transition-all duration-300 hover:-translate-y-1 hover:border-[#0e9f6e]/40 hover:bg-white hover:shadow-[0_24px_56px_rgba(12,56,96,0.18)]"
+              aria-label="Meet the SWK Properties Dubai Advisory Team"
+            >
+              <div className="flex flex-wrap items-center -space-x-2.5 sm:-space-x-2">
+                {team.map((member) => (
+                  <div
+                    key={member.slug}
+                    title={`${member.name} — ${member.role}`}
+                    className="relative h-12 w-12 sm:h-14 sm:w-14 overflow-hidden rounded-full border-2 border-white bg-[#eaf3f9] shadow-xs transition-all duration-300 hover:z-20 hover:-translate-y-1.5 hover:scale-110 hover:border-[#51fec0]"
+                  >
+                    <img
+                      src={member.photo}
+                      alt={`${member.name} — ${member.role}`}
+                      className="h-full w-full object-cover object-top"
+                    />
                   </div>
                 ))}
               </div>
-
-              {/* Clean Corporate Buttons (Replaces old HalomotButton style) */}
-              <div className="flex flex-wrap items-center gap-3 pt-2">
-                <Link
-                  href="/services"
-                  className="inline-flex items-center gap-2 rounded-xl bg-[#17130e] px-6 py-3.5 text-xs font-bold uppercase tracking-[0.16em] text-white shadow-sm transition hover:bg-[#2a2219]"
-                >
-                  <span>View Service Mandate</span>
-                  <ArrowRight className="h-4 w-4 text-[#dcb888]" />
-                </Link>
-                <Link
-                  href="/contact"
-                  className="inline-flex items-center gap-2 rounded-xl border border-[#94652c] bg-white px-6 py-3.5 text-xs font-bold uppercase tracking-[0.16em] text-[#94652c] transition hover:bg-[#94652c] hover:text-white"
-                >
-                  <span>Speak With a Specialist</span>
-                </Link>
+              <div className="pl-2 pr-3">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#0e9f6e]">
+                  OUR DUBAI TEAM
+                </p>
+                <p className="mt-0.5 inline-flex items-center gap-1 text-xs font-semibold text-[#0a1624] transition-colors group-hover:text-[#0e9f6e]">
+                  <span>Meet our advisory team</span>
+                  <ArrowUpRight className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                </p>
               </div>
+            </Link>
+
+            <div className="inline-flex items-baseline gap-4 rounded-2xl border border-white/80 bg-white/70 px-5 py-3 shadow-[0_12px_32px_rgba(12,56,96,0.08)] backdrop-blur-xl transition-all duration-300 hover:-translate-y-0.5 hover:bg-white/90 hover:shadow-[0_18px_42px_rgba(12,56,96,0.14)]">
+              <div className="text-[38px] sm:text-[48px] font-medium leading-none tracking-[-0.045em] text-[#0a1624] tabular-nums">
+                18+
+              </div>
+              <p className="max-w-[230px] text-[13px] leading-snug text-[#273849]">
+                Years advising residential, waterfront &amp; commercial buyers across the UAE
+              </p>
+            </div>
+          </div>
+
+          {/* Right: Circular Play / Market Brief Button + Glass Editorial Note */}
+          <div className="md:col-span-5 md:col-start-8 flex flex-col items-start md:items-end text-left md:text-right">
+            <button
+              type="button"
+              onClick={() => setBriefOpen(true)}
+              aria-label="Open Dubai Market Briefing"
+              className="group relative inline-flex h-16 w-16 cursor-pointer items-center justify-center rounded-full border border-white/90 bg-white/88 text-[#0a1624] shadow-[0_16px_40px_rgba(12,56,96,0.16)] backdrop-blur-xl transition-all duration-300 hover:-translate-y-1 hover:scale-110 hover:border-[#121212] hover:bg-[#121212] hover:text-[#51fec0] hover:shadow-[0_22px_50px_rgba(12,35,58,0.3)]"
+            >
+              <Play className="h-5 w-5 translate-x-0.5 fill-current transition-transform duration-300 group-hover:scale-110" />
+            </button>
+            <div className="mt-4 max-w-[360px] rounded-2xl border border-white/80 bg-white/74 px-5 py-3.5 shadow-[0_12px_32px_rgba(12,56,96,0.08)] backdrop-blur-xl transition-all duration-300 hover:-translate-y-0.5 hover:bg-white/92 hover:shadow-[0_18px_42px_rgba(12,56,96,0.14)]">
+              <p className="text-[14.5px] leading-[1.48] tracking-[-0.015em] text-[#0a1624]">
+                Direct master-developer access across{" "}
+                <span className="font-semibold text-[#1b6aa7]">
+                  Nakheel, Binghatti, Emaar, DAMAC &amp; Azizi,
+                </span>{" "}
+                paired with RERA escrow clarity.
+              </p>
             </div>
           </div>
         </div>
       </div>
+
+      {/* Ultra-Sharp Photorealistic UAE Skyline Layered Over Faint "Since 2008" Watermark */}
+      <div className="relative z-10 mt-10 sm:mt-14 w-full overflow-hidden">
+        <div
+          aria-hidden="true"
+          className="pointer-events-none select-none text-center text-[19vw] xl:text-[230px] font-medium leading-[0.82] tracking-[-0.055em] text-[#0a233d]/[0.075]"
+        >
+          Since 2008
+        </div>
+
+        <div className="relative z-10 mx-auto -mt-[8vw] sm:-mt-[95px] max-w-[1260px] px-4 sm:px-8">
+          <div className="relative overflow-hidden rounded-t-3xl border border-b-0 border-white/80 bg-[#0b1623] shadow-[0_-24px_80px_rgba(12,56,96,0.2)]">
+            <img
+              src="/img/hero/uae-skyline-flagship.webp"
+              alt="Downtown Dubai architectural skyline, Burj Khalifa and Dubai Water Canal at golden hour"
+              fetchPriority="high"
+              className="h-[340px] sm:h-[480px] md:h-[600px] w-full object-cover object-center"
+            />
+            <div className="absolute inset-x-0 bottom-0 flex flex-wrap items-center justify-between gap-3 bg-gradient-to-t from-[#08131f]/88 via-[#08131f]/40 to-transparent px-6 py-5 text-white">
+              <LiveStatusDot
+                label="Nakheel · Binghatti · Emaar · DAMAC · Azizi · Sobha"
+                tone="launch"
+                surface="dark"
+              />
+              <Link
+                href="#dubai-launches"
+                className="text-xs font-medium uppercase tracking-[0.16em] text-white/95 hover:text-[#51fec0] transition-colors"
+              >
+                Explore Iconic Projects ↓
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Clean Market Briefing Lightbox Modal */}
+      <AnimatePresence>
+        {briefOpen ? (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-[#08131f]/75 p-4 backdrop-blur-md"
+            onClick={() => setBriefOpen(false)}
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.96, y: 12 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.96, y: 12 }}
+              onClick={(e) => e.stopPropagation()}
+              className="w-full max-w-2xl overflow-hidden rounded-2xl border border-white/15 bg-[#0c1624] text-white shadow-2xl"
+            >
+              <div className="flex items-center justify-between border-b border-white/10 px-6 py-4">
+                <SectionEyebrow tone="dark">DUBAI MARKET BRIEFING</SectionEyebrow>
+                <button
+                  type="button"
+                  onClick={() => setBriefOpen(false)}
+                  aria-label="Close briefing"
+                  className="cursor-pointer rounded-full p-1.5 text-white/70 hover:bg-white/10 hover:text-white"
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              </div>
+              <div className="p-6 sm:p-8 space-y-5">
+                <h2 className="text-2xl sm:text-3xl font-medium tracking-[-0.03em]">
+                  How SWK navigates Dubai&apos;s flagship developer pipeline
+                </h2>
+                <p className="text-sm leading-relaxed text-white/75">
+                  Across Nakheel, Binghatti, Emaar, DAMAC, Azizi, Sobha Realty, Omniyat, Aldar, Ellington, and Arada, the difference between an ordinary purchase and a generational asset comes down to three checks: delivered build quality, RERA escrow protection, and realistic net rental yield after service charges.
+                </p>
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-3 pt-2">
+                  {[
+                    { k: "0% Buyer Fee", v: "On primary developer launches" },
+                    { k: "Escrow Registered", v: "Under Dubai Law No. 8 / 2007" },
+                    { k: "5 Emirates", v: "Dubai, Abu Dhabi, Sharjah, RAK & UAQ" },
+                  ].map((item) => (
+                    <div key={item.k} className="rounded-xl bg-white/[0.06] border border-white/10 p-4">
+                      <p className="text-sm font-medium text-[#51fec0]">{item.k}</p>
+                      <p className="mt-1 text-xs text-white/70">{item.v}</p>
+                    </div>
+                  ))}
+                </div>
+                <div className="flex flex-wrap items-center gap-4 pt-3">
+                  <BracketLink
+                    href="/off-plan"
+                    variant="white"
+                    size="sm"
+                    onClick={() => setBriefOpen(false)}
+                  >
+                    Explore Launches
+                  </BracketLink>
+                  <BracketLink
+                    href="/contact"
+                    variant="dark"
+                    size="sm"
+                    onClick={() => setBriefOpen(false)}
+                  >
+                    Book Private Briefing
+                  </BracketLink>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        ) : null}
+      </AnimatePresence>
     </section>
-  )
+  );
 }
 
-/* --------------------------------------------------------------- Journey (Interactive 6-Stage Acquisition & Handover Timeline) */
-const JOURNEY_STAGES = [
+/* -------------------------------------------------------------------------- */
+/* 02. SCROLL-REVEAL EDITORIAL STATEMENT, GLASS BENTO & FOCUS GALLERY         */
+/* -------------------------------------------------------------------------- */
+const ARCHITECTURAL_MOSAIC_ITEMS: GalleryItem[] = [
   {
-    step: "01",
-    phase: "Brief & Strategy",
-    title: "Portfolio Brief & Corridor Selection",
-    timing: "Day 1–2",
-    description:
-      "We map your capital budget, target yield, and timeline against live inventory across Dubai, Abu Dhabi, Sharjah, Ras Al Khaimah, and Umm Al Quwain.",
-    deliverable: "Custom 3-to-5 project comparison pack with historical capital & rental benchmarks.",
-    image: "/img/projects/azizi/azizi-venice.webp",
+    id: "mosaic-lana",
+    type: "image",
+    src: "/img/projects/omniyat/the-lana.webp",
+    label: "The Lana Residences",
+    sublabel: "OMNIYAT · MARASI BAY",
+    href: "/off-plan/the-lana",
   },
   {
-    step: "02",
-    phase: "Cost & Unit Audit",
-    title: "Floor-Plate Selection & Written Fee Sheet",
-    timing: "Day 3–5",
-    description:
-      "Before any reservation, we prepare a written acquisition sheet detailing unit orientation, service charges per sq ft, 4% DLD fee, and milestone dates.",
-    deliverable: "Itemised AED & foreign-currency acquisition cost breakdown with zero hidden charges.",
-    image: "/img/projects/emaar/greencrest.webp",
+    id: "mosaic-note-1",
+    type: "text",
+    eyebrow: "ARCHITECTURAL PRESENCE",
+    text: "We filter Dubai's expanding master-developer pipeline down to towers with enduring floor plates, verified escrow milestones, and real tenant liquidity.",
   },
   {
-    step: "03",
-    phase: "Inspection",
-    title: "Private Show-Home or Live Video Walkthrough",
-    timing: "Week 1",
-    description:
-      "Tour developer experience centres and ready properties in person with our advisors, or join a live GST-anchored architectural video inspection from overseas.",
-    deliverable: "On-site view corridor check, community drive-time test & developer stock verification.",
-    image: "/img/projects/damac/damac-islands.webp",
+    id: "mosaic-avarra",
+    type: "image",
+    src: "/img/projects/emaar/avarra-by-palace.webp",
+    label: "Avarra by Palace",
+    sublabel: "EMAAR · WATERFRONT",
+    href: "/off-plan/avarra-by-palace",
   },
   {
-    step: "04",
-    phase: "Reservation & SPA",
-    title: "Unit Allocation, Form F & Escrow Transfer",
-    timing: "Week 2",
-    description:
-      "Secure priority developer unit allocation or execute Form F (MOU) for secondary homes. All payments route directly to official project escrow or trustee accounts.",
-    deliverable: "Sales & Purchase Agreement (SPA) review and official developer booking receipt.",
-    image: "/img/projects/binghatti/mercedes-benz-places.webp",
+    id: "mosaic-baccarat",
+    type: "image",
+    src: "/img/projects/hh-development/baccarat-residences-dubai.webp",
+    label: "Baccarat Residences",
+    sublabel: "H&H · DOWNTOWN DUBAI",
+    href: "/off-plan/baccarat-residences-dubai",
   },
   {
-    step: "05",
-    phase: "Registration",
-    title: "Oqood, Title Deed & Golden Visa Filing",
-    timing: "Week 2–4",
-    description:
-      "Our operations team coordinates Oqood registration, Title Deed transfer, UAE mortgage disbursement, and 10-year Golden Visa documentation for AED 2M+ buyers.",
-    deliverable: "Official Title Deed / Oqood certificate & Golden Visa nomination dossier.",
-    image: "/img/projects/sobha/sobha-seahaven.webp",
+    id: "mosaic-note-2",
+    type: "text",
+    eyebrow: "CLIENT CAPITAL GROWTH",
+    text: "From waterfront beachfront mansions to high-yield urban corridors, every acquisition is benchmarked against live DLD comparable transfers.",
   },
   {
-    step: "06",
-    phase: "Handover & Yield",
-    title: "Technical Snagging, Key Handover & Leasing",
-    timing: "Completion & Ongoing",
-    description:
-      "At completion, we conduct a multi-point technical snagging inspection, activate utilities, and transition your property into annual leasing or resale management.",
-    deliverable: "Snagging clearance report, key handover & signed annual lease mandate.",
-    image: "/img/projects/nakheel/dubai-islands.webp",
+    id: "mosaic-armani",
+    type: "image",
+    src: "/img/projects/arada/armani-beach-residences.webp",
+    label: "Armani Beach Residences",
+    sublabel: "ARADA · PALM JUMEIRAH",
+    href: "/off-plan/armani-beach-residences",
   },
-]
+  {
+    id: "mosaic-waves",
+    type: "image",
+    src: "/img/projects/sobha/waves-opulence.webp",
+    label: "Waves Opulence",
+    sublabel: "SOBHA HARTLAND",
+    href: "/off-plan/waves-opulence",
+  },
+];
 
-export function Journey() {
-  const [activeStep, setActiveStep] = React.useState(0)
-  const current = JOURNEY_STAGES[activeStep]
+export function EditorialBento() {
+  const quotePool = useMemo(() => testimonials.slice(0, 3), []);
+  const [activeQuote, setActiveQuote] = useState(0);
+  const current = quotePool[activeQuote] ?? quotePool[0];
 
   return (
-    <section id="journey" className="scroll-mt-20 border-y border-[#e6dfd2] bg-white py-24">
-      <div className="mx-auto max-w-7xl px-4 md:px-6">
-        <div className="flex flex-wrap items-end justify-between gap-6 mb-12">
-          <SectionHeading
-            eyebrow="06 · Your Buying & Leasing Journey"
-            title={
-              <>
-                From First Call to{" "}
-                <em className="text-[#94652c] not-italic">Title Deed &amp; First Rent.</em>
-              </>
-            }
-            lead="Click any of the 6 milestones below to see how our sales and operations desk manages every step of your acquisition."
-          />
+    <section className="relative overflow-hidden bg-white/22 py-24 sm:py-32 backdrop-blur-[2px]">
+      <div className="relative mx-auto max-w-[1120px] px-4 sm:px-8">
+        <div className="mx-auto max-w-4xl rounded-3xl border border-white/80 bg-white/68 p-7 sm:p-11 shadow-[0_20px_60px_rgba(12,56,96,0.09)] backdrop-blur-2xl">
+          <ScrollRevealStatement text="We advise buyers and investors who look past developer brochures — pairing Dubai floor-plate intelligence with escrow security and long-term appreciation." />
 
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={() => setActiveStep((prev) => (prev - 1 + JOURNEY_STAGES.length) % JOURNEY_STAGES.length)}
-              className="rounded-xl border border-[#e6dfd2] bg-[#faf7f2] px-4 py-2.5 text-xs font-bold text-[#17130e] transition hover:border-[#94652c]"
-            >
-              ← Previous Step
-            </button>
-            <button
-              type="button"
-              onClick={() => setActiveStep((prev) => (prev + 1) % JOURNEY_STAGES.length)}
-              className="rounded-xl bg-[#17130e] px-4 py-2.5 text-xs font-bold text-white transition hover:bg-[#94652c]"
-            >
-              Next Step →
-            </button>
+          <div className="mt-9 flex flex-wrap items-center gap-2.5">
+            {[
+              "Direct Developer Allocations",
+              "DLD & Escrow Due Diligence",
+              "Yield & Exit Strategy",
+              "Residential & Commercial",
+            ].map((pillar) => (
+              <span
+                key={pillar}
+                className="cursor-default rounded-full border border-[#1b6aa7]/20 bg-white/90 px-4 py-2 text-xs font-medium text-[#0c233a] shadow-xs transition-all duration-200 hover:-translate-y-0.5 hover:border-[#121212] hover:bg-[#121212] hover:text-white hover:shadow-md"
+              >
+                {pillar}
+              </span>
+            ))}
           </div>
         </div>
 
-        {/* Interactive Progress Stepper Bar */}
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6 mb-10">
-          {JOURNEY_STAGES.map((item, idx) => {
-            const active = idx === activeStep
-            const completed = idx < activeStep
+        {/* 2-Card Glass Spotlight Bento Row */}
+        <div className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-2">
+          {/* Left Card: Frosted Glass Client Outcome Spotlight */}
+          <SpotlightCard>
+            <div className="flex min-h-[420px] sm:min-h-[460px] flex-col justify-between p-8 sm:p-10">
+              <div className="flex items-center justify-between">
+                <span className="text-xl font-semibold tracking-[-0.04em] text-[#0c233a]">
+                  client note
+                </span>
+                <div className="flex items-center gap-1.5" role="tablist" aria-label="Client stories">
+                  {quotePool.map((q, idx) => (
+                    <button
+                      key={q.id}
+                      type="button"
+                      role="tab"
+                      aria-selected={activeQuote === idx}
+                      aria-label={`Read quote from ${q.name}`}
+                      onClick={() => setActiveQuote(idx)}
+                      className={`h-2.5 cursor-pointer rounded-full transition-all ${
+                        activeQuote === idx
+                          ? "w-7 bg-[#121212]"
+                          : "w-2.5 bg-[#121212]/20 hover:bg-[#121212]/50"
+                      }`}
+                    />
+                  ))}
+                </div>
+              </div>
+
+              {current ? (
+                <blockquote className="my-8 text-[22px] sm:text-[26px] font-medium leading-[1.3] tracking-[-0.03em] text-[#121212]">
+                  &ldquo;{current.quote}&rdquo;
+                </blockquote>
+              ) : null}
+
+              {current ? (
+                <div className="flex items-center justify-between gap-4 border-t border-black/[0.07] pt-5">
+                  <div className="flex items-center gap-3">
+                    <img
+                      src={current.image}
+                      alt={current.name}
+                      loading="lazy"
+                      className="h-11 w-11 rounded-xl object-cover object-top"
+                    />
+                    <div className="text-xs">
+                      <span className="font-semibold text-[#121212]">{current.name}</span>
+                      <span className="mx-1.5 text-[#94a3b8]">•</span>
+                      <span className="uppercase tracking-[0.14em] text-[#1b6aa7] font-medium">
+                        {current.city}
+                      </span>
+                      <span className="block text-[#64748b]">{current.role}</span>
+                    </div>
+                  </div>
+                  <Link
+                    href="/about"
+                    className="text-xs font-semibold text-[#121212] underline underline-offset-4 hover:text-[#0e9f6e]"
+                  >
+                    About SWK
+                  </Link>
+                </div>
+              ) : null}
+            </div>
+          </SpotlightCard>
+
+          {/* Right Card: Ultra-Sharp Palm Waterfront Villa + Frosted Team Bar */}
+          <div className="relative min-h-[420px] sm:min-h-[460px] overflow-hidden rounded-2xl border border-white/80 bg-[#0b1623] shadow-[0_20px_54px_rgba(12,56,96,0.16)]">
+            <img
+              src="/img/hero/palm-waterfront-twilight.webp"
+              alt="Contemporary Dubai travertine and glass beachfront villa overlooking the Arabian Gulf"
+              loading="lazy"
+              className="h-full w-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#08131f]/78 via-transparent to-transparent" />
+
+            <div className="absolute inset-x-4 bottom-4 sm:inset-x-6 sm:bottom-6 rounded-2xl border border-white/25 bg-[#08131f]/62 p-5 text-white backdrop-blur-xl">
+              <div className="flex items-center justify-between gap-3">
+                <div className="flex items-center -space-x-1.5">
+                  {team.slice(0, 5).map((advisor) => (
+                    <img
+                      key={advisor.slug}
+                      src={advisor.photo}
+                      alt={advisor.name}
+                      loading="lazy"
+                      className="h-9 w-9 rounded-full border border-white/60 object-cover object-top"
+                    />
+                  ))}
+                </div>
+                <Link
+                  href="/agents"
+                  className="inline-flex items-center gap-1 rounded-full border border-white/30 bg-white/15 px-3.5 py-1.5 text-[11px] font-medium uppercase tracking-[0.14em] text-white transition-colors hover:bg-[#51fec0] hover:text-[#121212]"
+                >
+                  <span>Our Team</span>
+                  <ArrowUpRight className="h-3.5 w-3.5" />
+                </Link>
+              </div>
+
+              <div className="mt-4 flex items-end justify-between gap-4">
+                <p className="max-w-[260px] text-xs sm:text-sm leading-snug text-white/95">
+                  Turning a Dubai brief into direct master-developer allocation and Title Deed security.
+                </p>
+                <div className="text-right leading-none shrink-0">
+                  <span className="text-[11px] font-medium uppercase tracking-[0.16em] text-[#51fec0]">
+                    Sheikh Zayed Rd
+                  </span>
+                  <span className="mt-1 block text-xs text-white/80">
+                    25th Fl · Al Saqr
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* 21st.dev Interactive Focus Image Gallery — Hover to Spotlight Any Landmark */}
+        <div className="mt-16">
+          <div className="mb-4 text-center">
+            <SectionEyebrow align="center">CURATED ARCHITECTURAL MOSAIC · HOVER TO FOCUS</SectionEyebrow>
+          </div>
+          <InteractiveImageGallery items={ARCHITECTURAL_MOSAIC_ITEMS} />
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/* 03. 21ST.DEV LOGO CLOUD MARQUEE + GALLERY HOVER CAROUSEL (USER BOOKMARK!)  */
+/* -------------------------------------------------------------------------- */
+type LaunchCategory =
+  | "signature"
+  | "nakheel-emaar"
+  | "binghatti-branded"
+  | "damac-azizi"
+  | "jvc-urban";
+
+const LAUNCH_TABS: { id: LaunchCategory; label: string }[] = [
+  { id: "signature", label: "Signature Icons" },
+  { id: "nakheel-emaar", label: "Nakheel & Emaar" },
+  { id: "binghatti-branded", label: "Binghatti & Branded" },
+  { id: "damac-azizi", label: "DAMAC & Azizi Lagoons" },
+  { id: "jvc-urban", label: "JVC & Creek Growth" },
+];
+
+const CAROUSEL_SLUGS_BY_TAB: Record<LaunchCategory, string[]> = {
+  signature: [
+    "palm-springs-beachfront-villas",
+    "mercedes-benz-places",
+    "bugatti-residences-by-binghatti",
+    "creek-haven",
+    "damac-lagoons",
+    "riviera",
+    "binghatti-jvc-boutique-residences",
+    "como-residences",
+  ],
+  "nakheel-emaar": [
+    "palm-springs-beachfront-villas",
+    "como-residences",
+    "creek-haven",
+    "emaar-the-oasis",
+    "dubai-islands",
+    "rashid-yachts-and-marina",
+  ],
+  "binghatti-branded": [
+    "mercedes-benz-places",
+    "bugatti-residences-by-binghatti",
+    "burj-binghatti-jacob-and-co-residences",
+    "orla-dorchester-collection-dubai",
+    "karl-lagerfeld-villas",
+    "sobha-seahaven",
+  ],
+  "damac-azizi": [
+    "damac-lagoons",
+    "damac-islands",
+    "riviera",
+    "azizi-milan",
+    "chelsea-residences",
+    "azizi-florence",
+  ],
+  "jvc-urban": [
+    "binghatti-jvc-boutique-residences",
+    "binghatti-hills",
+    "sobha-century",
+    "dubai-hills-estate-residences",
+    "ellington-berkeley-tower",
+    "samana-downtown-one",
+  ],
+};
+
+const SIGNATURE_DECK_CONFIG = [
+  {
+    slug: "palm-springs-beachfront-villas",
+    kicker: "Nakheel · Palm Jebel Ali & Palm Jumeirah",
+    price: "From AED 18.5M",
+    priceNote: "80/20 Plan · 0% Buyer Fee",
+    accent: "#51fec0",
+  },
+  {
+    slug: "mercedes-benz-places",
+    kicker: "Binghatti · Downtown Dubai · 65 Floors",
+    price: "From AED 8.8M",
+    priceNote: "70/30 Plan · Burj Views",
+    accent: "#67e8f9",
+  },
+  {
+    slug: "bugatti-residences-by-binghatti",
+    kicker: "Binghatti · Business Bay Sky Mansions",
+    price: "From AED 19.0M",
+    priceNote: "Private Car Lifts · Riviera",
+    accent: "#f4d35e",
+  },
+  {
+    slug: "creek-haven",
+    kicker: "Emaar · Dubai Creek Harbour · Blue Line",
+    price: "From AED 1.65M",
+    priceNote: "80/20 Emaar Schedule",
+    accent: "#51fec0",
+  },
+  {
+    slug: "damac-lagoons",
+    kicker: "DAMAC · Mediterranean Lagoon Villas",
+    price: "From AED 2.65M",
+    priceNote: "Crystal Swimmable Lagoons",
+    accent: "#93c5fd",
+  },
+  {
+    slug: "riviera",
+    kicker: "Azizi · MBR City Waterfront Boulevard",
+    price: "From AED 1.15M",
+    priceNote: "Ready & Off-Plan Phases",
+    accent: "#51fec0",
+  },
+  {
+    slug: "como-residences",
+    kicker: "Nakheel · Palm Jumeirah Curved Tower",
+    price: "From AED 21.0M",
+    priceNote: "360° Gulf & Marina Views",
+    accent: "#67e8f9",
+  },
+  {
+    slug: "binghatti-jvc-boutique-residences",
+    kicker: "Binghatti · Jumeirah Village Circle",
+    price: "From AED 950K",
+    priceNote: "High-Yield Urban Corridor",
+    accent: "#51fec0",
+  },
+] as const;
+
+function SignatureIconsHorizontalShowcase() {
+  const deckItems = useMemo<SignatureDeckItem[]>(() => {
+    return SIGNATURE_DECK_CONFIG.map((cfg) => {
+      const proj = projects.find((p) => p.slug === cfg.slug) ?? projects[0];
+      return {
+        slug: proj.slug,
+        title: proj.name,
+        developer: proj.developer,
+        community: proj.community,
+        kicker: cfg.kicker,
+        summary: proj.summary,
+        image: proj.image,
+        price: cfg.price,
+        priceNote: cfg.priceNote,
+        tags: proj.tags,
+        href: `/off-plan/${proj.slug}`,
+        accent: cfg.accent,
+      };
+    });
+  }, []);
+
+  return <SignatureHorizontalDeck items={deckItems} className="mt-8" />;
+}
+
+export function DubaiDeveloperPulse() {
+  const [activeTab, setActiveTab] = useState<LaunchCategory>("signature");
+
+  const galleryItems = useMemo<GalleryHoverCarouselItem[]>(() => {
+    const slugs = CAROUSEL_SLUGS_BY_TAB[activeTab];
+    const matched = slugs
+      .map((s) => projects.find((p) => p.slug === s))
+      .filter((p): p is Project => Boolean(p));
+
+    const seen = new Set(matched.map((m) => m.slug));
+    const list =
+      matched.length >= 6
+        ? matched
+        : [
+            ...matched,
+            ...projects
+              .filter((p) => !seen.has(p.slug))
+              .slice(0, 6 - matched.length),
+          ];
+
+    return list.map((proj) => ({
+      id: proj.slug,
+      title: proj.name,
+      developer: proj.developer,
+      community: proj.community,
+      summary: proj.summary,
+      image: proj.image,
+      url: `/off-plan/${proj.slug}`,
+      tags: proj.tags,
+      badge: proj.priorityTarget ? "Flagship Mandate" : "Premier Launch",
+      isRender: true,
+    }));
+  }, [activeTab]);
+
+  const logoDevelopers = useMemo(
+    () =>
+      developers
+        .filter((d) => Boolean(d.logo))
+        .map((d) => ({
+          slug: d.slug,
+          name: d.name,
+          logo: d.logo as string,
+          knownFor: d.knownFor,
+        })),
+    []
+  );
+
+  return (
+    <section
+      id="dubai-launches"
+      className="relative border-y border-white/60 bg-white/24 py-24 backdrop-blur-[2px]"
+    >
+      <div className="mx-auto max-w-[1260px] px-4 sm:px-8">
+        {/* Header */}
+        <div className="flex flex-wrap items-end justify-between gap-6">
+          <div>
+            <SectionEyebrow>PREMIER UAE MASTER DEVELOPERS</SectionEyebrow>
+            <SplitHeading
+              primary="Iconic projects shaping"
+              muted="Dubai's next decade"
+              className="mt-5"
+            />
+          </div>
+          <BracketLink href="/off-plan" variant="light" size="md">
+            Explore All Projects
+          </BracketLink>
+        </div>
+
+        {/* 21st.dev Bidirectional Flowing Developer Logo Cloud — 100% Authentic Original Colors */}
+        <LogoCloudMarquee developers={logoDevelopers} className="mt-12" />
+
+        {/* Interactive Glass Category Pill Filters */}
+        <div className="mt-12 flex flex-wrap items-center gap-2.5">
+          {LAUNCH_TABS.map((tab) => {
+            const active = activeTab === tab.id;
             return (
               <button
-                key={item.step}
+                key={tab.id}
                 type="button"
-                onClick={() => setActiveStep(idx)}
-                className={`group relative flex flex-col justify-between rounded-2xl border p-4 text-left transition-all ${
+                onClick={() => setActiveTab(tab.id)}
+                className={`cursor-pointer rounded-full px-5 py-2.5 text-xs font-medium transition-all duration-200 hover:-translate-y-0.5 ${
                   active
-                    ? "border-[#17130e] bg-[#17130e] text-white shadow-md -translate-y-0.5"
-                    : completed
-                    ? "border-[#94652c]/50 bg-[#f6ead7]/55 text-[#17130e]"
-                    : "border-[#e6dfd2] bg-[#faf7f2] text-[#17130e] hover:border-[#94652c] hover:bg-white"
+                    ? "bg-[#121212] text-white shadow-[0_12px_28px_rgba(12,35,58,0.28)]"
+                    : "border border-white/85 bg-white/80 text-[#1e293b] shadow-xs backdrop-blur-xl hover:border-[#121212] hover:bg-[#121212] hover:text-white hover:shadow-[0_12px_28px_rgba(12,35,58,0.2)]"
                 }`}
               >
-                <div className="flex items-center justify-between gap-2">
-                  <span
-                    className={`font-hero-raleway font-light text-2xl ${
-                      active ? "text-[#dcb888]" : "text-[#94652c]"
-                    }`}
-                  >
-                    {item.step}
-                  </span>
-                  <span
-                    className={`rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${
-                      active
-                        ? "bg-white/15 text-[#dcb888]"
-                        : "bg-white text-[#786e60] border border-[#e6dfd2]"
-                    }`}
-                  >
-                    {item.timing}
-                  </span>
-                </div>
-                <div className="mt-3">
-                  <p
-                    className={`text-[10px] font-bold uppercase tracking-[0.18em] ${
-                      active ? "text-[#dcb888]" : "text-[#94652c]"
-                    }`}
-                  >
-                    {item.phase}
-                  </p>
-                  <p className="mt-0.5 font-serif text-base font-semibold leading-snug">
-                    {item.title}
-                  </p>
-                </div>
+                {tab.label}
               </button>
-            )
+            );
           })}
         </div>
 
-        {/* Animated Stage Detail Card */}
-        <AnimatePresence initial={false} mode="wait">
-          <motion.div
-            key={current.step}
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -12 }}
-            transition={{ duration: 0.35 }}
-            className="grid grid-cols-1 gap-8 lg:grid-cols-12 items-center rounded-3xl border border-[#e6dfd2] bg-[#faf7f2] p-6 md:p-10 shadow-sm"
-          >
-            <div className="lg:col-span-7 space-y-5">
-              <div className="inline-flex items-center gap-2 rounded-full border border-[#94652c]/35 bg-white px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.2em] text-[#94652c]">
-                <span>Step {current.step} of 06</span>
-                <span>·</span>
-                <span>{current.timing}</span>
-              </div>
-
-              <h3 className="font-serif text-2xl md:text-4xl font-semibold text-[#17130e]">
-                {current.title}
-              </h3>
-
-              <p className="text-sm md:text-base text-[#4a4237] leading-relaxed">
-                {current.description}
-              </p>
-
-              <div className="rounded-2xl border border-[#e6dfd2] bg-white p-4 flex items-start gap-3">
-                <CheckCircle2 className="h-5 w-5 shrink-0 text-[#94652c] mt-0.5" />
-                <div>
-                  <span className="block text-[10px] font-bold uppercase tracking-[0.2em] text-[#94652c]">
-                    Key Client Deliverable
-                  </span>
-                  <span className="text-xs md:text-sm font-semibold text-[#17130e]">
-                    {current.deliverable}
-                  </span>
-                </div>
-              </div>
-
-              <div className="flex flex-wrap items-center gap-3 pt-1">
-                <Link
-                  href="/guides/buying"
-                  className="inline-flex items-center gap-2 rounded-xl bg-[#17130e] px-6 py-3 text-xs font-bold uppercase tracking-[0.16em] text-white transition hover:bg-[#94652c]"
-                >
-                  <span>Read Full Acquisition Guide</span>
-                  <ArrowRight className="h-4 w-4 text-[#dcb888]" />
-                </Link>
-                <Link
-                  href="/calculators"
-                  className="inline-flex items-center gap-2 rounded-xl border border-[#e6dfd2] bg-white px-5 py-3 text-xs font-bold uppercase tracking-[0.16em] text-[#17130e] transition hover:border-[#94652c]"
-                >
-                  <span>Open Fee &amp; Yield Calculators</span>
-                </Link>
-              </div>
-            </div>
-
-            <div className="lg:col-span-5 overflow-hidden rounded-2xl border border-[#e6dfd2] bg-white shadow-md">
-              <img
-                src={current.image}
-                alt={current.title}
-                className="h-64 md:h-80 w-full object-cover"
-              />
-            </div>
-          </motion.div>
-        </AnimatePresence>
+        {/* Signature Icons -> 21st.dev Interactive Horizontal Expanding Deck; other clusters -> Gallery Hover Carousel */}
+        {activeTab === "signature" ? (
+          <SignatureIconsHorizontalShowcase />
+        ) : (
+          <GalleryHoverCarousel items={galleryItems} className="mt-8" />
+        )}
       </div>
     </section>
-  )
+  );
 }
 
-/* ------------------------------------------------------------- Our Promise (Viewfinder Inspection Removed per User Request) */
-export function OurNote() {
+/* -------------------------------------------------------------------------- */
+/* 04. SLOW INFINITE HORIZONTAL ARCHITECTURAL RESIDENCE MARQUEE               */
+/* -------------------------------------------------------------------------- */
+const SHOWCASE_PANELS = [
+  {
+    title: "Palm Jebel Ali",
+    developer: "Nakheel",
+    status: "NAKHEEL FLAGSHIP",
+    tone: "launch" as const,
+    specs: "PALM JEBEL ALI, DUBAI  ·  BEACHFRONT FROND VILLAS",
+    href: "/off-plan/palm-jebel-ali",
+    image: "/img/showcase/nakheel-palm-jebel-ali.webp",
+  },
+  {
+    title: "Bugatti Residences",
+    developer: "Binghatti",
+    status: "ULTRA-PRIME BRANDED",
+    tone: "offer" as const,
+    specs: "BUSINESS BAY, DUBAI  ·  RIVIERA SKY MANSIONS",
+    href: "/off-plan/bugatti-residences-by-binghatti",
+    image: "/img/showcase/binghatti-bugatti-residences.webp",
+  },
+  {
+    title: "Mercedes-Benz Places",
+    developer: "Binghatti",
+    status: "DOWNTOWN ICON",
+    tone: "launch" as const,
+    specs: "DOWNTOWN DUBAI  ·  65-STOREY SUPERTALL",
+    href: "/off-plan/mercedes-benz-places",
+    image: "/img/showcase/binghatti-mercedes-benz-places.webp",
+  },
+  {
+    title: "Dubai Creek Harbour",
+    developer: "Emaar Properties",
+    status: "EMAAR WATERFRONT",
+    tone: "launch" as const,
+    specs: "DUBAI CREEK HARBOUR  ·  CREEK MARINA TOWERS",
+    href: "/communities/dubai-creek-harbour",
+    image: "/img/showcase/emaar-creek-harbour.webp",
+  },
+  {
+    title: "DAMAC Lagoons",
+    developer: "DAMAC Properties",
+    status: "CRYSTAL LAGOON LIVING",
+    tone: "launch" as const,
+    specs: "DUBAILAND  ·  MEDITERRANEAN WATERFRONT VILLAS",
+    href: "/off-plan/damac-lagoons",
+    image: "/img/showcase/damac-lagoons.webp",
+  },
+  {
+    title: "Azizi Venice",
+    developer: "Azizi Developments",
+    status: "DUBAI SOUTH MASTERPLAN",
+    tone: "offer" as const,
+    specs: "DUBAI SOUTH  ·  CRYSTAL LAGOON BOULEVARD",
+    href: "/off-plan/azizi-venice",
+    image: "/img/showcase/azizi-venice.webp",
+  },
+];
+
+export function FullBleedResidences() {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const current = SHOWCASE_PANELS[activeIndex] ?? SHOWCASE_PANELS[0];
+  const marqueePanels = useMemo(
+    () => [
+      ...SHOWCASE_PANELS.map((p, idx) => ({ ...p, originalIdx: idx, loopKey: `a-${p.title}` })),
+      ...SHOWCASE_PANELS.map((p, idx) => ({ ...p, originalIdx: idx, loopKey: `b-${p.title}` })),
+    ],
+    []
+  );
+
   return (
-    <section className="border-b border-[#e6dfd2] bg-[#f4efe6] py-24">
-      <div className="mx-auto max-w-7xl px-4 md:px-6">
-        <div className="flex flex-col items-center text-center mb-10">
-          <span className="inline-flex items-center gap-2 rounded-full border border-[#94652c]/35 bg-white px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.24em] text-[#94652c] shadow-sm">
-            <ShieldCheck className="h-3.5 w-3.5" />
-            07 · Our Promise · The SWK Advisory Charter
-          </span>
-          <h2 className="mt-4 font-serif text-3xl md:text-5xl font-semibold text-[#17130e] leading-[1.08]">
-            Clarity Before <em className="text-[#94652c] not-italic">Commitment.</em>
-          </h2>
-          <p className="mt-3 max-w-2xl text-sm md:text-base text-[#4a4237] leading-relaxed">
-            Buying or leasing property in the UAE should be led by clear paperwork, verified developer track records, and written cost sheets. Explore our interactive charter pillars below.
-          </p>
-        </div>
+    <section
+      aria-label="Featured Dubai Residences Infinite Showcase Marquee"
+      className="relative overflow-hidden bg-gradient-to-b from-[#07111d]/96 via-[#0a1829]/95 to-[#0b131e]/97 py-20 sm:py-24 text-white backdrop-blur-xl border-b border-white/10"
+    >
+      {/* Subtle Ambient Sapphire Halo Behind Stage */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute top-1/2 left-1/2 h-[540px] w-[860px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(87,210,244,0.16)_0%,rgba(27,106,167,0.08)_42%,transparent_72%)] blur-3xl"
+      />
 
-        {/* 21st.dev InteractiveExpandingSelector for SWK Charter */}
-        <div className="rounded-3xl border border-[#e6dfd2] bg-white p-4 md:p-8 shadow-sm">
-          <InteractiveSelector />
-        </div>
-      </div>
-    </section>
-  )
-}
-
-/* ------------------------------------------------------------------ Team (Unified 8-Member Team Section + Animated Track-Record Popup Modal) */
-export type TeamMemberItem = (typeof team)[number] & {
-  dealsCount?: string
-  experienceYears?: string
-  topDevelopers?: string[]
-  keyProjects?: string[]
-  specialties?: string[]
-}
-
-export function Team() {
-  const [selectedMember, setSelectedMember] = React.useState<TeamMemberItem | null>(null)
-  const typedTeam = team as TeamMemberItem[]
-
-  return (
-    <section id="team" className="scroll-mt-20 border-b border-[#e6dfd2] bg-white py-16 md:py-24">
-      <div className="mx-auto max-w-7xl px-4 md:px-6">
-        <div className="flex flex-wrap items-end justify-between gap-6 mb-10 md:mb-12">
+      <div className="relative z-10 mx-auto max-w-[1260px] px-4 sm:px-8">
+        {/* Top Synced Architectural Header */}
+        <div className="flex flex-wrap items-end justify-between gap-6">
           <div>
-            <p className="text-xs font-bold uppercase tracking-[0.26em] text-[#17130e]">
-              25+ Real Estate Professionals · Sheikh Zayed Road, Dubai
-            </p>
-            <h2 className="mt-2 font-serif text-3xl md:text-5xl font-semibold text-[#17130e]">
-              Leadership &amp; Key Advisory Specialists
+            <LiveStatusDot
+              label={current.status}
+              tone={current.tone}
+              surface="dark"
+            />
+            <h2 className="mt-4 text-[34px] sm:text-[48px] md:text-[58px] font-medium leading-[1.03] tracking-[-0.04em] text-white transition-all duration-300">
+              {current.title}
             </h2>
-            <p className="mt-2.5 max-w-2xl text-sm md:text-base text-[#4a4237] leading-relaxed">
-              Backed by a team of 25+ dedicated real estate professionals on Sheikh Zayed Road. Click any senior advisor below to inspect their track-record dossier—including years of experience, verified transactions, developer partnerships, and direct WhatsApp contact.
+            <p className="mt-3 text-[11px] sm:text-[12px] font-medium uppercase tracking-[0.22em] text-white/70">
+              {current.specs}
             </p>
           </div>
-          <div className="rounded-2xl border border-[#e6dfd2] bg-[#faf7f2] px-5 py-3 text-left sm:text-right">
-            <div className="font-hero-raleway font-light text-2xl font-bold text-[#17130e]">
-              25+ Professionals
-            </div>
-            <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#17130e]/75">
-              18+ Years Combined UAE Leadership
-            </div>
+
+          <div className="flex flex-wrap items-center gap-4">
+            <span className="hidden sm:inline-block font-mono text-xs text-[#51fec0]/80">
+              HOVER ANY CARD TO PAUSE &amp; INSPECT
+            </span>
+            <BracketLink href={current.href} variant="white" size="md">
+              View Residence
+            </BracketLink>
           </div>
         </div>
+      </div>
 
-        {/* Interactive Senior Advisory Grid */}
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {typedTeam.map((member) => (
-            <motion.div
-              key={member.slug}
-              whileHover={{ y: -5 }}
-              transition={{ type: "spring", stiffness: 300, damping: 24 }}
-              onClick={() => setSelectedMember(member)}
-              className="group cursor-pointer flex flex-col justify-between overflow-hidden rounded-3xl border border-[#e6dfd2] bg-[#faf7f2] shadow-sm transition-colors hover:border-[#17130e] hover:bg-white hover:shadow-xl"
-            >
-              <div>
-                {/* High-Resolution 4:5 Centered Portrait — Zero Overlapping Badges */}
-                <div className="relative aspect-[4/5] w-full overflow-hidden bg-[#17130e]">
-                  <img
-                    src={member.photo}
-                    alt={member.name}
-                    loading="eager"
-                    decoding="sync"
-                    className="h-full w-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#17130e]/90 via-transparent to-transparent" />
+      {/* Slow Infinite Seamless Horizontal Architectural Card Marquee (Pauses on Hover) */}
+      <div
+        className="group/res-marquee relative z-10 mt-12 w-full overflow-hidden py-5"
+        style={{
+          maskImage:
+            "linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%)",
+          WebkitMaskImage:
+            "linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%)",
+        }}
+      >
+        <div className="animate-residence-marquee gap-6 pr-6 group-hover/res-marquee:[animation-play-state:paused]">
+          {marqueePanels.map((panel) => {
+            const isHighlighted = panel.originalIdx === activeIndex;
+            return (
+              <Link
+                key={panel.loopKey}
+                href={panel.href}
+                onMouseEnter={() => setActiveIndex(panel.originalIdx)}
+                onFocus={() => setActiveIndex(panel.originalIdx)}
+                className={`group/rcard relative flex h-[450px] sm:h-[500px] w-[320px] sm:w-[400px] lg:w-[440px] shrink-0 flex-col justify-between overflow-hidden rounded-[28px] border bg-[#0d1928] transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-2.5 hover:scale-[1.02] hover:border-[#51fec0]/80 hover:shadow-[0_30px_76px_rgba(81,254,192,0.2)] ${
+                  isHighlighted
+                    ? "border-[#51fec0]/55 shadow-[0_24px_64px_rgba(0,0,0,0.55)]"
+                    : "border-white/15 shadow-[0_18px_46px_rgba(0,0,0,0.4)]"
+                }`}
+              >
+                {/* Full-Bleed Architectural Photo */}
+                <img
+                  src={panel.image}
+                  alt={`${panel.title} by ${panel.developer}`}
+                  loading="lazy"
+                  className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover/rcard:scale-110"
+                />
 
-                  <div className="absolute bottom-4 left-4 right-4 text-white">
-                    <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-white/80">
-                      {member.role}
-                    </p>
-                    <h3 className="mt-0.5 font-serif text-xl md:text-2xl font-semibold text-white">
-                      {member.name}
-                    </h3>
-                  </div>
+                {/* Cinematic Edge Scrim */}
+                <div
+                  aria-hidden="true"
+                  className="absolute inset-0 bg-gradient-to-t from-[#050d17]/92 via-[#050d17]/28 to-[#050d17]/45 transition-opacity duration-300 group-hover/rcard:opacity-90"
+                />
+
+                {/* Top Row: Status Pill + Landmark Number */}
+                <div className="relative z-10 flex items-center justify-between gap-3 p-5 sm:p-6">
+                  <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-[#08131f]/75 px-3.5 py-1.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-white backdrop-blur-md transition-colors group-hover/rcard:border-[#51fec0]/60">
+                    <span
+                      className={`h-1.5 w-1.5 rounded-full ${
+                        panel.tone === "offer" ? "bg-[#a5ce3a]" : "bg-[#51fec0]"
+                      }`}
+                      aria-hidden="true"
+                    />
+                    {panel.status}
+                  </span>
+                  <span className="flex h-9 w-9 items-center justify-center rounded-full border border-white/20 bg-[#08131f]/70 font-mono text-xs font-semibold text-white/90 backdrop-blur-md transition-all duration-300 group-hover/rcard:border-[#51fec0] group-hover/rcard:bg-[#51fec0] group-hover/rcard:text-[#08131f]">
+                    0{panel.originalIdx + 1}
+                  </span>
                 </div>
 
-                {/* Non-Overlapping Experience & Transaction Badges + Summary */}
-                <div className="p-5 space-y-3.5">
-                  <div className="flex flex-wrap items-center gap-1.5">
-                    {member.experienceYears && (
-                      <span className="rounded-full bg-[#17130e] px-3 py-1 text-[10px] font-bold uppercase tracking-[0.1em] text-white">
-                        {member.experienceYears}
-                      </span>
-                    )}
-                    {member.dealsCount && (
-                      <span className="rounded-full border border-[#17130e]/20 bg-white px-3 py-1 text-[10px] font-bold text-[#17130e]">
-                        {member.dealsCount}
-                      </span>
-                    )}
-                  </div>
-
-                  <p className="line-clamp-3 text-xs text-[#4a4237] leading-relaxed">
-                    {member.bio}
+                {/* Bottom Editorial Meta + Hover-Animated Explore Pill */}
+                <div className="relative z-10 p-5 sm:p-6">
+                  <p className="text-[10.5px] font-semibold uppercase tracking-[0.22em] text-[#51fec0]">
+                    {panel.developer}
+                  </p>
+                  <h3 className="mt-1.5 text-[26px] sm:text-[30px] font-medium leading-[1.08] tracking-[-0.03em] text-white">
+                    {panel.title}
+                  </h3>
+                  <p className="mt-2 text-[11px] font-medium uppercase tracking-[0.16em] text-white/75">
+                    {panel.specs}
                   </p>
 
-                  {member.topDevelopers && member.topDevelopers.length > 0 && (
-                    <div>
-                      <span className="block text-[10px] font-bold uppercase tracking-[0.18em] text-[#17130e] mb-1.5">
-                        Key Developer Track Record:
-                      </span>
-                      <div className="flex flex-wrap gap-1.5">
-                        {member.topDevelopers.map((dev) => (
-                          <span
-                            key={dev}
-                            className="rounded-full border border-[#e6dfd2] bg-white px-2.5 py-0.5 text-[10px] font-semibold text-[#17130e]"
-                          >
-                            {dev}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  )}
+                  <div className="mt-5 flex items-center justify-between gap-3 border-t border-white/15 pt-4">
+                    <span className="inline-flex items-center gap-2 rounded-full bg-white/95 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.15em] text-[#0a1624] transition-all duration-300 group-hover/rcard:bg-[#51fec0] group-hover/rcard:shadow-[0_10px_24px_rgba(81,254,192,0.38)]">
+                      <span>Explore Residence</span>
+                      <ArrowUpRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover/rcard:translate-x-0.5 group-hover/rcard:-translate-y-0.5" />
+                    </span>
+                    <span className="text-[10px] font-medium uppercase tracking-[0.18em] text-white/55">
+                      Architectural Visual
+                    </span>
+                  </div>
                 </div>
-              </div>
+              </Link>
+            );
+          })}
+        </div>
+      </div>
 
-              <div className="flex items-center justify-between border-t border-[#e6dfd2] bg-white px-5 py-3.5 text-xs font-bold text-[#17130e] group-hover:bg-[#17130e] group-hover:text-white transition-colors">
-                <span className="uppercase tracking-[0.14em]">
-                  View Experience &amp; Track Record
-                </span>
-                <ArrowUpRight className="h-4 w-4" />
+      {/* Interactive Landmark Selector Pills (Hover or Click to Highlight & Open) */}
+      <div className="relative z-10 mx-auto mt-6 max-w-[1260px] px-4 sm:px-8">
+        <div className="flex flex-wrap items-center justify-center gap-2.5">
+          {SHOWCASE_PANELS.map((panel, idx) => {
+            const active = idx === activeIndex;
+            return (
+              <Link
+                key={panel.title}
+                href={panel.href}
+                onMouseEnter={() => setActiveIndex(idx)}
+                className={`cursor-pointer rounded-full px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.14em] transition-all duration-200 hover:-translate-y-0.5 ${
+                  active
+                    ? "bg-white text-[#0a1624] shadow-[0_10px_28px_rgba(255,255,255,0.28)] hover:bg-[#51fec0]"
+                    : "border border-white/20 bg-white/[0.08] text-white/85 hover:border-[#51fec0]/70 hover:bg-white/16 hover:text-white hover:shadow-[0_10px_24px_rgba(81,254,192,0.18)]"
+                }`}
+              >
+                <span className="mr-1.5 font-mono opacity-65">0{idx + 1}</span>
+                {panel.title}
+              </Link>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/* 05. OBSIDIAN CONTRAST BAND: SERVICES + 3 UNIQUE PHOTO CARDS + CREDENTIALS  */
+/* -------------------------------------------------------------------------- */
+const CORE_SERVICES = [
+  {
+    num: "01",
+    title: "Off-Plan Advisory",
+    href: "/services/off-plan-advisory",
+    items: [
+      "Direct access to Nakheel, Binghatti, Emaar, DAMAC, Azizi & Sobha",
+      "Side-by-side payment plan & floor-plate audit",
+      "RERA escrow & Oqood verification",
+      "Launch-day allocation & exit guidance",
+    ],
+  },
+  {
+    num: "02",
+    title: "Secondary & Ready Handovers",
+    href: "/services/secondary-market",
+    items: [
+      "Valuation anchored to DLD comparable sales",
+      "Qualified viewings & offer strategy",
+      "Form F (MOU), Developer NOC & Trustee transfer",
+      "Seamless Title Deed, snagging & utility handover",
+    ],
+  },
+  {
+    num: "03",
+    title: "Leasing & Commercial Spaces",
+    href: "/services/leasing-rental",
+    items: [
+      "Executive residential & Grade-A commercial representation",
+      "Realistic cheque-schedule & corporate lease structuring",
+      "Ejari contract drafting & DLD registration",
+      "Renewal benchmarks & RERA rental index checks",
+    ],
+  },
+  {
+    num: "04",
+    title: "Investment & Portfolio Advisory",
+    href: "/services/investment-advisory",
+    items: [
+      "Net rental yield after Mollak service charges",
+      "Capital growth corridors across 5 UAE emirates",
+      "UAE Golden Visa AED 2M+ qualification mapping",
+      "Annual hold, refinance, or resale review",
+    ],
+  },
+];
+
+const BEYOND_EXPAND_ITEMS: HoverExpandItem[] = [
+  {
+    id: "mortgage-assistance",
+    title: "Mortgage Assistance",
+    tag: "FINANCING DESK",
+    description:
+      "Pre-approval comparisons across UAE resident and non-resident banks before you sign Form F or commit to a developer milestone.",
+    image: "/img/beyond/mortgage-villa.webp",
+    href: "/services/mortgage-assistance",
+  },
+  {
+    id: "property-management",
+    title: "Property Management",
+    tag: "LANDLORD ASSET CARE",
+    description:
+      "End-to-end tenant vetting, Ejari registration, snagging, and annual RERA rental index yield optimization for absentee owners.",
+    image: "/img/beyond/management-lobby.webp",
+    href: "/services/property-management",
+  },
+  {
+    id: "legal-golden-visa",
+    title: "Legal, Golden Visa & Fit-Out",
+    tag: "CONVEYANCING & RESIDENCY",
+    description:
+      "DLD Trustee transfers, Power of Attorney coordination, AED 2M+ 10-year UAE Golden Visa eligibility guidance, and turnkey fit-out partners.",
+    image: "/img/beyond/legal-pavilion.webp",
+    href: "/services/legal-documentation",
+  },
+  {
+    id: "private-office-desk",
+    title: "Al Saqr Private Office",
+    tag: "25TH FLOOR · SHEIKH ZAYED RD",
+    description:
+      "Confidential portfolio reviews and direct master-developer allocation briefings hosted at our Sheikh Zayed Road headquarters.",
+    image: "/img/about/contact-reception.webp",
+    href: "/contact",
+  },
+  {
+    id: "branded-residences",
+    title: "Branded Residences Desk",
+    tag: "ULTRA-PRIME ALLOCATIONS",
+    description:
+      "Early-access floor plans across Four Seasons, Bugatti, Mercedes-Benz, Baccarat, Armani, and Dorchester Collection residences.",
+    image: "/img/projects/hh-development/four-seasons-branded-residences.webp",
+    href: "/off-plan",
+  },
+];
+
+function CredentialLaurel({ top, bottom }: { top: string; bottom: string }) {
+  return (
+    <div className="group flex flex-col items-center text-center transition-transform duration-300 hover:-translate-y-1">
+      <div className="relative flex h-24 w-24 items-center justify-center rounded-full border border-dashed border-[#51fec0]/45 bg-white/[0.06] backdrop-blur-md transition-all duration-300 group-hover:scale-105 group-hover:border-[#51fec0] group-hover:bg-[#51fec0]/15 group-hover:shadow-[0_0_28px_rgba(81,254,192,0.28)]">
+        <div className="text-center px-2">
+          <div className="text-sm font-medium tracking-[-0.02em] text-white transition-colors group-hover:text-[#51fec0]">
+            {top}
+          </div>
+        </div>
+      </div>
+      <p className="mt-3 max-w-[120px] text-[11px] leading-snug text-[#94a3b8] transition-colors group-hover:text-white/90">
+        {bottom}
+      </p>
+    </div>
+  );
+}
+
+export function ServicesAndTrackRecord() {
+  return (
+    <section className="bg-[#0b131e]/95 py-24 sm:py-32 text-white backdrop-blur-xl">
+      <div className="mx-auto max-w-[1260px] px-4 sm:px-8">
+        {/* Part A: Services Header */}
+        <div className="flex flex-wrap items-end justify-between gap-6">
+          <div>
+            <SectionEyebrow tone="dark">WHAT WE PROVIDE</SectionEyebrow>
+            <SplitHeading
+              tone="dark"
+              primary="Taking the guesswork"
+              muted="out of Dubai property"
+              className="mt-5"
+            />
+          </div>
+          <BracketLink href="/services" variant="white" size="sm">
+            All Services
+          </BracketLink>
+        </div>
+
+        {/* 4 Interactive Numbered Rows */}
+        <div className="mt-14 divide-y divide-white/[0.1] border-y border-white/[0.1]">
+          {CORE_SERVICES.map((srv) => (
+            <Link
+              key={srv.num}
+              href={srv.href}
+              className="group grid grid-cols-1 items-center gap-6 px-3 py-9 sm:py-11 md:grid-cols-12 rounded-2xl transition-all duration-300 hover:bg-white/[0.05] hover:px-5"
+            >
+              <div className="md:col-span-5 flex items-baseline gap-6">
+                <span className="font-mono text-sm text-[#57d2f4] transition-transform duration-300 group-hover:scale-110">{srv.num}</span>
+                <h3 className="text-2xl sm:text-[28px] font-medium tracking-[-0.03em] text-white transition-all duration-300 group-hover:translate-x-1 group-hover:text-[#51fec0]">
+                  {srv.title}
+                </h3>
               </div>
-            </motion.div>
+              <ul className="md:col-span-5 space-y-2 text-sm text-[#cbd5e1]">
+                {srv.items.map((pt) => (
+                  <li key={pt} className="flex items-start gap-2.5">
+                    <span className="text-[#51fec0]" aria-hidden="true">
+                      +
+                    </span>
+                    <span>{pt}</span>
+                  </li>
+                ))}
+              </ul>
+              <div className="md:col-span-2 flex md:justify-end">
+                <span className="inline-flex h-16 w-12 items-center justify-center rounded-xl border border-white/15 bg-white/[0.06] text-white transition-all duration-300 group-hover:scale-105 group-hover:border-[#51fec0] group-hover:bg-[#51fec0] group-hover:text-[#0a1624] group-hover:shadow-[0_12px_28px_rgba(81,254,192,0.35)]">
+                  <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" />
+                </span>
+              </div>
+            </Link>
           ))}
         </div>
 
-        {/* Animated Detailed Popup Modal for Selected Team Member */}
-        <AnimatePresence>
-          {selectedMember && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setSelectedMember(null)}
-              role="dialog"
-              aria-modal="true"
-              className="fixed inset-0 z-[90] flex items-center justify-center bg-[#17130e]/75 p-3 sm:p-4 backdrop-blur-md"
-            >
-              <motion.div
-                initial={{ opacity: 0, scale: 0.92, y: 24 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.92, y: 24 }}
-                transition={{ type: "spring", stiffness: 320, damping: 28 }}
-                onClick={(e) => e.stopPropagation()}
-                className="relative max-h-[90dvh] w-full max-w-3xl overflow-y-auto rounded-3xl border border-[#e6dfd2] bg-white text-[#17130e] shadow-[0_32px_90px_rgba(23,19,14,0.45)]"
-              >
-                {/* Modal Top Header Bar */}
-                <div className="sticky top-0 z-20 flex items-center justify-between border-b border-[#e6dfd2] bg-[#17130e] px-5 sm:px-6 py-4 text-white">
-                  <div className="flex items-center gap-2.5">
-                    <img
-                      src="/brand/swk-emblem.svg"
-                      alt="SWK"
-                      className="h-7 w-7 object-contain"
-                    />
-                    <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#E0C1A3]">
-                      Verified Advisor Dossier · SWK Properties
-                    </span>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => setSelectedMember(null)}
-                    aria-label="Close advisor modal"
-                    className="rounded-full bg-white/10 p-2 text-white hover:bg-white/20"
-                  >
-                    <X className="h-4 w-4" />
-                  </button>
-                </div>
-
-                {/* Modal Body */}
-                <div className="p-5 sm:p-8 space-y-6">
-                  <div className="grid grid-cols-1 gap-6 md:grid-cols-12 items-center">
-                    <div className="md:col-span-5 overflow-hidden rounded-2xl border border-[#e6dfd2] bg-[#17130e] shadow-md">
-                      <img
-                        src={selectedMember.photo}
-                        alt={selectedMember.name}
-                        className="h-72 w-full object-cover object-top"
-                      />
-                    </div>
-
-                    <div className="md:col-span-7 space-y-4">
-                      <div className="flex flex-wrap items-center gap-2">
-                        {selectedMember.experienceYears && (
-                          <span className="inline-flex items-center gap-1.5 rounded-full bg-[#17130e] px-3.5 py-1 text-[11px] font-bold uppercase tracking-[0.14em] text-[#dcb888]">
-                            <Award className="h-3.5 w-3.5" />
-                            {selectedMember.experienceYears}
-                          </span>
-                        )}
-                        {selectedMember.dealsCount && (
-                          <span className="rounded-full border border-[#94652c]/40 bg-[#f6ead7] px-3 py-1 text-[11px] font-bold text-[#94652c]">
-                            {selectedMember.dealsCount}
-                          </span>
-                        )}
-                      </div>
-
-                      <div>
-                        <h3 className="font-serif text-2xl sm:text-3xl font-semibold text-[#17130e]">
-                          {selectedMember.name}
-                        </h3>
-                        <p className="mt-1 text-xs font-bold uppercase tracking-[0.2em] text-[#94652c]">
-                          {selectedMember.role}
-                        </p>
-                      </div>
-
-                      <p className="text-sm text-[#4a4237] leading-relaxed">
-                        {selectedMember.bio}
-                      </p>
-
-                      <div className="flex flex-wrap items-center gap-1.5 pt-1">
-                        <span className="text-xs font-bold text-[#17130e] mr-1">
-                          Languages:
-                        </span>
-                        {selectedMember.languages.map((lang) => (
-                          <span
-                            key={lang}
-                            className="rounded-full border border-[#e6dfd2] bg-[#faf7f2] px-2.5 py-0.5 text-[11px] font-semibold text-[#4a4237]"
-                          >
-                            {lang}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Verified Performance Metrics Grid (Years & Number of Transactions Only — No Currency Figures) */}
-                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-                    <div className="rounded-2xl border border-[#e6dfd2] bg-[#faf7f2] p-4">
-                      <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#94652c]">
-                        Market Experience
-                      </span>
-                      <div className="mt-1 font-serif text-xl font-bold text-[#17130e]">
-                        {selectedMember.experienceYears ?? "10+ Years"}
-                      </div>
-                    </div>
-                    <div className="rounded-2xl border border-[#e6dfd2] bg-[#faf7f2] p-4">
-                      <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#94652c]">
-                        Completed Transactions
-                      </span>
-                      <div className="mt-1 font-serif text-xl font-bold text-[#17130e]">
-                        {selectedMember.dealsCount ?? "100+ Transactions"}
-                      </div>
-                    </div>
-                    <div className="rounded-2xl border border-[#e6dfd2] bg-[#faf7f2] p-4">
-                      <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#94652c]">
-                        Advisory Base
-                      </span>
-                      <div className="mt-1 font-serif text-xl font-bold text-[#17130e]">
-                        Sheikh Zayed Road
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Top Developers & Priority Projects */}
-                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                    {selectedMember.topDevelopers && (
-                      <div className="rounded-2xl border border-[#e6dfd2] bg-white p-4">
-                        <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#94652c] mb-2.5">
-                          Top Developer Partnerships
-                        </p>
-                        <div className="flex flex-wrap gap-1.5">
-                          {selectedMember.topDevelopers.map((dev) => (
-                            <span
-                              key={dev}
-                              className="rounded-lg bg-[#17130e] px-3 py-1 text-xs font-semibold text-white"
-                            >
-                              {dev}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-
-                    {selectedMember.keyProjects && (
-                      <div className="rounded-2xl border border-[#e6dfd2] bg-white p-4">
-                        <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#94652c] mb-2.5">
-                          Priority Target Allocations
-                        </p>
-                        <div className="flex flex-wrap gap-1.5">
-                          {selectedMember.keyProjects.map((proj) => (
-                            <span
-                              key={proj}
-                              className="rounded-lg border border-[#94652c]/35 bg-[#f6ead7] px-2.5 py-1 text-xs font-semibold text-[#17130e]"
-                            >
-                              {proj}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Modal Footer CTAs */}
-                  <div className="flex flex-wrap items-center justify-between gap-3 border-t border-[#e6dfd2] pt-5">
-                    <div className="flex flex-wrap items-center gap-2.5">
-                      <a
-                        href={`${SITE.whatsappUrl}?text=${encodeURIComponent(
-                          `Hello ${selectedMember.name} at SWK Properties, I would like to discuss UAE property options.`
-                        )}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-5 py-3 text-xs font-bold uppercase tracking-[0.16em] text-white transition hover:bg-emerald-700"
-                      >
-                        <WhatsAppIcon className="h-4 w-4" />
-                        WhatsApp {selectedMember.name.split(" ")[0]}
-                      </a>
-                      <a
-                        href={`tel:${SITE.phoneRaw}`}
-                        className="inline-flex items-center gap-2 rounded-xl border border-[#e6dfd2] bg-[#faf7f2] px-5 py-3 text-xs font-bold uppercase tracking-[0.16em] text-[#17130e] transition hover:border-[#94652c]"
-                      >
-                        <Phone className="h-4 w-4 text-[#94652c]" />
-                        {SITE.phone}
-                      </a>
-                    </div>
-
-                    <Link
-                      href={`/agents/${selectedMember.slug}`}
-                      onClick={() => setSelectedMember(null)}
-                      className="inline-flex items-center gap-2 rounded-xl bg-[#17130e] px-5 py-3 text-xs font-bold uppercase tracking-[0.16em] text-white transition hover:bg-[#94652c]"
-                    >
-                      <span>Full Advisor Page</span>
-                      <ArrowRight className="h-4 w-4 text-[#dcb888]" />
-                    </Link>
-                  </div>
-                </div>
-              </motion.div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
-    </section>
-  )
-}
-
-/* ---------------------------------------------------------------- Voices (Interactive Client Spotlight + Dual Counter-Scrolling Infinite Showcase) */
-export function Voices() {
-  const allStories = [...testimonials, ...horizontalTestimonials]
-  const [activeStoryIdx, setActiveStoryIdx] = React.useState(0)
-  const featured = allStories[activeStoryIdx] ?? allStories[0]
-
-  return (
-    <section id="reviews" className="scroll-mt-20 border-b border-[#e6dfd2] bg-white py-24 overflow-hidden">
-      <div className="mx-auto max-w-7xl px-4 md:px-6">
-        <div className="flex flex-wrap items-end justify-between gap-6 mb-12">
-          <SectionHeading
-            eyebrow="08 · Verified Global Client Stories"
-            title={
-              <>
-                Trusted by Buyers From{" "}
-                <em className="text-[#94652c] not-italic">Six Countries.</em>
-              </>
-            }
-            lead="Select any buyer profile below to read how families and overseas investors from the UK, India, UAE, Canada, Pakistan, and Russia completed their acquisitions with SWK."
-          />
-
-          {/* Interactive Buyer Selector Pills */}
-          <div className="flex flex-wrap gap-2">
-            { testimonials.map((item, idx) => {
-              const selected = idx === activeStoryIdx
-              return (
-                <button
-                  key={item.id}
-                  type="button"
-                  onClick={() => setActiveStoryIdx(idx)}
-                  className={`inline-flex items-center gap-2 rounded-full border px-3.5 py-1.5 text-xs font-semibold transition-all ${
-                    selected
-                      ? "border-[#17130e] bg-[#17130e] text-white shadow-sm"
-                      : "border-[#e6dfd2] bg-[#faf7f2] text-[#17130e] hover:border-[#94652c]"
-                  }`}
-                >
-                  <img
-                    src={item.image}
-                    alt={item.name}
-                    className="h-5 w-5 rounded-full object-cover"
-                  />
-                  <span>{item.name}</span>
-                  <span className="text-[10px] opacity-75">({item.city})</span>
-                </button>
-              )
-            })}
+        {/* Part B: Support Beyond Buying and Selling (21st.dev HoverExpand Spring Panels) */}
+        <div className="mt-24">
+          <div className="flex flex-wrap items-end justify-between gap-4">
+            <SplitHeading
+              tone="dark"
+              size="md"
+              primary="Support beyond"
+              muted="buying and selling"
+            />
+            <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-[#51fec0]/85">
+              HOVER OR TAP ANY DESK TO EXPAND
+            </span>
           </div>
+          <HoverExpand
+            items={BEYOND_EXPAND_ITEMS}
+            orientation="horizontal"
+            expandedFlex={4.2}
+            collapsedFlex={1}
+            className="mt-10"
+          />
         </div>
 
-        {/* Animated Featured Client Case Study Spotlight */}
-        {featured && (
-          <AnimatePresence initial={false} mode="wait">
-            <motion.div
-              key={featured.id}
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -12 }}
-              transition={{ duration: 0.35 }}
-              className="mb-14 grid grid-cols-1 gap-8 lg:grid-cols-12 items-center rounded-3xl border border-[#e6dfd2] bg-[#17130e] p-6 md:p-10 text-white shadow-xl"
-            >
-              <div className="lg:col-span-4 flex flex-col sm:flex-row lg:flex-col items-center sm:items-start gap-5">
-                <img
-                  src={featured.image}
-                  alt={featured.name}
-                  className="h-28 w-28 md:h-36 md:w-36 rounded-3xl object-cover border-2 border-[#dcb888]"
-                />
-                <div className="text-center sm:text-left">
-                  <div className="inline-flex items-center gap-1.5 rounded-full bg-[#dcb888]/20 border border-[#dcb888]/40 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-[#dcb888]">
-                    <Globe className="h-3 w-3" />
-                    Verified Buyer · {featured.city}
-                  </div>
-                  <h3 className="mt-2 font-serif text-2xl md:text-3xl font-semibold text-white">
-                    {featured.name}
-                  </h3>
-                  <p className="text-xs font-medium text-[#dcb888]">
-                    {featured.role}
+        {/* Part C: Track Record Credentials + 2x2 Crisp White Stat Cards (No Restrictive Caps) */}
+        <div className="mt-28 border-t border-white/[0.1] pt-20">
+          <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-12">
+            <div className="lg:col-span-5 grid grid-cols-3 gap-4">
+              <CredentialLaurel
+                top="ORN 51517"
+                bottom="RERA Registered Dubai Brokerage"
+              />
+              <CredentialLaurel
+                top="Direct Desk"
+                bottom="Premier UAE Master Developers"
+              />
+              <CredentialLaurel
+                top="Est. 2008"
+                bottom="Al Saqr Building · SZR"
+              />
+            </div>
+
+            <div className="lg:col-span-7">
+              <h2 className="text-[30px] sm:text-[42px] md:text-[48px] font-medium leading-[1.1] tracking-[-0.04em] text-white">
+                Eighteen years advising Dubai buyers and investors —{" "}
+                <span className="text-[#94a3b8]">
+                  pairing DLD transaction evidence with street-level floor-plate
+                  knowledge.
+                </span>
+              </h2>
+            </div>
+          </div>
+
+          <div className="mt-14 grid grid-cols-1 gap-5 sm:grid-cols-2">
+            {stats.map((st) => (
+              <SpotlightCard key={st.label} className="bg-white/95">
+                <div className="flex min-h-[136px] items-center justify-between gap-6 px-7 py-6 sm:px-9 text-[#121212]">
+                  <p className="max-w-[220px] text-sm leading-snug text-[#475569]">
+                    {st.label}
+                  </p>
+                  <p className="text-[42px] sm:text-[56px] font-medium leading-none tracking-[-0.045em] text-[#0a1624] tabular-nums">
+                    {st.value}
+                    {st.suffix}
                   </p>
                 </div>
-              </div>
-
-              <div className="lg:col-span-8 space-y-5 border-t lg:border-t-0 lg:border-l border-white/15 pt-5 lg:pt-0 lg:pl-8">
-                <div className="flex items-center gap-1 text-[#dcb888] text-sm">
-                  {"★★★★★"}
-                  <span className="ml-2 text-[11px] font-bold uppercase tracking-[0.2em] text-white/75">
-                    Completed Transaction Review
-                  </span>
-                </div>
-                <blockquote className="font-serif text-xl md:text-3xl leading-relaxed text-white">
-                  &ldquo;{featured.quote}&rdquo;
-                </blockquote>
-                <div className="flex flex-wrap items-center justify-between gap-4 pt-2">
-                  <span className="text-xs text-white/75">
-                    File handled by SWK Advisory Desk · Al Saqr Business Tower, Sheikh Zayed Road
-                  </span>
-                  <Link
-                    href="/contact"
-                    className="inline-flex items-center gap-2 rounded-full bg-[#dcb888] px-5 py-2.5 text-xs font-bold uppercase tracking-[0.16em] text-[#17130e] transition hover:bg-white"
-                  >
-                    <span>Start Your Shortlist</span>
-                    <ArrowRight className="h-3.5 w-3.5" />
-                  </Link>
-                </div>
-              </div>
-            </motion.div>
-          </AnimatePresence>
-        )}
-
-        {/* Dual Counter-Scrolling Infinite Client Testimonial Streams (Zero Repeated Images Between Rows) */}
-        <div className="space-y-6">
-          <div>
-            <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
-              <span className="text-xs font-bold uppercase tracking-[0.22em] text-[#94652c]">
-                Stream 01 · International &amp; Regional Investor Feedback
-              </span>
-              <span className="text-xs font-medium text-[#786e60]">
-                Hover any review card to pause
-              </span>
-            </div>
-            <TestimonialInfiniteMarquee
-              items={testimonials.map((t) => ({
-                id: t.id,
-                name: t.name,
-                role: t.role,
-                city: t.city,
-                country: t.country,
-                quote: t.quote,
-                image: t.image,
-                rating: t.rating,
-              }))}
-              direction="left"
-              speed="slow"
-            />
-          </div>
-
-          <div>
-            <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
-              <span className="text-xs font-bold uppercase tracking-[0.22em] text-[#17130e]">
-                Stream 02 · End-User Family &amp; Landlord Reviews
-              </span>
-            </div>
-            <TestimonialInfiniteMarquee
-              items={horizontalTestimonials.map((t) => ({
-                id: t.id,
-                name: t.name,
-                role: t.role,
-                city: t.city,
-                country: t.country,
-                quote: t.quote,
-                image: t.image,
-                rating: t.rating,
-              }))}
-              direction="right"
-              speed="slow"
-            />
+              </SpotlightCard>
+            ))}
           </div>
         </div>
       </div>
     </section>
-  )
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/* 06. GLASS TICKER + 21ST.DEV 3D PERSPECTIVE FLIP DUBAI COMMUNITIES          */
+/* -------------------------------------------------------------------------- */
+const TICKER_ITEMS = [
+  "RERA ORN 51517",
+  "NAKHEEL · BINGHATTI · EMAAR · DAMAC · AZIZI",
+  "ESCROW-REGISTERED OFF-PLAN",
+  "25TH FLOOR · AL SAQR BUILDING · SZR",
+  "RESIDENTIAL, LEASING & COMMERCIAL SPACES",
+  "DLD TRANSFER & EJARI ADVISORY",
+];
+
+export function CommunitiesAndTicker() {
+  return (
+    <section className="relative bg-white/16 backdrop-blur-[1px]">
+      {/* Luminous Translucent Uppercase Marquee Ticker */}
+      <div className="overflow-hidden border-b border-white/70 bg-white/62 py-5 backdrop-blur-xl">
+        <div className="avenlo-marquee-track flex items-center gap-8 text-[11px] font-semibold uppercase tracking-[0.22em] text-[#0c233a]">
+          {[...TICKER_ITEMS, ...TICKER_ITEMS].map((item, idx) => (
+            <React.Fragment key={`${item}-${idx}`}>
+              <span className="whitespace-nowrap">{item}</span>
+              <span
+                className="h-[5px] w-[5px] shrink-0 bg-[#1b6aa7]"
+                aria-hidden="true"
+              />
+            </React.Fragment>
+          ))}
+        </div>
+      </div>
+
+      {/* Flagship Dubai Communities — 21st.dev 3D Perspective Flip Cards */}
+      <div className="mx-auto max-w-[1260px] px-4 py-24 sm:px-8">
+        <div className="flex flex-wrap items-end justify-between gap-6">
+          <div>
+            <SectionEyebrow>DUBAI DISTRICTS</SectionEyebrow>
+            <SplitHeading
+              primary="Flagship corridors,"
+              muted="known building by building"
+              className="mt-5"
+            />
+          </div>
+          <BracketLink href="/communities" variant="light" size="md">
+            All Community Guides
+          </BracketLink>
+        </div>
+
+        <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          {communities.slice(0, 8).map((comm) => (
+            <CommunityFlipCard
+              key={comm.slug}
+              name={comm.name}
+              slug={comm.slug}
+              image={comm.image}
+              blurb={comm.blurb}
+            />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/* 07. STAGES OF ACQUISITION — 4-COLUMN GLASS WAVE CARDS                      */
+/* -------------------------------------------------------------------------- */
+const ACQUISITION_STAGES = [
+  {
+    num: "01",
+    title: "Brief & Shortlist",
+    body: "We align on yield, lifestyle, or Golden Visa goals, then narrow active developer releases and ready homes to a sharp 3–5 contender sheet.",
+    dashed: true,
+    offset: "lg:mt-0",
+  },
+  {
+    num: "02",
+    title: "Viewings & DLD Check",
+    body: "Sales gallery tours or building inspections paired with RERA escrow status, developer handover history, and service-charge evidence.",
+    dashed: false,
+    offset: "lg:mt-16",
+  },
+  {
+    num: "03",
+    title: "Reservation, Form F & SPA",
+    body: "We price every offer on recent DLD comparables, review SPA/Form F clauses in plain English, and structure mortgage pre-approval.",
+    dashed: true,
+    offset: "lg:mt-4",
+  },
+  {
+    num: "04",
+    title: "Transfer, Oqood & Keys",
+    body: "Developer NOC, DLD Trustee transfer or Oqood registration, handover snagging, DEWA setup, and Ejari leasing handled cleanly.",
+    dashed: false,
+    offset: "lg:mt-20",
+  },
+];
+
+export function AcquisitionStagesWave() {
+  return (
+    <section className="border-t border-white/60 bg-white/24 py-24 sm:py-28 backdrop-blur-[2px]">
+      <div className="mx-auto max-w-[1260px] px-4 sm:px-8">
+        <div className="text-center">
+          <SectionEyebrow align="center">STAGES OF A TRANSACTION</SectionEyebrow>
+          <SplitHeading
+            align="center"
+            primary="From first brief"
+            muted="to Title Deed"
+            inline
+            className="mt-5"
+          />
+        </div>
+
+        <div className="mt-16 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 items-start">
+          {ACQUISITION_STAGES.map((stage) => (
+            <BlurReveal key={stage.num} className={stage.offset}>
+              <SpotlightCard className="h-full">
+                <div className="flex min-h-[290px] flex-col justify-between p-7 sm:p-8">
+                  {stage.dashed ? (
+                    <div className="flex h-16 w-16 items-center justify-center rounded-full border border-dashed border-[#1b6aa7]/45 bg-[#eef7fc]/80 font-mono text-sm font-semibold text-[#0c233a]">
+                      {stage.num}
+                    </div>
+                  ) : (
+                    <span className="font-mono text-xs font-semibold tracking-[0.18em] text-[#1b6aa7]">
+                      STAGE {stage.num}
+                    </span>
+                  )}
+
+                  <div className="mt-10">
+                    <h3 className="text-[20px] font-medium tracking-[-0.025em] text-[#121212]">
+                      {stage.title}
+                    </h3>
+                    <p className="mt-3 text-sm leading-[1.6] text-[#475569]">
+                      {stage.body}
+                    </p>
+                  </div>
+                </div>
+              </SpotlightCard>
+            </BlurReveal>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/* 08. 21ST.DEV ANIMATED TESTIMONIALS — ALL 10 VERIFIED REPO CLIENT REVIEWS   */
+/* -------------------------------------------------------------------------- */
+const TRUSTED_MASTER_DEVELOPERS = [
+  "Nakheel",
+  "Emaar Properties",
+  "Binghatti",
+  "DAMAC",
+  "Azizi Developments",
+  "Sobha Realty",
+  "Omniyat",
+  "Ellington",
+  "Meraas",
+  "Aldar",
+];
+
+export function ClientVoices() {
+  const allClientReviews = useMemo<Testimonial[]>(() => {
+    const combined = [...testimonials, ...horizontalTestimonials];
+    const seen = new Set<string>();
+    const unique = combined.filter((item) => {
+      if (seen.has(item.name)) return false;
+      seen.add(item.name);
+      return true;
+    });
+
+    return unique.map((item, idx) => ({
+      id: idx + 1,
+      name: item.name,
+      role: item.role,
+      company: item.city,
+      content: item.quote,
+      rating: item.rating ?? 5,
+      avatar: item.image,
+    }));
+  }, []);
+
+  return (
+    <AnimatedTestimonials
+      badgeText="What Clients Say · Verified Reviews"
+      title="Judged on outcomes, not on brochures"
+      subtitle="Hear directly from international buyers, relocating families, and yield-focused investors advised by our Sheikh Zayed Road desk across Dubai."
+      testimonials={allClientReviews}
+      autoRotateInterval={6500}
+      trustedCompanies={TRUSTED_MASTER_DEVELOPERS}
+      trustedCompaniesTitle="Advising acquisitions across Dubai & UAE master developers"
+    />
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/* 09. DUBAI MARKET INSIGHTS & BUYER GUIDES PREVIEW                           */
+/* -------------------------------------------------------------------------- */
+const HOME_INSIGHT_TABS = [
+  { id: "latest", label: "Latest Briefings" },
+  { id: "Off-Plan & Launches", label: "Off-Plan & Launches" },
+  { id: "Rental Yields & Leasing", label: "Rental Yields" },
+  { id: "Buying & DLD Law", label: "Buying & DLD Law" },
+] as const;
+
+export function InsightsPreview() {
+  const [tab, setTab] = useState<string>("latest");
+
+  const visibleArticles = useMemo(() => {
+    const pool =
+      tab === "latest"
+        ? blogIndex
+        : blogIndex.filter((a) => a.category === tab);
+    return pool.slice(0, 6);
+  }, [tab]);
+
+  return (
+    <section className="bg-white/24 py-24 backdrop-blur-[2px]">
+      <div className="mx-auto max-w-[1260px] px-4 sm:px-8">
+        <div className="flex flex-wrap items-end justify-between gap-6">
+          <div>
+            <SectionEyebrow>JOURNAL &amp; RESEARCH ARCHIVE · SINCE 2008</SectionEyebrow>
+            <SplitHeading
+              primary="Notes from Sheikh"
+              muted="Zayed Road"
+              className="mt-5"
+            />
+          </div>
+          <div className="flex flex-wrap items-center gap-3">
+            <Link
+              href="/guides/buying"
+              className="rounded-full border border-white/85 bg-white/84 px-4 py-2.5 text-xs font-medium text-[#121212] shadow-xs backdrop-blur-xl transition-all duration-200 hover:-translate-y-0.5 hover:border-[#121212] hover:bg-[#121212] hover:text-white hover:shadow-md"
+            >
+              Buying Guide
+            </Link>
+            <Link
+              href="/guides/investing"
+              className="rounded-full border border-white/85 bg-white/84 px-4 py-2.5 text-xs font-medium text-[#121212] shadow-xs backdrop-blur-xl transition-all duration-200 hover:-translate-y-0.5 hover:border-[#121212] hover:bg-[#121212] hover:text-white hover:shadow-md"
+            >
+              Investor Guide
+            </Link>
+            <BracketLink href="/insights" variant="light" size="sm">
+              Explore Full Archive
+            </BracketLink>
+          </div>
+        </div>
+
+        {/* Interactive Category Switcher */}
+        <div className="mt-8 flex flex-wrap items-center gap-2">
+          {HOME_INSIGHT_TABS.map((t) => {
+            const active = tab === t.id;
+            return (
+              <button
+                key={t.id}
+                type="button"
+                onClick={() => setTab(t.id)}
+                className={`cursor-pointer rounded-full px-4 py-2 text-xs font-medium transition-all duration-200 hover:-translate-y-0.5 ${
+                  active
+                    ? "bg-[#121212] text-white shadow-md"
+                    : "border border-white/85 bg-white/80 text-[#334155] backdrop-blur-xl hover:border-[#121212] hover:bg-white hover:text-[#121212]"
+                }`}
+              >
+                {t.label}
+              </button>
+            );
+          })}
+        </div>
+
+        <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {visibleArticles.map((art) => (
+            <SpotlightCard key={art.slug}>
+              <Link
+                href={`/insights/${art.slug}`}
+                className="group flex h-full flex-col justify-between"
+              >
+                <div>
+                  <div className="relative aspect-[16/10] w-full overflow-hidden bg-[#e7f2f9]">
+                    <img
+                      src={art.image}
+                      alt={art.title}
+                      loading="lazy"
+                      className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    />
+                  </div>
+                  <div className="p-6">
+                    <p className="font-mono text-[10.5px] font-semibold uppercase tracking-[0.16em] text-[#1b6aa7]">
+                      {art.category} · {art.readTime}
+                    </p>
+                    <h3 className="mt-2.5 text-[19px] font-medium leading-[1.25] tracking-[-0.025em] text-[#121212] group-hover:text-[#0e9f6e] transition-colors">
+                      {art.title}
+                    </h3>
+                    <p className="mt-2.5 line-clamp-3 text-xs leading-relaxed text-[#475569]">
+                      {art.excerpt}
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center justify-between border-t border-black/[0.06] px-6 py-4 text-xs font-medium text-[#121212]">
+                  <span className="font-mono text-[11px] text-[#64748b]">{art.date}</span>
+                  <span className="inline-flex items-center gap-1 transition-all group-hover:translate-x-0.5 group-hover:text-[#0e9f6e]">
+                    Read <ArrowUpRight className="h-3.5 w-3.5" />
+                  </span>
+                </div>
+              </Link>
+            </SpotlightCard>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
 }

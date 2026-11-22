@@ -130,12 +130,9 @@ export function PrefsProvider({ children }: { children: React.ReactNode }) {
       const savedUnit = localStorage.getItem("swk_area_unit") as AreaUnit | null;
       if (savedUnit === "sqft" || savedUnit === "sqm") setAreaUnitState(savedUnit);
 
-      const savedLang = localStorage.getItem("swk_lang") as LanguageCode | null;
-      if (savedLang === "en" || savedLang === "ar") {
-        setLangState(savedLang);
-        document.documentElement.lang = savedLang;
-        document.documentElement.dir = savedLang === "ar" ? "rtl" : "ltr";
-      }
+      // Keep English LTR until full Arabic localization is shipped.
+      document.documentElement.lang = "en";
+      document.documentElement.dir = "ltr";
 
       const rawSaved = localStorage.getItem("swk_saved_slugs");
       if (rawSaved) setSavedSlugs(JSON.parse(rawSaved));

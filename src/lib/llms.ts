@@ -3,7 +3,7 @@ import { communityGuides } from "@/lib/communities"
 import { developers, projects } from "@/lib/developers"
 import { servicePages } from "@/lib/services"
 import { GUIDES } from "@/lib/guides"
-import { blogArticles } from "@/lib/blog"
+import { blogIndex } from "@/lib/blog"
 import { offPlanAreas } from "@/lib/areas"
 
 const u = (p: string) => `${SITE.url}${p}`
@@ -17,71 +17,73 @@ const FACTS = [
   `- Email: ${SITE.email}`,
   `- Hours: ${SITE.hours.full}`,
   `- Coverage: Dubai, Abu Dhabi, Sharjah, Ras Al Khaimah and Umm Al Quwain`,
-  `- Services: off-plan advisory, ready (secondary) sales, residential and commercial leasing, property management, mortgage introductions, Golden Visa property guidance`,
+  `- Services: off-plan advisory, secondary ready sales, handover transfers, residential leasing, Grade-A commercial spaces, property management, mortgage introductions, 10-Year UAE Golden Visa guidance`,
   `- Languages: English, Arabic, Hindi, Urdu, Punjabi, Pashto, French`,
+  `- Primary buyer brokerage fee on direct developer off-plan releases: 0%`,
 ]
 
-/** Short index for LLMs and AI answer engines (https://llmstxt.org). */
+/** Concise machine-readable index for LLMs & AI Answer Engines (https://llmstxt.org — SEO/AEO/AIO/GEO). */
 export function buildLlmsTxt() {
+  const recentBriefings = blogIndex.slice(0, 40)
   return [
     `# ${SITE.name}`,
     "",
-    `> ${SITE.legalName} is a RERA-licensed Dubai real estate brokerage (ORN ${SITE.orn}) on Sheikh Zayed Road. It advises buyers, investors, tenants and landlords on off-plan launches, ready homes, leasing and property management across the UAE.`,
+    `> ${SITE.legalName} is a RERA-licensed Dubai real estate brokerage (ORN ${SITE.orn}) located at ${SITE.address.full}. Operating since 2008, the firm advises buyers, investors, corporate tenants, and landlords across Dubai and the UAE on direct master-developer off-plan launches, ready secondary homes, Ejari leasing, and Grade-A commercial spaces.`,
     "",
-    "## Key facts",
+    "## Verified Entity Facts",
     ...FACTS,
     "",
-    "## Main pages",
+    "## Core Navigation",
     link("Home", "/"),
-    link("Off-plan projects", "/off-plan", "developer launches with payment plans"),
-    link("Buy ready property", "/buy"),
-    link("Rent property", "/rent"),
-    link("All listings and map search", "/properties"),
-    link("Developers", "/developers"),
-    link("Communities", "/communities"),
-    link("Services", "/services"),
-    link("Calculators", "/calculators", "mortgage, DLD fee, rental yield"),
-    link("Market insights", "/insights"),
-    link("FAQ", "/faq"),
+    link("Off-Plan Launches", "/off-plan", "direct master-developer releases across Nakheel, Emaar, Binghatti, DAMAC, Azizi, Sobha & Omniyat"),
+    link("Secondary Ready Homes", "/buy", "ready Dubai apartments, villas, townhouses & penthouses with Title Deed clarity"),
+    link("Leasing & Rentals", "/rent", "annual residential & executive leasing with Ejari registration"),
+    link("Commercial Spaces", "/properties?type=Office", "Grade-A offices, full floors & retail along Sheikh Zayed Road, DIFC & Business Bay"),
+    link("All Properties & Map Search", "/properties"),
+    link("UAE Master Developers", "/developers"),
+    link("Dubai Community Guides", "/communities"),
+    link("Advisory Services", "/services"),
+    link("DLD, Mortgage & Rental Yield Calculators", "/calculators"),
+    link("Market Insights & Research Archive (2008–Present)", "/insights"),
+    link("Dubai Property Handbooks & Guides", "/guides"),
+    link("Frequently Asked Questions (FAQ)", "/faq"),
     link("About SWK Properties", "/about"),
-    link("Corporate Brand Kit", "/corporate-kit"),
-    link("List your property", "/list-your-property"),
-    link("Contact", "/contact"),
+    link("Advisory Team", "/agents"),
+    link("List Your Property", "/list-your-property"),
+    link("Contact & Sheikh Zayed Road Office", "/contact"),
     "",
-    "## Off-plan projects by area",
-    ...offPlanAreas.map((a) => link(`Off-plan projects in ${a.name}`, `/off-plan/in/${a.slug}`, `${a.projects.length} launches`)),
+    "## Off-Plan Corridors by Area",
+    ...offPlanAreas.map((a) => link(`Off-plan projects in ${a.name}`, `/off-plan/in/${a.slug}`)),
     "",
-    "## Guides",
-    link("All guides", "/guides"),
+    "## Dubai Property Handbooks",
     ...GUIDES.map((g) => link(g.title, `/guides/${g.slug}`, g.directAnswer)),
     "",
-    "## Services",
+    "## Advisory Services",
     ...servicePages.map((s) => link(s.title, `/services/${s.slug}`, s.description)),
     "",
-    "## Communities",
+    "## Dubai & UAE Communities",
     ...communityGuides.map((c) => link(c.name, `/communities/${c.slug}`, c.blurb)),
     "",
-    "## Developers",
+    "## Master Developers Tracked",
     ...developers.map((d) => link(d.name, `/developers/${d.slug}`, d.tagline)),
     "",
-    "## Insights",
-    ...blogArticles.map((b) => link(b.title, `/insights/${b.slug}`, b.excerpt)),
+    "## Recent Dubai Market Briefings & Research",
+    ...recentBriefings.map((b) => link(`${b.title} (${b.date})`, `/insights/${b.slug}`, b.excerpt)),
     "",
-    "## RERA-licensed advisors",
+    "## Advisory Desk",
     ...team.map((m) => link(m.name, `/agents/${m.slug}`, `${m.role} (${m.languages.join(", ")})`)),
     "",
-    "## Optional",
-    link("Full text for LLMs", "/llms-full.txt"),
-    link("Sitemap", "/sitemap.xml"),
-    link("Privacy policy", "/privacy"),
-    link("Terms of use", "/terms"),
+    "## Full Machine-Readable Endpoints",
+    link("Full Plain-Text Corpus for LLMs", "/llms-full.txt"),
+    link("XML Sitemap", "/sitemap.xml"),
+    link("Robots Policy", "/robots.txt"),
     "",
   ].join("\n")
 }
 
-/** Expanded plain-text corpus: direct answers, FAQs and guide content for retrieval. */
+/** Expanded plain-text corpus: direct AEO answers, FAQs, guides, communities, projects & research summaries for retrieval. */
 export function buildLlmsFullTxt() {
-  const out: string[] = [buildLlmsTxt(), "", "---", "", "# Frequently asked questions", ""]
+  const out: string[] = [buildLlmsTxt(), "", "---", "", "# Frequently Asked Questions (Direct Answers)", ""]
   for (const f of faqs) out.push(`## ${f.q}`, "", f.a, "")
   for (const g of GUIDES) {
     out.push(`# ${g.title}`, "", `Source: ${u(`/guides/${g.slug}`)} (updated ${g.lastUpdated})`, "", g.directAnswer, "")
@@ -97,11 +99,11 @@ export function buildLlmsFullTxt() {
     out.push(`# ${c.name}`, "", `Source: ${u(`/communities/${c.slug}`)}`, "", c.overview, "")
     out.push(`Property types: ${c.propertyTypes.join(", ")}`, `Best for: ${c.bestFor.join(", ")}`, `Transport: ${c.transport.join("; ")}`, "")
   }
-  for (const b of blogArticles) {
-    out.push(`# ${b.title}`, "", `Source: ${u(`/insights/${b.slug}`)} (updated ${b.updatedAt})`, "", b.directAnswer, "")
-    out.push(...b.keyTakeaways.map((k) => `- ${k}`), "")
+  out.push("# Dubai Real Estate Research Archive (2008–Present)", "")
+  for (const b of blogIndex.slice(0, 120)) {
+    out.push(`- [${b.title}](${u(`/insights/${b.slug}`)}) (${b.date} · ${b.category}): ${b.excerpt}`)
   }
-  out.push("# Off-plan projects tracked", "", ...projects.map((p) => `- ${p.name} by ${p.devName}, ${p.community}: ${u(`/off-plan/${p.slug}`)}`), "")
-  out.push("# Advisors", "", ...team.map((m) => `- ${m.name}, ${m.role}: ${u(`/agents/${m.slug}`)}`), "")
+  out.push("", "# Off-Plan Developments Tracked", "", ...projects.map((p) => `- ${p.name} by ${p.devName}, ${p.community}: ${u(`/off-plan/${p.slug}`)}`), "")
+  out.push("# Advisory Team", "", ...team.map((m) => `- ${m.name}, ${m.role}: ${u(`/agents/${m.slug}`)}`), "")
   return out.join("\n")
 }

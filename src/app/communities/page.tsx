@@ -1,25 +1,26 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight, Compass } from "lucide-react";
-import { LivelyPageHero } from "@/components/ui/lively-page-hero";
+import { ArrowUpRight } from "lucide-react";
 import { EnquiryForm } from "@/components/site/enquiry-form";
 import { JsonLd } from "@/components/seo/json-ld";
 import { communityGuides } from "@/lib/communities";
 import { breadcrumbLd, buildMeta, itemListLd, KEYWORDS } from "@/lib/seo";
 import { SITE } from "@/lib/swk";
+import { AvenloPageHeader } from "@/components/avenlo/page-header";
+import { CtaBanner, SectionEyebrow, SplitHeading } from "@/components/avenlo/motion";
 
 export const metadata: Metadata = buildMeta({
-  title: "Dubai & UAE Community Guides | Downtown, Palm Jumeirah, Marina, Dubai Hills & Beyond",
+  title: "Dubai Community Guides | Downtown, Palm, Marina & Hills",
   description:
-    "Explore balanced neighbourhood guides for Dubai's core freehold communities: Downtown Dubai, Dubai Marina, Palm Jumeirah, Business Bay, Dubai Hills Estate, JVC, Dubai Creek Harbour, and Sheikh Zayed Road.",
+    "Balanced neighbourhood guides for Dubai's core freehold communities: Downtown Dubai, Dubai Marina, Palm Jumeirah, Business Bay, Dubai Hills Estate, JVC, Creek Harbour & SZR.",
   path: "/communities",
-  image: "/img/communities/downtown-dubai.webp",
+  image: "/img/hero/banner-communities.webp",
   keywords: KEYWORDS.communities,
 });
 
 export default function CommunitiesPage() {
   return (
-    <div className="min-h-screen bg-[#faf7f2] text-[#17130e]">
+    <div className="bg-transparent">
       <JsonLd
         data={[
           breadcrumbLd([
@@ -36,124 +37,83 @@ export default function CommunitiesPage() {
         ]}
       />
 
-      <LivelyPageHero
-        badge="Dubai & UAE Freehold Neighbourhood Guides"
-        title="Compare Dubai's Core"
-        highlight="Freehold & Leasing Districts"
-        description="Every community guide covers airport and DIFC travel times, nearby schools and hospitals, typical property types, key advantages, and honest practical trade-offs."
-        backgroundImage="/img/hero/slides/05-sobha-century-desktop.webp"
-        primaryCta={{ label: "Explore All Communities", href: "#communities-grid" }}
-        secondaryCta={{ label: "Search Properties by District", href: "/properties" }}
-        sideImages={[
-          {
-            src: "/img/communities/downtown-dubai.webp",
-            label: "Downtown Dubai & Business Bay",
-            sublabel: "8 Mins from SWK Sheikh Zayed Road HQ",
-          },
-          {
-            src: "/img/communities/palm-jumeirah.webp",
-            label: "Palm Jumeirah & Dubai Hills Estate",
-            sublabel: "Waterfront & Golf Master Communities",
-          },
+      <AvenloPageHeader
+        eyebrow="NEIGHBOURHOOD GUIDES · DUBAI"
+        title="Compare Dubai's core"
+        italic="freehold districts"
+        lead="Honest street-level briefs covering transport links, schools, typical property types, strengths, and practical trade-offs across eight major Dubai corridors."
+        breadcrumb={[
+          { label: "Home", href: "/" },
+          { label: "Communities" },
         ]}
       />
 
-      {/* 8 Dubai Community & Neighbourhood Guides Grid */}
-      <section className="mx-auto max-w-7xl px-4 py-16 md:px-6">
-        <div className="mb-10 max-w-3xl">
-          <p className="text-xs font-semibold uppercase tracking-[0.26em] text-[#94652c]">
-            Balanced Neighbourhood Evaluations
-          </p>
-          <h2 className="mt-2 font-serif text-3xl md:text-5xl font-semibold text-[#17130e]">
-            8 Core Dubai Freehold &amp; Leasing Districts
-          </h2>
-          <p className="mt-2 text-sm text-[#4a4237] leading-relaxed">
-            Select any neighbourhood below to inspect service-charge benchmarks, transport links, and available properties.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
+      <section className="mx-auto max-w-[1260px] px-4 py-16 sm:px-8">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
           {communityGuides.map((comm) => (
             <Link
               key={comm.slug}
               href={`/communities/${comm.slug}`}
-              className="group flex flex-col justify-between overflow-hidden rounded-3xl border border-[#e6dfd2] bg-white shadow-sm transition hover:-translate-y-1 hover:border-[#94652c]"
+              className="group overflow-hidden rounded-2xl border border-white/80 bg-white/84 backdrop-blur-xl shadow-[0_16px_44px_rgba(12,56,96,0.08)] transition-all duration-300 hover:border-black/20 hover:shadow-[0_20px_50px_rgba(18,18,18,0.08)]"
             >
-              <div>
-                <div className="relative h-64 w-full overflow-hidden bg-[#17130e]">
-                  <img
-                    src={comm.image}
-                    alt={comm.name}
-                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#17130e]/95 via-[#17130e]/30 to-transparent" />
-                  <div className="absolute bottom-4 left-5 right-5 flex items-end justify-between gap-2">
-                    <div>
-                      <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[#dcb888]">
-                        {comm.tagline}
-                      </span>
-                      <h3 className="font-serif text-3xl font-semibold text-white">
-                        {comm.name}
-                      </h3>
-                    </div>
-                    <span className="rounded-full border border-white/25 bg-white/95 px-3 py-1 font-mono text-[10px] font-bold text-[#17130e]">
-                      {comm.coordinates.lat.toFixed(2)}°N, {comm.coordinates.lng.toFixed(2)}°E
-                    </span>
-                  </div>
-                </div>
-
-                <div className="p-6 space-y-4">
-                  <p className="text-xs md:text-sm text-[#4a4237] leading-relaxed">
-                    {comm.blurb}
-                  </p>
-
-                  <div className="flex flex-wrap gap-1.5">
-                    {comm.propertyTypes.map((pt) => (
-                      <span
-                        key={pt}
-                        className="rounded-full border border-[#e6dfd2] bg-[#faf7f2] px-3 py-1 text-[11px] font-medium text-[#17130e]"
-                      >
-                        {pt}
-                      </span>
-                    ))}
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 border-t border-[#e6dfd2] pt-4 text-xs">
-                    <div>
-                      <span className="text-emerald-700 font-bold block mb-1">
-                        Key Advantage:
-                      </span>
-                      <span className="text-[#4a4237] line-clamp-2">{comm.pros[0]}</span>
-                    </div>
-                    <div>
-                      <span className="text-[#94652c] font-bold block mb-1">
-                        Practical Trade-Off:
-                      </span>
-                      <span className="text-[#4a4237] line-clamp-2">{comm.considerations[0]}</span>
-                    </div>
-                  </div>
-                </div>
+              <div className="relative aspect-[16/9] w-full overflow-hidden bg-[#f5f5f5]">
+                <img
+                  src={comm.image}
+                  alt={comm.name}
+                  loading="lazy"
+                  className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
+                />
               </div>
-
-              <div className="flex items-center justify-between border-t border-[#e6dfd2] bg-[#faf7f2] px-6 py-4 text-xs font-bold text-[#17130e] group-hover:text-[#94652c]">
-                <span className="inline-flex items-center gap-1.5">
-                  <Compass className="h-4 w-4 text-[#94652c]" />
-                  Read Full {comm.name} Neighbourhood Guide
-                </span>
-                <ArrowRight className="h-4 w-4" />
+              <div className="p-6 sm:p-7">
+                <div className="flex items-center justify-between gap-3">
+                  <h2 className="text-2xl font-medium tracking-[-0.03em] text-[#121212]">
+                    {comm.name}
+                  </h2>
+                  <ArrowUpRight className="h-5 w-5 shrink-0 text-[#8b8b8b] group-hover:text-[#121212]" />
+                </div>
+                <p className="mt-2 text-sm leading-relaxed text-[#525252]">{comm.blurb}</p>
+                <div className="mt-5 flex flex-wrap gap-1.5 border-t border-black/[0.06] pt-4">
+                  {comm.bestFor.slice(0, 2).map((b) => (
+                    <span
+                      key={b}
+                      className="rounded-full bg-[#f5f5f5] px-3 py-1 text-[11px] font-medium text-[#525252]"
+                    >
+                      {b}
+                    </span>
+                  ))}
+                </div>
               </div>
             </Link>
           ))}
         </div>
       </section>
 
-      <section className="mx-auto max-w-4xl px-4 py-16 md:px-6">
-        <EnquiryForm
-          context="general"
-          heading="Not Sure Which UAE Community Fits Your Mandate?"
-          subheading="Tell us your commute, school requirements, or target rental yield and our specialists will compare the top 3 districts for you."
-        />
+      <section className="border-t border-white/60 bg-white/24 backdrop-blur-[2px] py-20">
+        <div className="mx-auto max-w-[1260px] px-4 sm:px-8">
+          <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 items-start">
+            <div className="lg:col-span-5 space-y-4">
+              <SectionEyebrow>AREA SELECTION BRIEF</SectionEyebrow>
+              <SplitHeading
+                primary="Matching your routine"
+                muted="to the right corridor"
+                size="md"
+              />
+              <p className="text-sm leading-relaxed text-[#525252]">
+                Share commute destinations, school preferences, or target rental yield and our team will map two to three buildings worth viewing.
+              </p>
+            </div>
+            <div className="lg:col-span-7">
+              <EnquiryForm
+                context="advisory"
+                heading="Request a community comparison"
+                subheading="Receive real comparable prices, service-charge ranges, and rental yield notes."
+              />
+            </div>
+          </div>
+        </div>
       </section>
+
+      <CtaBanner />
     </div>
   );
 }

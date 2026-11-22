@@ -1,6 +1,5 @@
 import developersJson from "@/data/developers.json"
 import projectImages from "@/data/project-images.json"
-import { communities, gallery } from "@/lib/swk"
 
 export type RawProject = {
   name: string
@@ -58,24 +57,55 @@ export const slugify = (s: string) =>
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-|-$/g, "")
 
-// Official developer brandmarks only. Developers without a supplied logo render their name as text.
+// Official developer brandmarks in authentic original colors.
 const LOGOS: Record<string, string> = {
+  nakheel: "nakheel.svg",
+  binghatti: "binghatti.png",
   emaar: "emaar.svg",
   damac: "damac.png",
-  sobha: "sobha.png",
   azizi: "azizi.png",
+  sobha: "sobha.png",
+  omniyat: "omniyat.svg",
+  aldar: "aldar.png",
+  arada: "arada.png",
   imtiaz: "imtiaz.svg",
   danube: "danube.png",
-  binghatti: "binghatti.png",
-  omniyat: "omniyat.svg",
   samana: "samana.png",
   "dubai-properties": "dubai-properties.png",
-  "empire-developments": "empire-developments.png",
-  arada: "arada.png",
-  nakheel: "nakheel.svg",
-  aldar: "aldar.png",
   "hh-development": "hh-development.svg",
+  "empire-developments": "empire-developments.png",
 }
+
+// Strategic luxury brand ordering: Nakheel, Binghatti, Emaar, DAMAC, Azizi, Sobha, Omniyat, Ellington, Aldar first
+const DEVELOPER_PRIORITY_ORDER: string[] = [
+  "nakheel",
+  "binghatti",
+  "emaar",
+  "damac",
+  "azizi",
+  "sobha",
+  "omniyat",
+  "ellington",
+  "aldar",
+  "arada",
+  "meraas",
+  "select-group",
+  "imtiaz",
+  "danube",
+  "samana",
+  "dubai-properties",
+  "hh-development",
+  "beyond",
+  "taraf",
+  "deyaar",
+  "mag",
+  "marjan",
+  "rak-properties",
+  "al-hamra",
+  "empire-developments",
+  "dugasta",
+  "lunaya",
+]
 
 const EMIRATE: Record<string, Developer["emirate"]> = {
   arada: "Sharjah",
@@ -85,56 +115,71 @@ const EMIRATE: Record<string, Developer["emirate"]> = {
   "al-hamra": "Ras Al Khaimah",
 }
 
-const FALLBACK_IMG: Record<string, string> = {
-  ...Object.fromEntries(communities.map((c) => [c.name, c.image])),
-  "Bluewaters Island": "/img/gallery/image1.webp",
-  "La Mer": "/img/gallery/image5.webp",
-  "Mohammed Bin Rashid City": "/img/gallery/image7.webp",
-  "Dubai Production City": "/img/gallery/image10.webp",
+/**
+ * Dedicated 1-to-1 unique image mapping for every extra & newly introduced project.
+ * Zero shared images across projects, listings, communities, services, or blog articles.
+ */
+const EXTRA_PROJECT_IMAGES: Record<string, string> = {
+  "nakheel/Palm Springs Beachfront Villas": "/img/projects/nakheel/palm-springs-beachfront-villas.webp",
+  "binghatti/Binghatti JVC Boutique Residences": "/img/projects/binghatti/binghatti-jvc-boutique-residences.webp",
+  "emaar/Emaar The Oasis": "/img/projects/emaar/emaar-the-oasis.webp",
+  "emaar/Dubai Hills Estate Residences": "/img/projects/emaar/dubai-hills-estate-residences.webp",
+  "emaar/Address Residences Al Marjan Island": "/img/projects/emaar/address-residences-al-marjan.webp",
+  "sobha/Sobha Century": "/img/projects/sobha/sobha-century.webp",
+  "sobha/Sobha River Core": "/img/projects/sobha/sobha-river-core.webp",
+  "sobha/Sobha Siniya Island": "/img/projects/sobha/sobha-siniya-island.webp",
+  "sobha/Downtown Umm Al Quwain": "/img/projects/sobha/downtown-umm-al-quwain.webp",
+  "azizi/Azizi Leily": "/img/projects/azizi/azizi-leily.webp",
+  "danube/Danube Greenz": "/img/projects/danube/danube-greenz.webp",
+  "samana/Samana Downtown One": "/img/projects/samana/samana-downtown-one.webp",
+  "arada/Alif Sharjah": "/img/projects/arada/alif-sharjah.webp",
+  "aldar/Manchester City Yas Residences": "/img/projects/aldar/manchester-city-yas-residences.webp",
+  "aldar/Yas Island Waterfront": "/img/projects/aldar/yas-island-waterfront.webp",
+  "meraas/Bluewaters Bay": "/img/projects/meraas/bluewaters-bay.webp",
+  "meraas/Port de la Mer": "/img/projects/meraas/port-de-la-mer.webp",
+  "ellington/Ellington Berkeley Tower": "/img/projects/ellington/ellington-berkeley-tower.webp",
+  "ellington/The Meriva Dubai Islands": "/img/projects/ellington/the-meriva-dubai-islands.webp",
+  "ellington/Wilton Park Residences": "/img/projects/ellington/wilton-park-residences.webp",
+  "ellington/Ellington Beach House": "/img/projects/ellington/ellington-beach-house.webp",
+  "select-group/Marina Gate": "/img/projects/select-group/marina-gate.webp",
+  "select-group/Peninsula": "/img/projects/select-group/peninsula.webp",
+  "select-group/Six Senses Residences": "/img/projects/select-group/six-senses-residences.webp",
+  "deyaar/Midtown": "/img/projects/deyaar/midtown.webp",
+  "deyaar/Regalia": "/img/projects/deyaar/regalia.webp",
+  "mag/Keturah Reserve": "/img/projects/mag/keturah-reserve.webp",
+  "dugasta/Dugasta Platinum Residence": "/img/projects/dugasta/dugasta-platinum-residence.webp",
+  "lunaya/Lunaya The Bloom Villa": "/img/projects/lunaya/lunaya-the-bloom-villa.webp",
+  "marjan/Al Marjan Island Masterplan": "/img/projects/marjan/al-marjan-island-masterplan.webp",
+  "rak-properties/Quattro Del Mar": "/img/projects/rak-properties/quattro-del-mar.webp",
+  "al-hamra/Al Hamra Waterfront": "/img/projects/al-hamra/al-hamra-waterfront.webp",
+  "taraf/Karl Lagerfeld Villas": "/img/projects/taraf/karl-lagerfeld-villas.webp",
+  "beyond/Sensia Dubai Maritime City": "/img/projects/beyond/sensia-dubai-maritime-city.webp",
 }
 
-const EXTRA_PROJECT_IMAGES: Record<string, [string, string]> = {
-  "emaar/Emaar The Oasis": ["/img/projects/emaar/greencrest.webp", "/img/gallery/image7.webp"],
-  "emaar/Dubai Hills Estate Residences": ["/img/communities/dubai-hills-estate.webp", "/img/projects/emaar/greencrest.webp"],
-  "emaar/Address Residences Al Marjan Island": ["/img/projects/emaar/avarra-by-palace.webp", "/img/projects/emaar/rashid-yachts-and-marina.webp"],
-  "sobha/Sobha Century": ["/img/projects/sobha/sobha-one.webp", "/img/projects/sobha/sobha-seahaven.webp"],
-  "sobha/Sobha River Core": ["/img/projects/sobha/360-riverside-crescent.webp", "/img/projects/sobha/waves-opulence.webp"],
-  "sobha/Sobha Siniya Island": ["/img/projects/sobha/sobha-sanctuary.webp", "/img/projects/sobha/sobha-seahaven.webp"],
-  "sobha/Downtown Umm Al Quwain": ["/img/projects/sobha/sobha-skyscape.webp", "/img/projects/sobha/sobha-skyvue.webp"],
-  "binghatti/Binghatti Maybach Mercedes-Benz": ["/img/projects/binghatti/mercedes-benz-places.webp", "/img/projects/binghatti/bugatti-residences-by-binghatti.webp"],
-  "imtiaz/Imtiaz Kore": ["/img/projects/imtiaz/kore-by-imtiaz.webp", "/img/projects/imtiaz/sea-cliff-by-imtiaz.webp"],
-  "azizi/Azizi Florence": ["/img/projects/azizi/azizi-florence.webp", "/img/projects/azizi/azizi-venice.webp"],
-  "azizi/Azizi Leily": ["/img/projects/azizi/azizi-raffi.webp", "/img/projects/azizi/azizi-milan.webp"],
-  "danube/Danube Greenz": ["/img/projects/danube/eleganz.webp", "/img/projects/danube/sportz.webp"],
-  "samana/Samana Downtown One": ["/img/projects/samana/samana-waves.webp", "/img/projects/samana/samana-mykonos.webp"],
-  "arada/Alif Sharjah": ["/img/projects/arada/aljada.webp", "/img/projects/arada/masaar.webp"],
-  "aldar/Manchester City Yas Residences": ["/img/projects/aldar/yas-bay.webp", "/img/projects/aldar/yas-acres.webp"],
-  "aldar/Yas Island Waterfront": ["/img/projects/aldar/yas-acres.webp", "/img/projects/aldar/yas-bay.webp"],
-  "aldar/Saadiyat Island Sanctuary": ["/img/projects/aldar/saadiyat-lagoons.webp", "/img/projects/aldar/saadiyat-grove.webp"],
-  "meraas/Bluewaters Bay": ["/img/gallery/image1.webp", "/img/gallery/image3.webp"],
-  "meraas/Port de la Mer": ["/img/gallery/image5.webp", "/img/gallery/image8.webp"],
-  "ellington/Ellington Berkeley Tower": ["/img/gallery/image4.webp", "/img/gallery/image11.webp"],
-  "ellington/The Meriva Dubai Islands": ["/img/projects/nakheel/dubai-islands.webp", "/img/gallery/image2.webp"],
-  "ellington/Wilton Park Residences": ["/img/gallery/image7.webp", "/img/gallery/image11.webp"],
-  "ellington/Belgravia Heights": ["/img/gallery/image4.webp", "/img/gallery/image13.webp"],
-  "ellington/Ellington Beach House": ["/img/communities/palm-jumeirah.webp", "/img/gallery/image2.webp"],
-  "select-group/Marina Gate": ["/img/communities/dubai-marina.webp", "/img/gallery/image9.webp"],
-  "select-group/Peninsula": ["/img/communities/business-bay.webp", "/img/gallery/image12.webp"],
-  "select-group/Six Senses Residences": ["/img/gallery/image6.webp", "/img/gallery/image15.webp"],
-  "deyaar/Midtown": ["/img/gallery/image10.webp", "/img/gallery/image14.webp"],
-  "deyaar/Regalia": ["/img/communities/downtown-dubai.webp", "/img/gallery/image3.webp"],
-  "mag/Keturah Reserve": ["/img/communities/dubai-hills-estate.webp", "/img/gallery/image6.webp"],
-  "dugasta/Dugasta Platinum Residence": ["/img/projects/empire-developments/empire-residence.webp", "/img/gallery/image14.webp"],
-  "lunaya/Lunaya The Bloom Villa": ["/img/projects/arada/jouri-hills.webp", "/img/gallery/image7.webp"],
-  "marjan/Al Marjan Island Masterplan": ["/img/projects/nakheel/palm-jebel-ali.webp", "/img/projects/sobha/sobha-seahaven.webp"],
-  "rak-properties/Quattro Del Mar": ["/img/projects/imtiaz/sea-cliff-by-imtiaz.webp", "/img/gallery/image1.webp"],
-  "al-hamra/Al Hamra Waterfront": ["/img/projects/emaar/rashid-yachts-and-marina.webp", "/img/gallery/image5.webp"],
-  "taraf/Karl Lagerfeld Villas": ["/img/projects/hh-development/eden-hills-dubai.webp", "/img/gallery/image6.webp"],
-  "beyond/Sensia Dubai Maritime City": ["/img/projects/damac/chelsea-residences.webp", "/img/gallery/image8.webp"],
-}
-
-/** Extra priority launches injected into core JSON developers so all user-targeted projects appear */
+/** Priority launches injected into core JSON developers so flagship user-requested corridors lead every catalog */
 const EXTRA_PROJECTS_BY_DEV: Record<string, RawProject[]> = {
+  nakheel: [
+    {
+      name: "Palm Springs Beachfront Villas",
+      community: "Palm Jumeirah & Palm Jebel Ali",
+      collection: "Ultra-Prime Beachfront Villas",
+      blurb: "Limited-edition waterfront beachfront villas by Nakheel featuring private coral-sand frontage, sculptural white marble louvers, panoramic Gulf views, and bespoke resort pools.",
+      tags: ["Palm Beachfront", "Private Sand", "Nakheel Flagship"],
+      url: null,
+      video: null,
+    },
+  ],
+  binghatti: [
+    {
+      name: "Binghatti JVC Boutique Residences",
+      community: "Jumeirah Village Circle",
+      collection: "JVC Signature Architecture",
+      blurb: "Architectural landmark residences in Jumeirah Village Circle (JVC) by Binghatti combining warm travertine facades, sculpted terraces, rooftop infinity pools, and strong rental yields.",
+      tags: ["JVC Flagship", "High Rental Yield", "Signature Architecture"],
+      url: null,
+      video: null,
+    },
+  ],
   emaar: [
     {
       name: "Emaar The Oasis",
@@ -202,27 +247,7 @@ const EXTRA_PROJECTS_BY_DEV: Record<string, RawProject[]> = {
       video: null,
     },
   ],
-  imtiaz: [
-    {
-      name: "Imtiaz Kore",
-      community: "Dubai Islands / Meydan Horizon Corridor",
-      collection: "Boutique Furnished Luxury",
-      blurb: "Imtiaz Developments' flagship new release featuring fully furnished designer residences, smart home automation, rooftop infinity sky pool, and a 60/40 milestone payment plan.",
-      tags: ["Fully Furnished", "60/40 Payment Plan", "VIP First Release"],
-      url: null,
-      video: null,
-    },
-  ],
   azizi: [
-    {
-      name: "Azizi Florence",
-      community: "Al Furjan / Sharjah Waterfront Corridor",
-      collection: "Italian Waterfront Residences",
-      blurb: "Italian-inspired waterfront residential masterplan by Azizi Developments featuring crystal lagoon promenades, retail arcades, and a flexible 50/50 payment schedule.",
-      tags: ["Italian Architecture", "Crystal Lagoon", "50/50 Payment Plan"],
-      url: null,
-      video: null,
-    },
     {
       name: "Azizi Leily",
       community: "Al Jaddaf / Dubai Healthcare City",
@@ -238,8 +263,8 @@ const EXTRA_PROJECTS_BY_DEV: Record<string, RawProject[]> = {
       name: "Danube Greenz",
       community: "Dubailand / Academic Corridor",
       collection: "1% Monthly Plan Residences",
-      blurb: "Resort-style residences surrounded by landscaped courtyards and 30+ lifestyle amenities, backed by Danube's signature post-handover payment structure.",
-      tags: ["1% Monthly Plan", "30+ Amenities", "High Yield"],
+      blurb: "Resort-style residences surrounded by landscaped courtyards and abundant lifestyle amenities, backed by Danube's signature post-handover payment structure.",
+      tags: ["1% Monthly Plan", "Resort Amenities", "High Yield"],
       url: null,
       video: null,
     },
@@ -572,58 +597,51 @@ const EXTRAS: Extra[] = [
 
 const img = (dev: string, file: string) => `/img/projects/${dev}/${file}.webp`
 
-function projectImage(devSlug: string, name: string, community: string, indexOffset = 0) {
+function projectImage(devSlug: string, name: string) {
   const key = `${devSlug}/${name}` as keyof typeof projectImages
   const file = projectImages[key]
-  const companion = gallery[(indexOffset * 3 + 1) % gallery.length] ?? "/img/gallery/image2.webp"
   if (file) {
-    return {
-      image: img(devSlug, file),
-      thumb: img(devSlug, `${file}-640`),
-      secondImage: companion,
-    }
+    const full = img(devSlug, file)
+    return { image: full, thumb: full }
   }
-  const extraPair = EXTRA_PROJECT_IMAGES[`${devSlug}/${name}`]
-  if (extraPair) {
-    return {
-      image: extraPair[0],
-      thumb: extraPair[0],
-      secondImage: extraPair[1],
-    }
+  const extra = EXTRA_PROJECT_IMAGES[`${devSlug}/${name}`]
+  if (extra) {
+    return { image: extra, thumb: extra }
   }
-  const fb = FALLBACK_IMG[community] ?? "/img/hero/dubai-skyline-hero.webp"
-  return { image: fb, thumb: fb, secondImage: companion }
+  return {
+    image: "/img/hero/banner-developers.webp",
+    thumb: "/img/hero/banner-developers.webp",
+  }
 }
 
 const PRIORITY_NAMES = new Set([
-  "Imtiaz Kore",
-  "Azizi Florence",
-  "Azizi Venice",
-  "Sobha Century",
-  "DAMAC Islands",
-  "Emaar The Oasis",
+  "Palm Springs Beachfront Villas",
+  "Palm Jebel Ali",
+  "Como Residences",
   "Mercedes-Benz Places",
-  "Ellington Berkeley Tower",
-  "Samana Downtown One",
-  "Danube Greenz",
-  "Azizi Leily",
-  "Lunaya The Bloom Villa",
-  "Dugasta Platinum Residence",
-  "Dubai Hills Estate Residences",
-  "The Meriva Dubai Islands",
-  "Masaar",
+  "Bugatti Residences by Binghatti",
+  "Binghatti JVC Boutique Residences",
+  "Creek Haven",
+  "Emaar The Oasis",
+  "DAMAC Lagoons",
+  "DAMAC Islands",
+  "Azizi Venice",
+  "Riviera",
+  "Sobha SeaHaven",
+  "Sobha Century",
+  "KORE by Imtiaz",
   "Azizi Florence",
-  "Alif Sharjah",
+  "ORLA, Dorchester Collection, Dubai",
+  "Dubai Hills Estate Residences",
+  "Ellington Berkeley Tower",
+  "The Meriva Dubai Islands",
+  "Dubai Islands",
+  "Burj Binghatti Jacob & Co Residences",
+  "Rashid Yachts & Marina",
+  "Masaar",
   "Manchester City Yas Residences",
-  "Sobha River Core",
-  "Yas Island Waterfront",
   "Saadiyat Lagoons",
   "Sobha Siniya Island",
-  "Downtown Umm Al Quwain",
-  "Al Marjan Island Masterplan",
-  "Address Residences Al Marjan Island",
-  "Quattro Del Mar",
-  "Al Hamra Waterfront",
 ])
 
 const seen = new Set<string>()
@@ -647,12 +665,12 @@ const fromJson: Developer[] = (
     | "flagshipAreas"
     | "projectCount"
   > & { projects: RawProject[] })[]
-).map((d, dIdx) => {
+).map((d) => {
   const emirate = EMIRATE[d.slug] ?? "Dubai"
   const extraProjs = EXTRA_PROJECTS_BY_DEV[d.slug] ?? []
   const combinedRaw = [...extraProjs, ...d.projects]
-  const mappedProjects: Project[] = combinedRaw.map((p, pIdx) => {
-    const imgs = projectImage(d.slug, p.name, p.community, dIdx * 7 + pIdx)
+  const mappedProjects: Project[] = combinedRaw.map((p) => {
+    const imgs = projectImage(d.slug, p.name)
     return {
       slug: uniqueSlug(p.name, d.slug),
       name: p.name,
@@ -668,7 +686,7 @@ const fromJson: Developer[] = (
       url: p.url,
       image: imgs.image,
       thumb: imgs.thumb,
-      images: [imgs.image, imgs.secondImage],
+      images: [imgs.image],
       priorityTarget: PRIORITY_NAMES.has(p.name),
     }
   })
@@ -680,16 +698,16 @@ const fromJson: Developer[] = (
     flagshipAreas: Array.from(new Set(combinedRaw.map((p) => p.community))).slice(0, 5),
     projectCount: mappedProjects.length,
     logo: LOGOS[d.slug] ? `/img/developers/${LOGOS[d.slug]}` : "",
-    coverImage: mappedProjects[0]?.image || "/img/hero/dubai-skyline-hero.webp",
+    coverImage: mappedProjects[0]?.image || "/img/hero/banner-developers.webp",
     verify: true,
     projects: mappedProjects,
   }
 })
 
-const fromExtras: Developer[] = EXTRAS.map((e, eIdx) => {
+const fromExtras: Developer[] = EXTRAS.map((e) => {
   const emirate = e.emirate ?? EMIRATE[e.slug] ?? "Dubai"
-  const mappedProjects: Project[] = e.projects.map((p, pIdx) => {
-    const imgs = projectImage(e.slug, p.name, p.community, (eIdx + 15) * 5 + pIdx)
+  const mappedProjects: Project[] = e.projects.map((p) => {
+    const imgs = projectImage(e.slug, p.name)
     return {
       slug: uniqueSlug(p.name, e.slug),
       name: p.name,
@@ -705,7 +723,7 @@ const fromExtras: Developer[] = EXTRAS.map((e, eIdx) => {
       url: null,
       image: imgs.image,
       thumb: imgs.thumb,
-      images: [imgs.image, imgs.secondImage],
+      images: [imgs.image],
       priorityTarget: PRIORITY_NAMES.has(p.name),
     }
   })
@@ -723,13 +741,20 @@ const fromExtras: Developer[] = EXTRAS.map((e, eIdx) => {
     flagshipAreas: Array.from(new Set(e.projects.map((p) => p.community))).slice(0, 5),
     projectCount: mappedProjects.length,
     logo: LOGOS[e.slug] ? `/img/developers/${LOGOS[e.slug]}` : "",
-    coverImage: mappedProjects[0]?.image || "/img/hero/dubai-skyline-hero.webp",
+    coverImage: mappedProjects[0]?.image || "/img/hero/banner-developers.webp",
     verify: true,
     projects: mappedProjects,
   }
 })
 
-export const developers: Developer[] = [...fromJson, ...fromExtras]
+const orderIndex = (slug: string) => {
+  const i = DEVELOPER_PRIORITY_ORDER.indexOf(slug)
+  return i === -1 ? 999 : i
+}
+
+export const developers: Developer[] = [...fromJson, ...fromExtras].sort(
+  (a, b) => orderIndex(a.slug) - orderIndex(b.slug)
+)
 
 const rawAllProjects = developers.flatMap((d) => d.projects)
 export const priorityProjects: Project[] = rawAllProjects.filter((p) => p.priorityTarget)

@@ -55,7 +55,7 @@ const rawServicePages: RawServicePage[] = [
     metaDescription:
       "Independent off-plan advice in Dubai: compare new launches, payment plans and handover timelines, check escrow and Oqood registration, and reserve with confidence. RERA ORN 51517.",
     keywords: ["off plan properties Dubai", "new launches Dubai", "off plan payment plan Dubai", "Oqood registration", "escrow account off plan"],
-    image: "/img/gallery/image9.webp",
+    image: "/img/services/off-plan-advisory.webp",
     intro:
       "Off-plan means buying a home before it is finished, usually in stages tied to construction. It can put you into a community early on a structured payment plan, but it also means you carry delivery risk. We help you read a launch the way a lender would: who is building it, what has been delivered before, where your money sits, and what happens if dates slip.",
     scope: [
@@ -108,7 +108,7 @@ const rawServicePages: RawServicePage[] = [
     metaDescription:
       "Buy or sell apartments, villas and townhouses on Dubai's secondary market. Honest valuation, viewings, negotiation, Form F and DLD transfer handled by RERA-registered SWK Properties.",
     keywords: ["secondary market property Dubai", "buy apartment in Dubai", "sell my property Dubai", "ready properties Dubai", "DLD transfer"],
-    image: "/img/gallery/image8.webp",
+    image: "/img/services/secondary-market.webp",
     intro:
       "Ready property means you can see what you are buying, check the building, and often move or rent within weeks. Whether you are buying or selling, our job is to price realistically, negotiate on evidence, and keep the transfer moving through the Dubai Land Department without surprises.",
     scope: [
@@ -161,7 +161,7 @@ const rawServicePages: RawServicePage[] = [
     metaDescription:
       "Rent a home in Dubai or let out your property. SWK handles viewings, tenant screening, tenancy contracts, Ejari registration and renewals for yearly rentals across Dubai.",
     keywords: ["apartments for rent in Dubai", "villas for rent in Dubai", "Ejari registration", "rent out property Dubai", "Dubai yearly rental"],
-    image: "/img/gallery/image3.webp",
+    image: "/img/services/leasing-rental.webp",
     intro:
       "Most Dubai tenancies are yearly and registered through Ejari. For tenants we match you to buildings by commute, budget and lifestyle. For landlords we find a reliable tenant, set a sensible rent, and make sure the paperwork is right from day one.",
     scope: [
@@ -214,7 +214,7 @@ const rawServicePages: RawServicePage[] = [
     metaDescription:
       "Data-led Dubai property investment advice: compare rental yield, capital growth, payment plans and exit options across communities. Golden Visa eligibility explained. RERA ORN 51517.",
     keywords: ["Dubai property investment", "Dubai rental yield", "best areas to invest in Dubai", "Golden Visa property Dubai", "high ROI property Dubai"],
-    image: "/img/gallery/image10.webp",
+    image: "/img/services/investment-advisory.webp",
     intro:
       "A good investment starts with a clear objective: monthly income, long-term growth or residency. We model each option on realistic rents, service charges and holding costs, and we tell you when a launch does not stack up.",
     scope: [
@@ -262,7 +262,7 @@ const rawServicePages: RawServicePage[] = [
     metaDescription:
       "Hands-off property management for Dubai landlords: tenant sourcing, rent collection, maintenance, Ejari renewals and owner reporting from SWK Properties.",
     keywords: ["property management Dubai", "landlord services Dubai", "rent collection Dubai", "Ejari renewal"],
-    image: "/img/gallery/image12.webp",
+    image: "/img/services/property-management.webp",
     intro:
       "If you own in Dubai but do not live here, or simply do not want to chase maintenance and cheques, we manage the tenancy for you and report clearly on what happened and what it cost.",
     scope: [
@@ -299,7 +299,7 @@ const rawServicePages: RawServicePage[] = [
     metaDescription:
       "Compare UAE mortgage options for residents and non-residents. SWK structures the application, compares lender rates and coordinates valuation through to DLD registration.",
     keywords: ["Dubai mortgage for non residents", "UAE mortgage broker", "mortgage pre approval Dubai", "home loan Dubai"],
-    image: "/img/gallery/image13.webp",
+    image: "/img/services/mortgage-assistance.webp",
     intro:
       "Mortgage rules for UAE residents and non-residents differ on loan-to-value and documentation. We introduce you to lending partners, compare terms side by side, and keep the application moving so it does not hold up your purchase.",
     scope: [
@@ -335,7 +335,7 @@ const rawServicePages: RawServicePage[] = [
     metaDescription:
       "DLD registration, SPA review, power of attorney and Golden Visa documentation for Dubai property buyers, handled with SWK's in-house legal partners.",
     keywords: ["DLD registration", "SPA review Dubai", "power of attorney Dubai property", "Title Deed Dubai", "Golden Visa documents"],
-    image: "/img/gallery/image2.webp",
+    image: "/img/services/legal-documentation.webp",
     intro:
       "The paperwork behind a Dubai purchase is straightforward when someone explains it in order. We coordinate with legal partners so you understand what you sign and when.",
     scope: [
@@ -370,7 +370,7 @@ const rawServicePages: RawServicePage[] = [
     metaDescription:
       "Turnkey interior design and furnishing packages for newly handed-over Dubai units, built for rental-ready returns or comfortable living. Quoted upfront by SWK Properties.",
     keywords: ["apartment fit out Dubai", "furnishing packages Dubai", "interior design Dubai apartment", "rental ready furnishing"],
-    image: "/img/gallery/image4.webp",
+    image: "/img/services/interior-fitout.webp",
     intro:
       "A unit that is furnished well rents faster and holds its value. We scope the work against your budget and the likely tenant, then manage the contractors so you are not on site.",
     scope: [

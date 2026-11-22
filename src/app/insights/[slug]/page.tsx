@@ -1,61 +1,67 @@
-import type { Metadata } from "next"
-import Link from "next/link"
-import { notFound } from "next/navigation"
-import { ArrowLeft, Calendar, CheckCircle2, ExternalLink, ShieldCheck, UserCheck } from "lucide-react"
-import { blogArticles, getBlogArticle } from "@/lib/blog"
-import { listings } from "@/lib/listings"
-import { team } from "@/lib/swk"
-import { buildMetadata, articleSchema, faqSchema, breadcrumbSchema } from "@/lib/seo"
-import { JsonLd } from "@/components/seo/json-ld"
-import { PropertyCard } from "@/components/site/property-card"
-import { EnquiryForm } from "@/components/site/enquiry-form"
+import type { Metadata } from "next";
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import { Check, ExternalLink } from "lucide-react";
+import { blogArticles, getBlogArticle } from "@/lib/blog";
+import { listings } from "@/lib/listings";
+import { team } from "@/lib/swk";
+import { buildMetadata, articleSchema, faqSchema, breadcrumbSchema } from "@/lib/seo";
+import { JsonLd } from "@/components/seo/json-ld";
+import { PropertyCard } from "@/components/site/property-card";
+import { EnquiryForm } from "@/components/site/enquiry-form";
+import { Faq } from "@/components/site/faq";
+import { AvenloPageHeader } from "@/components/avenlo/page-header";
+import { CtaBanner, SectionEyebrow, SplitHeading } from "@/components/avenlo/motion";
 
 export function generateStaticParams() {
-  return blogArticles.map((a) => ({ slug: a.slug }))
+  return blogArticles.map((a) => ({ slug: a.slug }));
 }
 
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ slug: string }>
+  params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
-  const { slug } = await params
-  const article = getBlogArticle(slug)
+  const { slug } = await params;
+  const article = getBlogArticle(slug);
   if (!article) {
     return buildMetadata({
       title: "Article Not Found",
       description: "Requested SWK market briefing could not be found.",
       path: `/insights/${slug}`,
-    })
+    });
   }
   return buildMetadata({
     title: article.title,
     description: article.directAnswer,
     path: `/insights/${article.slug}`,
     ogImage: article.image,
+    type: "article",
+    publishedTime: article.date,
+    modifiedTime: article.updatedAt,
     keywords: [
-      article.title,
+      ...article.keywords,
       article.category,
-      "SWK Properties research",
-      "Dubai real estate guide",
-      "DLD RERA ORN 51517",
+      "SWK Properties Dubai",
+      "Dubai real estate research",
     ],
-  })
+  });
 }
 
 export default async function InsightArticlePage({
   params,
 }: {
-  params: Promise<{ slug: string }>
+  params: Promise<{ slug: string }>;
 }) {
-  const { slug } = await params
-  const article = getBlogArticle(slug)
-  if (!article) notFound()
+  const { slug } = await params;
+  const article = getBlogArticle(slug);
+  if (!article) notFound();
 
-  const relatedListings = listings.slice(0, 3)
+  const relatedListings = listings.slice(0, 3);
+  const authorInTeam = team.some((m) => m.slug === article.author.slug);
 
   return (
-    <div className="min-h-screen bg-[#faf7f2] text-[#17130e]">
+    <div className="bg-transparent">
       <JsonLd
         id="ld-article"
         data={articleSchema({
@@ -78,208 +84,144 @@ export default async function InsightArticlePage({
         ])}
       />
 
-      <article className="mx-auto max-w-5xl px-4 py-12">
-        <Link
-          href="/insights"
-          className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-[#94652c] hover:underline"
-        >
-          <ArrowLeft className="h-3.5 w-3.5" /> Back to All Market Insights
-        </Link>
-
-        {/* Header */}
-        <header className="mt-6">
-          <div className="flex flex-wrap items-center gap-3 text-xs text-[#786e60]">
-            <span className="rounded-full border border-[#94652c]/35 bg-[#f6ead7] px-3 py-1 font-semibold uppercase tracking-[0.18em] text-[#94652c]">
-              {article.category}
-            </span>
-            <span className="inline-flex items-center gap-1.5">
-              <Calendar className="h-3.5 w-3.5 text-[#94652c]" /> Published: {article.date}
-            </span>
-            <span>·</span>
-            <span>Last Reviewed: {article.updatedAt}</span>
-            <span>·</span>
+      <AvenloPageHeader
+        eyebrow={article.category}
+        title={article.title}
+        compact
+        breadcrumb={[
+          { label: "Home", href: "/" },
+          { label: "Insights", href: "/insights" },
+          { label: article.category },
+        ]}
+        meta={
+          <>
+            <span>{article.date}</span>
+            <span className="text-[#cfcfcf]">·</span>
             <span>{article.readTime}</span>
-          </div>
+            <span className="text-[#cfcfcf]">·</span>
+            {authorInTeam ? (
+              <Link
+                href={`/agents/${article.author.slug}`}
+                className="font-medium text-[#121212] underline underline-offset-4"
+              >
+                {article.author.name}
+              </Link>
+            ) : (
+              <span>{article.author.name}</span>
+            )}
+          </>
+        }
+      />
 
-          <h1 className="mt-4 font-serif text-3xl md:text-5xl font-semibold text-[#17130e] leading-tight">
-            {article.title}
-          </h1>
-
-          {/* Author & RERA Reviewer Block (§42) */}
-          <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 rounded-2xl border border-[#e6dfd2] bg-white p-4 text-xs">
-            <div className="flex items-start gap-3">
-              <UserCheck className="h-4 w-4 shrink-0 text-[#94652c] mt-0.5" />
-              <div>
-                <div className="text-[10px] uppercase tracking-[0.18em] text-[#786e60]">
-                  Written By
-                </div>
-                {team.some((m) => m.slug === article.author.slug) ? (
-                  <Link
-                    href={`/agents/${article.author.slug}`}
-                    className="font-semibold text-[#17130e] hover:text-[#94652c]"
-                  >
-                    {article.author.name} — {article.author.role}
-                  </Link>
-                ) : (
-                  <span className="font-semibold text-[#17130e]">
-                    {article.author.name} — {article.author.role}
-                  </span>
-                )}
-                <div className="text-[#786e60]">{article.author.credentials}</div>
-              </div>
-            </div>
-            <div className="flex items-start gap-3">
-              <ShieldCheck className="h-4 w-4 shrink-0 text-[#94652c] mt-0.5" />
-              <div>
-                <div className="text-[10px] uppercase tracking-[0.18em] text-[#786e60]">
-                  Reviewed for Regulatory Accuracy By
-                </div>
-                <div className="font-semibold text-[#17130e]">{article.reviewer.name}</div>
-                <div className="text-[#786e60]">{article.reviewer.credentials}</div>
-              </div>
-            </div>
-          </div>
-        </header>
-
-        {/* Hero Image */}
-        <div className="mt-8 overflow-hidden rounded-3xl border border-[#e6dfd2]">
+      {/* Avenlo Single-Column Frosted Glass Editorial Reading Flow */}
+      <article className="mx-auto my-12 max-w-3xl rounded-3xl border border-white/80 bg-white/86 px-6 py-10 sm:px-10 shadow-[0_20px_54px_rgba(12,56,96,0.09)] backdrop-blur-2xl space-y-10">
+        <div className="overflow-hidden rounded-2xl bg-[#f5f5f5]">
           <img
             src={article.image}
             alt={article.title}
-            className="h-72 md:h-96 w-full object-cover"
+            className="aspect-[16/9] w-full object-cover"
           />
         </div>
 
-        {/* Answer-First AEO Direct Answer Box (§37) */}
-        <section
-          aria-label="Direct Answer Summary"
-          className="mt-8 rounded-3xl border border-[#94652c]/40 bg-[#151319] p-6 md:p-8"
-        >
-          <div className="text-xs font-bold uppercase tracking-[0.22em] text-[#94652c]">
-            Direct Answer Summary (AEO / GEO Verified)
-          </div>
-          <p className="mt-2 font-serif text-xl md:text-2xl text-[#17130e] leading-relaxed">
-            {article.directAnswer}
+        {/* Direct Summary Callout (AEO/GEO Speakable Direct Answer) */}
+        <div className="rounded-2xl border border-white/80 bg-white/80 backdrop-blur-xl shadow-[0_14px_40px_rgba(12,56,96,0.08)] p-6 sm:p-8">
+          <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.2em] text-[#1b6aa7]">
+            KEY SUMMARY · DIRECT ANSWER
           </p>
-          <ul className="mt-5 grid grid-cols-1 gap-2.5 md:grid-cols-2 text-xs text-[#4a4237]">
-            {article.keyTakeaways.map((kt, idx) => (
-              <li key={idx} className="flex items-start gap-2">
-                <CheckCircle2 className="h-4 w-4 shrink-0 text-[#94652c] mt-0.5" />
-                <span>{kt}</span>
-              </li>
-            ))}
-          </ul>
-        </section>
-
-        {/* Table of Contents + Main Body */}
-        <div className="mt-10 grid grid-cols-1 gap-10 lg:grid-cols-12">
-          <aside className="lg:col-span-4">
-            <div className="sticky top-28 rounded-3xl border border-[#e6dfd2] bg-white p-6">
-              <div className="text-xs font-bold uppercase tracking-[0.2em] text-[#94652c]">
-                Table of Contents
-              </div>
-              <ol className="mt-4 space-y-2.5 text-xs text-[#4a4237]">
-                {article.sections.map((sec, i) => (
-                  <li key={i}>
-                    <a
-                      href={`#section-${i + 1}`}
-                      className="hover:text-[#94652c] transition block"
-                    >
-                      {i + 1}. {sec.title}
-                    </a>
-                  </li>
-                ))}
-              </ol>
-
-              <div className="mt-6 border-t border-[#e6dfd2] pt-5">
-                <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#94652c]">
-                  Official Verification Sources
-                </div>
-                <ul className="mt-2.5 space-y-2 text-xs">
-                  {article.sources.map((src, i) => (
-                    <li key={i}>
-                      <a
-                        href={src.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1.5 text-[#4a4237] hover:text-[#94652c]"
-                      >
-                        <ExternalLink className="h-3.5 w-3.5 text-[#94652c]" />
-                        {src.title}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          </aside>
-
-          <div className="lg:col-span-8 space-y-8">
-            {article.sections.map((sec, i) => (
-              <section
-                key={i}
-                id={`section-${i + 1}`}
-                className="scroll-mt-28 rounded-3xl border border-[#e6dfd2] bg-white/80 p-6 md:p-8"
-              >
-                <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[#94652c]">
-                  Step 0{i + 1}
-                </span>
-                <h2 className="mt-1 font-serif text-2xl md:text-3xl font-semibold text-[#17130e]">
-                  {sec.title}
-                </h2>
-                <p className="mt-3 text-sm md:text-base text-[#4a4237] leading-relaxed">
-                  {sec.text}
-                </p>
-              </section>
-            ))}
-
-            {/* Article FAQs */}
-            <section className="rounded-3xl border border-[#e6dfd2] bg-white p-6 md:p-8">
-              <h2 className="font-serif text-2xl font-semibold text-[#17130e]">
-                Frequently Asked Questions
-              </h2>
-              <div className="mt-4 space-y-4">
-                {article.faqs.map((faq, i) => (
-                  <div key={i} className="rounded-2xl border border-[#e6dfd2] bg-[#faf7f2] p-4">
-                    <h3 className="text-sm font-semibold text-[#94652c]">{faq.q}</h3>
-                    <p className="mt-1.5 text-xs md:text-sm text-[#4a4237] leading-relaxed">
-                      {faq.a}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </section>
-
-            {/* Editorial Disclaimer */}
-            <div className="rounded-2xl border border-[#e6dfd2] bg-[#faf7f2] p-4 text-xs text-[#786e60] leading-relaxed">
-              <strong className="text-[#94652c]">Regulatory & Editorial Notice:</strong> This briefing is published by SWK Properties (RERA ORN 51517) for general educational and property-research purposes only. It does not constitute legal, tax, mortgage, or immigration advice. Always verify current fees, escrow accounts, and residency rules directly with the Dubai Land Department (DLD), RERA, or a licensed legal adviser.
-            </div>
-          </div>
+          <p data-speakable className="mt-3 text-[16px] leading-[1.7] text-[#121212]">{article.directAnswer}</p>
         </div>
+
+        <p className="text-[17px] leading-[1.75] text-[#4a4a4a]">{article.content}</p>
+
+        {/* Long-Form Sections */}
+        {article.sections.map((sec) => (
+          <section key={sec.title} className="space-y-3">
+            <h2 className="text-2xl sm:text-[30px] font-medium tracking-[-0.03em] text-[#121212]">
+              {sec.title}
+            </h2>
+            <p className="text-[16px] leading-[1.75] text-[#4a4a4a]">{sec.text}</p>
+          </section>
+        ))}
+
+        {/* Key Takeaways */}
+        {article.keyTakeaways.length > 0 ? (
+          <div className="rounded-2xl border border-white/80 bg-white/80 backdrop-blur-xl shadow-[0_14px_40px_rgba(12,56,96,0.08)] p-6 sm:p-8">
+            <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-[#8b8b8b]">
+              TAKEAWAYS
+            </p>
+            <ul className="mt-4 space-y-3 text-sm text-[#121212]">
+              {article.keyTakeaways.map((kt) => (
+                <li key={kt} className="flex items-start gap-3">
+                  <Check className="mt-0.5 h-4 w-4 shrink-0 text-[#0e9f6e]" />
+                  <span>{kt}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : null}
+
+        {/* Sources */}
+        {article.sources.length > 0 ? (
+          <div className="border-t border-black/[0.08] pt-6 text-xs text-[#737373]">
+            <p className="font-medium uppercase tracking-[0.18em] text-[#8b8b8b]">
+              Official References
+            </p>
+            <ul className="mt-3 space-y-1.5">
+              {article.sources.map((src) => (
+                <li key={src.url}>
+                  <a
+                    href={src.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 text-[#121212] hover:underline"
+                  >
+                    <span>{src.title}</span>
+                    <ExternalLink className="h-3 w-3" />
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : null}
       </article>
 
-      {/* Related Verified Listings */}
-      <section className="mx-auto max-w-7xl px-4 py-14 border-t border-[#e6dfd2]">
-        <h2 className="font-serif text-2xl md:text-4xl font-semibold text-[#17130e] mb-8">
-          Verified Properties to Compare Alongside This Guide
-        </h2>
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-          {relatedListings.map((l) => (
-            <PropertyCard key={l.slug} listing={l} />
+      {article.faqs.length > 0 ? (
+        <Faq
+          items={article.faqs}
+          eyebrow="BRIEFING QUESTIONS"
+          primary="Questions raised by"
+          muted="this note"
+          compact
+        />
+      ) : null}
+
+      {/* Related Residences */}
+      <section className="mx-auto max-w-[1260px] px-4 py-16 sm:px-8">
+        <SectionEyebrow>ON OUR BOOKS</SectionEyebrow>
+        <SplitHeading
+          primary="Selected Dubai"
+          muted="residences"
+          size="md"
+          inline
+          className="mt-4"
+        />
+        <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-3">
+          {relatedListings.map((item) => (
+            <PropertyCard key={item.slug} listing={item} />
           ))}
         </div>
       </section>
 
-      {/* Consultation Form */}
-      <section className="border-t border-[#e6dfd2] bg-[#f4efe6] py-16">
-        <div className="mx-auto max-w-4xl px-4">
-          <EnquiryForm
-            context="advisory"
-            subject={`Briefing Enquiry: ${article.title}`}
-            heading="Discuss This Topic With a RERA-Licensed SWK Consultant"
-          />
-        </div>
+      <section className="mx-auto max-w-3xl px-4 pb-16 sm:px-8">
+        <EnquiryForm
+          context="advisory"
+          subject={article.title}
+          heading="Discuss this briefing with our desk"
+          subheading="Request building comparables or a bespoke cost sheet."
+        />
       </section>
+
+      <CtaBanner />
     </div>
-  )
+  );
 }

@@ -1,14 +1,8 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
-import {
-  Clock,
-  Mail,
-  MapPin,
-  Phone,
-  ShieldCheck,
-} from "lucide-react";
+import { ArrowUp, Check } from "lucide-react";
 import { SITE } from "@/lib/swk";
 import { usePrefs } from "@/lib/prefs";
 import { WhatsAppIcon } from "@/components/site/whatsapp-icon";
@@ -26,11 +20,20 @@ export function SectionHeading({
 }) {
   return (
     <div className={align === "center" ? "mx-auto max-w-3xl text-center" : "max-w-3xl"}>
-      <p className="text-xs font-bold tracking-[0.24em] text-[#94652c] uppercase">{eyebrow}</p>
-      <h2 className="mt-3 font-serif text-3xl leading-[1.12] font-semibold tracking-tight text-[#17130e] md:text-5xl">
+      <div
+        className={`inline-flex items-center gap-2.5 text-[11px] font-medium uppercase tracking-[0.22em] text-[#121212]/75 ${
+          align === "center" ? "justify-center" : ""
+        }`}
+      >
+        <span className="inline-block h-[5px] w-[5px] bg-[#121212]" aria-hidden="true" />
+        <span>{eyebrow}</span>
+      </div>
+      <h2 className="mt-4 text-[30px] sm:text-[42px] md:text-[50px] font-medium leading-[1.06] tracking-[-0.04em] text-[#121212]">
         {title}
       </h2>
-      {lead && <p className="mt-4 text-base md:text-lg leading-relaxed text-[#4a4237]">{lead}</p>}
+      {lead ? (
+        <p className="mt-4 text-[15px] sm:text-[17px] leading-[1.6] text-[#525252]">{lead}</p>
+      ) : null}
     </div>
   );
 }
@@ -42,51 +45,212 @@ const SOCIAL_LINKS: [string, string][] = [
   ["YouTube", SITE.socials.youtube],
   ["TikTok", SITE.socials.tiktok],
   ["X", SITE.socials.x],
-  ["Google", SITE.socials.googleBusinessProfile],
-  ["Property Finder", SITE.socials.propertyFinder],
-  ["Bayut", SITE.socials.bayut],
-]
+];
 
 export function SiteFooter() {
-  const { trackEvent } = usePrefs();
+  const { trackEvent, attribution } = usePrefs();
+  const [email, setEmail] = useState("");
+  const [consent, setConsent] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [subscribed, setSubscribed] = useState(false);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+
+  const handleSubscribe = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setErrorMsg(null);
+    if (!email.trim()) {
+      setErrorMsg("Enter your email address.");
+      return;
+    }
+    if (!consent) {
+      setErrorMsg("Tick the consent box to subscribe.");
+      return;
+    }
+
+    setSubmitting(true);
+    try {
+      const res = await fetch("/api/enquiries", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          context: "newsletter",
+          email: email.trim(),
+          marketingConsent: true,
+          pageUrl: typeof window !== "undefined" ? window.location.href : SITE.url,
+          attribution,
+        }),
+      });
+      const data = (await res.json()) as { ok?: boolean; error?: string };
+      if (!res.ok || !data.ok) {
+        setErrorMsg(data.error || `Could not subscribe. Email ${SITE.email} directly.`);
+      } else {
+        setSubscribed(true);
+        setEmail("");
+        setConsent(false);
+        trackEvent("enquiry_success", { context: "newsletter" });
+      }
+    } catch {
+      setErrorMsg(`Network error. Email ${SITE.email} or message us on WhatsApp.`);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const scrollToTop = () => {
+    if (typeof window !== "undefined") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
 
   return (
-    <footer className="w-full border-t border-[#e6dfd2] bg-[#17130e] text-white">
-      <div className="mx-auto max-w-7xl px-4 py-16 md:px-6">
-        <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-5">
-          {/* Brand & Advisory Credentials */}
-          <div className="lg:col-span-2 space-y-5">
-            <div className="flex flex-wrap items-center gap-4">
-              <Link
-                href="/"
-                className="inline-flex items-center py-1 transition-transform duration-200 hover:scale-[1.02]"
-              >
-                <img
-                  src="/brand/swk-logo-horizontal.svg"
-                  width={870}
-                  height={311}
-                  alt="SWK Properties Dubai"
-                  loading="lazy"
-                  decoding="async"
-                  className="h-14 sm:h-16 md:h-20 w-auto object-contain"
-                />
-              </Link>
-            </div>
-            <p className="max-w-md text-sm text-white/80 leading-relaxed">
-              Backed by 18+ years of UAE market experience across 27+ partner developers and 108+ verified projects, SWK Properties advises private buyers, family offices, and landlords from Al Saqr Business Tower on Sheikh Zayed Road, Dubai.
-            </p>
+    <footer className="relative w-full overflow-hidden bg-[#121212] text-white">
+      <div className="mx-auto max-w-[1260px] px-4 pt-20 pb-24 sm:px-8">
+        {/* Top Brand Row — Highlighted Prominent Transparent Icon + Calligraphic Wordmark */}
+        <div className="mb-14 flex flex-wrap items-center justify-between gap-6 border-b border-white/[0.08] pb-10">
+          <Link href="/" className="group inline-flex items-center gap-4" aria-label="SWK Properties Home">
+            <img
+              src="/brand/swk-icon-192.webp"
+              width={64}
+              height={64}
+              alt="SWK Properties Emblem"
+              loading="lazy"
+              className="h-14 w-14 sm:h-16 sm:w-16 object-contain drop-shadow-[0_6px_18px_rgba(212,175,55,0.42)] transition-transform duration-300 group-hover:scale-[1.06]"
+            />
+            <img
+              src="/brand/swk-logo-dark.webp"
+              width={168}
+              height={76}
+              alt="SWK Properties"
+              loading="lazy"
+              className="h-12 sm:h-14 w-auto object-contain drop-shadow-[0_4px_14px_rgba(212,175,55,0.22)] transition-transform duration-300 group-hover:scale-[1.02]"
+            />
+          </Link>
 
-            <div className="space-y-2.5 text-xs text-white/80">
-              <div className="flex items-start gap-2.5">
-                <MapPin className="h-4 w-4 shrink-0 text-[#dcb888] mt-0.5" />
-                <span>{SITE.address.full}</span>
-              </div>
-              <div className="flex items-center gap-2.5">
-                <Phone className="h-4 w-4 shrink-0 text-[#dcb888]" />
+          <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-[#1e1e1e] px-4 py-2 text-xs text-white/85">
+            <span className="h-1.5 w-1.5 rounded-full bg-[#51fec0]" aria-hidden="true" />
+            <span>
+              RERA ORN <strong>{SITE.reraOrn}</strong> · Sheikh Zayed Road, Dubai
+            </span>
+          </div>
+        </div>
+
+        {/* Main 4-Column Avenlo Architecture */}
+        <div className="grid grid-cols-1 gap-10 lg:grid-cols-12 lg:gap-8">
+          {/* Col 1: Elevated #1E1E1E Newsletter Card */}
+          <div className="lg:col-span-4">
+            <div className="rounded-2xl border border-white/[0.08] bg-[#1e1e1e] p-6 sm:p-7">
+              <p className="text-[11px] font-medium uppercase tracking-[0.22em] text-[#8b8b8b]">
+                NEWSLETTER
+              </p>
+              <h3 className="mt-2.5 text-[20px] font-medium tracking-[-0.025em] text-white">
+                Dubai launch notes, once a month.
+              </h3>
+
+              {subscribed ? (
+                <div className="mt-5 flex items-center gap-2.5 rounded-xl border border-[#51fec0]/30 bg-[#121212] px-4 py-3.5 text-sm text-[#51fec0]">
+                  <Check className="h-4 w-4 shrink-0" />
+                  <span>Subscribed. Look out for our next Dubai briefing.</span>
+                </div>
+              ) : (
+                <form onSubmit={handleSubscribe} className="mt-5 space-y-3" noValidate>
+                  <div>
+                    <label htmlFor="footer-newsletter-email" className="sr-only">
+                      Email address
+                    </label>
+                    <input
+                      id="footer-newsletter-email"
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="Enter your email"
+                      autoComplete="email"
+                      className="w-full rounded-lg border border-[#333333] bg-[#121212] px-4 py-3 text-sm text-white placeholder:text-[#8b8b8b] focus:border-white focus:outline-none"
+                    />
+                  </div>
+                  <label className="flex cursor-pointer items-start gap-2.5 text-[11px] leading-snug text-[#a7a7a7]">
+                    <input
+                      type="checkbox"
+                      checked={consent}
+                      onChange={(e) => setConsent(e.target.checked)}
+                      className="mt-0.5 h-3.5 w-3.5 shrink-0 accent-[#51fec0]"
+                    />
+                    <span>
+                      Send me monthly Dubai market &amp; developer launch updates (UAE PDPL opt-in; unsubscribe anytime).
+                    </span>
+                  </label>
+                  {errorMsg ? (
+                    <p className="text-xs text-rose-400" role="alert">
+                      {errorMsg}
+                    </p>
+                  ) : null}
+                  <button
+                    type="submit"
+                    disabled={submitting}
+                    className="w-full cursor-pointer rounded-lg bg-white px-5 py-3 text-[12px] font-semibold uppercase tracking-[0.16em] text-[#121212] transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#51fec0] hover:shadow-[0_12px_28px_rgba(81,254,192,0.32)] active:scale-[0.98] disabled:opacity-50"
+                  >
+                    {submitting ? "Subscribing..." : "Subscribe"}
+                  </button>
+                </form>
+              )}
+            </div>
+          </div>
+
+          {/* Col 2: MAIN PAGES (2-col subgrid) */}
+          <div className="lg:col-span-3">
+            <p className="text-[11px] font-medium uppercase tracking-[0.22em] text-[#8b8b8b]">
+              MAIN PAGES
+            </p>
+            <div className="mt-4 grid grid-cols-2 gap-x-6 gap-y-2.5 text-[14px] text-white/85">
+              <Link href="/" className="hover:text-[#51fec0] transition-colors">Home</Link>
+              <Link href="/agents" className="hover:text-[#51fec0] transition-colors">Our Team</Link>
+              <Link href="/about" className="hover:text-[#51fec0] transition-colors">About</Link>
+              <Link href="/insights" className="hover:text-[#51fec0] transition-colors">Insights</Link>
+              <Link href="/properties" className="hover:text-[#51fec0] transition-colors">Properties</Link>
+              <Link href="/guides" className="hover:text-[#51fec0] transition-colors">Guides</Link>
+              <Link href="/off-plan" className="hover:text-[#51fec0] transition-colors">Off-Plan</Link>
+              <Link href="/faq" className="hover:text-[#51fec0] transition-colors">FAQ</Link>
+              <Link href="/developers" className="hover:text-[#51fec0] transition-colors">Developers</Link>
+              <Link href="/contact" className="hover:text-[#51fec0] transition-colors">Contact</Link>
+              <Link href="/communities" className="hover:text-[#51fec0] transition-colors">Communities</Link>
+              <Link href="/privacy" className="hover:text-[#51fec0] transition-colors">Privacy</Link>
+              <Link href="/terms" className="hover:text-[#51fec0] transition-colors">Terms</Link>
+              <Link href="/cookies" className="hover:text-[#51fec0] transition-colors">Cookies</Link>
+            </div>
+          </div>
+
+          {/* Col 3: SERVICES & PORTFOLIO */}
+          <div className="lg:col-span-2">
+            <p className="text-[11px] font-medium uppercase tracking-[0.22em] text-[#8b8b8b]">
+              SERVICES
+            </p>
+            <ul className="mt-4 space-y-2.5 text-[14px] text-white/85">
+              <li><Link href="/services/off-plan-advisory" className="hover:text-[#51fec0] transition-colors">Off-Plan Advisory</Link></li>
+              <li><Link href="/services/secondary-market" className="hover:text-[#51fec0] transition-colors">Buying &amp; Selling</Link></li>
+              <li><Link href="/services/leasing-rental" className="hover:text-[#51fec0] transition-colors">Leasing &amp; Ejari</Link></li>
+              <li><Link href="/properties?type=Office" className="hover:text-[#51fec0] transition-colors">Commercial Spaces</Link></li>
+              <li><Link href="/services/investment-advisory" className="hover:text-[#51fec0] transition-colors">Investment Advisory</Link></li>
+              <li><Link href="/calculators" className="hover:text-[#51fec0] transition-colors">Mortgage Calculator</Link></li>
+              <li><Link href="/list-your-property" className="hover:text-[#51fec0] transition-colors">List Your Property</Link></li>
+            </ul>
+          </div>
+
+          {/* Col 4: DUBAI OFFICE & RERA CREDENTIAL */}
+          <div className="lg:col-span-3">
+            <p className="text-[11px] font-medium uppercase tracking-[0.22em] text-[#8b8b8b]">
+              OFFICE
+            </p>
+            <div className="mt-4 space-y-2.5 text-[14px] text-white/85 leading-relaxed">
+              <p>{SITE.address.full}</p>
+              <p>
+                <a href={`mailto:${SITE.email}`} className="hover:text-[#51fec0] transition-colors">
+                  {SITE.email}
+                </a>
+              </p>
+              <p className="flex flex-wrap items-center gap-2">
                 <a
                   href={`tel:${SITE.phoneRaw}`}
                   onClick={() => trackEvent("phone_click", { location: "footer" })}
-                  className="hover:text-[#dcb888]"
+                  className="hover:text-[#51fec0] transition-colors"
                 >
                   {SITE.phone}
                 </a>
@@ -96,126 +260,74 @@ export function SiteFooter() {
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={() => trackEvent("whatsapp_click", { location: "footer" })}
-                  className="inline-flex items-center gap-1 text-emerald-300 hover:underline"
+                  className="inline-flex items-center gap-1 text-[#51fec0] hover:underline"
                 >
                   <WhatsAppIcon className="h-3.5 w-3.5" />
-                  WhatsApp
+                  <span>WhatsApp</span>
                 </a>
-              </div>
-              <div className="flex items-center gap-2.5">
-                <Mail className="h-4 w-4 shrink-0 text-[#dcb888]" />
-                <a href={`mailto:${SITE.email}`} className="hover:text-[#dcb888]">
-                  {SITE.email}
-                </a>
-              </div>
-              <div className="flex items-start gap-2.5">
-                <Clock className="h-4 w-4 shrink-0 text-[#dcb888] mt-0.5" />
-                <span>
-                  {SITE.hours.weekdays} · {SITE.hours.saturday} (Asia/Dubai GST)
-                </span>
-              </div>
+              </p>
+              <p className="text-xs text-[#8b8b8b]">{SITE.hours.full}</p>
             </div>
-          </div>
 
-          {/* Properties & Search */}
-          <div>
-            <h4 className="mb-4 text-xs font-bold uppercase tracking-[0.22em] text-[#dcb888]">
-              Properties & Mandates
-            </h4>
-            <ul className="space-y-2.5 text-xs text-white/80">
-              <li><Link href="/properties" className="hover:text-[#dcb888]">All Dubai Properties Search</Link></li>
-              <li><Link href="/buy" className="hover:text-[#dcb888]">Buy Ready Homes (Secondary)</Link></li>
-              <li><Link href="/rent" className="hover:text-[#dcb888]">Rent & Lease (Annual / Monthly)</Link></li>
-              <li><Link href="/off-plan" className="hover:text-[#dcb888]">Verified Off-Plan Launches</Link></li>
-              <li><Link href="/list-your-property" className="hover:text-[#dcb888]">List Your Property (Sell / Lease)</Link></li>
-              <li><Link href="/developers" className="hover:text-[#dcb888]">27+ UAE Master Developers</Link></li>
-              <li><Link href="/communities" className="hover:text-[#dcb888]">Dubai &amp; UAE Community Guides</Link></li>
-            </ul>
-          </div>
-
-          {/* Services & Guides */}
-          <div>
-            <h4 className="mb-4 text-xs font-bold uppercase tracking-[0.22em] text-[#dcb888]">
-              Services, Guides & Tools
-            </h4>
-            <ul className="space-y-2.5 text-xs text-white/80">
-              <li><Link href="/services/off-plan-advisory" className="hover:text-[#dcb888]">Off-Plan Investment Advisory</Link></li>
-              <li><Link href="/services/secondary-market" className="hover:text-[#dcb888]">Secondary Sales & Form F</Link></li>
-              <li><Link href="/services/leasing-rental" className="hover:text-[#dcb888]">Leasing & Ejari Services</Link></li>
-              <li><Link href="/services/property-management" className="hover:text-[#dcb888]">Landlord Property Management</Link></li>
-              <li><Link href="/guides" className="hover:text-[#dcb888]">All Dubai Property Guides</Link></li>
-              <li><Link href="/guides/buying" className="hover:text-[#dcb888]">Dubai Buying Guide</Link></li>
-              <li><Link href="/guides/renting" className="hover:text-[#dcb888]">Dubai Renting & Ejari Guide</Link></li>
-              <li><Link href="/guides/selling" className="hover:text-[#dcb888]">Dubai Selling Guide</Link></li>
-              <li><Link href="/guides/investing" className="hover:text-[#dcb888]">Property Investment Guide</Link></li>
-              <li><Link href="/calculators" className="hover:text-[#dcb888]">Mortgage, DLD & Yield Calculators</Link></li>
-            </ul>
-          </div>
-
-          {/* Company, Governance & Legal */}
-          <div>
-            <h4 className="mb-4 text-xs font-bold uppercase tracking-[0.22em] text-[#dcb888]">
-              Governance & Legal
-            </h4>
-            <ul className="space-y-2.5 text-xs text-white/80">
-              <li><Link href="/about" className="hover:text-[#dcb888]">About SWK & RERA Credentials</Link></li>
-              <li><Link href="/insights" className="hover:text-[#dcb888]">Market Insights & Research</Link></li>
-              <li><Link href="/faq" className="hover:text-[#dcb888]">Frequently Asked Questions</Link></li>
-              <li><Link href="/contact" className="hover:text-[#dcb888]">Contact & Office Location</Link></li>
-              <li><Link href="/privacy" className="hover:text-[#dcb888]">Privacy Policy (UAE PDPL)</Link></li>
-              <li><Link href="/terms" className="hover:text-[#dcb888]">Terms of Use & Disclaimers</Link></li>
-              <li><Link href="/cookies" className="hover:text-[#dcb888]">Cookie Settings & Tracker Inventory</Link></li>
-            </ul>
-
-            <div className="mt-5 rounded-2xl border border-white/15 bg-[#2a2219] p-3.5 text-[11px] text-white/85">
-              <div className="flex items-center gap-1.5 font-bold text-[#dcb888]">
-                <ShieldCheck className="h-3.5 w-3.5" />
-                DLD & RERA Compliance
-              </div>
-              <p className="mt-1 leading-relaxed">
-                RERA ORN: <strong>{SITE.reraOrn}</strong>
-                {SITE.tradeLicense ? (
-                  <>
-                    {" "}· Licence No: <strong>{SITE.tradeLicense}</strong>
-                  </>
-                ) : null}{" "}
-                · Verify permits at{" "}
+            <div className="mt-5 inline-flex items-center gap-2 rounded-full border border-white/15 bg-[#1e1e1e] px-3.5 py-1.5 text-[11px] text-white/85">
+              <span className="h-1.5 w-1.5 rounded-full bg-[#51fec0]" aria-hidden="true" />
+              <span>
+                RERA ORN <strong>{SITE.reraOrn}</strong>
+                {SITE.tradeLicense ? ` · Licence ${SITE.tradeLicense}` : ""} ·{" "}
                 <a
                   href="https://dubailand.gov.ae"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-[#dcb888] underline"
+                  className="underline hover:text-[#51fec0]"
                 >
                   dubailand.gov.ae
                 </a>
-              </p>
+              </span>
             </div>
           </div>
         </div>
 
-        {/* Regulatory & Image Attribution Disclaimers (§08, §09, §10, §15) */}
-        <div className="mt-12 border-t border-white/15 pt-6 text-[11px] text-white/65 space-y-2 leading-relaxed">
+        {/* Mandatory RERA, AED & Trademark Disclosures */}
+        <div className="mt-14 border-t border-white/[0.08] pt-6 text-[11px] leading-relaxed text-[#8b8b8b] space-y-1.5">
           <p>
-            <strong>Regulatory & Pricing Notice:</strong> Primary prices are quoted in UAE Dirhams (AED). Any foreign currency conversions (USD, EUR, GBP, INR, RUB) and calculator outputs are approximate and for general information only—not financial, tax, or legal advice. Off-plan project visuals include developer architectural renders; floor plans, dimensions, service charges, payment plans, and handover dates are subject to the official Sales & Purchase Agreement (SPA) and Dubai Land Department (DLD) registration.
+            <strong className="text-white/75 font-medium">Regulatory &amp; Pricing Notice:</strong> Primary prices are quoted in UAE Dirhams (AED). Foreign currency conversions and calculator outputs are approximate and for general information only—not financial, tax, or legal advice. Off-plan visuals include architectural renders; floor plans, service charges, payment plans, and handover timelines are governed by the official Sales &amp; Purchase Agreement (SPA) and Dubai Land Department (DLD) registration.
           </p>
           <p>
-            <strong>Developer Trademarks:</strong> Developer names, logos, and project imagery remain the property of their respective developers and are used solely to identify developments in the UAE market. SWK Properties LLC operates as an independent RERA-licensed real estate brokerage (ORN {SITE.reraOrn}) at Al Saqr Business Tower, Sheikh Zayed Road, Dubai, UAE.
+            <strong className="text-white/75 font-medium">Developer Trademarks:</strong> Developer names, logos, and project imagery remain the property of their respective developers and are used solely to identify UAE developments. {SITE.legalName} is an independent RERA-licensed brokerage (ORN {SITE.reraOrn}).
           </p>
         </div>
 
-        <div className="mt-6 flex flex-col gap-3 border-t border-white/15 pt-5 text-[11px] text-white/70 sm:flex-row sm:items-center sm:justify-between">
-          <p>
-            © {new Date().getFullYear()} {SITE.legalName}. All rights reserved. RERA ORN {SITE.reraOrn}.
-          </p>
-          <ul className="flex flex-wrap gap-x-4 gap-y-1" aria-label="SWK Properties on social media">
+        {/* Clean Bottom Utility Pill Row (Monumental bottom SWK watermark removed) */}
+        <div className="mt-10 flex flex-col items-center justify-between gap-3 border-t border-white/[0.08] pt-8 sm:flex-row">
+          {/* Pill 1: Socials */}
+          <div className="inline-flex items-center gap-3 rounded-full border border-white/10 bg-[#1e1e1e]/95 px-4 py-2 text-xs text-white/80 backdrop-blur-md">
             {SOCIAL_LINKS.filter(([, href]) => href).map(([label, href]) => (
-              <li key={label}>
-                <a href={href} target="_blank" rel="noopener noreferrer me" className="hover:text-[#dcb888]">
-                  {label}
-                </a>
-              </li>
+              <a
+                key={label}
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer me"
+                className="hover:text-[#51fec0] transition-colors"
+              >
+                {label}
+              </a>
             ))}
-          </ul>
+          </div>
+
+          {/* Pill 2: Copyright */}
+          <div className="inline-flex items-center rounded-full border border-white/10 bg-[#1e1e1e]/95 px-4 py-2 text-xs text-white/70 backdrop-blur-md">
+            © <span suppressHydrationWarning>{new Date().getFullYear()}</span> {SITE.legalName}. All rights reserved. RERA ORN {SITE.reraOrn}.
+          </div>
+
+          {/* Pill 3: Back to Top */}
+          <button
+            type="button"
+            onClick={scrollToTop}
+            className="group inline-flex cursor-pointer items-center gap-2 rounded-full border border-white/15 bg-[#1e1e1e]/95 px-4 py-2 text-[11px] font-medium uppercase tracking-[0.16em] text-white/90 backdrop-blur-md transition-all duration-200 hover:-translate-y-0.5 hover:border-[#51fec0] hover:bg-[#51fec0] hover:text-[#0a1624] hover:shadow-[0_10px_24px_rgba(81,254,192,0.3)]"
+          >
+            <span>Back to top</span>
+            <ArrowUp className="h-3.5 w-3.5 transition-transform duration-200 group-hover:-translate-y-0.5" />
+          </button>
         </div>
       </div>
     </footer>

@@ -1,3 +1,5 @@
+import listingsExpandedJson from "@/data/listings-expanded.json";
+
 export type ListingPurpose = "buy" | "rent" | "off-plan";
 export type ListingStatus = "available" | "reserved" | "rented" | "sold";
 export type PropertyType = "Apartment" | "Villa" | "Townhouse" | "Penthouse" | "Duplex" | "Office";
@@ -132,10 +134,7 @@ export const LISTINGS: PropertyListing[] = [
     lng: 55.2718,
     mapZone: "central",
     images: [
-      "/img/communities/downtown-dubai.webp",
-      "/img/gallery/image1.webp",
-      "/img/gallery/image4.webp",
-      "/img/gallery/image9.webp",
+      "/img/listings/burj-crown-boulevard-3br-downtown-dubai.webp",
     ],
     floorPlan: {
       label: "Type 3B-04 · Corner Layout",
@@ -216,10 +215,7 @@ export const LISTINGS: PropertyListing[] = [
     lng: 55.1452,
     mapZone: "coastal",
     images: [
-      "/img/communities/palm-jumeirah.webp",
-      "/img/gallery/image2.webp",
-      "/img/gallery/image6.webp",
-      "/img/gallery/image12.webp",
+      "/img/listings/palm-jumeirah-signature-frond-villa-5br.webp",
     ],
     floorPlan: {
       label: "Signature Villa · Contemporary Gallery Layout",
@@ -297,10 +293,7 @@ export const LISTINGS: PropertyListing[] = [
     lng: 55.2421,
     mapZone: "green-suburban",
     images: [
-      "/img/communities/dubai-hills-estate.webp",
-      "/img/gallery/image3.webp",
-      "/img/gallery/image7.webp",
-      "/img/gallery/image11.webp",
+      "/img/listings/dubai-hills-park-ridge-2br-golf-estate.webp",
     ],
     floorPlan: {
       label: "Type 2B-Park · 1,124 sq ft",
@@ -376,10 +369,7 @@ export const LISTINGS: PropertyListing[] = [
     lng: 55.2644,
     mapZone: "central",
     images: [
-      "/img/communities/business-bay.webp",
-      "/img/gallery/image5.webp",
-      "/img/gallery/image8.webp",
-      "/img/gallery/image14.webp",
+      "/img/listings/business-bay-canal-front-penthouse-4br.webp",
     ],
     floorPlan: {
       label: "Duplex Sky Villa · 4,380 sq ft",
@@ -458,10 +448,7 @@ export const LISTINGS: PropertyListing[] = [
     lng: 55.1486,
     mapZone: "coastal",
     images: [
-      "/img/communities/dubai-marina.webp",
-      "/img/gallery/image6.webp",
-      "/img/gallery/image10.webp",
-      "/img/gallery/image15.webp",
+      "/img/listings/dubai-marina-promenade-2br-waterfront-rent.webp",
     ],
     floorPlan: {
       label: "Series 04 · Full Marina Aspect",
@@ -540,10 +527,7 @@ export const LISTINGS: PropertyListing[] = [
     lng: 55.2768,
     mapZone: "central",
     images: [
-      "/img/communities/sheikh-zayed-road.webp",
-      "/img/gallery/image11.webp",
-      "/img/gallery/image13.webp",
-      "/img/gallery/image16.webp",
+      "/img/listings/sheikh-zayed-road-executive-1br-difc-corridor-rent.webp",
     ],
     floorPlan: {
       label: "Executive 1B + Study Nook",
@@ -557,7 +541,7 @@ export const LISTINGS: PropertyListing[] = [
       ],
     },
     description: [
-      "Positioned steps from Financial Centre Metro Station and SWK Properties' headquarters at Al Saqr Business Tower, this 910 sq ft executive 1-bedroom apartment offers effortless commuting to DIFC and Downtown Dubai.",
+      "Positioned steps from Financial Centre Metro Station and SWK Properties' headquarters at Al Saqr Building, this 910 sq ft executive 1-bedroom apartment offers effortless commuting to DIFC and Downtown Dubai.",
       "Available on an annual Ejari contract (up to 4 cheques) or flexible corporate lease terms upon enquiry.",
     ],
     dld: {
@@ -621,10 +605,7 @@ export const LISTINGS: PropertyListing[] = [
     lng: 55.2094,
     mapZone: "green-suburban",
     images: [
-      "/img/communities/jvc.webp",
-      "/img/gallery/image7.webp",
-      "/img/gallery/image9.webp",
-      "/img/gallery/image12.webp",
+      "/img/listings/jvc-family-townhouse-4br-park-corner-rent.webp",
     ],
     floorPlan: {
       label: "Corner G+2 Townhouse · 3,150 sq ft",
@@ -702,10 +683,7 @@ export const LISTINGS: PropertyListing[] = [
     lng: 55.1614,
     mapZone: "green-suburban",
     images: [
-      "/img/projects/azizi/azizi-venice.webp",
-      "/img/projects/azizi/azizi-florence.webp",
-      "/img/gallery/image5.webp",
-      "/img/gallery/image2.webp",
+      "/img/listings/azizi-venice-crystal-lagoon-residences-dubai-south.webp",
     ],
     floorPlan: {
       label: "1BR Lagoon Aspect · Azizi Venice",
@@ -783,10 +761,7 @@ export const LISTINGS: PropertyListing[] = [
     lng: 55.2218,
     mapZone: "green-suburban",
     images: [
-      "/img/projects/emaar/greencrest.webp",
-      "/img/projects/emaar/avarra-by-palace.webp",
-      "/img/communities/dubai-hills-estate.webp",
-      "/img/gallery/image7.webp",
+      "/img/listings/emaar-the-oasis-waterfront-villa-dubailand.webp",
     ],
     floorPlan: {
       label: "4BR + Maid + Driver · Waterfront Villa",
@@ -865,10 +840,7 @@ export const LISTINGS: PropertyListing[] = [
     lng: 55.2612,
     mapZone: "green-suburban",
     images: [
-      "/img/projects/damac/damac-islands.webp",
-      "/img/projects/damac/damac-lagoons.webp",
-      "/img/gallery/image5.webp",
-      "/img/gallery/image7.webp",
+      "/img/listings/damac-islands-waterfront-townhouse-dubailand.webp",
     ],
     floorPlan: {
       label: "4BR Lagoon Townhouse · 2,208 sq ft",
@@ -947,10 +919,7 @@ export const LISTINGS: PropertyListing[] = [
     lng: 55.1388,
     mapZone: "coastal",
     images: [
-      "/img/projects/sobha/sobha-seahaven.webp",
-      "/img/projects/sobha/sobha-one.webp",
-      "/img/communities/dubai-marina.webp",
-      "/img/gallery/image8.webp",
+      "/img/listings/sobha-century-sheikh-zayed-road-2br-offplan.webp",
     ],
     floorPlan: {
       label: "2BR Sea & Skyline Aspect · Sobha Century",
@@ -1027,10 +996,7 @@ export const LISTINGS: PropertyListing[] = [
     lng: 55.3118,
     mapZone: "coastal",
     images: [
-      "/img/projects/nakheel/dubai-islands.webp",
-      "/img/gallery/image2.webp",
-      "/img/gallery/image1.webp",
-      "/img/gallery/image6.webp",
+      "/img/listings/the-meriva-dubai-islands-ellington-2br-offplan.webp",
     ],
     floorPlan: {
       label: "2BR + Study · Ellington Coastal Layout",
@@ -1108,10 +1074,7 @@ export const LISTINGS: PropertyListing[] = [
     lng: 55.2782,
     mapZone: "central",
     images: [
-      "/img/projects/binghatti/mercedes-benz-places.webp",
-      "/img/projects/binghatti/bugatti-residences-by-binghatti.webp",
-      "/img/communities/downtown-dubai.webp",
-      "/img/gallery/image14.webp",
+      "/img/listings/binghatti-mercedes-benz-places-2br-downtown-offplan.webp",
     ],
     floorPlan: {
       label: "Pagoda Suite · 2BR + Private Pool",
@@ -1140,6 +1103,162 @@ export const LISTINGS: PropertyListing[] = [
       verificationUrl: "https://dubailand.gov.ae",
     },
   },
+  {
+    slug: "al-saqr-corridor-fitted-office-sheikh-zayed-road",
+    reference: "SWK-DXB-2026-401",
+    title: "Grade-A Fitted Executive Office on Sheikh Zayed Road",
+    subtitle: "High-floor commercial headquarters beside DIFC & Financial Centre Metro with travertine reception, private boardroom & skyline views",
+    purpose: "rent",
+    status: "available",
+    propertyType: "Office",
+    communitySlug: "sheikh-zayed-road",
+    community: "Sheikh Zayed Road",
+    building: "Al Saqr Commercial Corridor",
+    developerSlug: "dubai-properties",
+    developer: "Dubai Properties",
+    priceAed: 540000,
+    rentalPeriod: "yearly",
+    cheques: 4,
+    securityDepositPct: 10,
+    bedrooms: 0,
+    bathrooms: 2,
+    areaSqFt: 2450,
+    furnished: "Furnished",
+    completion: "Ready",
+    handover: "Ready (Immediate Corporate Move-In)",
+    serviceChargePerSqFt: 26.0,
+    parkingSpaces: 4,
+    floorLevel: "High Floor (Level 24+)",
+    views: ["Sheikh Zayed Road Skyline", "DIFC Corridor"],
+    features: ["Parking", "Near metro", "Step-free access", "Fitted boardroom"],
+    amenities: [
+      "Glass-partitioned partner suites & executive boardroom",
+      "Honed travertine reception gallery",
+      "4 allocated covered executive parking bays",
+      "Direct 4-minute walk to Financial Centre Metro",
+      "24/7 Grade-A building security & concierge",
+    ],
+    accessibility: ["Step-free lobby & high-speed destination lifts", "Accessible washrooms on floor"],
+    petPolicy: "No pets",
+    nearMetro: true,
+    metroStation: "Financial Centre Metro (4 min walk)",
+    badge: "Direct Mandate",
+    isRender: false,
+    agentSlug: "mohammad-haseeb",
+    agentName: "Mohammad Haseeb",
+    agentRole: "Sales & Operations Manager",
+    agentPhone: "+971564330448",
+    agentLanguages: ["English", "Urdu", "Hindi", "Punjabi"],
+    lastChecked: "2026-11-20",
+    listedAt: "2026-11-18",
+    lat: 25.2139,
+    lng: 55.2780,
+    mapZone: "central",
+    images: [
+      "/img/listings/al-saqr-corridor-fitted-office-sheikh-zayed-road.webp",
+    ],
+    floorPlan: {
+      label: "Commercial Executive Suite · 2,450 sq ft",
+      totalAreaSqFt: 2450,
+      internalSqFt: 2450,
+      balconySqFt: 0,
+      rooms: [
+        { name: "Reception & Client Lounge", dimensions: "6.4m × 4.2m" },
+        { name: "Executive Boardroom (12-Seat)", dimensions: "6.8m × 4.5m" },
+        { name: "3 Glass Partner Offices", dimensions: "4.2m × 3.8m avg" },
+        { name: "Open Advisory Workstation Floor", dimensions: "9.5m × 5.8m" },
+      ],
+    },
+    description: [
+      "Turnkey Grade-A commercial office positioned along the prime Sheikh Zayed Road financial corridor adjacent to DIFC and Financial Centre Metro.",
+      "Delivered fully fitted with acoustic glass partitions, oak slat ceilings, a dedicated 12-seat client boardroom, private pantry, and Ejari-ready DED mainland licence eligibility.",
+    ],
+    dld: {
+      permitNumber: "71940281544",
+      permitIssued: "2026-10-15",
+      permitExpiry: "2027-04-15",
+      orn: "51517",
+      brn: "58412",
+      madmounQrId: "DLD-MDM-71940281544",
+      verificationUrl: "https://dubailand.gov.ae",
+    },
+  },
+  {
+    slug: "business-bay-canal-executive-headquarters-commercial",
+    reference: "SWK-DXB-2026-402",
+    title: "Canal-Front Freehold Commercial Headquarters in Business Bay",
+    subtitle: "Full-wing Grade-A commercial space for sale overlooking Dubai Water Canal with showroom glazing & 6 parking bays",
+    purpose: "buy",
+    status: "available",
+    propertyType: "Office",
+    communitySlug: "business-bay",
+    community: "Business Bay",
+    building: "Canal Executive Tower",
+    developerSlug: "omniyat",
+    developer: "Omniyat",
+    priceAed: 9250000,
+    bedrooms: 0,
+    bathrooms: 3,
+    areaSqFt: 3820,
+    furnished: "Partly furnished",
+    completion: "Ready",
+    handover: "Ready (Vacant on Transfer)",
+    serviceChargePerSqFt: 24.0,
+    parkingSpaces: 6,
+    floorLevel: "High Floor · Canal Wing",
+    views: ["Dubai Water Canal", "Downtown Skyline"],
+    features: ["Parking", "Near metro", "Step-free access", "Canal frontage"],
+    amenities: [
+      "Floor-to-ceiling canal-view curtain wall glazing",
+      "Polished terrazzo arrival lobby & flagship display wing",
+      "6 dedicated covered parking bays + visitor valet",
+      "DED mainland freehold commercial Title Deed",
+    ],
+    accessibility: ["Step-free arrival plaza", "Dedicated commercial lift bank"],
+    petPolicy: "No pets",
+    nearMetro: true,
+    metroStation: "Business Bay Metro (7 min drive)",
+    badge: "Direct Mandate",
+    isRender: false,
+    agentSlug: "talha-shabbir",
+    agentName: "Talha Shabbir",
+    agentRole: "Business Development Manager",
+    agentPhone: "+971564330448",
+    agentLanguages: ["English", "Urdu", "Punjabi"],
+    lastChecked: "2026-11-20",
+    listedAt: "2026-11-19",
+    lat: 25.1862,
+    lng: 55.2684,
+    mapZone: "central",
+    images: [
+      "/img/listings/business-bay-canal-executive-headquarters-commercial.webp",
+    ],
+    floorPlan: {
+      label: "Freehold Commercial Wing · 3,820 sq ft",
+      totalAreaSqFt: 3820,
+      internalSqFt: 3820,
+      balconySqFt: 0,
+      rooms: [
+        { name: "Canal-Front Client Gallery", dimensions: "10.2m × 5.4m" },
+        { name: "Executive Suites (4 Rooms)", dimensions: "4.6m × 4.0m avg" },
+        { name: "Open Operations Floor", dimensions: "11.5m × 6.8m" },
+      ],
+    },
+    description: [
+      "Rare freehold Grade-A commercial wing overlooking the Dubai Water Canal in Business Bay, tailored for family offices, private wealth firms, and corporate headquarters.",
+      "Clear DLD commercial Title Deed ready for immediate Trustee transfer with strong corporate leasing demand in Dubai's central business district.",
+    ],
+    dld: {
+      permitNumber: "71940281988",
+      permitIssued: "2026-10-18",
+      permitExpiry: "2027-04-18",
+      orn: "51517",
+      brn: "62918",
+      madmounQrId: "DLD-MDM-71940281988",
+      verificationUrl: "https://dubailand.gov.ae",
+    },
+  },
+  ...(listingsExpandedJson as PropertyListing[]),
 ];
 
 export const listings = LISTINGS;

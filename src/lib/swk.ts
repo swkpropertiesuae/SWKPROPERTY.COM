@@ -17,8 +17,8 @@ export const SITE = {
   whatsappUrl: "https://wa.me/971564330448",
   email: "info@swkpropertiesuae.com",
   address: {
-    full: "Office No 54, 27th Floor, Al Saqr Business Tower, Sheikh Zayed Road, Dubai, UAE",
-    street: "Al Saqr Business Tower, Sheikh Zayed Road",
+    full: "25th Floor, Al Saqr Building, Sheikh Zayed Road, Dubai, UAE",
+    street: "25th Floor, Al Saqr Building, Sheikh Zayed Road",
     city: "Dubai",
     country: "UAE",
   },
@@ -32,7 +32,7 @@ export const SITE = {
   reraOrn: "51517",
   rera: "RERA ORN 51517",
   announcement:
-    "18+ Years Experience · 27+ Partner Developers · 108+ Verified Projects Across Dubai, Abu Dhabi, Sharjah, RAK & UAQ",
+    "18+ Years UAE Experience · Direct Master Developer Access · Nakheel, Emaar, Binghatti, DAMAC, Azizi & More Across the UAE",
   geo: {
     lat: 25.213925,
     lng: 55.277978,
@@ -60,23 +60,28 @@ export const SITE = {
 } as const;
 
 export const stats = [
-  { label: "Years of Experience", value: 18, suffix: "+" },
-  { label: "Partner Developers", value: 27, suffix: "+" },
-  { label: "Verified Projects", value: 108, suffix: "+" },
+  { label: "Years Advising UAE Buyers & Investors", value: 18, suffix: "+" },
   { label: "UAE Emirates Covered", value: 5, suffix: "" },
+  { label: "Primary Launch Buyer Fee", value: 0, suffix: "%" },
+  { label: "RERA Licensed Brokerage ORN", value: 51517, suffix: "" },
 ];
 
 const img = (p: string) => `/img/${p}`;
 
-export const communities = communitiesJson.map((c) => ({
-  id: c.id,
-  slug: c.id,
-  name: c.name,
-  blurb: c.blurb,
-  tagline: c.blurb,
-  image: img(`communities/${c.id}.webp`),
-  thumb: img(`communities/${c.id}-640.webp`),
-}));
+export const communities = communitiesJson.map((c) => {
+  const imagePath = c.image.startsWith("/")
+    ? c.image
+    : img(`communities/${c.id}-hd.webp`);
+  return {
+    id: c.id,
+    slug: c.id,
+    name: c.name,
+    blurb: c.blurb,
+    tagline: c.blurb,
+    image: imagePath,
+    thumb: imagePath,
+  };
+});
 
 export const services = servicesJson;
 
@@ -88,6 +93,7 @@ const TEAM_LANGUAGES: Record<string, string[]> = {
   "issaadi-chahrazed": ["English", "French", "Arabic"],
   saifullah: ["English", "Urdu", "Hindi", "Pashto"],
   "mohammad-umar": ["English", "Urdu", "Hindi"],
+  "sanket-katariya": ["English", "Hindi", "Marathi"],
   "mohd-shahid-khan": ["English", "Hindi", "Urdu"],
 };
 
@@ -122,16 +128,16 @@ const COORDS: Record<string, { city: string; code: string; lat: number; lng: num
 };
 
 const UNIQUE_CLIENT_PORTRAIT_BY_NAME: Record<string, string> = {
-  "Arjun S.": "/img/clients/arjun-s.jpg",
-  "Priya M.": "/img/clients/priya-m.jpg",
-  "Rohan K.": "/img/clients/rohan-k.jpg",
-  "Ahmed R.": "/img/clients/ahmed-r.jpg",
-  "Sana A.": "/img/clients/sana-a.jpg",
-  "Elena V.": "/img/clients/elena-v.jpg",
-  "James W.": "/img/clients/james-w.jpg",
-  "Charlotte B.": "/img/clients/charlotte-b.jpg",
-  "Khalid A.": "/img/clients/khalid-a.jpg",
-  "Daniel C.": "/img/clients/daniel-c.jpg",
+  "Arjun S.": "/img/clients/arjun-s.jpg?v=2",
+  "Priya M.": "/img/clients/priya-m.jpg?v=2",
+  "Rohan K.": "/img/clients/rohan-k.jpg?v=2",
+  "Ahmed R.": "/img/clients/ahmed-r.jpg?v=2",
+  "Sana A.": "/img/clients/sana-a.jpg?v=2",
+  "Elena V.": "/img/clients/elena-v.jpg?v=2",
+  "James W.": "/img/clients/james-w.jpg?v=2",
+  "Charlotte B.": "/img/clients/charlotte-b.jpg?v=2",
+  "Khalid A.": "/img/clients/khalid-a.jpg?v=2",
+  "Daniel C.": "/img/clients/daniel-c.jpg?v=2",
 };
 
 const allMappedTestimonials = testimonialsJson
@@ -169,19 +175,7 @@ export const horizontalTestimonials = allMappedTestimonials.filter(
   (t) => !GLOBE_NAMES.has(t.name)
 );
 
-/** Developer render photography from the SWK library. */
-export const gallery = Array.from({ length: 16 }, (_, i) => img(`gallery/image${i + 1}.webp`));
-export const heroImages = [
-  { src: img("communities/downtown-dubai.webp"), title: "Downtown Dubai" },
-  { src: img("gallery/image1.webp"), title: "Beachside living" },
-  { src: img("communities/palm-jumeirah.webp"), title: "Palm Jumeirah" },
-  { src: img("gallery/image7.webp"), title: "Pool villas" },
-  { src: img("communities/dubai-marina.webp"), title: "Dubai Marina" },
-  { src: img("gallery/image10.webp"), title: "Mixed-use towers" },
-  { src: img("communities/business-bay.webp"), title: "Business Bay" },
-  { src: img("gallery/image5.webp"), title: "Lagoon residences" },
-  { src: img("communities/dubai-creek-harbour.webp"), title: "Creek Harbour" },
-];
-export const officeImage = img("about/swk-office.webp");
-export const skylineImage = img("hero/dubai-skyline-hero.webp");
-export const cinematicImage = img("hero/dubai-services-cinematic.webp");
+/** Architectural photography paths (unique per section — zero repetition). */
+export const officeImage = img("about/al-saqr-suite.webp");
+export const skylineImage = img("hero/uae-skyline-flagship.webp");
+export const cinematicImage = img("hero/banner-services.webp");

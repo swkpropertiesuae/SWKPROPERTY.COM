@@ -213,10 +213,10 @@ export const organizationLd = {
   name: SITE.name,
   legalName: "SWK Properties LLC",
   url: SITE_URL,
-  logo: { "@type": "ImageObject", url: abs("/brand/swk-emblem-charcoal-1024.png"), width: 1024, height: 1024 },
+  logo: { "@type": "ImageObject", url: abs("/brand/swk-icon.png"), width: 1024, height: 1024 },
   image: abs(OG_DEFAULT),
   description:
-    "SWK Properties is a RERA-registered Dubai real estate brokerage advising on off-plan launches, secondary-market sales, leasing, investment, mortgages and property management across the UAE.",
+    "SWK Properties is a RERA-registered Dubai real estate brokerage advising on off-plan launches, secondary-market sales, leasing, commercial spaces, investment, mortgages and property management across the UAE.",
   telephone: SITE.phone,
   email: SITE.email,
   foundingDate: String(SITE.founded),
@@ -226,7 +226,7 @@ export const organizationLd = {
   ],
   address: {
     "@type": "PostalAddress",
-    streetAddress: "Office 54, 27th Floor, Al Saqr Business Tower, Sheikh Zayed Road",
+    streetAddress: "25th Floor, Al Saqr Building, Sheikh Zayed Road",
     addressLocality: "Dubai",
     addressRegion: "Dubai",
     addressCountry: "AE",

@@ -19,7 +19,7 @@ const nextConfig: NextConfig = {
       { source: "/:path*", headers: securityHeaders },
       {
         source: "/:dir(brand|img)/:path*",
-        headers: [{ key: "Cache-Control", value: "public, max-age=2592000, stale-while-revalidate=86400" }],
+        headers: [{ key: "Cache-Control", value: "public, max-age=3600, must-revalidate" }],
       },
     ];
   },

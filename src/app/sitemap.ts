@@ -5,7 +5,7 @@ import { developers, projects } from "@/lib/developers"
 import { services } from "@/lib/services"
 import { listings, isPermitVerified } from "@/lib/listings"
 import { GUIDES } from "@/lib/guides"
-import { blogArticles } from "@/lib/blog"
+import { blogIndex } from "@/lib/blog"
 import { offPlanAreas } from "@/lib/areas"
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -25,7 +25,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/calculators",
     "/guides",
     "/about",
-    "/corporate-kit",
+    "/agents",
     "/contact",
     "/list-your-property",
     "/faq",
@@ -93,11 +93,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "monthly" as const,
       priority: 0.85,
     })),
-    ...blogArticles.map((b) => ({
+    ...blogIndex.map((b) => ({
       url: `${base}/insights/${b.slug}`,
-      lastModified: new Date(b.updatedAt),
+      lastModified: new Date(b.updated || b.date),
       changeFrequency: "monthly" as const,
-      priority: 0.8,
+      priority: Number(b.date.slice(0, 4)) >= 2024 ? 0.82 : 0.72,
     })),
   ]
 }

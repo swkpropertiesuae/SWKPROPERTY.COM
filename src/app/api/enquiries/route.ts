@@ -173,9 +173,80 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ ok: true, enquiryId: "SWK-FILTERED", status: "accepted" }, { status: 200 });
   }
 
+  const context = clip(body.context, 60) || "general";
+  const email = clip(body.email, 200);
+
+  // 1b. Dedicated UAE PDPL-compliant newsletter subscription path (email + explicit marketing opt-in).
+  if (context === "newsletter") {
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      return NextResponse.json({ ok: false, error: "Please enter a valid email address." }, { status: 400 });
+    }
+    if (!body.marketingConsent) {
+      return NextResponse.json(
+        { ok: false, error: "Please confirm you wish to receive monthly Dubai property notes." },
+        { status: 400 }
+      );
+    }
+
+    const now = Date.now();
+    for (const [k, v] of recentSubmissions) if (now - v.at > DEDUPE_WINDOW_MS) recentSubmissions.delete(k);
+    const dedupeKey = `${email.toLowerCase()}|newsletter`;
+    const previous = recentSubmissions.get(dedupeKey);
+    if (previous) {
+      return NextResponse.json(
+        { ok: true, duplicate: true, enquiryId: previous.enquiryId, message: "You are already subscribed." },
+        { status: 200 }
+      );
+    }
+
+    const enquiryId = `SWK-NEWS-${new Date().getFullYear()}-${crypto.randomUUID().slice(0, 8).toUpperCase()}`;
+    const submittedAtGst = `${new Intl.DateTimeFormat("en-GB", {
+      dateStyle: "medium",
+      timeStyle: "short",
+      timeZone: "Asia/Dubai",
+    }).format(new Date())} GST`;
+
+    const lead = {
+      enquiryId,
+      type: "newsletter",
+      submittedAtIso: new Date().toISOString(),
+      submittedAtGst,
+      status: "Subscribed",
+      context: "newsletter",
+      contact: {
+        name: "Newsletter Subscriber",
+        phone: "N/A",
+        email,
+        preferredContact: "Email",
+      },
+      message: "Subscribed to SWK Properties monthly Dubai market & developer launch notes.",
+      consent: {
+        enquiryProcessing: true,
+        marketingOptIn: true,
+        privacyPolicyVersion: "UAE-PDPL-2026.11",
+      },
+      attribution: body.attribution ?? {},
+      pageUrl: clip(body.pageUrl, 500),
+      userAgent: clip(req.headers.get("user-agent"), 300),
+    };
+
+    const delivered = await deliver(lead, readEnv());
+    if (delivered.length === 0) {
+      console.error("newsletter not delivered: no channel configured or all failed", enquiryId);
+      return NextResponse.json(
+        {
+          ok: false,
+          error: `Unable to save your subscription right now. Please email ${SITE.email} or message us on WhatsApp at ${SITE.phoneDisplay}.`,
+        },
+        { status: 502 }
+      );
+    }
+    recentSubmissions.set(dedupeKey, { at: now, enquiryId });
+    return NextResponse.json({ ok: true, enquiryId, submittedAtGst }, { status: 200 });
+  }
+
   const name = clip(body.name, 120);
   const phone = clip(body.phone, 40);
-  const email = clip(body.email, 200);
 
   if (name.length < 2) {
     return NextResponse.json({ ok: false, error: "Please enter your full name." }, { status: 400 });
@@ -186,7 +257,8 @@ export async function POST(req: NextRequest) {
       { status: 400 }
     );
   }
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+  const isQuickCallback = context === "exit-intent-brief";
+  if ((!isQuickCallback || email.length > 0) && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     return NextResponse.json({ ok: false, error: "Please enter a valid email address." }, { status: 400 });
   }
 
