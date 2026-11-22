@@ -1,54 +1,53 @@
-import type { Metadata } from "next"
-import Link from "next/link"
-import { notFound } from "next/navigation"
-import { ArrowLeft, BookOpen, Calculator, CheckCircle2, ShieldCheck } from "lucide-react"
-import { GUIDES, getGuide } from "@/lib/guides"
-import { buildMetadata, articleSchema, faqSchema, breadcrumbSchema } from "@/lib/seo"
-import { JsonLd } from "@/components/seo/json-ld"
-import { EnquiryForm } from "@/components/site/enquiry-form"
+import type { Metadata } from "next";
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import { Check } from "lucide-react";
+import { GUIDES, getGuide } from "@/lib/guides";
+import { buildMetadata, articleSchema, faqSchema, breadcrumbSchema } from "@/lib/seo";
+import { JsonLd } from "@/components/seo/json-ld";
+import { EnquiryForm } from "@/components/site/enquiry-form";
+import { Faq } from "@/components/site/faq";
+import { AvenloPageHeader } from "@/components/avenlo/page-header";
+import { BracketLink } from "@/components/avenlo/bracket-button";
+import { CtaBanner } from "@/components/avenlo/motion";
 
 export function generateStaticParams() {
-  return GUIDES.map((g) => ({ slug: g.slug }))
+  return GUIDES.map((g) => ({ slug: g.slug }));
 }
 
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ slug: string }>
+  params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
-  const { slug } = await params
-  const guide = getGuide(slug)
+  const { slug } = await params;
+  const guide = getGuide(slug);
   if (!guide) {
     return buildMetadata({
       title: "Guide Not Found",
       description: "The requested SWK guide could not be found.",
       path: `/guides/${slug}`,
-    })
+    });
   }
   return buildMetadata({
     title: guide.title,
     description: guide.directAnswer,
     path: `/guides/${guide.slug}`,
-    keywords: [
-      guide.title,
-      guide.eyebrow,
-      "Dubai real estate guide",
-      "SWK Properties RERA ORN 51517",
-    ],
-  })
+    keywords: [guide.title, guide.eyebrow, "Dubai real estate guide", "RERA ORN 51517"],
+  });
 }
 
 export default async function GuideDetailPage({
   params,
 }: {
-  params: Promise<{ slug: string }>
+  params: Promise<{ slug: string }>;
 }) {
-  const { slug } = await params
-  const guide = getGuide(slug)
-  if (!guide) notFound()
+  const { slug } = await params;
+  const guide = getGuide(slug);
+  if (!guide) notFound();
 
   return (
-    <div className="min-h-screen bg-[#faf7f2] text-[#17130e]">
+    <div className="bg-white">
       <JsonLd
         id="ld-guide-article"
         data={articleSchema({
@@ -66,118 +65,94 @@ export default async function GuideDetailPage({
         id="ld-guide-breadcrumb"
         data={breadcrumbSchema([
           { name: "Home", path: "/" },
-          { name: "Insights & Guides", path: "/insights" },
+          { name: "Guides", path: "/guides" },
           { name: guide.title, path: `/guides/${guide.slug}` },
         ])}
       />
 
-      <div className="mx-auto max-w-5xl px-4 py-12">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <Link
-            href="/insights"
-            className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-[#94652c] hover:underline"
-          >
-            <ArrowLeft className="h-3.5 w-3.5" /> All Guides & Insights
-          </Link>
-          <div className="flex flex-wrap gap-2">
-            {GUIDES.map((g) => (
-              <Link
-                key={g.slug}
-                href={`/guides/${g.slug}`}
-                className={`rounded-full px-3.5 py-1.5 text-xs font-semibold transition ${
-                  g.slug === guide.slug
-                    ? "bg-[#17130e] text-white"
-                    : "border border-[#e6dfd2] text-[#4a4237] hover:border-[#94652c]"
-                }`}
-              >
-                {g.eyebrow}
-              </Link>
-            ))}
-          </div>
+      <AvenloPageHeader
+        eyebrow={guide.badge}
+        title={guide.title}
+        lead={guide.subtitle}
+        compact
+        breadcrumb={[
+          { label: "Home", href: "/" },
+          { label: "Guides", href: "/guides" },
+          { label: guide.eyebrow },
+        ]}
+        meta={
+          <>
+            <span>{guide.readTime}</span>
+            <span className="text-[#cfcfcf]">·</span>
+            <span>Updated {guide.lastUpdated}</span>
+            <span className="text-[#cfcfcf]">·</span>
+            <span>Reviewed by {guide.reviewedBy}</span>
+          </>
+        }
+        actions={
+          <BracketLink href="/calculators" variant="light" size="sm">
+            Open DLD &amp; Mortgage Calculator
+          </BracketLink>
+        }
+      />
+
+      {/* Uncluttered Single-Column Reading Layout */}
+      <article className="mx-auto max-w-3xl px-4 py-14 sm:px-8 space-y-12">
+        {/* Direct Executive Summary */}
+        <div className="rounded-2xl border border-black/[0.08] bg-[#f7f7f7] p-6 sm:p-8">
+          <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-[#8b8b8b]">
+            DIRECT ANSWER
+          </p>
+          <p className="mt-3 text-[16px] leading-[1.7] text-[#121212]">{guide.directAnswer}</p>
         </div>
 
-        {/* Header */}
-        <header className="mt-8">
-          <span className="inline-flex items-center gap-2 rounded-full border border-[#94652c]/35 bg-[#f6ead7] px-3.5 py-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-[#94652c]">
-            <BookOpen className="h-3.5 w-3.5" /> {guide.eyebrow} · {guide.readTime} · Updated {guide.updatedAt}
-          </span>
-          <h1 className="mt-4 font-serif text-3xl md:text-5xl font-semibold text-[#17130e]">
-            {guide.title}
-          </h1>
-          <p className="mt-3 text-base md:text-lg text-[#4a4237] leading-relaxed">
-            {guide.subtitle}
-          </p>
-          <div className="mt-4 flex items-center gap-2 text-xs text-[#94652c]">
-            <ShieldCheck className="h-4 w-4" /> Reviewed by {guide.reviewedBy}
-          </div>
-        </header>
-
-        {/* Answer-First Direct Answer Box (§37) */}
-        <section className="mt-8 rounded-3xl border border-[#94652c]/40 bg-[#151319] p-6 md:p-8">
-          <div className="text-xs font-bold uppercase tracking-[0.22em] text-[#94652c]">
-            Answer-First Summary (40–60 Word Direct Briefing)
-          </div>
-          <p className="mt-2 font-serif text-xl md:text-2xl text-[#17130e] leading-relaxed">
-            {guide.directAnswer}
-          </p>
-          <div className="mt-5 grid grid-cols-1 gap-2.5 md:grid-cols-2 text-xs text-[#4a4237]">
-            {guide.keyTakeaways.map((kt, idx) => (
-              <div key={idx} className="flex items-start gap-2">
-                <CheckCircle2 className="h-4 w-4 shrink-0 text-[#94652c] mt-0.5" />
-                <span>{kt}</span>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* Step-by-Step Sections */}
-        <div className="mt-10 space-y-6">
-          {guide.sections.map((sec, idx) => (
-            <section
-              key={idx}
-              className="rounded-3xl border border-[#e6dfd2] bg-white p-6 md:p-8"
-            >
-              <h2 className="font-serif text-2xl md:text-3xl font-semibold text-[#17130e]">
-                {sec.heading}
-              </h2>
-              <p className="mt-3 text-sm md:text-base text-[#4a4237] leading-relaxed">
-                {sec.body}
-              </p>
-              {sec.bullets && (
-                <ul className="mt-4 space-y-2 text-xs md:text-sm text-[#4a4237]">
-                  {sec.bullets.map((b, bi) => (
-                    <li key={bi} className="flex items-start gap-2.5">
-                      <CheckCircle2 className="h-4 w-4 shrink-0 text-[#94652c] mt-0.5" />
-                      <span>{b}</span>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </section>
-          ))}
-        </div>
-
-        {/* Comparison Table (§38 Structured Table) */}
-        {guide.comparisonTable && (
-          <section className="mt-10 rounded-3xl border border-[#e6dfd2] bg-white p-6 md:p-8 overflow-x-auto">
-            <h2 className="font-serif text-2xl font-semibold text-[#17130e]">
-              {guide.comparisonTable.caption}
+        {/* Guide Sections */}
+        {guide.sections.map((sec) => (
+          <section key={sec.id} id={sec.id} className="space-y-4">
+            <h2 className="text-2xl sm:text-3xl font-medium tracking-[-0.03em] text-[#121212]">
+              {sec.heading}
             </h2>
-            <table className="mt-4 w-full text-left border-collapse text-xs md:text-sm">
-              <thead>
-                <tr className="border-b border-[#e6dfd2] text-[#94652c]">
-                  {guide.comparisonTable.headers.map((h, i) => (
-                    <th key={i} className="py-3 pr-4 font-semibold">
+            <p className="text-[16px] leading-[1.7] text-[#4a4a4a]">{sec.summary}</p>
+            <ul className="space-y-3 pt-2 text-sm leading-relaxed text-[#4a4a4a]">
+              {sec.bullets.map((b) => (
+                <li key={b} className="flex items-start gap-3">
+                  <Check className="mt-0.5 h-4 w-4 shrink-0 text-[#0e9f6e]" />
+                  <span>{b}</span>
+                </li>
+              ))}
+            </ul>
+            {sec.callout ? (
+              <div className="rounded-xl border-l-2 border-[#121212] bg-[#f7f7f7] px-5 py-4 text-sm font-medium text-[#121212]">
+                {sec.callout}
+              </div>
+            ) : null}
+          </section>
+        ))}
+
+        {/* Crisp Architectural Comparison Table */}
+        <section className="space-y-4">
+          <h2 className="text-2xl font-medium tracking-[-0.03em] text-[#121212]">
+            {guide.comparisonTable.caption}
+          </h2>
+          <div className="overflow-x-auto rounded-2xl border border-black/[0.08]">
+            <table className="w-full text-left text-xs sm:text-sm">
+              <thead className="bg-[#f7f7f7] text-[#121212]">
+                <tr>
+                  {guide.comparisonTable.headers.map((h) => (
+                    <th key={h} className="px-4 py-3.5 font-medium">
                       {h}
                     </th>
                   ))}
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[#e6dfd2] text-[#4a4237]">
-                {guide.comparisonTable.rows.map((row, rIdx) => (
-                  <tr key={rIdx}>
-                    {row.map((cell, cIdx) => (
-                      <td key={cIdx} className="py-3.5 pr-4 align-top">
+              <tbody className="divide-y divide-black/[0.06] text-[#4a4a4a]">
+                {guide.comparisonTable.rows.map((row, idx) => (
+                  <tr key={idx}>
+                    {row.map((cell, ci) => (
+                      <td
+                        key={ci}
+                        className={`px-4 py-3.5 ${ci === 0 ? "font-medium text-[#121212]" : ""}`}
+                      >
                         {cell}
                       </td>
                     ))}
@@ -185,57 +160,43 @@ export default async function GuideDetailPage({
                 ))}
               </tbody>
             </table>
-          </section>
-        )}
-
-        {/* Interactive Calculator CTA */}
-        <div className="mt-10 flex flex-wrap items-center justify-between gap-4 rounded-3xl border border-[#94652c]/35 bg-[#f6ead7] p-6">
-          <div>
-            <div className="text-xs font-bold uppercase tracking-[0.2em] text-[#94652c]">
-              Model Your Numbers in AED & Your Preferred Currency
-            </div>
-            <p className="mt-1 text-sm text-[#4a4237]">
-              Use our interactive DLD 4% Purchase Cost, Mortgage Repayment, and Gross-vs-Net Rental Yield calculators.
-            </p>
-          </div>
-          <Link
-            href="/calculators"
-            className="inline-flex items-center gap-2 rounded-full bg-[#17130e] px-5 py-2.5 text-xs font-bold uppercase tracking-[0.16em] text-white"
-          >
-            <Calculator className="h-4 w-4" /> Open Calculators →
-          </Link>
-        </div>
-
-        {/* FAQs */}
-        <section className="mt-10 rounded-3xl border border-[#e6dfd2] bg-white p-6 md:p-8">
-          <h2 className="font-serif text-2xl md:text-3xl font-semibold text-[#17130e]">
-            Frequently Asked Questions — {guide.eyebrow}
-          </h2>
-          <div className="mt-5 space-y-4">
-            {guide.faqs.map((f, idx) => (
-              <div key={idx} className="rounded-2xl border border-[#e6dfd2] bg-[#faf7f2] p-5">
-                <h3 className="text-sm md:text-base font-semibold text-[#94652c]">{f.q}</h3>
-                <p className="mt-2 text-xs md:text-sm text-[#4a4237] leading-relaxed">{f.a}</p>
-              </div>
-            ))}
           </div>
         </section>
 
-        {/* Enquiry Form */}
-        <div className="mt-12">
-          <EnquiryForm
-            context={
-              guide.slug === "selling"
-                ? "selling"
-                : guide.slug === "renting"
-                  ? "renting"
-                  : "buying"
-            }
-            subject={`${guide.title} — Written Checklist & Consultation`}
-            heading={`Speak With a Specialist About ${guide.eyebrow}`}
-          />
+        {/* Sibling Guides */}
+        <div className="flex flex-wrap gap-2 border-t border-black/[0.08] pt-8">
+          {GUIDES.filter((g) => g.slug !== guide.slug).map((g) => (
+            <Link
+              key={g.slug}
+              href={`/guides/${g.slug}`}
+              className="rounded-full border border-black/10 bg-[#f7f7f7] px-4 py-2 text-xs font-medium text-[#121212] hover:bg-[#121212] hover:text-white transition-colors"
+            >
+              {g.eyebrow} Guide →
+            </Link>
+          ))}
         </div>
-      </div>
+      </article>
+
+      {guide.faqs.length > 0 ? (
+        <Faq
+          items={guide.faqs}
+          eyebrow="GUIDE QUESTIONS"
+          primary="Frequently asked"
+          muted="on this topic"
+          compact
+        />
+      ) : null}
+
+      <section className="mx-auto max-w-3xl px-4 py-16 sm:px-8">
+        <EnquiryForm
+          context="advisory"
+          subject={guide.title}
+          heading="Ask an advisor about your situation"
+          subheading="Receive a tailored Dubai cost sheet and timeline from our Sheikh Zayed Road desk."
+        />
+      </section>
+
+      <CtaBanner />
     </div>
-  )
+  );
 }

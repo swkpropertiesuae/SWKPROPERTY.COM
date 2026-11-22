@@ -1,269 +1,219 @@
-import type { Metadata } from "next"
-import Link from "next/link"
-import { notFound } from "next/navigation"
-import { ArrowLeft, Globe2, Mail, MapPin, Phone, UserCheck } from "lucide-react"
-import { SITE, team } from "@/lib/swk"
-import { getListingsByAgent, listings } from "@/lib/listings"
-import { buildMetadata, breadcrumbSchema } from "@/lib/seo"
-import { JsonLd } from "@/components/seo/json-ld"
-import { PropertyCard } from "@/components/site/property-card"
-import { EnquiryForm } from "@/components/site/enquiry-form"
+import type { Metadata } from "next";
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import { Check, Mail, Phone } from "lucide-react";
+import { SITE, team } from "@/lib/swk";
+import { getListingsByAgent, listings } from "@/lib/listings";
+import { buildMetadata, breadcrumbSchema } from "@/lib/seo";
+import { JsonLd } from "@/components/seo/json-ld";
+import { PropertyCard } from "@/components/site/property-card";
+import { EnquiryForm } from "@/components/site/enquiry-form";
+import { AvenloPageHeader } from "@/components/avenlo/page-header";
+import { BracketLink } from "@/components/avenlo/bracket-button";
+import { CtaBanner, SectionEyebrow, SplitHeading } from "@/components/avenlo/motion";
 
-const AGENT_DETAILS: Record<
-  string,
-  {
-    communities: string[]
-    bio: string
-    backupAgent: string
-  }
-> = {
-  "mohammad-haseeb": {
-    communities: ["Downtown Dubai", "Dubai Hills Estate", "Dubai South", "Palm Jumeirah"],
-    bio: "Mohammad Haseeb brings 10+ years of UAE real estate experience and 140+ verified transactions across Emaar, Azizi, Sobha Realty, DAMAC, and Imtiaz Developments.",
-    backupAgent: "Mohammed Islam (Rex) · Assistant Director",
-  },
-  "mohammed-islam": {
-    communities: ["Dubai Islands", "Downtown Dubai", "Yas Island", "Al Marjan Island"],
-    bio: "Mohammed Islam (Rex) brings over a decade of international real estate experience across the United Kingdom and Dubai with 165+ verified transactions in sales, investment advisory, and client relationships.",
-    backupAgent: "Mohammad Haseeb · Sales & Operations Manager",
-  },
-  "issaadi-chahrazed": {
-    communities: ["Palm Jumeirah", "Dubai Marina", "Downtown Dubai", "Business Bay"],
-    bio: "Issaadi Chahrazed advises French-, Arabic-, and English-speaking buyers across waterfront residences, branded developments, and high-yield city-centre apartments, coordinating remote viewings and power-of-attorney handovers.",
-    backupAgent: "Talha Shabbir · Business Development Manager",
-  },
-  "talha-shabbir": {
-    communities: ["Dubai Creek Harbour", "Dubai Hills Estate", "Mohammed Bin Rashid City", "Dubai South"],
-    bio: "Talha Shabbir focuses on verified UAE developer launches, payment-plan structuring, and Oqood registration milestones across Emaar, Sobha, Imtiaz, DAMAC, and Azizi communities.",
-    backupAgent: "Mohammad Haseeb · Sales & Operations Manager",
-  },
-  "fareed-choudhary": {
-    communities: ["Dubai Hills Estate", "Masaar Sharjah", "Jumeirah Village Circle", "Business Bay"],
-    bio: "Fareed Choudhary advises secondary-market buyers and portfolio landlords on ready villas, townhouses, and tenanted investments, preparing DLD transaction comparables and net-yield worksheets.",
-    backupAgent: "Mohammad Haseeb · Sales & Operations Manager",
-  },
-  saifullah: {
-    communities: ["Dubai South", "Al Jaddaf", "Dubailand", "Business Bay"],
-    bio: "Saifullah specialises in high-demand off-plan launches including Imtiaz Kore, Azizi Florence, and Azizi Venice with flexible developer payment schedules.",
-    backupAgent: "Talha Shabbir · Business Development Manager",
-  },
-  "mohammad-umar": {
-    communities: ["Dubailand", "Dubai Islands", "Al Furjan", "Umm Al Quwain"],
-    bio: "Mohammad Umar guides residential buyers and landlords through off-plan reservations and secondary resales across emerging UAE corridors.",
-    backupAgent: "Fareed Choudhary · Senior Property Consultant",
-  },
-  "mohd-shahid-khan": {
-    communities: ["Sheikh Zayed Road", "Downtown Dubai", "Business Bay"],
-    bio: "Mohd Shahid Khan manages transaction operations, developer portal allocations, and SPA documentation across 500+ coordinated filings at SWK Properties.",
-    backupAgent: "Mohammad Haseeb · Sales & Operations Manager",
-  },
-}
+const AGENT_COMMUNITIES: Record<string, string[]> = {
+  "mohammad-haseeb": ["Downtown Dubai", "Dubai Hills Estate", "Dubai South", "Palm Jumeirah"],
+  "mohammed-islam": ["Dubai Islands", "Downtown Dubai", "Yas Island", "Al Marjan Island"],
+  "issaadi-chahrazed": ["Palm Jumeirah", "Dubai Marina", "Downtown Dubai", "Business Bay"],
+  "talha-shabbir": ["Dubai Creek Harbour", "Dubai Hills Estate", "MBR City", "Dubai South"],
+  "fareed-choudhary": ["Dubai Hills Estate", "Masaar Sharjah", "JVC", "Business Bay"],
+  saifullah: ["Dubai South", "Al Jaddaf", "Dubailand", "Business Bay"],
+  "mohammad-umar": ["Dubailand", "Dubai Islands", "Al Furjan", "Umm Al Quwain"],
+  "mohd-shahid-khan": ["Sheikh Zayed Road", "Downtown Dubai", "Business Bay"],
+};
 
 export function generateStaticParams() {
-  return team.map((m) => ({ slug: m.slug }))
+  return team.map((m) => ({ slug: m.slug }));
 }
 
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ slug: string }>
+  params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
-  const { slug } = await params
-  const member = team.find((m) => m.slug === slug)
+  const { slug } = await params;
+  const member = team.find((m) => m.slug === slug);
   if (!member) {
     return buildMetadata({
-      title: "Consultant Not Found",
-      description: "Requested SWK consultant profile could not be found.",
-      path: `/agents/${slug}`,
-    })
+      title: "Advisor Not Found",
+      description: "Meet SWK Properties Dubai real estate advisors.",
+      path: "/agents",
+    });
   }
   return buildMetadata({
-    title: `${member.name}, ${member.role}`,
-    description: `Connect with ${member.name}, ${member.role} at SWK Properties Dubai (RERA ORN 51517). Speaks ${member.languages.join(", ")}. View active listings and book a viewing.`,
+    title: `${member.name} — ${member.role}`,
+    description: `${member.bio} Contact ${member.name} at SWK Properties Dubai (RERA ORN ${SITE.reraOrn}).`,
     path: `/agents/${member.slug}`,
     ogImage: member.photo,
-  })
+  });
 }
 
 export default async function AgentProfilePage({
   params,
 }: {
-  params: Promise<{ slug: string }>
+  params: Promise<{ slug: string }>;
 }) {
-  const { slug } = await params
-  const member = team.find((m) => m.slug === slug)
-  if (!member) notFound()
+  const { slug } = await params;
+  const member = team.find((m) => m.slug === slug);
+  if (!member) notFound();
 
-  const details = AGENT_DETAILS[member.slug] ?? {
-    communities: ["Downtown Dubai", "Dubai Marina"],
-    bio: member.focus,
-    backupAgent: "SWK Central Advisory Desk",
-  }
-
-  const agentListings = getListingsByAgent(member.slug)
-  const displayListings = agentListings.length > 0 ? agentListings : listings.slice(0, 3)
+  const assigned = getListingsByAgent(member.slug);
+  const shownListings = assigned.length > 0 ? assigned : listings.slice(0, 3);
+  const areas = AGENT_COMMUNITIES[member.slug] ?? ["Dubai", "Sheikh Zayed Road"];
 
   return (
-    <div className="min-h-screen bg-[#faf7f2] text-[#17130e]">
+    <div className="bg-white">
       <JsonLd
-        id="ld-agent-breadcrumb"
-        data={[
-          breadcrumbSchema([
-            { name: "Home", path: "/" },
-            { name: "About SWK", path: "/about" },
-            { name: member.name, path: `/agents/${member.slug}` },
-          ]),
-          {
-            "@context": "https://schema.org",
-            "@type": "Person",
-            "@id": `${SITE.url}/agents/${member.slug}#person`,
-            name: member.name,
-            jobTitle: member.role,
-            image: `${SITE.url}${member.photo}`,
-            url: `${SITE.url}/agents/${member.slug}`,
-            worksFor: { "@id": `${SITE.url}/#organization` },
-            knowsLanguage: member.languages,
-            areaServed: details.communities.map((name) => ({ "@type": "Place", name })),
-            ...(member.brn ? { identifier: { "@type": "PropertyValue", name: "RERA BRN", value: member.brn } } : {}),
-          },
-        ]}
+        data={breadcrumbSchema([
+          { name: "Home", path: "/" },
+          { name: "Advisors", path: "/agents" },
+          { name: member.name, path: `/agents/${member.slug}` },
+        ])}
       />
 
-      <div className="mx-auto max-w-7xl px-4 py-12">
-        <Link
-          href="/about"
-          className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-[#94652c] hover:underline"
-        >
-          <ArrowLeft className="h-3.5 w-3.5" /> Back to SWK Advisory Team
-        </Link>
+      <AvenloPageHeader
+        eyebrow={member.role}
+        title={member.name}
+        compact
+        breadcrumb={[
+          { label: "Home", href: "/" },
+          { label: "Advisors", href: "/agents" },
+          { label: member.name },
+        ]}
+        meta={
+          <>
+            <span>{member.experienceYears}</span>
+            <span className="text-[#cfcfcf]">·</span>
+            <span>{member.languages.join(", ")}</span>
+            {member.brn ? (
+              <>
+                <span className="text-[#cfcfcf]">·</span>
+                <span>RERA BRN {member.brn}</span>
+              </>
+            ) : null}
+          </>
+        }
+      />
 
-        {/* Agent Profile Card (§14) */}
-        <div className="mt-8 grid grid-cols-1 gap-10 lg:grid-cols-12 rounded-3xl border border-[#e6dfd2] bg-white p-6 md:p-10">
-          <div className="lg:col-span-4">
-            <div className="overflow-hidden rounded-3xl border border-[#e6dfd2] bg-black">
+      {/* Avenlo 2-Column Studio Portrait + Editorial Dossier */}
+      <section className="mx-auto max-w-[1260px] px-4 py-14 sm:px-8">
+        <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 items-start">
+          <div className="lg:col-span-5">
+            <div className="overflow-hidden rounded-2xl border border-black/[0.06] bg-[#f5f5f5]">
               <img
                 src={member.photo}
                 alt={member.name}
-                className="h-96 w-full object-cover object-top"
+                className="aspect-[4/5] w-full object-cover object-top"
               />
             </div>
           </div>
 
-          <div className="lg:col-span-8 flex flex-col justify-between space-y-6">
+          <div className="lg:col-span-7 space-y-8">
             <div>
-              <div className="flex flex-wrap items-center gap-2.5">
-                <span className="rounded-full border border-[#94652c]/35 bg-[#f6ead7] px-3.5 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-[#94652c]">
-                  {member.role}
-                </span>
-                <span className="rounded-full border border-[#e6dfd2] bg-[#faf7f2] px-3.5 py-1 text-[11px] text-[#4a4237]">
-                  RERA ORN {SITE.orn}
-                  {member.brn ? ` · BRN ${member.brn}` : ""}
-                </span>
+              <SectionEyebrow>ABOUT</SectionEyebrow>
+              <p className="mt-4 text-[17px] leading-[1.7] text-[#333333]">{member.bio}</p>
+            </div>
+
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 border-y border-black/[0.08] py-7">
+              <div>
+                <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-[#8b8b8b]">
+                  CORE SPECIALTIES
+                </p>
+                <ul className="mt-3.5 space-y-2.5 text-sm text-[#121212]">
+                  {member.specialties.map((s) => (
+                    <li key={s} className="flex items-start gap-2.5">
+                      <Check className="mt-0.5 h-4 w-4 shrink-0 text-[#0e9f6e]" />
+                      <span>{s}</span>
+                    </li>
+                  ))}
+                </ul>
               </div>
 
-              <h1 className="mt-4 font-serif text-3xl md:text-5xl font-semibold text-[#17130e]">
-                {member.name}
-              </h1>
-              <p className="mt-2 text-sm font-medium text-[#94652c]">{member.focus}</p>
-              <p className="mt-4 text-sm md:text-base text-[#4a4237] leading-relaxed">
-                {details.bio}
-              </p>
-
-              <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
-                <div className="rounded-2xl border border-[#e6dfd2] bg-[#faf7f2] p-4">
-                  <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-[#94652c]">
-                    <Globe2 className="h-4 w-4" /> Languages Spoken
-                  </div>
-                  <div className="mt-2 flex flex-wrap gap-1.5">
-                    {member.languages.map((lang) => (
-                      <span
-                        key={lang}
-                        className="rounded-full border border-[#e6dfd2] px-3 py-1 text-xs text-[#17130e]"
-                      >
-                        {lang}
-                      </span>
-                    ))}
-                  </div>
+              <div>
+                <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-[#8b8b8b]">
+                  FOCUS DEVELOPERS &amp; AREAS
+                </p>
+                <div className="mt-3.5 flex flex-wrap gap-1.5">
+                  {member.topDevelopers.map((dev) => (
+                    <span
+                      key={dev}
+                      className="rounded-full border border-black/10 bg-[#f7f7f7] px-3 py-1 text-xs font-medium text-[#121212]"
+                    >
+                      {dev}
+                    </span>
+                  ))}
                 </div>
-
-                <div className="rounded-2xl border border-[#e6dfd2] bg-[#faf7f2] p-4">
-                  <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-[#94652c]">
-                    <MapPin className="h-4 w-4" /> Core Dubai Communities
-                  </div>
-                  <div className="mt-2 flex flex-wrap gap-1.5">
-                    {details.communities.map((c) => (
-                      <span
-                        key={c}
-                        className="rounded-full border border-[#e6dfd2] px-3 py-1 text-xs text-[#17130e]"
-                      >
-                        {c}
-                      </span>
-                    ))}
-                  </div>
-                </div>
+                <p className="mt-4 text-xs text-[#737373]">
+                  Corridors: <strong className="font-medium text-[#121212]">{areas.join(" · ")}</strong>
+                </p>
               </div>
             </div>
 
-            {/* Direct Contact & Backup Contact (§14) */}
-            <div className="border-t border-[#e6dfd2] pt-6 flex flex-wrap items-center justify-between gap-4">
-              <div className="flex flex-wrap gap-3">
-                <a
-                  href={`tel:${SITE.phoneTel}`}
-                  className="inline-flex items-center gap-2 rounded-full bg-[#17130e] px-5 py-2.5 text-xs font-bold uppercase tracking-[0.16em] text-white"
-                >
-                  <Phone className="h-3.5 w-3.5" /> Call {SITE.phone}
-                </a>
-                <a
-                  href={`${SITE.whatsapp}?text=${encodeURIComponent(
-                    `Hello ${member.name}, I viewed your consultant profile on SWK Properties and would like to arrange a consultation.`
-                  )}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 rounded-full border border-[#2f5d3a] bg-[#2f5d3a]/25 px-5 py-2.5 text-xs font-bold uppercase tracking-[0.16em] text-[#17130e] hover:bg-[#2f5d3a]/40"
-                >
-                  WhatsApp {member.name}
-                </a>
-                <a
-                  href={`mailto:${SITE.email}?subject=${encodeURIComponent(`Consultation with ${member.name}`)}`}
-                  className="inline-flex items-center gap-2 rounded-full border border-[#e6dfd2] px-4 py-2.5 text-xs font-semibold text-[#17130e]"
-                >
-                  <Mail className="h-3.5 w-3.5 text-[#94652c]" /> {SITE.email}
-                </a>
-              </div>
-
-              <div className="text-xs text-[#786e60] flex items-center gap-2">
-                <UserCheck className="h-4 w-4 text-[#94652c]" />
-                <span>
-                  Backup Contact: <strong className="text-[#17130e]">{details.backupAgent}</strong>
-                </span>
-              </div>
+            {/* Direct Contact Strip */}
+            <div className="flex flex-wrap items-center gap-5">
+              <BracketLink href="#enquire" variant="light" size="md">
+                Book a Call
+              </BracketLink>
+              <a
+                href={`tel:${SITE.phoneRaw}`}
+                className="inline-flex items-center gap-2 text-sm font-medium text-[#121212] hover:text-[#0e9f6e]"
+              >
+                <Phone className="h-4 w-4" />
+                <span>{SITE.phone}</span>
+              </a>
+              <a
+                href={`mailto:${SITE.email}`}
+                className="inline-flex items-center gap-2 text-sm text-[#525252] hover:text-[#121212]"
+              >
+                <Mail className="h-4 w-4" />
+                <span>{SITE.email}</span>
+              </a>
             </div>
           </div>
         </div>
+      </section>
 
-        {/* Active Listings Managed by Consultant */}
-        <section className="mt-16">
-          <h2 className="font-serif text-2xl md:text-4xl font-semibold text-[#17130e] mb-6">
-            Active Properties & Shortlist Managed by {member.name}
-          </h2>
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-            {displayListings.map((l) => (
-              <PropertyCard key={l.slug} listing={l} />
+      {/* Currently on Our Books */}
+      <section className="border-y border-black/[0.06] bg-[#f7f7f7] py-16">
+        <div className="mx-auto max-w-[1260px] px-4 sm:px-8">
+          <div className="flex flex-wrap items-end justify-between gap-4">
+            <div>
+              <SectionEyebrow>CURRENTLY ON OUR BOOKS</SectionEyebrow>
+              <SplitHeading
+                primary={`Selected residences`}
+                muted={`advised by ${member.name.split(" ")[0]}`}
+                size="md"
+                inline
+                className="mt-4"
+              />
+            </div>
+            <Link
+              href="/properties"
+              className="text-xs font-medium uppercase tracking-[0.14em] text-[#121212] underline underline-offset-4"
+            >
+              All Properties →
+            </Link>
+          </div>
+          <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-3">
+            {shownListings.slice(0, 3).map((item) => (
+              <PropertyCard key={item.slug} listing={item} />
             ))}
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* Appointment Booking Form */}
-        <section className="mt-16">
-          <EnquiryForm
-            context="viewing"
-            agentName={member.name}
-            subject={`Direct Consultation / Viewing Booking with ${member.name}`}
-            heading={`Book an Appointment With ${member.name}`}
-            subheading={`Select a preferred date and Gulf Standard Time (GST) slot, or request a general callback. Backup coverage is provided by ${details.backupAgent}.`}
-          />
-        </section>
-      </div>
+      <section id="enquire" className="mx-auto max-w-4xl px-4 py-16 sm:px-8">
+        <EnquiryForm
+          context="advisory"
+          agentSlug={member.slug}
+          agentName={member.name}
+          heading={`Message ${member.name} directly`}
+          subheading="Your brief is routed directly to this advisor at our Sheikh Zayed Road desk."
+        />
+      </section>
+
+      <CtaBanner />
     </div>
-  )
+  );
 }

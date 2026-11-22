@@ -1,17 +1,19 @@
-import type { Metadata } from "next"
-import Link from "next/link"
-import { ArrowRight, BookOpen, Calculator } from "lucide-react"
-import { buildMetadata, breadcrumbSchema } from "@/lib/seo"
-import { JsonLd } from "@/components/seo/json-ld"
-import { blogArticles } from "@/lib/blog"
-import { GUIDES } from "@/lib/guides"
-import { LivelyPageHero } from "@/components/ui/lively-page-hero"
-import { EnquiryForm } from "@/components/site/enquiry-form"
+import type { Metadata } from "next";
+import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
+import { buildMetadata, breadcrumbSchema } from "@/lib/seo";
+import { JsonLd } from "@/components/seo/json-ld";
+import { blogArticles } from "@/lib/blog";
+import { GUIDES } from "@/lib/guides";
+import { EnquiryForm } from "@/components/site/enquiry-form";
+import { AvenloPageHeader } from "@/components/avenlo/page-header";
+import { BracketLink } from "@/components/avenlo/bracket-button";
+import { CtaBanner, SectionEyebrow, SplitHeading } from "@/components/avenlo/motion";
 
 export const metadata: Metadata = buildMetadata({
-  title: "Dubai & UAE Real Estate Insights, Market Briefings & Buyer Guides",
+  title: "Dubai Real Estate Insights & Market Briefings",
   description:
-    "Dubai and UAE real estate research, off-plan payment plan guides, Golden Visa property checklists, developer track-record analysis, and rental yield worksheets by SWK Properties.",
+    "Dubai and UAE real estate research, off-plan payment plan guides, Golden Visa property checklists, developer track-record analysis, and rental yield notes by SWK Properties.",
   path: "/insights",
   keywords: [
     "Dubai real estate market insights 2026",
@@ -19,11 +21,11 @@ export const metadata: Metadata = buildMetadata({
     "UAE Golden Visa AED 2M property",
     "Dubai rental yield comparison",
   ],
-})
+});
 
 export default function InsightsPage() {
   return (
-    <div className="min-h-screen bg-[#faf7f2] text-[#17130e]">
+    <div className="bg-white">
       <JsonLd
         id="ld-insights-breadcrumb"
         data={breadcrumbSchema([
@@ -32,136 +34,105 @@ export default function InsightsPage() {
         ])}
       />
 
-      <LivelyPageHero
-        badge="Market Research & Buyer Handbooks"
-        title="Dubai & UAE Real Estate"
-        highlight="Intelligence & Field Guides"
-        description="Every briefing starts with a direct, plain-English answer backed by actual Dubai Land Department procedures, payment plan mechanics, and real community trade-offs."
-        backgroundImage="/img/hero/slides/01-dubai-horizon-desktop.webp"
-        primaryCta={{ label: "Open DLD & Yield Calculators", href: "/calculators" }}
-        secondaryCta={{ label: "Browse All Market Briefings", href: "#briefings-grid" }}
-        sideImages={[
-          {
-            src: "/img/hero/slides/02-imtiaz-kore-desktop.webp",
-            label: "Off-Plan Escrow & Oqood Mechanics",
-            sublabel: "Step-by-Step Buyer Protection Guides",
-          },
-          {
-            src: "/img/hero/slides/05-sobha-century-desktop.webp",
-            label: "AED 2M+ UAE Golden Visa Checklists",
-            sublabel: "10-Year Residency Eligibility & DLD Rules",
-          },
+      <AvenloPageHeader
+        eyebrow="JOURNAL & RESEARCH · SHEIKH ZAYED ROAD"
+        title="Notes from the"
+        italic="Dubai desk"
+        lead="Plain-English market briefings grounded in Dubai Land Department procedures, payment-plan structures, and building-level trade-offs."
+        breadcrumb={[
+          { label: "Home", href: "/" },
+          { label: "Insights" },
         ]}
+        actions={
+          <BracketLink href="/calculators" variant="light" size="md">
+            DLD &amp; Yield Calculators
+          </BracketLink>
+        }
       />
 
-      {/* Core Guides & Interactive Calculators Bar */}
-      <section className="mx-auto max-w-7xl px-4 py-14 md:px-6 border-b border-[#e6dfd2]">
-        <div className="flex flex-wrap items-end justify-between gap-4 mb-8">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#94652c]">
-              Cornerstone Pillar Guides &amp; Financial Tools
-            </p>
-            <h2 className="mt-1 font-serif text-2xl md:text-4xl font-semibold text-[#17130e]">
-              Step-by-Step UAE Property Handbooks
-            </h2>
-          </div>
-          <Link
-            href="/calculators"
-            className="inline-flex items-center gap-2 rounded-xl bg-[#17130e] px-5 py-3 text-xs font-bold uppercase tracking-[0.16em] text-white transition hover:bg-[#94652c]"
-          >
-            <Calculator className="h-4 w-4 text-[#dcb888]" /> Open DLD 4%, Mortgage &amp; Yield Calculators →
-          </Link>
-        </div>
-
-        <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-4">
-          {GUIDES.map((g) => (
-            <Link
-              key={g.slug}
-              href={`/guides/${g.slug}`}
-              className="group flex flex-col justify-between rounded-3xl border border-[#e6dfd2] bg-white p-6 shadow-sm transition hover:border-[#94652c]"
-            >
-              <div>
-                <span className="inline-flex items-center gap-1.5 rounded-full border border-[#94652c]/30 bg-[#f6ead7] px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#94652c]">
-                  <BookOpen className="h-3 w-3" /> {g.eyebrow}
-                </span>
-                <h3 className="mt-4 font-serif text-xl font-semibold text-[#17130e] group-hover:text-[#94652c]">
-                  {g.title}
-                </h3>
-                <p className="mt-2 line-clamp-3 text-xs text-[#4a4237] leading-relaxed">
-                  {g.directAnswer}
-                </p>
-              </div>
-              <div className="mt-5 flex items-center justify-between border-t border-[#e6dfd2] pt-3 text-xs font-bold text-[#94652c]">
-                <span>{g.readTime}</span>
-                <span>Read Guide →</span>
-              </div>
-            </Link>
-          ))}
-        </div>
-      </section>
-
-      {/* 10 Market Articles Grid */}
-      <section className="mx-auto max-w-7xl px-4 py-16 md:px-6">
-        <div className="mb-10 max-w-3xl">
-          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#94652c]">
-            10 Research Briefings
-          </p>
-          <h2 className="mt-2 font-serif text-3xl md:text-5xl font-semibold text-[#17130e]">
-            Latest Market Briefings &amp; Regulatory Updates
-          </h2>
-        </div>
-
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+      {/* Editorial Article Grid */}
+      <section className="mx-auto max-w-[1260px] px-4 py-16 sm:px-8">
+        <div className="grid grid-cols-1 gap-7 md:grid-cols-2 lg:grid-cols-3">
           {blogArticles.map((art) => (
             <Link
               key={art.slug}
               href={`/insights/${art.slug}`}
-              className="group flex flex-col justify-between overflow-hidden rounded-3xl border border-[#e6dfd2] bg-white shadow-sm transition hover:-translate-y-1 hover:border-[#94652c] hover:shadow-lg"
+              className="group flex flex-col justify-between overflow-hidden rounded-2xl border border-black/[0.07] bg-white transition-all duration-300 hover:border-black/20 hover:shadow-[0_20px_50px_rgba(18,18,18,0.08)]"
             >
               <div>
-                <div className="relative h-52 w-full overflow-hidden">
+                <div className="relative aspect-[16/10] w-full overflow-hidden bg-[#f5f5f5]">
                   <img
                     src={art.image}
                     alt={art.title}
-                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    loading="lazy"
+                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />
-                  <span className="absolute top-3 left-3 rounded-full bg-[#17130e]/90 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#dcb888]">
-                    {art.category}
-                  </span>
                 </div>
                 <div className="p-6">
-                  <div className="flex items-center gap-2 text-[11px] text-[#786e60]">
-                    <span>{art.date}</span>
-                    <span>·</span>
-                    <span>{art.readTime}</span>
-                  </div>
-                  <h3 className="mt-2 font-serif text-xl font-semibold text-[#17130e] group-hover:text-[#94652c]">
+                  <p className="text-[11px] font-medium uppercase tracking-[0.16em] text-[#8b8b8b]">
+                    {art.category} · {art.readTime}
+                  </p>
+                  <h2 className="mt-2.5 text-xl font-medium leading-[1.25] tracking-[-0.025em] text-[#121212] group-hover:text-[#525252]">
                     {art.title}
-                  </h3>
-                  <p className="mt-2 line-clamp-3 text-xs text-[#4a4237] leading-relaxed">
+                  </h2>
+                  <p className="mt-2.5 line-clamp-3 text-xs leading-relaxed text-[#666666]">
                     {art.excerpt}
                   </p>
                 </div>
               </div>
-              <div className="border-t border-[#e6dfd2] bg-[#faf7f2] px-6 py-4 text-xs font-bold text-[#17130e] group-hover:text-[#94652c] flex items-center justify-between">
-                <span>Read Full Briefing</span>
-                <ArrowRight className="h-4 w-4" />
+              <div className="flex items-center justify-between border-t border-black/[0.06] px-6 py-4 text-xs font-medium text-[#121212]">
+                <span className="text-[#8b8b8b]">{art.date}</span>
+                <span className="inline-flex items-center gap-1 group-hover:text-[#0e9f6e]">
+                  Read Briefing <ArrowUpRight className="h-3.5 w-3.5" />
+                </span>
               </div>
             </Link>
           ))}
         </div>
       </section>
 
-      {/* Consultation Form */}
-      <section className="border-t border-[#e6dfd2] bg-[#f4efe6] py-16">
-        <div className="mx-auto max-w-4xl px-4 md:px-6">
-          <EnquiryForm
-            context="investment"
-            subject="Insights Desk — Custom Market & Yield Briefing Request"
-            heading="Request a Custom Community or Project Comparison"
+      {/* Core Dubai Handbooks Strip */}
+      <section className="border-y border-black/[0.06] bg-[#f7f7f7] py-16">
+        <div className="mx-auto max-w-[1260px] px-4 sm:px-8">
+          <SectionEyebrow>CORE HANDBOOKS</SectionEyebrow>
+          <SplitHeading
+            primary="Step-by-step"
+            muted="transaction manuals"
+            size="md"
+            inline
+            className="mt-4"
           />
+          <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {GUIDES.map((g) => (
+              <Link
+                key={g.slug}
+                href={`/guides/${g.slug}`}
+                className="group rounded-2xl border border-black/[0.06] bg-white p-6 transition-all hover:border-black/20"
+              >
+                <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-[#8b8b8b]">
+                  {g.eyebrow}
+                </p>
+                <h3 className="mt-2 text-lg font-medium tracking-[-0.02em] text-[#121212]">
+                  {g.title}
+                </h3>
+                <span className="mt-4 inline-flex items-center gap-1 text-xs font-medium text-[#121212] group-hover:text-[#0e9f6e]">
+                  Open Guide <ArrowUpRight className="h-3.5 w-3.5" />
+                </span>
+              </Link>
+            ))}
+          </div>
         </div>
       </section>
+
+      <section className="mx-auto max-w-4xl px-4 py-16 sm:px-8">
+        <EnquiryForm
+          context="advisory"
+          heading="Request a custom Dubai market brief"
+          subheading="Tell us which district or developer you are evaluating and we will share DLD comparables."
+        />
+      </section>
+
+      <CtaBanner />
     </div>
-  )
+  );
 }
