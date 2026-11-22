@@ -49,6 +49,7 @@
   --border: #e5e5e5;
   --input: #d4d4d4;
   --ring: #121212;
+  --chart-1: #0e9f6e;
   --radius: 1rem;
 }
 
@@ -71,6 +72,7 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
   --color-mint: var(--accent-mint);
   --color-obsidian: var(--bg-obsidian);
 

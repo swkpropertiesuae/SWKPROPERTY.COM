@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import { ArrowUpRight, ShieldCheck } from "lucide-react";
+import { ShieldCheck } from "lucide-react";
 import { SITE, stats, team } from "@/lib/swk";
 import { buildMetadata, breadcrumbSchema } from "@/lib/seo";
 import { JsonLd } from "@/components/seo/json-ld";
@@ -17,6 +16,10 @@ import {
   InteractiveImageGallery,
   type GalleryItem,
 } from "@/components/ui/interactive-image-gallery";
+import {
+  CalendlyCarousel,
+  type CarouselItem,
+} from "@/components/ui/connected-carousel";
 
 export const metadata: Metadata = buildMetadata({
   title: "About SWK Properties — Sheikh Zayed Road, Dubai",
@@ -77,6 +80,30 @@ const ABOUT_GALLERY_ITEMS: GalleryItem[] = [
     sublabel: "FIVE UAE EMIRATES",
   },
 ];
+
+const ADVISOR_HEADLINE_BY_SLUG: Record<string, string> = {
+  "mohammad-haseeb": "Sales & Developer Allocations",
+  "mohammed-islam": "UK & Dubai Private Advisory",
+  "talha-shabbir": "Capital Growth & Yield Strategy",
+  "fareed-choudhary": "Master Communities & Family Villas",
+  "issaadi-chahrazed": "Waterfront & Lagoon Launches",
+  saifullah: "High-Yield Urban Corridors",
+  "mohammad-umar": "Island Masterplans & Resales",
+  "mohd-shahid-khan": "SPA, Oqood & Developer Portals",
+};
+
+const ADVISORY_CAROUSEL_ITEMS: CarouselItem[] = team.map((member) => ({
+  id: member.slug,
+  badge: member.topDevelopers.slice(0, 3).join(" · "),
+  stat: ADVISOR_HEADLINE_BY_SLUG[member.slug] ?? member.specialties[0] ?? member.role,
+  quote: member.bio,
+  author: member.name,
+  role: member.role,
+  defaultImage: member.photo,
+  selectedImage: member.photo,
+  alt: `${member.name} — ${member.role} at SWK Properties Dubai`,
+  href: `/agents/${member.slug}`,
+}));
 
 export default function AboutPage() {
   return (
@@ -169,7 +196,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Advisory Team Preview */}
+      {/* Advisory Team — 21st.dev Connected Multi-Card Profile Carousel */}
       <section className="mx-auto max-w-[1260px] px-4 py-20 sm:px-8">
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div>
@@ -186,30 +213,13 @@ export default function AboutPage() {
           </BracketLink>
         </div>
 
-        <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {team.slice(0, 4).map((member) => (
-            <Link
-              key={member.slug}
-              href={`/agents/${member.slug}`}
-              className="group overflow-hidden rounded-2xl border border-white/80 bg-white/84 backdrop-blur-xl shadow-[0_14px_40px_rgba(12,56,96,0.08)] transition-all hover:border-black/20"
-            >
-              <div className="aspect-[4/5] w-full overflow-hidden bg-[#f5f5f5]">
-                <img
-                  src={member.photo}
-                  alt={member.name}
-                  loading="lazy"
-                  className="h-full w-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
-                />
-              </div>
-              <div className="p-5 flex items-center justify-between gap-2">
-                <div>
-                  <h3 className="text-base font-medium text-[#121212]">{member.name}</h3>
-                  <p className="mt-0.5 text-xs text-[#8b8b8b]">{member.role}</p>
-                </div>
-                <ArrowUpRight className="h-4 w-4 shrink-0 text-[#8b8b8b] group-hover:text-[#121212]" />
-              </div>
-            </Link>
-          ))}
+        <div className="mt-10">
+          <CalendlyCarousel
+            items={ADVISORY_CAROUSEL_ITEMS}
+            autoPlayInterval={6500}
+            pauseOnHover
+            aria-label="SWK Properties Advisory Desk profiles"
+          />
         </div>
       </section>
 
