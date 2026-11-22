@@ -1,23 +1,19 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import {
-  AlertCircle,
-  CheckCircle2,
-  Compass,
-  GraduationCap,
-  Train,
-} from "lucide-react";
+import { ArrowUpRight, Check, Minus } from "lucide-react";
 import { communityGuides, getCommunityGuide } from "@/lib/communities";
 import { getListingsByCommunity } from "@/lib/listings";
 import { projects } from "@/lib/developers";
 import { PropertyCard } from "@/components/site/property-card";
 import { EnquiryForm } from "@/components/site/enquiry-form";
-import { NearbyWalk } from "@/components/ui/nearby-walk-menu";
 import { JsonLd } from "@/components/seo/json-ld";
 import { breadcrumbLd, buildMeta, placeLd } from "@/lib/seo";
 import { SITE } from "@/lib/swk";
 import { MapEmbed } from "@/components/site/map-embed";
+import { AvenloPageHeader } from "@/components/avenlo/page-header";
+import { BracketLink } from "@/components/avenlo/bracket-button";
+import { CtaBanner, SectionEyebrow, SplitHeading } from "@/components/avenlo/motion";
 
 export function generateStaticParams() {
   return communityGuides.map((c) => ({ slug: c.slug }));
@@ -39,15 +35,14 @@ export async function generateMetadata({
   }
 
   return buildMeta({
-    title: `${comm.name} Community Guide | Properties, Connectivity, Pros & Cons`,
-    description: `${comm.blurb} Explore verified properties for sale and rent, schools, transport times, and balanced pros & drawbacks in ${comm.name} with SWK Properties (ORN ${SITE.reraOrn}).`,
+    title: `${comm.name} Guide | Properties, Schools & Pros/Cons`,
+    description: `${comm.blurb} Explore properties, transport links, schools, and balanced pros & drawbacks in ${comm.name} with SWK Properties (ORN ${SITE.reraOrn}).`,
     path: `/communities/${comm.slug}`,
     image: comm.image,
     keywords: [
       comm.name,
       `${comm.name} properties for sale`,
       `${comm.name} apartments for rent`,
-      `${comm.name} community guide`,
       `living in ${comm.name}`,
     ],
   });
@@ -64,11 +59,11 @@ export default async function CommunityDetailPage({
 
   const commListings = getListingsByCommunity(comm.slug);
   const commProjects = projects
-    .filter((p) => p.community.toLowerCase().includes(comm.name.split(" (")[0].toLowerCase()))
+    .filter((p) => p.community.toLowerCase().includes(comm.name.toLowerCase().split(" ")[0]))
     .slice(0, 6);
 
   return (
-    <>
+    <div className="bg-white">
       <JsonLd
         data={[
           breadcrumbLd([
@@ -78,222 +73,221 @@ export default async function CommunityDetailPage({
           ]),
           placeLd({
             name: comm.name,
-            description: comm.blurb,
+            description: comm.overview,
             slug: comm.slug,
+            lat: comm.lat,
+            lng: comm.lng,
             image: comm.image,
-            lat: comm.coordinates.lat,
-            lng: comm.coordinates.lng,
           }),
         ]}
       />
 
-      <div className="mx-auto max-w-7xl px-4 py-10 space-y-14">
-        {/* Breadcrumb */}
-        <nav aria-label="Breadcrumb" className="flex flex-wrap items-center gap-2 text-xs text-[#786e60]">
-          <Link href="/" className="hover:text-[#94652c]">Home</Link>
-          <span>/</span>
-          <Link href="/communities" className="hover:text-[#94652c]">Dubai Communities</Link>
-          <span>/</span>
-          <span className="text-[#94652c]">{comm.name}</span>
-        </nav>
+      <AvenloPageHeader
+        eyebrow="DUBAI COMMUNITY GUIDE"
+        title={comm.name}
+        lead={comm.blurb}
+        breadcrumb={[
+          { label: "Home", href: "/" },
+          { label: "Communities", href: "/communities" },
+          { label: comm.name },
+        ]}
+        actions={
+          <>
+            <BracketLink href={`/properties?community=${comm.slug}`} variant="light" size="md">
+              Browse {comm.name} Listings
+            </BracketLink>
+            <BracketLink href="#enquire" variant="light" size="md">
+              Speak to Area Specialist
+            </BracketLink>
+          </>
+        }
+      />
 
-        {/* §11 Hero Banner */}
-        <section className="relative overflow-hidden rounded-3xl border border-[#e6dfd2] bg-white">
-          <div className="relative h-[360px] md:h-[440px] w-full">
-            <img
-              src={comm.image}
-              alt={comm.name}
-              className="h-full w-full object-cover"
+      {/* Full-Width Community Image */}
+      <section className="mx-auto max-w-[1260px] px-4 py-12 sm:px-8">
+        <div className="overflow-hidden rounded-2xl bg-[#f5f5f5]">
+          <img
+            src={comm.image}
+            alt={comm.name}
+            className="h-[320px] sm:h-[480px] md:h-[560px] w-full object-cover"
+          />
+        </div>
+
+        {/* Overview + Lifestyle */}
+        <div className="mt-12 grid grid-cols-1 gap-12 lg:grid-cols-12">
+          <div className="lg:col-span-7 space-y-5">
+            <SectionEyebrow>NEIGHBOURHOOD OVERVIEW</SectionEyebrow>
+            <h2 className="text-3xl font-medium tracking-[-0.035em] text-[#121212]">
+              Living &amp; investing in {comm.name}
+            </h2>
+            <p className="text-[16px] leading-[1.7] text-[#4a4a4a]">{comm.overview}</p>
+            <p className="text-sm leading-relaxed text-[#737373]">
+              <strong className="font-medium text-[#121212]">Lifestyle:</strong> {comm.lifestyle}
+            </p>
+          </div>
+
+          <div className="lg:col-span-5 rounded-2xl border border-black/[0.06] bg-[#f7f7f7] p-6 sm:p-8 space-y-5">
+            <div>
+              <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-[#8b8b8b]">
+                PROPERTY TYPES
+              </p>
+              <ul className="mt-3 space-y-2 text-sm text-[#121212]">
+                {comm.propertyTypes.map((pt) => (
+                  <li key={pt} className="flex items-center gap-2">
+                    <span className="h-1.5 w-1.5 rounded-full bg-[#121212]" />
+                    <span>{pt}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="border-t border-black/[0.08] pt-5">
+              <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-[#8b8b8b]">
+                BEST SUITED FOR
+              </p>
+              <div className="mt-3 flex flex-wrap gap-2">
+                {comm.bestFor.map((bf) => (
+                  <span
+                    key={bf}
+                    className="rounded-full border border-black/10 bg-white px-3 py-1.5 text-xs font-medium text-[#121212]"
+                  >
+                    {bf}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Balanced Pros & Practical Considerations */}
+        <div className="mt-14 grid grid-cols-1 gap-6 md:grid-cols-2">
+          <div className="rounded-2xl border border-black/[0.06] bg-[#f7f7f7] p-7">
+            <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-[#0e9f6e]">
+              KEY ADVANTAGES
+            </p>
+            <ul className="mt-5 space-y-3 text-sm text-[#121212]">
+              {comm.pros.map((p) => (
+                <li key={p} className="flex items-start gap-2.5">
+                  <Check className="mt-0.5 h-4 w-4 shrink-0 text-[#0e9f6e]" />
+                  <span>{p}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="rounded-2xl border border-black/[0.06] bg-[#f7f7f7] p-7">
+            <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-[#8b8b8b]">
+              PRACTICAL CONSIDERATIONS
+            </p>
+            <ul className="mt-5 space-y-3 text-sm text-[#525252]">
+              {comm.drawbacks.map((d) => (
+                <li key={d} className="flex items-start gap-2.5">
+                  <Minus className="mt-0.5 h-4 w-4 shrink-0 text-[#8b8b8b]" />
+                  <span>{d}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        {/* Transport, Schools & Amenities */}
+        <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-3">
+          {[
+            { title: "Connectivity & Transport", list: comm.transport },
+            { title: "Schools & Healthcare", list: comm.schoolsHealth },
+            { title: "District Amenities", list: comm.amenities },
+          ].map((box) => (
+            <div
+              key={box.title}
+              className="rounded-2xl border border-black/[0.07] bg-white p-6"
+            >
+              <h3 className="text-base font-medium text-[#121212]">{box.title}</h3>
+              <ul className="mt-4 space-y-2.5 text-xs leading-relaxed text-[#525252]">
+                {box.list.map((item) => (
+                  <li key={item}>• {item}</li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-10">
+          <MapEmbed lat={comm.lat} lng={comm.lng} zoom={13} title={`${comm.name}, Dubai`} />
+        </div>
+      </section>
+
+      {/* Listings in Community */}
+      {commListings.length > 0 ? (
+        <section className="border-t border-black/[0.06] bg-[#f7f7f7] py-16">
+          <div className="mx-auto max-w-[1260px] px-4 sm:px-8">
+            <SectionEyebrow>ON OUR BOOKS</SectionEyebrow>
+            <SplitHeading
+              primary={`Properties in ${comm.name}`}
+              muted="available now"
+              size="md"
+              inline
+              className="mt-4"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#faf7f2] via-[#faf7f2]/65 to-transparent" />
-            <div className="absolute bottom-6 left-6 right-6 md:bottom-10 md:left-10 md:right-10 flex flex-wrap items-end justify-between gap-4">
-              <div className="max-w-3xl space-y-2">
-                <span className="rounded-full bg-[#17130e] px-3.5 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-white">
-                  SWK Neighbourhood Guide · {comm.tagline}
-                </span>
-                <h1 className="font-serif text-4xl md:text-6xl font-semibold text-[#17130e]">
-                  {comm.name}
-                </h1>
-                <p className="text-sm md:text-base text-[#4a4237]">{comm.blurb}</p>
-              </div>
-              <div className="rounded-2xl border border-[#e6dfd2] bg-[#17130e]/90 p-4 text-xs text-white backdrop-blur-md">
-                <div className="text-[#94652c] font-semibold">Geo Coordinates</div>
-                <div className="font-mono mt-0.5">
-                  {comm.coordinates.lat.toFixed(4)}° N, {comm.coordinates.lng.toFixed(4)}° E
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="p-6 md:p-10 space-y-6">
-            <h2 className="font-serif text-2xl md:text-3xl font-semibold text-[#17130e]">
-              District Overview & Lifestyle Character
-            </h2>
-            <p className="text-sm md:text-base text-[#4a4237] leading-relaxed">
-              {comm.overview}
-            </p>
-            <p className="text-sm md:text-base text-[#4a4237] leading-relaxed">
-              <strong className="text-[#94652c]">Lifestyle & Resident Profile:</strong>{" "}
-              {comm.lifestyle}
-            </p>
-
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-3 border-t border-[#e6dfd2] pt-6 text-xs">
-              <div className="rounded-2xl border border-[#e6dfd2] bg-[#faf7f2] p-4">
-                <div className="flex items-center gap-2 font-semibold text-[#94652c] mb-2">
-                  <Train className="h-4 w-4" />
-                  Transport & Connectivity (Peak vs Off-Peak)
-                </div>
-                <ul className="space-y-1.5 text-[#4a4237]">
-                  {comm.connectivity.map((item) => (
-                    <li key={item}>• {item}</li>
-                  ))}
-                </ul>
-              </div>
-
-              <div className="rounded-2xl border border-[#e6dfd2] bg-[#faf7f2] p-4">
-                <div className="flex items-center gap-2 font-semibold text-[#94652c] mb-2">
-                  <GraduationCap className="h-4 w-4" />
-                  Nearby Schools & Healthcare
-                </div>
-                <ul className="space-y-1.5 text-[#4a4237]">
-                  {comm.nearbySchoolsHealthcare.map((item) => (
-                    <li key={item}>• {item}</li>
-                  ))}
-                </ul>
-              </div>
-
-              <div className="rounded-2xl border border-[#e6dfd2] bg-[#faf7f2] p-4">
-                <div className="flex items-center gap-2 font-semibold text-[#94652c] mb-2">
-                  <Compass className="h-4 w-4" />
-                  Amenities & Property Types
-                </div>
-                <p className="text-[#94652c] font-medium mb-1.5">
-                  {comm.propertyTypes.join(" · ")}
-                </p>
-                <ul className="space-y-1 text-[#4a4237]">
-                  {comm.amenities.map((item) => (
-                    <li key={item}>• {item}</li>
-                  ))}
-                </ul>
-              </div>
+            <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {commListings.map((l) => (
+                <PropertyCard key={l.slug} listing={l} />
+              ))}
             </div>
           </div>
         </section>
+      ) : null}
 
-        {/* §11 Balanced Assessment: Advantages AND Practical Drawbacks */}
-        <section className="grid grid-cols-1 gap-6 md:grid-cols-2">
-          <div className="rounded-3xl border border-emerald-500/30 bg-emerald-50/75 p-6 md:p-8">
-            <h2 className="font-serif text-2xl font-semibold text-[#17130e] flex items-center gap-2.5">
-              <CheckCircle2 className="h-5 w-5 text-emerald-600" />
-              Why Buyers & Tenants Choose {comm.name}
-            </h2>
-            <ul className="mt-4 space-y-3 text-xs md:text-sm text-[#4a4237]">
-              {comm.pros.map((pro) => (
-                <li key={pro} className="flex items-start gap-2.5">
-                  <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-400" />
-                  <span>{pro}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="rounded-3xl border border-amber-400/30 bg-amber-50/75 p-6 md:p-8">
-            <h2 className="font-serif text-2xl font-semibold text-[#17130e] flex items-center gap-2.5">
-              <AlertCircle className="h-5 w-5 text-amber-700" />
-              Practical Considerations & Trade-Offs
-            </h2>
-            <ul className="mt-4 space-y-3 text-xs md:text-sm text-[#4a4237]">
-              {comm.considerations.map((con) => (
-                <li key={con} className="flex items-start gap-2.5">
-                  <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-amber-400" />
-                  <span>{con}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </section>
-
-        {/* Available Properties in this Community */}
-        {commListings.length > 0 && (
-          <section>
-            <div className="mb-6 flex items-end justify-between">
-              <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#94652c]">
-                  Verified Listings in {comm.name}
-                </p>
-                <h2 className="mt-1 font-serif text-3xl font-semibold text-[#17130e]">
-                  Available Properties for Sale & Rent
-                </h2>
-              </div>
+      {/* Tracked Off-Plan Launches Nearby */}
+      {commProjects.length > 0 ? (
+        <section className="mx-auto max-w-[1260px] px-4 py-16 sm:px-8">
+          <SectionEyebrow>OFF-PLAN LAUNCHES</SectionEyebrow>
+          <SplitHeading
+            primary={`New launches in & around`}
+            muted={comm.name}
+            size="md"
+            inline
+            className="mt-4"
+          />
+          <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-3">
+            {commProjects.map((p) => (
               <Link
-                href={`/properties?community=${comm.slug}`}
-                className="text-xs font-semibold text-[#94652c] hover:underline"
+                key={p.slug}
+                href={`/off-plan/${p.slug}`}
+                className="group overflow-hidden rounded-2xl border border-black/[0.07] bg-white hover:border-black/20"
               >
-                Filter All {comm.name} Inventory →
-              </Link>
-            </div>
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {commListings.map((item) => (
-                <PropertyCard key={item.slug} listing={item} />
-              ))}
-            </div>
-          </section>
-        )}
-
-        {/* Off-Plan Projects in this Community */}
-        {commProjects.length > 0 && (
-          <section>
-            <h2 className="mb-6 font-serif text-3xl font-semibold text-[#17130e]">
-              Off-Plan & Developer Releases in {comm.name}
-            </h2>
-            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-              {commProjects.map((proj) => (
-                <Link
-                  key={proj.slug}
-                  href={`/off-plan/${proj.slug}`}
-                  className="group flex items-center gap-4 rounded-2xl border border-[#e6dfd2] bg-white p-3.5 hover:border-[#94652c]/40"
-                >
+                <div className="aspect-[16/10] w-full overflow-hidden bg-[#ececec]">
                   <img
-                    src={proj.images[0]}
-                    alt={proj.name}
-                    className="h-20 w-24 shrink-0 rounded-xl object-cover"
+                    src={p.thumb || p.image}
+                    alt={p.name}
+                    loading="lazy"
+                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />
-                  <div className="min-w-0">
-                    <span className="text-[10px] font-semibold uppercase tracking-wider text-[#94652c]">
-                      {proj.developer}
-                    </span>
-                    <h3 className="truncate font-serif text-lg font-semibold text-[#17130e] group-hover:text-[#94652c]">
-                      {proj.name}
-                    </h3>
-                    <p className="truncate text-xs text-[#786e60]">{proj.collection}</p>
+                </div>
+                <div className="p-5 flex items-center justify-between gap-2">
+                  <div>
+                    <p className="text-[11px] uppercase tracking-[0.16em] text-[#8b8b8b]">
+                      {p.developer}
+                    </p>
+                    <h3 className="mt-1 text-lg font-medium text-[#121212]">{p.name}</h3>
                   </div>
-                </Link>
-              ))}
-            </div>
-          </section>
-        )}
-
-        <MapEmbed lat={comm.lat} lng={comm.lng} zoom={13} title={`${comm.name}, Dubai — map`} />
-
-        {/* Interactive Connectivity Walk/Drive Scene */}
-        <section className="overflow-hidden rounded-3xl border border-[#e6dfd2]">
-          <NearbyWalk
-            origin={comm.name}
-            defaultTheme="classic"
-            hint={`Interactive transit overview from ${comm.name}`}
-          />
+                  <ArrowUpRight className="h-4 w-4 text-[#8b8b8b] group-hover:text-[#121212]" />
+                </div>
+              </Link>
+            ))}
+          </div>
         </section>
+      ) : null}
 
-        {/* Local Specialist Consultation Form (§11) */}
-        <section className="mx-auto max-w-4xl">
-          <EnquiryForm
-            context="property"
-            heading={`Speak With Our ${comm.name} Area Specialist`}
-            subheading={`Request recent DLD comparable transfers, building service-charge benchmarks, and active listings in ${comm.name}.`}
-            community={comm.name}
-          />
-        </section>
-      </div>
-    </>
+      <section id="enquire" className="mx-auto max-w-4xl px-4 py-16 sm:px-8">
+        <EnquiryForm
+          context="advisory"
+          community={comm.name}
+          heading={`Speak to our ${comm.name} specialist`}
+          subheading="Get building-by-building comparable prices, service charges, and upcoming launch allocations."
+        />
+      </section>
+
+      <CtaBanner />
+    </div>
   );
 }

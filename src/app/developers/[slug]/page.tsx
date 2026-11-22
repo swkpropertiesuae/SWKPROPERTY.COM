@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Building2, CheckCircle2, MapPin, ShieldCheck } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import { developers, getDeveloper } from "@/lib/developers";
 import { getListingsByDeveloper } from "@/lib/listings";
 import { PropertyCard } from "@/components/site/property-card";
@@ -9,6 +9,9 @@ import { EnquiryForm } from "@/components/site/enquiry-form";
 import { JsonLd } from "@/components/seo/json-ld";
 import { breadcrumbLd, buildMeta } from "@/lib/seo";
 import { SITE } from "@/lib/swk";
+import { AvenloPageHeader } from "@/components/avenlo/page-header";
+import { BracketLink } from "@/components/avenlo/bracket-button";
+import { CtaBanner, SectionEyebrow, SplitHeading } from "@/components/avenlo/motion";
 
 export function generateStaticParams() {
   return developers.map((d) => ({ slug: d.slug }));
@@ -24,21 +27,20 @@ export async function generateMetadata({
   if (!dev) {
     return buildMeta({
       title: "Developer Not Found",
-      description: "Browse 20 UAE real estate developers with SWK Properties.",
+      description: "Browse UAE real estate developers with SWK Properties.",
       path: "/developers",
     });
   }
 
   return buildMeta({
-    title: `${dev.name} Projects, Payment Plans & Delivery Track Record | Dubai & UAE`,
-    description: `${dev.tagline}. Explore ${dev.projectCount} off-plan and ready developments by ${dev.name}, flagship communities, and DLD escrow guidance with SWK Properties (ORN ${SITE.reraOrn}).`,
+    title: `${dev.name} Projects & Payment Plans | Dubai & UAE`,
+    description: `${dev.tagline}. Explore ${dev.projectCount} off-plan and ready developments by ${dev.name} and DLD escrow guidance with SWK Properties (ORN ${SITE.reraOrn}).`,
     path: `/developers/${dev.slug}`,
     image: dev.projects[0]?.images[0] || "/img/hero/dubai-skyline-hero.webp",
     keywords: [
       dev.name,
       `${dev.name} Dubai projects`,
       `${dev.name} off-plan`,
-      `${dev.name} payment plan`,
       ...(dev.flagshipAreas || []),
     ],
   });
@@ -56,7 +58,7 @@ export default async function DeveloperDetailPage({
   const devListings = getListingsByDeveloper(dev.slug);
 
   return (
-    <div className="min-h-screen bg-[#faf7f2] text-[#17130e]">
+    <div className="bg-white">
       <JsonLd
         data={breadcrumbLd([
           { name: "Home", path: "/" },
@@ -65,197 +67,166 @@ export default async function DeveloperDetailPage({
         ])}
       />
 
-      <div className="mx-auto max-w-7xl px-4 py-12 space-y-14 md:px-6">
-        {/* Breadcrumb */}
-        <nav aria-label="Breadcrumb" className="flex flex-wrap items-center gap-2 text-xs text-[#786e60]">
-          <Link href="/" className="hover:text-[#17130e]">Home</Link>
-          <span>/</span>
-          <Link href="/developers" className="hover:text-[#17130e]">UAE Developers</Link>
-          <span>/</span>
-          <span className="font-semibold text-[#94652c]">{dev.name}</span>
-        </nav>
+      <AvenloPageHeader
+        eyebrow={`${dev.emirate.toUpperCase()} MASTER DEVELOPER`}
+        title={dev.name}
+        lead={dev.tagline}
+        breadcrumb={[
+          { label: "Home", href: "/" },
+          { label: "Developers", href: "/developers" },
+          { label: dev.name },
+        ]}
+        meta={
+          <>
+            <span>{dev.projectCount} Tracked Releases</span>
+            <span className="text-[#cfcfcf]">·</span>
+            <span>HQ: {dev.headquarters}</span>
+            {dev.founded ? (
+              <>
+                <span className="text-[#cfcfcf]">·</span>
+                <span>Est. {dev.founded}</span>
+              </>
+            ) : null}
+          </>
+        }
+        actions={
+          <>
+            <BracketLink href="#enquire" variant="light" size="md">
+              Request {dev.name} Inventory
+            </BracketLink>
+            <BracketLink href="/off-plan" variant="light" size="md">
+              All UAE Releases
+            </BracketLink>
+          </>
+        }
+      />
 
-        {/* §10 Developer Profile Header */}
-        <section className="rounded-3xl border border-[#e6dfd2] bg-white p-6 md:p-10 shadow-sm">
-          <div className="grid grid-cols-1 gap-8 lg:grid-cols-12 items-start">
-            <div className="lg:col-span-8 space-y-5">
-              <div className="flex flex-wrap items-center gap-3">
-                {dev.logo && (
-                  <div className="rounded-2xl border border-[#e6dfd2] bg-[#faf7f2] px-4 py-2">
-                    <img
-                      src={dev.logo}
-                      alt={dev.name}
-                      className="h-8 max-w-[150px] object-contain"
-                    />
-                  </div>
-                )}
-                <span className="rounded-full bg-[#17130e] px-3.5 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-[#dcb888]">
-                  UAE Master Developer Profile
-                </span>
-                {dev.founded && (
-                  <span className="rounded-full border border-[#e6dfd2] bg-[#faf7f2] px-3 py-1 text-[11px] font-medium text-[#4a4237]">
-                    Established {dev.founded}
-                  </span>
-                )}
-                {dev.headquarters && (
-                  <span className="rounded-full border border-[#94652c]/35 bg-[#f6ead7] px-3 py-1 text-[11px] font-semibold text-[#94652c]">
-                    HQ: {dev.headquarters}
-                  </span>
-                )}
+      {/* Developer Overview & Metadata Table */}
+      <section className="mx-auto max-w-[1260px] px-4 py-16 sm:px-8">
+        <div className="grid grid-cols-1 gap-10 lg:grid-cols-12 items-start">
+          <div className="lg:col-span-7 space-y-5">
+            {dev.logo ? (
+              <div className="inline-flex h-16 items-center rounded-2xl border border-black/[0.06] bg-[#f7f7f7] px-6">
+                <img
+                  src={dev.logo}
+                  alt={dev.name}
+                  className="max-h-10 max-w-[180px] object-contain"
+                />
               </div>
-
-              <h1 className="font-serif text-4xl md:text-6xl font-semibold text-[#17130e] leading-[1.08]">
-                {dev.name}
-              </h1>
-              <p className="text-base md:text-lg font-semibold text-[#94652c]">{dev.tagline}</p>
-              <p className="text-sm md:text-base text-[#4a4237] leading-relaxed">
-                {dev.description}
-              </p>
-
-              {dev.flagshipAreas && dev.flagshipAreas.length > 0 && (
-                <div className="pt-2">
-                  <span className="text-xs font-bold uppercase tracking-[0.2em] text-[#94652c] block mb-2.5">
-                    Flagship Master Communities & Districts:
-                  </span>
-                  <div className="flex flex-wrap gap-2">
-                    {dev.flagshipAreas.map((area) => (
-                      <span
-                        key={area}
-                        className="inline-flex items-center gap-1.5 rounded-full border border-[#e6dfd2] bg-[#faf7f2] px-3.5 py-1.5 text-xs font-medium text-[#17130e]"
-                      >
-                        <MapPin className="h-3.5 w-3.5 text-[#94652c]" />
-                        {area}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {/* Factual Delivery & Escrow Summary Card (§10) */}
-            <div className="lg:col-span-4 rounded-2xl border border-[#e6dfd2] bg-[#faf7f2] p-6 space-y-4">
-              <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-[#17130e]">
-                <ShieldCheck className="h-4 w-4 text-emerald-600" />
-                SWK Due Diligence Summary
-              </div>
-              <div className="grid grid-cols-2 gap-3 text-xs">
-                <div className="rounded-xl border border-[#e6dfd2] bg-white p-3.5">
-                  <span className="text-[#786e60] block">Curated Releases</span>
-                  <strong className="mt-1 block font-serif text-2xl text-[#17130e]">
-                    {dev.projectCount}
-                  </strong>
-                </div>
-                <div className="rounded-xl border border-[#e6dfd2] bg-white p-3.5">
-                  <span className="text-[#786e60] block">Escrow Status</span>
-                  <strong className="mt-1 block text-emerald-700">
-                    DLD Verified
-                  </strong>
-                </div>
-              </div>
-              <ul className="space-y-2 text-xs text-[#4a4237]">
-                <li className="flex items-start gap-2">
-                  <CheckCircle2 className="h-4 w-4 shrink-0 text-[#94652c] mt-0.5" />
-                  <span>Compare floor plates & service charges across {dev.name} buildings</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <CheckCircle2 className="h-4 w-4 shrink-0 text-[#94652c] mt-0.5" />
-                  <span>0% agency commission on direct off-plan developer bookings</span>
-                </li>
-              </ul>
-              <p className="border-t border-[#e6dfd2] pt-3 text-[11px] text-[#786e60] leading-relaxed">
-                Independent Advisory Notice: SWK Properties LLC (RERA ORN {SITE.reraOrn}) represents buyers and landlords independently and does not claim exclusive developer ownership.
-              </p>
-            </div>
+            ) : null}
+            <h2 className="text-3xl font-medium tracking-[-0.03em] text-[#121212]">
+              About {dev.name}
+            </h2>
+            <p className="text-[16px] leading-[1.7] text-[#4a4a4a]">{dev.about}</p>
+            <p className="text-sm leading-relaxed text-[#737373]">
+              <strong className="font-medium text-[#121212]">Known for:</strong> {dev.knownFor}
+            </p>
           </div>
-        </section>
 
-        {/* Active Secondary & Off-Plan Listings for this Developer */}
-        {devListings.length > 0 && (
-          <section>
-            <div className="mb-6">
-              <p className="text-xs font-bold uppercase tracking-[0.24em] text-[#94652c]">
-                Immediate Inventory
-              </p>
-              <h2 className="mt-1 font-serif text-3xl font-semibold text-[#17130e]">
-                Featured {dev.name} Listings With Full Floor Plans
-              </h2>
-            </div>
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {devListings.map((item) => (
-                <PropertyCard key={item.slug} listing={item} />
+          <div className="lg:col-span-5 rounded-2xl border border-black/[0.07] bg-[#f7f7f7] p-6 sm:p-8">
+            <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-[#8b8b8b]">
+              PROFILE SNAPSHOT
+            </p>
+            <dl className="mt-4 divide-y divide-black/[0.08] text-sm">
+              {[
+                ["Primary Emirate", dev.emirate],
+                ["Headquarters", dev.headquarters],
+                ["Tracked Projects", `${dev.projectCount} releases`],
+                ["Flagship Corridors", dev.flagshipAreas.join(", ") || "Dubai & UAE"],
+              ].map(([k, v]) => (
+                <div key={k} className="flex items-start justify-between gap-4 py-3.5">
+                  <dt className="shrink-0 text-[#737373]">{k}</dt>
+                  <dd className="text-right font-medium text-[#121212]">{v}</dd>
+                </div>
               ))}
-            </div>
-          </section>
-        )}
-
-        {/* §10 All Projects by this Developer */}
-        <section>
-          <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
-            <div>
-              <p className="text-xs font-bold uppercase tracking-[0.24em] text-[#94652c]">
-                Current, Upcoming & Delivered Portfolio
-              </p>
-              <h2 className="mt-1 font-serif text-3xl md:text-4xl font-semibold text-[#17130e]">
-                {dev.name} Developments ({dev.projects.length})
-              </h2>
-            </div>
-            <Link href="/off-plan" className="text-xs font-bold uppercase tracking-[0.18em] text-[#94652c] hover:text-[#17130e]">
-              Browse All 108 UAE Projects →
-            </Link>
+            </dl>
           </div>
+        </div>
+      </section>
 
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {/* Active Projects Grid */}
+      <section className="border-y border-black/[0.06] bg-[#f7f7f7] py-16">
+        <div className="mx-auto max-w-[1260px] px-4 sm:px-8">
+          <SectionEyebrow>{dev.name.toUpperCase()} PORTFOLIO</SectionEyebrow>
+          <SplitHeading
+            primary={`${dev.projectCount} verified`}
+            muted="developments"
+            size="md"
+            inline
+            className="mt-4"
+          />
+
+          <div className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
             {dev.projects.map((proj) => (
               <Link
                 key={proj.slug}
                 href={`/off-plan/${proj.slug}`}
-                className="group flex flex-col justify-between overflow-hidden rounded-3xl border border-[#e6dfd2] bg-white shadow-sm transition hover:-translate-y-1 hover:border-[#94652c] hover:shadow-lg"
+                className="group flex flex-col overflow-hidden rounded-2xl border border-black/[0.07] bg-white transition-all hover:border-black/20 hover:shadow-[0_20px_50px_rgba(18,18,18,0.08)]"
               >
-                <div>
-                  <div className="relative h-56 w-full overflow-hidden">
-                    <img
-                      src={proj.images[0]}
-                      alt={proj.name}
-                      className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-                    />
-                    <span className="absolute top-3 left-3 rounded-full bg-[#17130e] px-3 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-[#dcb888]">
-                      {proj.collection}
-                    </span>
-                    <span className="absolute bottom-3 right-3 rounded-full bg-white/95 px-2.5 py-0.5 text-[10px] font-semibold text-[#17130e] shadow-sm">
-                      Developer Visualisation
-                    </span>
-                  </div>
-                  <div className="p-5">
-                    <div className="flex items-center gap-1.5 text-xs font-bold text-[#94652c]">
-                      <Building2 className="h-3.5 w-3.5" />
-                      <span>{proj.community}</span>
-                    </div>
-                    <h3 className="mt-1 font-serif text-2xl font-semibold text-[#17130e] group-hover:text-[#94652c]">
+                <div className="relative aspect-[16/10] w-full overflow-hidden bg-[#ececec]">
+                  <img
+                    src={proj.thumb || proj.image}
+                    alt={`${proj.name} by ${dev.name}`}
+                    loading="lazy"
+                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                  <span className="absolute bottom-3 right-3 rounded-full bg-white/90 px-2.5 py-0.5 text-[10px] font-medium text-[#121212]">
+                    Developer Render
+                  </span>
+                </div>
+                <div className="flex flex-1 flex-col justify-between p-6">
+                  <div>
+                    <p className="text-[11px] font-medium uppercase tracking-[0.16em] text-[#8b8b8b]">
+                      {proj.community} · {proj.collection}
+                    </p>
+                    <h3 className="mt-2 text-xl font-medium tracking-[-0.025em] text-[#121212]">
                       {proj.name}
                     </h3>
-                    <p className="mt-2 line-clamp-3 text-xs md:text-sm text-[#4a4237] leading-relaxed">
+                    <p className="mt-2 line-clamp-2 text-xs leading-relaxed text-[#666666]">
                       {proj.summary}
                     </p>
                   </div>
-                </div>
-                <div className="border-t border-[#e6dfd2] bg-[#faf7f2] px-5 py-3.5 text-xs font-bold uppercase tracking-[0.16em] text-[#17130e] group-hover:text-[#94652c]">
-                  Inspect Project & Payment Plan →
+                  <div className="mt-5 flex items-center justify-end border-t border-black/[0.06] pt-4 text-xs font-medium text-[#121212] group-hover:text-[#0e9f6e]">
+                    <span>Inspect Project</span>
+                    <ArrowUpRight className="ml-1 h-3.5 w-3.5" />
+                  </div>
                 </div>
               </Link>
             ))}
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* Developer Enquiry Form (§10) */}
-        <section className="mx-auto max-w-4xl">
-          <EnquiryForm
-            context="investment"
-            heading={`Request ${dev.name} Inventory, Price List & Escrow Sheet`}
-            subheading={`Receive current unit availability, floor plans, and historical handover data across ${dev.name} communities.`}
-            developer={dev.name}
+      {/* Ready / Secondary Listings by This Developer (if any) */}
+      {devListings.length > 0 ? (
+        <section className="mx-auto max-w-[1260px] px-4 py-16 sm:px-8">
+          <SectionEyebrow>ON OUR BOOKS</SectionEyebrow>
+          <SplitHeading
+            primary={`Residences by ${dev.name}`}
+            muted="available now"
+            size="md"
+            inline
+            className="mt-4"
           />
+          <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {devListings.map((l) => (
+              <PropertyCard key={l.slug} listing={l} />
+            ))}
+          </div>
         </section>
-      </div>
+      ) : null}
+
+      {/* Developer Allocation Enquiry */}
+      <section id="enquire" className="mx-auto max-w-4xl px-4 py-16 sm:px-8">
+        <EnquiryForm
+          context="investment"
+          developer={dev.name}
+          heading={`Request ${dev.name} price list & availability`}
+          subheading="Receive direct developer floor plans, milestone payment schedules, and escrow details."
+        />
+      </section>
+
+      <CtaBanner />
     </div>
   );
 }
