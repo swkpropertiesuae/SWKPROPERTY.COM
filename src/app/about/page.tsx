@@ -36,7 +36,7 @@ const STRIP_PHOTOS = [
 
 export default function AboutPage() {
   return (
-    <div className="bg-white">
+    <div className="bg-transparent">
       <JsonLd
         id="ld-about-breadcrumb"
         data={breadcrumbSchema([
@@ -89,7 +89,9 @@ export default function AboutPage() {
 
       {/* Scroll-Reveal Firm Philosophy */}
       <section className="mx-auto max-w-[1060px] px-4 py-16 sm:px-8">
-        <ScrollRevealStatement text="Eighteen years in Dubai have taught us that the right address is rarely the loudest launch — it is the building whose floor plans, developer escrow, and rental demand still hold up five years later." />
+        <div className="rounded-3xl border border-white/80 bg-white/76 p-7 sm:p-11 shadow-[0_20px_54px_rgba(12,56,96,0.09)] backdrop-blur-2xl">
+          <ScrollRevealStatement text="Eighteen years in Dubai have taught us that the right address is rarely the loudest launch — it is the building whose floor plans, developer escrow, and rental demand still hold up five years later." />
+        </div>
 
         <div className="mt-12 grid grid-cols-1 gap-5 md:grid-cols-3">
           {[
@@ -108,7 +110,7 @@ export default function AboutPage() {
           ].map((pillar) => (
             <div
               key={pillar.title}
-              className="rounded-2xl border border-black/[0.06] bg-[#f7f7f7] p-6"
+              className="rounded-2xl border border-white/80 bg-white/80 backdrop-blur-xl shadow-[0_14px_40px_rgba(12,56,96,0.08)] p-6"
             >
               <h2 className="text-lg font-medium tracking-[-0.02em] text-[#121212]">
                 {pillar.title}
@@ -161,7 +163,7 @@ export default function AboutPage() {
             <Link
               key={member.slug}
               href={`/agents/${member.slug}`}
-              className="group overflow-hidden rounded-2xl border border-black/[0.06] bg-white transition-all hover:border-black/20"
+              className="group overflow-hidden rounded-2xl border border-white/80 bg-white/84 backdrop-blur-xl shadow-[0_14px_40px_rgba(12,56,96,0.08)] transition-all hover:border-black/20"
             >
               <div className="aspect-[4/5] w-full overflow-hidden bg-[#f5f5f5]">
                 <img
@@ -184,7 +186,7 @@ export default function AboutPage() {
       </section>
 
       {/* Sheikh Zayed Road Office + Consultation */}
-      <section className="border-t border-black/[0.06] bg-[#f7f7f7] py-20">
+      <section className="border-t border-white/60 bg-white/24 backdrop-blur-[2px] py-20">
         <div className="mx-auto max-w-[1260px] px-4 sm:px-8">
           <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 items-start">
             <div className="lg:col-span-5 space-y-5">
@@ -197,7 +199,7 @@ export default function AboutPage() {
               <p className="text-sm leading-relaxed text-[#525252]">
                 Visit our 25th-floor consultation suite at Al Saqr Building for private floor-plan walkthroughs, developer portfolio briefings, or Form A / Form F documentation.
               </p>
-              <div className="rounded-2xl border border-black/[0.07] bg-white p-6 text-xs text-[#525252] space-y-2.5">
+              <div className="rounded-2xl border border-white/80 bg-white/84 backdrop-blur-xl shadow-[0_16px_44px_rgba(12,56,96,0.08)] p-6 text-xs text-[#525252] space-y-2.5">
                 <div className="flex items-center gap-2 font-medium text-[#121212]">
                   <ShieldCheck className="h-4 w-4 text-[#0e9f6e]" />
                   <span>{SITE.legalName} · RERA ORN {SITE.reraOrn}</span>

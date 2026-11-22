@@ -200,7 +200,7 @@ export function EnquiryForm({
   if (result) {
     return (
       <div
-        className={`rounded-2xl border border-black/[0.08] bg-white p-6 sm:p-8 ${className}`}
+        className={`rounded-2xl border border-white/80 bg-white/86 backdrop-blur-xl shadow-[0_18px_48px_rgba(12,56,96,0.09)] p-6 sm:p-8 ${className}`}
       >
         <div className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-[#121212] text-[#51fec0]">
           <CheckCircle2 className="h-5 w-5" />
@@ -244,7 +244,7 @@ export function EnquiryForm({
 
   return (
     <div
-      className={`rounded-2xl border border-black/[0.08] bg-white ${
+      className={`rounded-2xl border border-white/80 bg-white/86 backdrop-blur-xl shadow-[0_18px_48px_rgba(12,56,96,0.09)] ${
         compact ? "p-5 sm:p-6" : "p-6 sm:p-8 md:p-10"
       } ${className}`}
     >

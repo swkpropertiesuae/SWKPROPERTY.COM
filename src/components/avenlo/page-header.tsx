@@ -41,7 +41,7 @@ export function AvenloPageHeader({
   return (
     <section
       className={cn(
-        "relative overflow-hidden bg-white bg-arch-grid-fade border-b border-black/[0.06]",
+        "relative overflow-hidden bg-white/18 backdrop-blur-[2px] bg-arch-grid-fade border-b border-white/60",
         compact ? "pt-12 pb-12 sm:pt-16 sm:pb-14" : "pt-16 pb-16 sm:pt-24 sm:pb-20",
         className
       )}

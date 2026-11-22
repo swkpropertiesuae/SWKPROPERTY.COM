@@ -63,7 +63,7 @@ export default async function AgentProfilePage({
   const areas = AGENT_COMMUNITIES[member.slug] ?? ["Dubai", "Sheikh Zayed Road"];
 
   return (
-    <div className="bg-white">
+    <div className="bg-transparent">
       <JsonLd
         data={breadcrumbSchema([
           { name: "Home", path: "/" },
@@ -175,7 +175,7 @@ export default async function AgentProfilePage({
       </section>
 
       {/* Currently on Our Books */}
-      <section className="border-y border-black/[0.06] bg-[#f7f7f7] py-16">
+      <section className="border-y border-white/60 bg-white/24 backdrop-blur-[2px] py-16">
         <div className="mx-auto max-w-[1260px] px-4 sm:px-8">
           <div className="flex flex-wrap items-end justify-between gap-4">
             <div>

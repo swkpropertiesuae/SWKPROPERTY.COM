@@ -184,7 +184,7 @@ export default function CalculatorsPage() {
   }, [brPrice, brAnnualRent, brRentGrowth, brAppreciation]);
 
   return (
-    <div className="bg-white">
+    <div className="bg-transparent">
       <AvenloPageHeader
         eyebrow="CALCULATORS · DUBAI & UAE"
         title="What it"
@@ -220,7 +220,7 @@ export default function CalculatorsPage() {
           <div className="mt-10 space-y-6">
             <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
               {/* Left Crisp #F7F7F7 Sliders Card */}
-              <div className="lg:col-span-6 rounded-2xl border border-black/[0.06] bg-[#f7f7f7] p-6 sm:p-8 space-y-6">
+              <div className="lg:col-span-6 rounded-2xl border border-white/80 bg-white/80 backdrop-blur-xl shadow-[0_14px_40px_rgba(12,56,96,0.08)] p-6 sm:p-8 space-y-6">
                 {/* Property Price */}
                 <div>
                   <div className="flex items-center justify-between text-xs">
@@ -475,7 +475,7 @@ export default function CalculatorsPage() {
             </div>
 
             {/* Full-Width "What you still owe" Payoff Mint Area Chart Card */}
-            <div className="rounded-2xl border border-black/[0.08] bg-white p-6 sm:p-8">
+            <div className="rounded-2xl border border-white/80 bg-white/86 backdrop-blur-xl shadow-[0_18px_48px_rgba(12,56,96,0.09)] p-6 sm:p-8">
               <div className="flex flex-wrap items-center justify-between gap-4">
                 <div>
                   <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-[#8b8b8b]">
@@ -542,7 +542,7 @@ export default function CalculatorsPage() {
         {/* MODE 2: DLD 4% UPFRONT COSTS */}
         {mode === "dld" ? (
           <div className="mt-10 grid grid-cols-1 gap-6 lg:grid-cols-12">
-            <div className="lg:col-span-6 rounded-2xl border border-black/[0.06] bg-[#f7f7f7] p-6 sm:p-8 space-y-6">
+            <div className="lg:col-span-6 rounded-2xl border border-white/80 bg-white/80 backdrop-blur-xl shadow-[0_14px_40px_rgba(12,56,96,0.08)] p-6 sm:p-8 space-y-6">
               <div>
                 <div className="flex items-center justify-between text-xs">
                   <label htmlFor="dld-price" className="font-medium text-[#121212]">
@@ -653,7 +653,7 @@ export default function CalculatorsPage() {
         {/* MODE 3: OFF-PLAN SCHEDULE */}
         {mode === "offplan" ? (
           <div className="mt-10 grid grid-cols-1 gap-6 lg:grid-cols-12">
-            <div className="lg:col-span-6 rounded-2xl border border-black/[0.06] bg-[#f7f7f7] p-6 sm:p-8 space-y-6">
+            <div className="lg:col-span-6 rounded-2xl border border-white/80 bg-white/80 backdrop-blur-xl shadow-[0_14px_40px_rgba(12,56,96,0.08)] p-6 sm:p-8 space-y-6">
               <div>
                 <div className="flex items-center justify-between text-xs">
                   <label htmlFor="op-price" className="font-medium text-[#121212]">
@@ -756,7 +756,7 @@ export default function CalculatorsPage() {
         {/* MODE 4: NET RENTAL YIELD */}
         {mode === "yield" ? (
           <div className="mt-10 grid grid-cols-1 gap-6 lg:grid-cols-12">
-            <div className="lg:col-span-6 rounded-2xl border border-black/[0.06] bg-[#f7f7f7] p-6 sm:p-8 space-y-5">
+            <div className="lg:col-span-6 rounded-2xl border border-white/80 bg-white/80 backdrop-blur-xl shadow-[0_14px_40px_rgba(12,56,96,0.08)] p-6 sm:p-8 space-y-5">
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div>
                   <label htmlFor="y-price" className="mb-1.5 block text-xs font-medium">
@@ -885,7 +885,7 @@ export default function CalculatorsPage() {
         {/* MODE 5: 5-YEAR BUY VS RENT */}
         {mode === "buyrent" ? (
           <div className="mt-10 grid grid-cols-1 gap-6 lg:grid-cols-12">
-            <div className="lg:col-span-6 rounded-2xl border border-black/[0.06] bg-[#f7f7f7] p-6 sm:p-8 space-y-5">
+            <div className="lg:col-span-6 rounded-2xl border border-white/80 bg-white/80 backdrop-blur-xl shadow-[0_14px_40px_rgba(12,56,96,0.08)] p-6 sm:p-8 space-y-5">
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div>
                   <label htmlFor="br-price" className="mb-1.5 block text-xs font-medium">
@@ -996,7 +996,7 @@ export default function CalculatorsPage() {
         </p>
       </section>
 
-      <section className="border-t border-black/[0.06] bg-[#f7f7f7] py-16">
+      <section className="border-t border-white/60 bg-white/24 backdrop-blur-[2px] py-16">
         <div className="mx-auto max-w-3xl px-4 sm:px-8">
           <EnquiryForm
             context="buying"

@@ -20,7 +20,7 @@ export const metadata: Metadata = buildMeta({
 
 export default function CommunitiesPage() {
   return (
-    <div className="bg-white">
+    <div className="bg-transparent">
       <JsonLd
         data={[
           breadcrumbLd([
@@ -54,7 +54,7 @@ export default function CommunitiesPage() {
             <Link
               key={comm.slug}
               href={`/communities/${comm.slug}`}
-              className="group overflow-hidden rounded-2xl border border-black/[0.07] bg-white transition-all duration-300 hover:border-black/20 hover:shadow-[0_20px_50px_rgba(18,18,18,0.08)]"
+              className="group overflow-hidden rounded-2xl border border-white/80 bg-white/84 backdrop-blur-xl shadow-[0_16px_44px_rgba(12,56,96,0.08)] transition-all duration-300 hover:border-black/20 hover:shadow-[0_20px_50px_rgba(18,18,18,0.08)]"
             >
               <div className="relative aspect-[16/9] w-full overflow-hidden bg-[#f5f5f5]">
                 <img
@@ -88,7 +88,7 @@ export default function CommunitiesPage() {
         </div>
       </section>
 
-      <section className="border-t border-black/[0.06] bg-[#f7f7f7] py-20">
+      <section className="border-t border-white/60 bg-white/24 backdrop-blur-[2px] py-20">
         <div className="mx-auto max-w-[1260px] px-4 sm:px-8">
           <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 items-start">
             <div className="lg:col-span-5 space-y-4">

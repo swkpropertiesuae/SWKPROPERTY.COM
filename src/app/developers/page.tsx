@@ -19,7 +19,7 @@ export const metadata: Metadata = buildMeta({
 
 export default function DevelopersPage() {
   return (
-    <div className="bg-white">
+    <div className="bg-transparent">
       <JsonLd
         data={[
           breadcrumbLd([
@@ -49,7 +49,7 @@ export default function DevelopersPage() {
 
       <DevelopersDirectory developers={developers} />
 
-      <section className="border-t border-black/[0.06] bg-[#f7f7f7] py-20">
+      <section className="border-t border-white/60 bg-white/24 backdrop-blur-[2px] py-20">
         <div className="mx-auto max-w-[1260px] px-4 sm:px-8">
           <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 items-start">
             <div className="lg:col-span-5 space-y-5">

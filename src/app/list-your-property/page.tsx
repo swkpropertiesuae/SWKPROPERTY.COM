@@ -68,7 +68,7 @@ const REQUIRED_DOCS = [
 
 export default function ListYourPropertyPage() {
   return (
-    <div className="bg-white">
+    <div className="bg-transparent">
       <JsonLd
         data={breadcrumbSchema([
           { name: "Home", path: "/" },
@@ -88,7 +88,7 @@ export default function ListYourPropertyPage() {
       />
 
       {/* Staggered 4-Stage Mandate Wave */}
-      <section className="border-b border-black/[0.06] bg-[#f7f7f7] py-20">
+      <section className="border-b border-white/60 bg-white/24 backdrop-blur-[2px] py-20">
         <div className="mx-auto max-w-[1260px] px-4 sm:px-8">
           <div className="text-center">
             <SectionEyebrow align="center">HOW WE REPRESENT OWNERS</SectionEyebrow>
@@ -105,7 +105,7 @@ export default function ListYourPropertyPage() {
             {SELLER_STEPS.map((s) => (
               <div
                 key={s.num}
-                className={`rounded-2xl border border-black/[0.06] bg-white p-7 ${s.offset}`}
+                className={`rounded-2xl border border-white/80 bg-white/84 backdrop-blur-xl shadow-[0_14px_40px_rgba(12,56,96,0.08)] p-7 ${s.offset}`}
               >
                 <span className="inline-flex h-12 w-12 items-center justify-center rounded-full border border-dashed border-[#cfcfcf] font-mono text-xs font-medium text-[#121212]">
                   {s.num}
@@ -137,7 +137,7 @@ export default function ListYourPropertyPage() {
               {REQUIRED_DOCS.map((doc) => (
                 <div
                   key={doc.title}
-                  className="rounded-2xl border border-black/[0.06] bg-[#f7f7f7] p-5"
+                  className="rounded-2xl border border-white/80 bg-white/80 backdrop-blur-xl shadow-[0_14px_40px_rgba(12,56,96,0.08)] p-5"
                 >
                   <div className="flex items-center gap-2 text-sm font-medium text-[#121212]">
                     <Check className="h-4 w-4 text-[#0e9f6e]" />

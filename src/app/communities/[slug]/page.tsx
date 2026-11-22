@@ -63,7 +63,7 @@ export default async function CommunityDetailPage({
     .slice(0, 6);
 
   return (
-    <div className="bg-white">
+    <div className="bg-transparent">
       <JsonLd
         data={[
           breadcrumbLd([
@@ -126,7 +126,7 @@ export default async function CommunityDetailPage({
             </p>
           </div>
 
-          <div className="lg:col-span-5 rounded-2xl border border-black/[0.06] bg-[#f7f7f7] p-6 sm:p-8 space-y-5">
+          <div className="lg:col-span-5 rounded-2xl border border-white/80 bg-white/80 backdrop-blur-xl shadow-[0_14px_40px_rgba(12,56,96,0.08)] p-6 sm:p-8 space-y-5">
             <div>
               <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-[#8b8b8b]">
                 PROPERTY TYPES
@@ -161,7 +161,7 @@ export default async function CommunityDetailPage({
 
         {/* Balanced Pros & Practical Considerations */}
         <div className="mt-14 grid grid-cols-1 gap-6 md:grid-cols-2">
-          <div className="rounded-2xl border border-black/[0.06] bg-[#f7f7f7] p-7">
+          <div className="rounded-2xl border border-white/80 bg-white/80 backdrop-blur-xl shadow-[0_14px_40px_rgba(12,56,96,0.08)] p-7">
             <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-[#0e9f6e]">
               KEY ADVANTAGES
             </p>
@@ -175,7 +175,7 @@ export default async function CommunityDetailPage({
             </ul>
           </div>
 
-          <div className="rounded-2xl border border-black/[0.06] bg-[#f7f7f7] p-7">
+          <div className="rounded-2xl border border-white/80 bg-white/80 backdrop-blur-xl shadow-[0_14px_40px_rgba(12,56,96,0.08)] p-7">
             <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-[#8b8b8b]">
               PRACTICAL CONSIDERATIONS
             </p>
@@ -199,7 +199,7 @@ export default async function CommunityDetailPage({
           ].map((box) => (
             <div
               key={box.title}
-              className="rounded-2xl border border-black/[0.07] bg-white p-6"
+              className="rounded-2xl border border-white/80 bg-white/84 backdrop-blur-xl shadow-[0_16px_44px_rgba(12,56,96,0.08)] p-6"
             >
               <h3 className="text-base font-medium text-[#121212]">{box.title}</h3>
               <ul className="mt-4 space-y-2.5 text-xs leading-relaxed text-[#525252]">
@@ -218,7 +218,7 @@ export default async function CommunityDetailPage({
 
       {/* Listings in Community */}
       {commListings.length > 0 ? (
-        <section className="border-t border-black/[0.06] bg-[#f7f7f7] py-16">
+        <section className="border-t border-white/60 bg-white/24 backdrop-blur-[2px] py-16">
           <div className="mx-auto max-w-[1260px] px-4 sm:px-8">
             <SectionEyebrow>ON OUR BOOKS</SectionEyebrow>
             <SplitHeading
@@ -253,7 +253,7 @@ export default async function CommunityDetailPage({
               <Link
                 key={p.slug}
                 href={`/off-plan/${p.slug}`}
-                className="group overflow-hidden rounded-2xl border border-black/[0.07] bg-white hover:border-black/20"
+                className="group overflow-hidden rounded-2xl border border-white/80 bg-white/84 backdrop-blur-xl shadow-[0_16px_44px_rgba(12,56,96,0.08)] hover:border-black/20"
               >
                 <div className="aspect-[16/10] w-full overflow-hidden bg-[#ececec]">
                   <img

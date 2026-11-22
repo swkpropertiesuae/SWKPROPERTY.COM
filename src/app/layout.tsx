@@ -7,6 +7,7 @@ import { SiteHeader } from "@/components/site/site-header";
 import { SiteFooter } from "@/components/site/site-footer";
 import { FloatingChrome } from "@/components/site/floating-chrome";
 import { AvenloPreloader } from "@/components/avenlo/preloader";
+import { ShaderBackground } from "@/components/ui/shader-background";
 import { JsonLd } from "@/components/seo/json-ld";
 import { Analytics, CONSENT_DEFAULT_SCRIPT } from "@/components/seo/analytics";
 import { KEYWORDS, OG_DEFAULT, organizationLd, websiteLd } from "@/lib/seo";
@@ -144,24 +145,34 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body
-        className={`${switzer.variable} ${inter.variable} ${geistMono.variable} min-h-screen overflow-x-clip bg-white text-[#121212] antialiased selection:bg-[#121212] selection:text-[#51fec0]`}
+        className={`${switzer.variable} ${inter.variable} ${geistMono.variable} min-h-screen overflow-x-clip bg-transparent text-[#121212] antialiased selection:bg-[#121212] selection:text-[#51fec0]`}
       >
+        {/* Global 21st.dev Mesh Drift WebGL Wave Canvas — Active Across Every Route */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none fixed inset-0 z-0 h-full w-full overflow-hidden"
+        >
+          <ShaderBackground className="h-full w-full" />
+        </div>
+
         <JsonLd data={[organizationLd, websiteLd]} />
         <PrefsProvider>
-          <a
-            href="#main-content"
-            className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[130] focus:rounded-full focus:bg-[#121212] focus:px-4 focus:py-2 focus:text-xs focus:font-medium focus:text-white"
-          >
-            Skip to main content
-          </a>
-          <AvenloPreloader />
-          <SiteHeader />
-          <main id="main-content" className="min-h-[70vh]">
-            {children}
-          </main>
-          <SiteFooter />
-          <FloatingChrome />
-          <Analytics />
+          <div className="relative z-10 flex min-h-screen flex-col">
+            <a
+              href="#main-content"
+              className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[130] focus:rounded-full focus:bg-[#121212] focus:px-4 focus:py-2 focus:text-xs focus:font-medium focus:text-white"
+            >
+              Skip to main content
+            </a>
+            <AvenloPreloader />
+            <SiteHeader />
+            <main id="main-content" className="min-h-[70vh] flex-1">
+              {children}
+            </main>
+            <SiteFooter />
+            <FloatingChrome />
+            <Analytics />
+          </div>
         </PrefsProvider>
       </body>
     </html>

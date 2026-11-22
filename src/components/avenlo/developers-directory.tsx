@@ -56,7 +56,7 @@ export function DevelopersDirectory({ developers }: { developers: Developer[] })
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Search Nakheel, Binghatti, Emaar, DAMAC, Azizi, Sobha, Aldar..."
           aria-label="Search UAE developers"
-          className="w-full rounded-full border border-black/12 bg-[#f7f7f7] py-3 pr-5 pl-11 text-sm text-[#121212] placeholder:text-[#8b8b8b] focus:border-[#121212] focus:bg-white focus:outline-none"
+          className="w-full rounded-full border border-white/85 bg-white/82 backdrop-blur-xl shadow-[0_10px_28px_rgba(12,56,96,0.08)] py-3 pr-5 pl-11 text-sm text-[#121212] placeholder:text-[#8b8b8b] focus:border-[#121212] focus:bg-white focus:outline-none"
         />
       </div>
 

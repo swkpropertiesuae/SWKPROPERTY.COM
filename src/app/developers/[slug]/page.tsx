@@ -58,7 +58,7 @@ export default async function DeveloperDetailPage({
   const devListings = getListingsByDeveloper(dev.slug);
 
   return (
-    <div className="bg-white">
+    <div className="bg-transparent">
       <JsonLd
         data={breadcrumbLd([
           { name: "Home", path: "/" },
@@ -106,7 +106,7 @@ export default async function DeveloperDetailPage({
         <div className="grid grid-cols-1 gap-10 lg:grid-cols-12 items-start">
           <div className="lg:col-span-7 space-y-5">
             {dev.logo ? (
-              <div className="inline-flex h-16 items-center rounded-2xl border border-black/[0.06] bg-[#f7f7f7] px-6">
+              <div className="inline-flex h-16 items-center rounded-2xl border border-white/80 bg-white/80 backdrop-blur-xl shadow-[0_14px_40px_rgba(12,56,96,0.08)] px-6">
                 <img
                   src={dev.logo}
                   alt={dev.name}
@@ -123,7 +123,7 @@ export default async function DeveloperDetailPage({
             </p>
           </div>
 
-          <div className="lg:col-span-5 rounded-2xl border border-black/[0.07] bg-[#f7f7f7] p-6 sm:p-8">
+          <div className="lg:col-span-5 rounded-2xl border border-white/80 bg-white/80 backdrop-blur-xl shadow-[0_14px_40px_rgba(12,56,96,0.08)] p-6 sm:p-8">
             <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-[#8b8b8b]">
               PROFILE SNAPSHOT
             </p>
@@ -145,7 +145,7 @@ export default async function DeveloperDetailPage({
       </section>
 
       {/* Active Projects Grid */}
-      <section className="border-y border-black/[0.06] bg-[#f7f7f7] py-16">
+      <section className="border-y border-white/60 bg-white/24 backdrop-blur-[2px] py-16">
         <div className="mx-auto max-w-[1260px] px-4 sm:px-8">
           <SectionEyebrow>{dev.name.toUpperCase()} PORTFOLIO</SectionEyebrow>
           <SplitHeading
@@ -161,7 +161,7 @@ export default async function DeveloperDetailPage({
               <Link
                 key={proj.slug}
                 href={`/off-plan/${proj.slug}`}
-                className="group flex flex-col overflow-hidden rounded-2xl border border-black/[0.07] bg-white transition-all hover:border-black/20 hover:shadow-[0_20px_50px_rgba(18,18,18,0.08)]"
+                className="group flex flex-col overflow-hidden rounded-2xl border border-white/80 bg-white/84 backdrop-blur-xl shadow-[0_16px_44px_rgba(12,56,96,0.08)] transition-all hover:border-black/20 hover:shadow-[0_20px_50px_rgba(18,18,18,0.08)]"
               >
                 <div className="relative aspect-[16/10] w-full overflow-hidden bg-[#ececec]">
                   <img

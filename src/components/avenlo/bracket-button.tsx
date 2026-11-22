@@ -23,15 +23,15 @@ const SIZE_CLASSES: Record<BracketSize, string> = {
 
 const SURFACE_CLASSES: Record<BracketVariant, string> = {
   light:
-    "bg-[#f5f5f5] text-[#121212] hover:bg-[#121212] hover:text-white",
+    "bg-white/88 text-[#121212] backdrop-blur-md shadow-[0_10px_28px_rgba(12,56,96,0.1)] hover:bg-[#121212] hover:text-white",
   dark:
-    "bg-[#121212]/90 text-white backdrop-blur-sm hover:bg-white hover:text-[#121212]",
+    "bg-[#121212]/88 text-white backdrop-blur-md hover:bg-white hover:text-[#121212]",
   white:
     "bg-white text-[#121212] hover:bg-[#51fec0] hover:text-[#121212]",
 };
 
 const BRACKET_BORDER: Record<BracketVariant, string> = {
-  light: "border-[#cfcfcf] group-hover/brk:border-[#121212]",
+  light: "border-[#0b2640]/35 group-hover/brk:border-[#121212]",
   dark: "border-white/45 group-hover/brk:border-white",
   white: "border-white/50 group-hover/brk:border-[#51fec0]",
 };

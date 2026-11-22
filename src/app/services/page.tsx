@@ -29,7 +29,7 @@ const PROCESS_TAGS = [
 
 export default function ServicesPage() {
   return (
-    <div className="bg-white">
+    <div className="bg-transparent">
       <JsonLd
         data={breadcrumbLd([
           { name: "Home", path: "/" },

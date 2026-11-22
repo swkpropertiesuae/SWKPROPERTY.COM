@@ -96,10 +96,11 @@ html {
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
   overflow-x: clip;
+  background: linear-gradient(135deg, #eef8fd 0%, #d4effc 48%, #f5fbff 100%);
 }
 
 body {
-  background: var(--bg-white);
+  background: transparent;
   color: var(--ink-primary);
   font-family: var(--font-sans);
   font-feature-settings: "cv03" 1, "cv04" 1, "cv09" 1, "cv11" 1;
@@ -131,27 +132,25 @@ h4 {
   color: #51fec0;
 }
 
-/* Signature Avenlo Vertical Architectural Hairline Grid */
+/* Signature Avenlo Vertical Architectural Hairline Grid (Translucent for WebGL Mesh Drift) */
 .bg-arch-grid {
   background-image: repeating-linear-gradient(
     to right,
-    rgba(18, 18, 18, 0.042) 0px,
-    rgba(18, 18, 18, 0.042) 1px,
+    rgba(11, 25, 41, 0.055) 0px,
+    rgba(11, 25, 41, 0.055) 1px,
     transparent 1px,
     transparent 24px
   );
 }
 
 .bg-arch-grid-fade {
-  background-image:
-    linear-gradient(to bottom, rgba(255, 255, 255, 0) 68%, #ffffff 100%),
-    repeating-linear-gradient(
-      to right,
-      rgba(18, 18, 18, 0.042) 0px,
-      rgba(18, 18, 18, 0.042) 1px,
-      transparent 1px,
-      transparent 24px
-    );
+  background-image: repeating-linear-gradient(
+    to right,
+    rgba(11, 25, 41, 0.05) 0px,
+    rgba(11, 25, 41, 0.05) 1px,
+    transparent 1px,
+    transparent 24px
+  );
 }
 
 /* Scrollbar utilities */
@@ -201,13 +200,22 @@ input[type="range"].avenlo-range::-moz-range-thumb {
   transition: transform 180ms var(--ease-swiss), background-color 180ms ease;
 }
 
-/* Smooth Architectural Marquee */
+/* Smooth Architectural & Bidirectional Logo Marquees */
 @keyframes avenlo-marquee {
   0% {
     transform: translateX(0%);
   }
   100% {
     transform: translateX(-50%);
+  }
+}
+
+@keyframes logo-marquee-reverse {
+  0% {
+    transform: translateX(-50%);
+  }
+  100% {
+    transform: translateX(0%);
   }
 }
 
@@ -219,6 +227,14 @@ input[type="range"].avenlo-range::-moz-range-thumb {
 
 .avenlo-marquee-track:hover {
   animation-play-state: paused;
+}
+
+.animate-logo-marquee {
+  animation: avenlo-marquee 34s linear infinite;
+}
+
+.animate-logo-marquee-reverse {
+  animation: logo-marquee-reverse 38s linear infinite;
 }
 
 /* Subtle ViewTransition crossfade */
@@ -248,7 +264,9 @@ input[type="range"].avenlo-range::-moz-range-thumb {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .avenlo-marquee-track {
+  .avenlo-marquee-track,
+  .animate-logo-marquee,
+  .animate-logo-marquee-reverse {
     animation: none;
   }
   ::view-transition-old(*),

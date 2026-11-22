@@ -27,7 +27,7 @@ export default function BuyPage() {
   const buyListings = LISTINGS.filter((l) => l.purpose === "buy");
 
   return (
-    <div className="bg-white">
+    <div className="bg-transparent">
       <JsonLd
         data={breadcrumbLd([
           { name: "Home", path: "/" },
@@ -66,7 +66,7 @@ export default function BuyPage() {
       </section>
 
       {/* Upfront Cost Summary + Form F Strip */}
-      <section className="border-y border-black/[0.06] bg-[#f7f7f7] py-20">
+      <section className="border-y border-white/60 bg-white/24 backdrop-blur-[2px] py-20">
         <div className="mx-auto max-w-[1260px] px-4 sm:px-8">
           <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 items-start">
             <div className="lg:col-span-5 space-y-6">
@@ -86,7 +86,7 @@ export default function BuyPage() {
                   { v: "2–4 Wks", l: "Typical Cash Transfer" },
                   { v: "100%", l: "Freehold Title Deed" },
                 ].map((m) => (
-                  <div key={m.l} className="rounded-2xl border border-black/[0.06] bg-white p-5">
+                  <div key={m.l} className="rounded-2xl border border-white/80 bg-white/84 backdrop-blur-xl shadow-[0_14px_40px_rgba(12,56,96,0.08)] p-5">
                     <p className="text-2xl font-medium tracking-[-0.03em] text-[#121212]">{m.v}</p>
                     <p className="mt-1 text-xs text-[#737373]">{m.l}</p>
                   </div>

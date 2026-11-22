@@ -26,7 +26,7 @@ export default function FaqPage() {
   const combinedFaqs = [...faqs, ...GUIDES.flatMap((g) => g.faqs)];
 
   return (
-    <div className="bg-white">
+    <div className="bg-transparent">
       <JsonLd id="ld-faq-page" data={faqSchema(combinedFaqs)} />
       <JsonLd
         id="ld-faq-breadcrumb"

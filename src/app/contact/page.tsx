@@ -31,7 +31,7 @@ const CORRIDOR_TIMES = [
 
 export default function ContactPage() {
   return (
-    <div className="bg-white">
+    <div className="bg-transparent">
       <JsonLd
         id="ld-contact-breadcrumb"
         data={breadcrumbSchema([
@@ -119,7 +119,7 @@ export default function ContactPage() {
               </div>
             </div>
 
-            <div className="overflow-hidden rounded-2xl border border-black/[0.07] bg-[#f7f7f7]">
+            <div className="overflow-hidden rounded-2xl border border-white/80 bg-white/80 backdrop-blur-xl shadow-[0_14px_40px_rgba(12,56,96,0.08)]">
               <img
                 src="/img/about/contact-reception.webp"
                 alt="SWK Properties Private Advisory Suite, 25th Floor, Al Saqr Building"

@@ -3,7 +3,7 @@ import { SectionEyebrow } from "@/components/avenlo/motion";
 
 export default function NotFoundPage() {
   return (
-    <section className="flex min-h-[75vh] items-center justify-center bg-white bg-arch-grid-fade px-4 py-24 sm:px-8">
+    <section className="flex min-h-[75vh] items-center justify-center bg-white/20 backdrop-blur-[2px] bg-arch-grid-fade px-4 py-24 sm:px-8">
       <div className="mx-auto max-w-3xl text-center">
         <SectionEyebrow align="center">ERROR 404</SectionEyebrow>
         <h1 className="mt-6 text-[44px] sm:text-[68px] md:text-[84px] font-medium leading-[1.0] tracking-[-0.045em] text-[#121212]">

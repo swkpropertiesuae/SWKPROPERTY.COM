@@ -262,7 +262,7 @@ function PropertiesExplorer() {
         </div>
 
         {/* Crisp Search, Community, Beds, Price & Utility Row */}
-        <div className="mt-8 rounded-2xl border border-black/[0.07] bg-[#f7f7f7] p-4 sm:p-5">
+        <div className="mt-8 rounded-2xl border border-white/80 bg-white/80 backdrop-blur-xl shadow-[0_14px_40px_rgba(12,56,96,0.08)] p-4 sm:p-5">
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-12">
             <div className="relative lg:col-span-4">
               <Search className="pointer-events-none absolute top-1/2 left-3.5 h-4 w-4 -translate-y-1/2 text-[#8b8b8b]" />
@@ -439,7 +439,7 @@ function PropertiesExplorer() {
 
         {/* Results Grid (First 2 Large Featured Cards + 3-Col Grid per Avenlo) */}
         {filtered.length === 0 ? (
-          <div className="mt-12 rounded-2xl border border-black/[0.07] bg-[#f7f7f7] p-12 text-center">
+          <div className="mt-12 rounded-2xl border border-white/80 bg-white/80 backdrop-blur-xl shadow-[0_14px_40px_rgba(12,56,96,0.08)] p-12 text-center">
             <h2 className="text-2xl font-medium tracking-[-0.03em] text-[#121212]">
               No listings match those exact filters
             </h2>
@@ -648,14 +648,14 @@ function PropertiesExplorer() {
 
 export default function PropertiesPage() {
   return (
-    <div className="bg-white">
+    <div className="bg-transparent">
       <AvenloPageHeader
         eyebrow="PROPERTIES · DUBAI & UAE"
         title="Residences we are"
         italic="advising on now"
         lead="Ready apartments, beachfront villas, townhouses, annual leases, and off-plan releases across Dubai's premier freehold corridors."
       />
-      <Suspense fallback={<div className="min-h-[60vh] bg-white" />}>
+      <Suspense fallback={<div className="min-h-[60vh] bg-transparent" />}>
         <PropertiesExplorer />
       </Suspense>
     </div>

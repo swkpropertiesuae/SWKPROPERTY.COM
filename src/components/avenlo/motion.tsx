@@ -76,7 +76,7 @@ export function SplitHeading({
         <span
           className={cn(
             inline ? "inline ml-2" : "block",
-            "text-[#8b8b8b]"
+            tone === "dark" ? "text-[#94a3b8]" : "text-[#475569]"
           )}
         >
           {muted}

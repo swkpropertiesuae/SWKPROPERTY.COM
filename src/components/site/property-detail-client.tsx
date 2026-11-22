@@ -72,7 +72,7 @@ export function PropertyDetailClient({
   const allAmenities = [...listing.amenities, ...listing.features, ...listing.views].slice(0, 16);
 
   return (
-    <div className="bg-white">
+    <div className="bg-transparent">
       {/* Avenlo Centered Residence Header */}
       <AvenloPageHeader
         eyebrow={`${listing.community}, Dubai`}
@@ -173,7 +173,7 @@ export function PropertyDetailClient({
           ].map((stat) => (
             <div
               key={stat.label}
-              className="rounded-2xl border border-black/[0.06] bg-[#f7f7f7] p-5"
+              className="rounded-2xl border border-white/80 bg-white/80 backdrop-blur-xl shadow-[0_14px_40px_rgba(12,56,96,0.08)] p-5"
             >
               <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-[#8b8b8b]">
                 {stat.label}
@@ -202,7 +202,7 @@ export function PropertyDetailClient({
           </div>
 
           <div className="lg:col-span-5">
-            <div className="rounded-2xl border border-black/[0.08] bg-[#f7f7f7] p-6 sm:p-8 space-y-5">
+            <div className="rounded-2xl border border-white/80 bg-white/80 backdrop-blur-xl shadow-[0_14px_40px_rgba(12,56,96,0.08)] p-6 sm:p-8 space-y-5">
               <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-[#8b8b8b]">
                 KEY PARTICULARS
               </p>
@@ -250,7 +250,7 @@ export function PropertyDetailClient({
 
       {/* Multi-Photo Gallery ("A look around, before you visit") */}
       {listing.images.length > 1 ? (
-        <section className="bg-[#f7f7f7] py-16">
+        <section className="bg-white/24 backdrop-blur-[2px] py-16">
           <div className="mx-auto max-w-[1260px] px-4 sm:px-8">
             <SectionEyebrow>GALLERY</SectionEyebrow>
             <SplitHeading
@@ -310,7 +310,7 @@ export function PropertyDetailClient({
       </section>
 
       {/* Interactive Tabbed Floor Plan & Dimensions (Avenlo Signature) */}
-      <section className="border-y border-black/[0.06] bg-[#f7f7f7] py-16">
+      <section className="border-y border-white/60 bg-white/24 backdrop-blur-[2px] py-16">
         <div className="mx-auto max-w-[1260px] px-4 sm:px-8">
           <div className="flex flex-wrap items-end justify-between gap-6">
             <div>
@@ -347,7 +347,7 @@ export function PropertyDetailClient({
             </div>
           </div>
 
-          <div className="mt-8 rounded-2xl border border-black/[0.06] bg-white p-6 sm:p-8">
+          <div className="mt-8 rounded-2xl border border-white/80 bg-white/84 backdrop-blur-xl shadow-[0_14px_40px_rgba(12,56,96,0.08)] p-6 sm:p-8">
             {activeTab === "layout" ? (
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 {listing.floorPlan.rooms.map((room) => (
@@ -429,7 +429,7 @@ export function PropertyDetailClient({
             <div className="overflow-hidden rounded-2xl">
               <MapEmbed lat={listing.lat} lng={listing.lng} title={listing.building} />
             </div>
-            <div className="rounded-2xl border border-black/[0.07] bg-[#f7f7f7] p-5">
+            <div className="rounded-2xl border border-white/80 bg-white/80 backdrop-blur-xl shadow-[0_14px_40px_rgba(12,56,96,0.08)] p-5">
               <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-[#8b8b8b]">
                 ASSIGNED ADVISOR
               </p>
@@ -464,7 +464,7 @@ export function PropertyDetailClient({
 
       {/* Similar Residences */}
       {similarListings.length > 0 ? (
-        <section className="border-t border-black/[0.06] bg-[#f7f7f7] py-16">
+        <section className="border-t border-white/60 bg-white/24 backdrop-blur-[2px] py-16">
           <div className="mx-auto max-w-[1260px] px-4 sm:px-8">
             <SectionEyebrow>MORE ON OUR BOOKS</SectionEyebrow>
             <SplitHeading

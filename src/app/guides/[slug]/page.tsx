@@ -47,7 +47,7 @@ export default async function GuideDetailPage({
   if (!guide) notFound();
 
   return (
-    <div className="bg-white">
+    <div className="bg-transparent">
       <JsonLd
         id="ld-guide-article"
         data={articleSchema({
@@ -96,10 +96,10 @@ export default async function GuideDetailPage({
         }
       />
 
-      {/* Uncluttered Single-Column Reading Layout */}
-      <article className="mx-auto max-w-3xl px-4 py-14 sm:px-8 space-y-12">
+      {/* Uncluttered Single-Column Frosted Glass Reading Layout */}
+      <article className="mx-auto my-12 max-w-3xl rounded-3xl border border-white/80 bg-white/86 px-6 py-12 sm:px-10 shadow-[0_20px_54px_rgba(12,56,96,0.09)] backdrop-blur-2xl space-y-12">
         {/* Direct Executive Summary */}
-        <div className="rounded-2xl border border-black/[0.08] bg-[#f7f7f7] p-6 sm:p-8">
+        <div className="rounded-2xl border border-white/80 bg-white/80 backdrop-blur-xl shadow-[0_14px_40px_rgba(12,56,96,0.08)] p-6 sm:p-8">
           <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-[#8b8b8b]">
             DIRECT ANSWER
           </p>

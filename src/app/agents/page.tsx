@@ -16,7 +16,7 @@ export const metadata: Metadata = buildMeta({
 
 export default function AgentsPage() {
   return (
-    <div className="bg-white">
+    <div className="bg-transparent">
       <JsonLd
         data={[
           breadcrumbLd([
@@ -48,7 +48,7 @@ export default function AgentsPage() {
             <Link
               key={member.slug}
               href={`/agents/${member.slug}`}
-              className="group flex flex-col overflow-hidden rounded-2xl border border-black/[0.07] bg-white transition-all duration-300 hover:border-black/20 hover:shadow-[0_20px_50px_rgba(18,18,18,0.08)]"
+              className="group flex flex-col overflow-hidden rounded-2xl border border-white/80 bg-white/84 backdrop-blur-xl shadow-[0_16px_44px_rgba(12,56,96,0.08)] transition-all duration-300 hover:border-black/20 hover:shadow-[0_20px_50px_rgba(18,18,18,0.08)]"
             >
               <div className="relative aspect-[4/5] w-full overflow-hidden bg-[#f5f5f5]">
                 <img

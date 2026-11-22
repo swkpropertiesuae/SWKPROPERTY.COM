@@ -70,7 +70,7 @@ export default async function OffPlanProjectDetailPage({
   );
 
   return (
-    <div className="bg-white">
+    <div className="bg-transparent">
       <JsonLd
         data={breadcrumbLd([
           { name: "Home", path: "/" },
@@ -134,7 +134,7 @@ export default async function OffPlanProjectDetailPage({
           ].map((stat) => (
             <div
               key={stat.label}
-              className="rounded-2xl border border-black/[0.06] bg-[#f7f7f7] p-5"
+              className="rounded-2xl border border-white/80 bg-white/80 backdrop-blur-xl shadow-[0_14px_40px_rgba(12,56,96,0.08)] p-5"
             >
               <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-[#8b8b8b]">
                 {stat.label}
@@ -170,7 +170,7 @@ export default async function OffPlanProjectDetailPage({
               </div>
             </div>
 
-            <div className="rounded-2xl border border-black/[0.06] bg-[#f7f7f7] p-6 sm:p-8">
+            <div className="rounded-2xl border border-white/80 bg-white/80 backdrop-blur-xl shadow-[0_14px_40px_rgba(12,56,96,0.08)] p-6 sm:p-8">
               <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-[#8b8b8b]">
                 SWK DUE DILIGENCE PROTOCOL
               </p>
@@ -190,7 +190,7 @@ export default async function OffPlanProjectDetailPage({
             </div>
 
             {dev ? (
-              <div className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-black/[0.08] bg-white p-6">
+              <div className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-white/80 bg-white/86 backdrop-blur-xl shadow-[0_18px_48px_rgba(12,56,96,0.09)] p-6">
                 <div className="flex items-center gap-4">
                   {dev.logo ? (
                     <div className="flex h-14 w-24 items-center justify-center rounded-xl bg-[#f7f7f7] p-2.5">
@@ -239,7 +239,7 @@ export default async function OffPlanProjectDetailPage({
               compact
             />
 
-            <div className="rounded-2xl border border-black/[0.07] bg-[#f7f7f7] p-5 text-xs text-[#525252] space-y-3">
+            <div className="rounded-2xl border border-white/80 bg-white/80 backdrop-blur-xl shadow-[0_14px_40px_rgba(12,56,96,0.08)] p-5 text-xs text-[#525252] space-y-3">
               <div className="flex items-center gap-2 font-medium text-[#121212]">
                 <ShieldCheck className="h-4 w-4 text-[#0e9f6e]" />
                 <span>Direct Developer Desk · RERA ORN {SITE.reraOrn}</span>
@@ -260,7 +260,7 @@ export default async function OffPlanProjectDetailPage({
 
       {/* Related Releases */}
       {relatedProjects.length > 0 ? (
-        <section className="border-t border-black/[0.06] bg-[#f7f7f7] py-16">
+        <section className="border-t border-white/60 bg-white/24 backdrop-blur-[2px] py-16">
           <div className="mx-auto max-w-[1260px] px-4 sm:px-8">
             <SectionEyebrow>RELATED RELEASES</SectionEyebrow>
             <SplitHeading
@@ -275,7 +275,7 @@ export default async function OffPlanProjectDetailPage({
                 <Link
                   key={rel.slug}
                   href={`/off-plan/${rel.slug}`}
-                  className="group overflow-hidden rounded-2xl border border-black/[0.07] bg-white transition-all hover:border-black/20"
+                  className="group overflow-hidden rounded-2xl border border-white/80 bg-white/84 backdrop-blur-xl shadow-[0_16px_44px_rgba(12,56,96,0.08)] transition-all hover:border-black/20"
                 >
                   <div className="aspect-[16/10] w-full overflow-hidden bg-[#ececec]">
                     <img

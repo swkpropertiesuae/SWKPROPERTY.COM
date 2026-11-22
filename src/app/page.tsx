@@ -22,28 +22,28 @@ export default function Home() {
         fetchPriority="high"
       />
 
-      {/* 01 · Bright Architectural Hairline-Grid + 21st.dev GradientWave Hero */}
+      {/* 01 · Active Architectural Hero Over Live 21st.dev Mesh Drift ShaderBackground */}
       <AvenloHero />
 
-      {/* 02 · Scroll-Reveal Editorial Statement & 2-Card Client Growth Bento */}
+      {/* 02 · Scroll-Reveal Editorial Statement & 2-Card Glass Client Growth Bento */}
       <EditorialBento />
 
-      {/* 03 · Premier UAE Master Developers & 21st.dev Luxury Project Carousel */}
+      {/* 03 · 21st.dev Logo Cloud Marquee & Gallery Hover Carousel */}
       <DubaiDeveloperPulse />
 
-      {/* 04 · Six Full-Bleed Architectural Residence Showcase Panels */}
+      {/* 04 · 21st.dev Dual-Spring Tilted Architectural Cascade Showcase */}
       <FullBleedResidences />
 
       {/* 05 · Obsidian Contrast Band: 01-04 Services, 3 Photo Cards & Track Record */}
       <ServicesAndTrackRecord />
 
-      {/* 06 · Dubai Marquee Ticker & 8 Core Community Corridors */}
+      {/* 06 · Glass Marquee Ticker & 21st.dev 3D Flip Dubai Communities */}
       <CommunitiesAndTicker />
 
-      {/* 07 · Four-Column Staggered Acquisition Stages Wave */}
+      {/* 07 · Four-Column Staggered Glass Acquisition Stages Wave */}
       <AcquisitionStagesWave />
 
-      {/* 08 · Verified Client Stories & Two-Column FAQ */}
+      {/* 08 · 21st.dev Editorial Testimonial Slider & Frosted-Glass FAQ */}
       <ClientVoices />
       <Faq />
 

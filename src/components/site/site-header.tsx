@@ -143,10 +143,10 @@ export function SiteHeader() {
 
   return (
     <header
-      className={`sticky top-0 z-50 w-full transition-all duration-200 ${
+      className={`sticky top-0 z-50 w-full transition-all duration-300 ${
         scrolled || mobileOpen
-          ? "bg-white/95 backdrop-blur-xl border-b border-black/[0.07]"
-          : "bg-white/88 backdrop-blur-md border-b border-black/[0.04]"
+          ? "bg-white/82 backdrop-blur-2xl border-b border-white/70 shadow-[0_12px_36px_rgba(12,56,96,0.08)]"
+          : "bg-white/58 backdrop-blur-xl border-b border-white/55"
       }`}
     >
       <div className="mx-auto flex h-[80px] sm:h-[88px] max-w-[1260px] items-center justify-between gap-4 px-4 sm:px-8">

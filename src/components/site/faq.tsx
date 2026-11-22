@@ -27,9 +27,9 @@ export function Faq({
   const [openIdx, setOpenIdx] = useState<number | null>(0);
 
   return (
-    <section className={compact ? "bg-[#f7f7f7] py-16" : "bg-[#f7f7f7] py-24"}>
+    <section className={compact ? "bg-white/24 backdrop-blur-[2px] py-16" : "bg-white/24 backdrop-blur-[2px] py-24"}>
       <div className="mx-auto max-w-[1260px] px-4 sm:px-8">
-        <div className="border-t border-black/[0.08] pt-14 sm:pt-16">
+        <div className="border-t border-white/60 pt-14 sm:pt-16">
           <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-10">
             {/* Left Column: Avenlo Heading + Direct Office Note */}
             <div className="lg:col-span-5">
@@ -39,7 +39,7 @@ export function Faq({
                 muted={muted}
                 className="mt-5"
               />
-              <p className="mt-6 max-w-sm text-[15px] leading-[1.6] text-[#737373]">
+              <p className="mt-6 max-w-sm text-[15px] leading-[1.6] text-[#334155]">
                 If yours is not here, call our Sheikh Zayed Road office on{" "}
                 <a
                   href={`tel:${SITE.phoneRaw}`}
@@ -51,14 +51,14 @@ export function Faq({
               </p>
             </div>
 
-            {/* Right Column: Pure White Rounded-16px Accordion Stack */}
+            {/* Right Column: Luminous Frosted-Glass Rounded-16px Accordion Stack */}
             <div className="lg:col-span-7 space-y-3.5">
               {list.map((f, idx) => {
                 const open = openIdx === idx;
                 return (
                   <div
                     key={f.q}
-                    className="rounded-2xl border border-black/[0.06] bg-white transition-colors"
+                    className="rounded-2xl border border-white/80 bg-white/82 shadow-[0_14px_38px_rgba(12,56,96,0.08)] backdrop-blur-xl transition-all hover:bg-white/92"
                   >
                     <button
                       type="button"

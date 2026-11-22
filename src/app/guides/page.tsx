@@ -15,7 +15,7 @@ export const metadata = buildMeta({
 
 export default function GuidesIndexPage() {
   return (
-    <div className="bg-white">
+    <div className="bg-transparent">
       <JsonLd
         data={[
           breadcrumbLd([
@@ -46,7 +46,7 @@ export default function GuidesIndexPage() {
             <Link
               key={g.slug}
               href={`/guides/${g.slug}`}
-              className="group flex flex-col justify-between rounded-2xl border border-black/[0.07] bg-white p-7 sm:p-8 transition-all hover:border-black/20 hover:shadow-[0_20px_50px_rgba(18,18,18,0.07)]"
+              className="group flex flex-col justify-between rounded-2xl border border-white/80 bg-white/84 backdrop-blur-xl shadow-[0_16px_44px_rgba(12,56,96,0.08)] p-7 sm:p-8 transition-all hover:border-black/20 hover:shadow-[0_20px_50px_rgba(18,18,18,0.07)]"
             >
               <div>
                 <div className="flex items-center justify-between text-[11px] font-medium uppercase tracking-[0.2em] text-[#8b8b8b]">

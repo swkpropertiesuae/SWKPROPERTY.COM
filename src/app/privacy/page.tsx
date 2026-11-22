@@ -14,7 +14,7 @@ export const metadata: Metadata = buildMetadata({
 
 export default function PrivacyPolicyPage() {
   return (
-    <div className="bg-white">
+    <div className="bg-transparent">
       <JsonLd
         id="ld-privacy-breadcrumb"
         data={breadcrumbSchema([
@@ -39,7 +39,7 @@ export default function PrivacyPolicyPage() {
         }
       />
 
-      <article className="mx-auto max-w-3xl px-4 py-14 sm:px-8 space-y-10 text-[15px] leading-[1.75] text-[#4a4a4a]">
+      <article className="mx-auto my-12 max-w-3xl rounded-3xl border border-white/80 bg-white/86 px-6 py-12 sm:px-10 shadow-[0_20px_54px_rgba(12,56,96,0.09)] backdrop-blur-2xl space-y-10 text-[15px] leading-[1.75] text-[#334155]">
         <section>
           <h2 className="text-2xl font-medium tracking-[-0.03em] text-[#121212]">
             1. Who We Are &amp; Regulatory Scope

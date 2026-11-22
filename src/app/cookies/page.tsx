@@ -81,7 +81,7 @@ export default function CookieSettingsPage() {
   };
 
   return (
-    <div className="bg-white">
+    <div className="bg-transparent">
       <AvenloPageHeader
         eyebrow="UAE PDPL · GRANULAR CONSENT & STORAGE"
         title="Cookie Settings"
@@ -96,7 +96,7 @@ export default function CookieSettingsPage() {
 
       <div className="mx-auto max-w-4xl px-4 py-14 sm:px-8 space-y-12">
         {/* Interactive Consent Panel */}
-        <section className="rounded-2xl border border-black/[0.08] bg-[#f7f7f7] p-6 sm:p-8 space-y-6">
+        <section className="rounded-2xl border border-white/80 bg-white/86 backdrop-blur-xl shadow-[0_18px_48px_rgba(12,56,96,0.09)]/24 backdrop-blur-[2px] p-6 sm:p-8 space-y-6">
           <div className="flex items-start justify-between gap-4 border-b border-black/[0.08] pb-5">
             <div>
               <h2 className="text-base font-medium text-[#121212]">

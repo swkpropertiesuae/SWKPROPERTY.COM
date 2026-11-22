@@ -49,7 +49,7 @@ export default async function ServiceDetailPage({
   if (!svc) notFound();
 
   return (
-    <div className="bg-white">
+    <div className="bg-transparent">
       <JsonLd
         data={[
           breadcrumbLd([
@@ -97,7 +97,7 @@ export default async function ServiceDetailPage({
           </div>
 
           <div className="lg:col-span-6">
-            <div className="rounded-2xl border border-black/[0.08] bg-[#f7f7f7] p-6 sm:p-8">
+            <div className="rounded-2xl border border-white/80 bg-white/80 backdrop-blur-xl shadow-[0_14px_40px_rgba(12,56,96,0.08)] p-6 sm:p-8">
               <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-[#8b8b8b]">
                 MANDATE SPECIFICATION
               </p>
@@ -137,7 +137,7 @@ export default async function ServiceDetailPage({
 
         {/* Scope Deliverables & Step-by-Step Process */}
         <div className="mt-16 grid grid-cols-1 gap-8 lg:grid-cols-12">
-          <div className="lg:col-span-6 rounded-2xl border border-black/[0.07] bg-white p-7 sm:p-8">
+          <div className="lg:col-span-6 rounded-2xl border border-white/80 bg-white/84 backdrop-blur-xl shadow-[0_16px_44px_rgba(12,56,96,0.08)] p-7 sm:p-8">
             <SectionEyebrow>WHAT IS INCLUDED</SectionEyebrow>
             <ul className="mt-6 space-y-3.5 text-sm text-[#121212]">
               {svc.scope.map((item) => (
@@ -149,7 +149,7 @@ export default async function ServiceDetailPage({
             </ul>
           </div>
 
-          <div className="lg:col-span-6 rounded-2xl border border-black/[0.07] bg-[#f7f7f7] p-7 sm:p-8">
+          <div className="lg:col-span-6 rounded-2xl border border-white/80 bg-white/80 backdrop-blur-xl shadow-[0_14px_40px_rgba(12,56,96,0.08)] p-7 sm:p-8">
             <SectionEyebrow>HOW IT RUNS</SectionEyebrow>
             <ol className="mt-6 space-y-4">
               {svc.process.map((step, i) => (
@@ -189,7 +189,7 @@ export default async function ServiceDetailPage({
       </section>
 
       {/* Bottom Numbered 01-08 Sibling Services Cross-Links (Avenlo Pattern) */}
-      <section className="border-t border-black/[0.06] bg-[#f7f7f7] py-16">
+      <section className="border-t border-white/60 bg-white/24 backdrop-blur-[2px] py-16">
         <div className="mx-auto max-w-[1260px] px-4 sm:px-8">
           <SectionEyebrow>ALL ADVISORY DESKS</SectionEyebrow>
           <SplitHeading

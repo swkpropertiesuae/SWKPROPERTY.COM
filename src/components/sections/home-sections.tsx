@@ -2,6 +2,7 @@
 
 import React, { useMemo, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowRight, ArrowUpRight, Play, X } from "lucide-react";
 import {
@@ -22,52 +23,55 @@ import {
   SectionEyebrow,
   SplitHeading,
 } from "@/components/avenlo/motion";
-import { GradientWave } from "@/components/ui/gradient-wave";
 import { SpotlightCard } from "@/components/ui/spotlight-card";
 import {
-  LuxuryProjectCarousel,
-  type LuxuryCarouselItem,
-} from "@/components/ui/luxury-carousel";
+  GalleryHoverCarousel,
+  type GalleryHoverCarouselItem,
+} from "@/components/ui/gallery-hover-carousel";
+import TiltCascadeCarousel, {
+  type TiltCascadeItem,
+} from "@/components/ui/tilt-cascade-carousel";
+import { LogoCloudMarquee } from "@/components/ui/logo-cloud-marquee";
+import { CommunityFlipCard } from "@/components/ui/perspective-flip-card";
+import {
+  TestimonialSlider,
+  type SliderReview,
+} from "@/components/ui/testimonial-slider";
 
 /* -------------------------------------------------------------------------- */
-/* 01. BRIGHT ARCHITECTURAL HERO WITH 21ST.DEV GRADIENT WAVE & FULL TEAM      */
+/* 01. ACTIVE ARCHITECTURAL HERO OVER LIVE 21ST.DEV MESH DRIFT SHADER WAVES   */
 /* -------------------------------------------------------------------------- */
 export function AvenloHero() {
   const [briefOpen, setBriefOpen] = useState(false);
 
   return (
-    <section className="relative overflow-hidden bg-white pt-14 pb-0 sm:pt-20">
-      {/* 21st.dev @designali-in/gradient-wave Luminous Architectural Background */}
-      <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
-        <GradientWave
-          colors={["#ffffff", "#f3f9f6", "#dff9ee", "#faf4e6", "#edf4ff"]}
-          shadowPower={6}
-          darkenTop={false}
-          noiseSpeed={0.000016}
-          noiseFrequency={[1.35, 1.75]}
-          deform={{ incline: 0.22, noiseAmp: 0.45, noiseFlow: 0.9 }}
-          className="opacity-90"
-        />
-        <div
-          aria-hidden="true"
-          className="absolute inset-0 bg-arch-grid-fade opacity-75"
-        />
-        <div
-          aria-hidden="true"
-          className="absolute inset-x-0 bottom-0 h-44 bg-gradient-to-t from-white via-white/80 to-transparent"
-        />
-      </div>
+    <section className="relative overflow-hidden bg-transparent pt-14 pb-0 sm:pt-20">
+      {/* Subtle Architectural Grid Hairlines + Crisp Editorial Contrast Veil (Lets Live Waves Shine!) */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 z-0 bg-arch-grid opacity-55"
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 top-0 z-0 h-[520px] bg-[radial-gradient(ellipse_at_top,rgba(255,255,255,0.62)_0%,rgba(255,255,255,0.16)_58%,transparent_100%)]"
+      />
 
       <div className="relative z-10 mx-auto max-w-[1260px] px-4 sm:px-8">
         {/* Centered Eyebrow + Monumental Mixed Roman/Italic H1 */}
         <div className="mx-auto max-w-5xl text-center">
-          <SectionEyebrow align="center">
-            RERA ORN {SITE.reraOrn} · DUBAI &amp; UAE REAL ESTATE
-          </SectionEyebrow>
+          <div className="inline-flex items-center gap-2.5 rounded-full border border-white/80 bg-white/72 px-4 py-1.5 shadow-[0_8px_24px_rgba(12,56,96,0.08)] backdrop-blur-xl">
+            <span className="relative flex h-2 w-2" aria-hidden="true">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#0e9f6e] opacity-75" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-[#0e9f6e]" />
+            </span>
+            <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#0c233a]">
+              RERA ORN {SITE.reraOrn} · DUBAI &amp; UAE REAL ESTATE
+            </span>
+          </div>
 
-          <h1 className="mt-6 text-[46px] sm:text-[74px] md:text-[102px] lg:text-[124px] font-medium leading-[0.96] tracking-[-0.048em] text-[#121212]">
+          <h1 className="mt-7 text-[46px] sm:text-[74px] md:text-[102px] lg:text-[124px] font-medium leading-[0.95] tracking-[-0.048em] text-[#0a1624] drop-shadow-[0_1px_0_rgba(255,255,255,0.5)]">
             Own the{" "}
-            <span className="italic font-light">skyline</span>
+            <span className="italic font-light text-[#0f3457]">skyline</span>
             <br />
             before it rises
           </h1>
@@ -78,7 +82,7 @@ export function AvenloHero() {
             </BracketLink>
             <Link
               href="/off-plan"
-              className="inline-flex items-center gap-1.5 text-xs font-medium uppercase tracking-[0.16em] text-[#121212]/80 transition-colors hover:text-[#0e9f6e]"
+              className="inline-flex items-center gap-2 rounded-full border border-white/80 bg-white/68 px-6 py-3.5 text-xs font-semibold uppercase tracking-[0.16em] text-[#0c233a] shadow-[0_8px_24px_rgba(12,56,96,0.08)] backdrop-blur-xl transition-all hover:bg-[#121212] hover:text-white hover:border-[#121212]"
             >
               <span>Explore Iconic UAE Launches</span>
               <ArrowUpRight className="h-3.5 w-3.5" />
@@ -87,12 +91,12 @@ export function AvenloHero() {
         </div>
 
         {/* Asymmetric Lower Meta Row: Full Advisory Team Showcase (No Employee Count) + Market Brief */}
-        <div className="mt-14 sm:mt-20 grid grid-cols-1 items-end gap-10 md:grid-cols-12">
+        <div className="mt-14 sm:mt-20 grid grid-cols-1 items-end gap-8 md:grid-cols-12">
           {/* Left: Full SWK Advisory Team Portraits (All Staff, Zero Headcount Mentioned) */}
           <div className="md:col-span-6 flex flex-col items-start gap-4">
             <Link
               href="/agents"
-              className="group inline-flex flex-wrap items-center gap-2 rounded-2xl border border-black/[0.08] bg-white/85 p-2.5 shadow-[0_12px_36px_rgba(18,18,18,0.06)] backdrop-blur-md transition-all hover:border-black/20 hover:bg-white"
+              className="group inline-flex flex-wrap items-center gap-2 rounded-2xl border border-white/85 bg-white/80 p-2.5 shadow-[0_18px_46px_rgba(12,56,96,0.12)] backdrop-blur-2xl transition-all duration-300 hover:-translate-y-0.5 hover:border-white hover:bg-white/95"
               aria-label="Meet the SWK Properties Dubai Advisory Team"
             >
               <div className="flex flex-wrap items-center -space-x-2.5 sm:-space-x-2">
@@ -100,7 +104,7 @@ export function AvenloHero() {
                   <div
                     key={member.slug}
                     title={`${member.name} — ${member.role}`}
-                    className="relative h-12 w-12 sm:h-14 sm:w-14 overflow-hidden rounded-full border-2 border-white bg-[#f2f2f2] shadow-xs transition-transform duration-300 group-hover:translate-y-[-2px]"
+                    className="relative h-12 w-12 sm:h-14 sm:w-14 overflow-hidden rounded-full border-2 border-white bg-[#eaf3f9] shadow-xs transition-transform duration-300 group-hover:-translate-y-0.5"
                   >
                     <img
                       src={member.photo}
@@ -110,66 +114,68 @@ export function AvenloHero() {
                   </div>
                 ))}
               </div>
-              <div className="pl-2 pr-2.5">
-                <p className="text-[10px] font-medium uppercase tracking-[0.18em] text-[#0e9f6e]">
+              <div className="pl-2 pr-3">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#0e9f6e]">
                   OUR DUBAI TEAM
                 </p>
-                <p className="mt-0.5 inline-flex items-center gap-1 text-xs font-medium text-[#121212]">
+                <p className="mt-0.5 inline-flex items-center gap-1 text-xs font-semibold text-[#0a1624]">
                   <span>Meet our advisory team</span>
                   <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                 </p>
               </div>
             </Link>
 
-            <div className="flex items-baseline gap-4 pl-1">
-              <div className="text-[40px] sm:text-[50px] font-medium leading-none tracking-[-0.045em] text-[#121212] tabular-nums">
+            <div className="inline-flex items-baseline gap-4 rounded-2xl border border-white/75 bg-white/65 px-5 py-3 shadow-[0_12px_32px_rgba(12,56,96,0.08)] backdrop-blur-xl">
+              <div className="text-[38px] sm:text-[48px] font-medium leading-none tracking-[-0.045em] text-[#0a1624] tabular-nums">
                 18+
               </div>
-              <p className="max-w-[230px] text-[13px] leading-snug text-[#525252]">
+              <p className="max-w-[230px] text-[13px] leading-snug text-[#273849]">
                 Years advising residential, waterfront &amp; commercial buyers across the UAE
               </p>
             </div>
           </div>
 
-          {/* Right: Circular Play / Market Brief Button + Split-Tone Editorial Note */}
+          {/* Right: Circular Play / Market Brief Button + Glass Editorial Note */}
           <div className="md:col-span-5 md:col-start-8 flex flex-col items-start md:items-end text-left md:text-right">
             <button
               type="button"
               onClick={() => setBriefOpen(true)}
               aria-label="Open Dubai Market Briefing"
-              className="group inline-flex h-16 w-16 cursor-pointer items-center justify-center rounded-full border border-black/15 bg-white/95 text-[#121212] shadow-sm transition-all duration-300 hover:scale-105 hover:border-[#121212] hover:bg-[#121212] hover:text-white"
+              className="group relative inline-flex h-16 w-16 cursor-pointer items-center justify-center rounded-full border border-white/90 bg-white/85 text-[#0a1624] shadow-[0_16px_40px_rgba(12,56,96,0.16)] backdrop-blur-xl transition-all duration-300 hover:scale-105 hover:border-[#121212] hover:bg-[#121212] hover:text-[#51fec0]"
             >
               <Play className="h-5 w-5 translate-x-0.5 fill-current" />
             </button>
-            <p className="mt-5 max-w-[330px] text-[15px] leading-[1.45] tracking-[-0.015em] text-[#121212]">
-              Direct master-developer access across{" "}
-              <span className="text-[#6b6b6b]">
-                Nakheel, Binghatti, Emaar, DAMAC &amp; Azizi,
-              </span>{" "}
-              paired with RERA escrow clarity.
-            </p>
+            <div className="mt-4 max-w-[360px] rounded-2xl border border-white/75 bg-white/70 px-5 py-3.5 shadow-[0_12px_32px_rgba(12,56,96,0.08)] backdrop-blur-xl">
+              <p className="text-[14.5px] leading-[1.48] tracking-[-0.015em] text-[#0a1624]">
+                Direct master-developer access across{" "}
+                <span className="font-semibold text-[#1b6aa7]">
+                  Nakheel, Binghatti, Emaar, DAMAC &amp; Azizi,
+                </span>{" "}
+                paired with RERA escrow clarity.
+              </p>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Ultra-Sharp Photorealistic UAE Skyline Layered Over Monumental Faint "Since 2008" Watermark */}
+      {/* Ultra-Sharp Photorealistic UAE Skyline Layered Over Faint "Since 2008" Watermark */}
       <div className="relative z-10 mt-10 sm:mt-14 w-full overflow-hidden">
         <div
           aria-hidden="true"
-          className="pointer-events-none select-none text-center text-[19vw] xl:text-[230px] font-medium leading-[0.82] tracking-[-0.055em] text-black/[0.045]"
+          className="pointer-events-none select-none text-center text-[19vw] xl:text-[230px] font-medium leading-[0.82] tracking-[-0.055em] text-[#0a233d]/[0.075]"
         >
           Since 2008
         </div>
 
         <div className="relative z-10 mx-auto -mt-[8vw] sm:-mt-[95px] max-w-[1260px] px-4 sm:px-8">
-          <div className="relative overflow-hidden rounded-t-3xl border border-b-0 border-black/[0.08] bg-[#f5f5f5] shadow-[0_-20px_70px_rgba(18,18,18,0.08)]">
+          <div className="relative overflow-hidden rounded-t-3xl border border-b-0 border-white/80 bg-[#0b1623] shadow-[0_-24px_80px_rgba(12,56,96,0.2)]">
             <img
               src="/img/hero/uae-skyline-flagship.webp"
               alt="Downtown Dubai architectural skyline, Burj Khalifa and Dubai Water Canal at golden hour"
               fetchPriority="high"
               className="h-[340px] sm:h-[480px] md:h-[600px] w-full object-cover object-center"
             />
-            <div className="absolute inset-x-0 bottom-0 flex flex-wrap items-center justify-between gap-3 bg-gradient-to-t from-[#121212]/80 via-[#121212]/35 to-transparent px-6 py-5 text-white">
+            <div className="absolute inset-x-0 bottom-0 flex flex-wrap items-center justify-between gap-3 bg-gradient-to-t from-[#08131f]/88 via-[#08131f]/40 to-transparent px-6 py-5 text-white">
               <LiveStatusDot
                 label="Nakheel · Binghatti · Emaar · DAMAC · Azizi · Sobha"
                 tone="launch"
@@ -193,7 +199,7 @@ export function AvenloHero() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] flex items-center justify-center bg-[#121212]/70 p-4 backdrop-blur-md"
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-[#08131f]/75 p-4 backdrop-blur-md"
             onClick={() => setBriefOpen(false)}
           >
             <motion.div
@@ -201,7 +207,7 @@ export function AvenloHero() {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.96, y: 12 }}
               onClick={(e) => e.stopPropagation()}
-              className="w-full max-w-2xl overflow-hidden rounded-2xl border border-white/15 bg-[#121212] text-white shadow-2xl"
+              className="w-full max-w-2xl overflow-hidden rounded-2xl border border-white/15 bg-[#0c1624] text-white shadow-2xl"
             >
               <div className="flex items-center justify-between border-b border-white/10 px-6 py-4">
                 <SectionEyebrow tone="dark">DUBAI MARKET BRIEFING</SectionEyebrow>
@@ -227,7 +233,7 @@ export function AvenloHero() {
                     { k: "Escrow Registered", v: "Under Dubai Law No. 8 / 2007" },
                     { k: "5 Emirates", v: "Dubai, Abu Dhabi, Sharjah, RAK & UAQ" },
                   ].map((item) => (
-                    <div key={item.k} className="rounded-xl bg-[#1e1e1e] p-4">
+                    <div key={item.k} className="rounded-xl bg-white/[0.06] border border-white/10 p-4">
                       <p className="text-sm font-medium text-[#51fec0]">{item.k}</p>
                       <p className="mt-1 text-xs text-white/70">{item.v}</p>
                     </div>
@@ -261,7 +267,7 @@ export function AvenloHero() {
 }
 
 /* -------------------------------------------------------------------------- */
-/* 02. SCROLL-REVEAL EDITORIAL STATEMENT & 2-CARD CLIENT GROWTH BENTO         */
+/* 02. SCROLL-REVEAL EDITORIAL STATEMENT & 2-CARD GLASS CLIENT GROWTH BENTO   */
 /* -------------------------------------------------------------------------- */
 export function EditorialBento() {
   const quotePool = useMemo(() => testimonials.slice(0, 3), []);
@@ -269,17 +275,12 @@ export function EditorialBento() {
   const current = quotePool[activeQuote] ?? quotePool[0];
 
   return (
-    <section className="relative overflow-hidden bg-white py-24 sm:py-32">
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 top-0 h-[520px] bg-gradient-to-b from-[#f7f7f7] via-white to-white"
-      />
-
+    <section className="relative overflow-hidden bg-white/22 py-24 sm:py-32 backdrop-blur-[2px]">
       <div className="relative mx-auto max-w-[1120px] px-4 sm:px-8">
-        <div className="mx-auto max-w-4xl">
+        <div className="mx-auto max-w-4xl rounded-3xl border border-white/80 bg-white/68 p-7 sm:p-11 shadow-[0_20px_60px_rgba(12,56,96,0.09)] backdrop-blur-2xl">
           <ScrollRevealStatement text="We advise buyers and investors who look past developer brochures — pairing Dubai floor-plate intelligence with escrow security and long-term appreciation." />
 
-          <div className="mt-10 flex flex-wrap items-center gap-3">
+          <div className="mt-9 flex flex-wrap items-center gap-2.5">
             {[
               "Direct Developer Allocations",
               "DLD & Escrow Due Diligence",
@@ -288,7 +289,7 @@ export function EditorialBento() {
             ].map((pillar) => (
               <span
                 key={pillar}
-                className="rounded-full border border-black/10 bg-[#f7f7f7] px-4 py-2 text-xs font-medium text-[#121212]"
+                className="rounded-full border border-[#1b6aa7]/20 bg-white/90 px-4 py-2 text-xs font-medium text-[#0c233a] shadow-xs"
               >
                 {pillar}
               </span>
@@ -296,13 +297,13 @@ export function EditorialBento() {
           </div>
         </div>
 
-        {/* 2-Card 21st.dev Spotlight Bento Row */}
-        <div className="mt-16 grid grid-cols-1 gap-6 md:grid-cols-2">
-          {/* Left Card: Pure White Client Outcome Spotlight */}
-          <SpotlightCard className="bg-[#f7f7f7]">
+        {/* 2-Card Glass Spotlight Bento Row */}
+        <div className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-2">
+          {/* Left Card: Frosted Glass Client Outcome Spotlight */}
+          <SpotlightCard>
             <div className="flex min-h-[420px] sm:min-h-[460px] flex-col justify-between p-8 sm:p-10">
               <div className="flex items-center justify-between">
-                <span className="text-xl font-semibold tracking-[-0.04em] text-[#121212]">
+                <span className="text-xl font-semibold tracking-[-0.04em] text-[#0c233a]">
                   client note
                 </span>
                 <div className="flex items-center gap-1.5" role="tablist" aria-label="Client stories">
@@ -314,8 +315,10 @@ export function EditorialBento() {
                       aria-selected={activeQuote === idx}
                       aria-label={`Read quote from ${q.name}`}
                       onClick={() => setActiveQuote(idx)}
-                      className={`h-2 w-2 cursor-pointer rounded-full transition-colors ${
-                        activeQuote === idx ? "bg-[#121212]" : "bg-[#cfcfcf] hover:bg-[#8b8b8b]"
+                      className={`h-2.5 cursor-pointer rounded-full transition-all ${
+                        activeQuote === idx
+                          ? "w-7 bg-[#121212]"
+                          : "w-2.5 bg-[#121212]/20 hover:bg-[#121212]/50"
                       }`}
                     />
                   ))}
@@ -329,26 +332,26 @@ export function EditorialBento() {
               ) : null}
 
               {current ? (
-                <div className="flex items-center justify-between gap-4 border-t border-black/[0.06] pt-5">
+                <div className="flex items-center justify-between gap-4 border-t border-black/[0.07] pt-5">
                   <div className="flex items-center gap-3">
                     <img
                       src={current.image}
                       alt={current.name}
                       loading="lazy"
-                      className="h-10 w-10 rounded-lg object-cover"
+                      className="h-11 w-11 rounded-xl object-cover object-top"
                     />
                     <div className="text-xs">
-                      <span className="font-medium text-[#121212]">{current.name}</span>
-                      <span className="mx-1.5 text-[#a7a7a7]">•</span>
-                      <span className="uppercase tracking-[0.14em] text-[#8b8b8b]">
+                      <span className="font-semibold text-[#121212]">{current.name}</span>
+                      <span className="mx-1.5 text-[#94a3b8]">•</span>
+                      <span className="uppercase tracking-[0.14em] text-[#1b6aa7] font-medium">
                         {current.city}
                       </span>
-                      <span className="block text-[#737373]">{current.role}</span>
+                      <span className="block text-[#64748b]">{current.role}</span>
                     </div>
                   </div>
                   <Link
                     href="/about"
-                    className="text-xs font-medium text-[#121212] underline underline-offset-4 hover:text-[#0e9f6e]"
+                    className="text-xs font-semibold text-[#121212] underline underline-offset-4 hover:text-[#0e9f6e]"
                   >
                     About SWK
                   </Link>
@@ -357,17 +360,17 @@ export function EditorialBento() {
             </div>
           </SpotlightCard>
 
-          {/* Right Card: Brand-New Ultra-Sharp Palm Waterfront Villa + Team Frosted Overlay */}
-          <div className="relative min-h-[420px] sm:min-h-[460px] overflow-hidden rounded-2xl border border-black/[0.08] bg-[#121212]">
+          {/* Right Card: Ultra-Sharp Palm Waterfront Villa + Frosted Team Bar */}
+          <div className="relative min-h-[420px] sm:min-h-[460px] overflow-hidden rounded-2xl border border-white/80 bg-[#0b1623] shadow-[0_20px_54px_rgba(12,56,96,0.16)]">
             <img
               src="/img/hero/palm-waterfront-twilight.webp"
               alt="Contemporary Dubai travertine and glass beachfront villa overlooking the Arabian Gulf"
               loading="lazy"
               className="h-full w-full object-cover"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#121212]/72 via-transparent to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#08131f]/78 via-transparent to-transparent" />
 
-            <div className="absolute inset-x-4 bottom-4 sm:inset-x-6 sm:bottom-6 rounded-2xl border border-white/25 bg-[#121212]/55 p-5 text-white backdrop-blur-xl">
+            <div className="absolute inset-x-4 bottom-4 sm:inset-x-6 sm:bottom-6 rounded-2xl border border-white/25 bg-[#08131f]/62 p-5 text-white backdrop-blur-xl">
               <div className="flex items-center justify-between gap-3">
                 <div className="flex items-center -space-x-1.5">
                   {team.slice(0, 5).map((advisor) => (
@@ -376,7 +379,7 @@ export function EditorialBento() {
                       src={advisor.photo}
                       alt={advisor.name}
                       loading="lazy"
-                      className="h-9 w-9 rounded-full border border-white/50 object-cover object-top"
+                      className="h-9 w-9 rounded-full border border-white/60 object-cover object-top"
                     />
                   ))}
                 </div>
@@ -411,7 +414,7 @@ export function EditorialBento() {
 }
 
 /* -------------------------------------------------------------------------- */
-/* 03. ICONIC MASTER DEVELOPERS (ORIGINAL COLORS) + 21ST.DEV LUXURY CAROUSEL  */
+/* 03. 21ST.DEV LOGO CLOUD MARQUEE + GALLERY HOVER CAROUSEL (USER BOOKMARK!)  */
 /* -------------------------------------------------------------------------- */
 type LaunchCategory =
   | "signature"
@@ -428,10 +431,6 @@ const LAUNCH_TABS: { id: LaunchCategory; label: string }[] = [
   { id: "jvc-urban", label: "JVC & Creek Growth" },
 ];
 
-/**
- * Curated carousel items using dedicated non-repeating card photography so NO card image
- * duplicates the Full-Bleed Showcase panels or any community/listing card on the homepage.
- */
 const CAROUSEL_SLUGS_BY_TAB: Record<LaunchCategory, string[]> = {
   signature: [
     "palm-springs-beachfront-villas",
@@ -480,7 +479,7 @@ const CAROUSEL_SLUGS_BY_TAB: Record<LaunchCategory, string[]> = {
 export function DubaiDeveloperPulse() {
   const [activeTab, setActiveTab] = useState<LaunchCategory>("signature");
 
-  const carouselItems = useMemo<LuxuryCarouselItem[]>(() => {
+  const galleryItems = useMemo<GalleryHoverCarouselItem[]>(() => {
     const slugs = CAROUSEL_SLUGS_BY_TAB[activeTab];
     const matched = slugs
       .map((s) => projects.find((p) => p.slug === s))
@@ -490,7 +489,12 @@ export function DubaiDeveloperPulse() {
     const list =
       matched.length >= 6
         ? matched
-        : [...matched, ...projects.filter((p) => !seen.has(p.slug)).slice(0, 6 - matched.length)];
+        : [
+            ...matched,
+            ...projects
+              .filter((p) => !seen.has(p.slug))
+              .slice(0, 6 - matched.length),
+          ];
 
     return list.map((proj) => ({
       id: proj.slug,
@@ -499,21 +503,31 @@ export function DubaiDeveloperPulse() {
       community: proj.community,
       summary: proj.summary,
       image: proj.image,
-      href: `/off-plan/${proj.slug}`,
+      url: `/off-plan/${proj.slug}`,
       tags: proj.tags,
       badge: proj.priorityTarget ? "Flagship Mandate" : "Premier Launch",
       isRender: true,
     }));
   }, [activeTab]);
 
-  // Showcase ALL official developer logos in authentic original colors — prioritized with Nakheel, Emaar, Binghatti, DAMAC, Sobha, Azizi first
   const logoDevelopers = useMemo(
-    () => developers.filter((d) => Boolean(d.logo)),
+    () =>
+      developers
+        .filter((d) => Boolean(d.logo))
+        .map((d) => ({
+          slug: d.slug,
+          name: d.name,
+          logo: d.logo as string,
+          knownFor: d.knownFor,
+        })),
     []
   );
 
   return (
-    <section id="dubai-launches" className="border-y border-black/[0.06] bg-[#f7f7f7] py-24">
+    <section
+      id="dubai-launches"
+      className="relative border-y border-white/60 bg-white/24 py-24 backdrop-blur-[2px]"
+    >
       <div className="mx-auto max-w-[1260px] px-4 sm:px-8">
         {/* Header */}
         <div className="flex flex-wrap items-end justify-between gap-6">
@@ -530,40 +544,11 @@ export function DubaiDeveloperPulse() {
           </BracketLink>
         </div>
 
-        {/* Official UAE Master Developer Logo Roster — 100% Authentic Original Colors (ZERO grayscale) */}
-        <div className="mt-12 rounded-2xl border border-black/[0.06] bg-white p-5 sm:p-7 shadow-[0_10px_40px_rgba(18,18,18,0.03)]">
-          <div className="mb-5 flex flex-wrap items-center justify-between gap-2">
-            <span className="text-[11px] font-medium uppercase tracking-[0.2em] text-[#525252]">
-              Official UAE Master Developer Partners
-            </span>
-            <Link
-              href="/developers"
-              className="text-xs font-medium text-[#121212] underline underline-offset-4 hover:text-[#0e9f6e]"
-            >
-              View Developer Directory →
-            </Link>
-          </div>
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-5">
-            {logoDevelopers.map((dev) => (
-              <Link
-                key={dev.slug}
-                href={`/developers/${dev.slug}`}
-                title={`${dev.name} — ${dev.knownFor}`}
-                className="group flex h-20 items-center justify-center rounded-xl border border-black/[0.06] bg-white px-4 transition-all duration-200 hover:-translate-y-0.5 hover:border-black/20 hover:shadow-[0_10px_28px_rgba(18,18,18,0.07)]"
-              >
-                <img
-                  src={dev.logo}
-                  alt={dev.name}
-                  loading="lazy"
-                  className="max-h-10 max-w-[126px] object-contain transition-transform duration-200 group-hover:scale-[1.04]"
-                />
-              </Link>
-            ))}
-          </div>
-        </div>
+        {/* 21st.dev Bidirectional Flowing Developer Logo Cloud — 100% Authentic Original Colors */}
+        <LogoCloudMarquee developers={logoDevelopers} className="mt-12" />
 
-        {/* Interactive Avenlo Pill Filters */}
-        <div className="mt-11 flex flex-wrap items-center gap-2">
+        {/* Interactive Glass Category Pill Filters */}
+        <div className="mt-12 flex flex-wrap items-center gap-2.5">
           {LAUNCH_TABS.map((tab) => {
             const active = activeTab === tab.id;
             return (
@@ -573,8 +558,8 @@ export function DubaiDeveloperPulse() {
                 onClick={() => setActiveTab(tab.id)}
                 className={`cursor-pointer rounded-full px-5 py-2.5 text-xs font-medium transition-all ${
                   active
-                    ? "bg-[#121212] text-white shadow-sm"
-                    : "border border-black/10 bg-white text-[#525252] hover:border-[#121212] hover:text-[#121212]"
+                    ? "bg-[#121212] text-white shadow-[0_10px_24px_rgba(12,35,58,0.22)]"
+                    : "border border-white/80 bg-white/75 text-[#1e293b] backdrop-blur-xl hover:border-[#121212] hover:bg-white hover:text-[#121212]"
                 }`}
               >
                 {tab.label}
@@ -583,114 +568,176 @@ export function DubaiDeveloperPulse() {
           })}
         </div>
 
-        {/* 21st.dev Luxury Interactive Horizontal Project Carousel */}
-        <LuxuryProjectCarousel items={carouselItems} className="mt-8" />
+        {/* 21st.dev Gallery Hover Carousel (User Bookmark #5562) */}
+        <GalleryHoverCarousel items={galleryItems} className="mt-8" />
       </div>
     </section>
   );
 }
 
 /* -------------------------------------------------------------------------- */
-/* 04. FULL-BLEED ARCHITECTURAL RESIDENCE PANELS (6 DEDICATED UNIQUE SHOTS)   */
+/* 04. 21ST.DEV TILTED ARCHITECTURAL CASCADE STAGE (USER BOOKMARK #35229)     */
 /* -------------------------------------------------------------------------- */
 const SHOWCASE_PANELS = [
   {
     title: "Palm Jebel Ali",
+    developer: "Nakheel",
     status: "NAKHEEL FLAGSHIP",
     tone: "launch" as const,
-    specs: "PALM JEBEL ALI, DUBAI  |  BEACHFRONT FROND VILLAS  |  NAKHEEL",
+    specs: "PALM JEBEL ALI, DUBAI  ·  BEACHFRONT FROND VILLAS",
     href: "/off-plan/palm-jebel-ali",
     image: "/img/showcase/nakheel-palm-jebel-ali.webp",
-    isRender: true,
   },
   {
     title: "Bugatti Residences",
+    developer: "Binghatti",
     status: "ULTRA-PRIME BRANDED",
     tone: "offer" as const,
-    specs: "BUSINESS BAY, DUBAI  |  RIVIERA SKY MANSIONS  |  BINGHATTI",
+    specs: "BUSINESS BAY, DUBAI  ·  RIVIERA SKY MANSIONS",
     href: "/off-plan/bugatti-residences-by-binghatti",
     image: "/img/showcase/binghatti-bugatti-residences.webp",
-    isRender: true,
   },
   {
     title: "Mercedes-Benz Places",
+    developer: "Binghatti",
     status: "DOWNTOWN ICON",
     tone: "launch" as const,
-    specs: "DOWNTOWN DUBAI  |  65-STOREY SUPERTALL  |  BINGHATTI",
+    specs: "DOWNTOWN DUBAI  ·  65-STOREY SUPERTALL",
     href: "/off-plan/mercedes-benz-places",
     image: "/img/showcase/binghatti-mercedes-benz-places.webp",
-    isRender: true,
   },
   {
     title: "Dubai Creek Harbour",
+    developer: "Emaar Properties",
     status: "EMAAR WATERFRONT",
     tone: "launch" as const,
-    specs: "DUBAI CREEK HARBOUR  |  CREEK MARINA TOWERS  |  EMAAR",
+    specs: "DUBAI CREEK HARBOUR  ·  CREEK MARINA TOWERS",
     href: "/communities/dubai-creek-harbour",
     image: "/img/showcase/emaar-creek-harbour.webp",
-    isRender: false,
   },
   {
     title: "DAMAC Lagoons",
+    developer: "DAMAC Properties",
     status: "CRYSTAL LAGOON LIVING",
     tone: "launch" as const,
-    specs: "DUBAILAND  |  MEDITERRANEAN WATERFRONT VILLAS  |  DAMAC",
+    specs: "DUBAILAND  ·  MEDITERRANEAN WATERFRONT VILLAS",
     href: "/off-plan/damac-lagoons",
     image: "/img/showcase/damac-lagoons.webp",
-    isRender: true,
   },
   {
     title: "Azizi Venice",
+    developer: "Azizi Developments",
     status: "DUBAI SOUTH MASTERPLAN",
     tone: "offer" as const,
-    specs: "DUBAI SOUTH  |  CRYSTAL LAGOON BOULEVARD  |  AZIZI DEVELOPMENTS",
+    specs: "DUBAI SOUTH  ·  CRYSTAL LAGOON BOULEVARD",
     href: "/off-plan/azizi-venice",
     image: "/img/showcase/azizi-venice.webp",
-    isRender: true,
   },
 ];
 
 export function FullBleedResidences() {
-  return (
-    <section aria-label="Featured Dubai Residences Showcase" className="bg-[#121212]">
-      {SHOWCASE_PANELS.map((panel) => (
-        <div
-          key={panel.title}
-          className="group relative flex min-h-[600px] sm:min-h-[720px] lg:min-h-[780px] w-full items-center justify-center overflow-hidden border-b border-white/10"
-        >
-          <img
-            src={panel.image}
-            alt={panel.title}
-            loading="lazy"
-            className="absolute inset-0 h-full w-full object-cover transition-transform duration-1000 ease-out group-hover:scale-[1.03]"
-          />
-          <div
-            aria-hidden="true"
-            className="absolute inset-0 bg-gradient-to-t from-[#121212]/82 via-[#121212]/28 to-[#121212]/38"
-          />
+  const router = useRouter();
+  const [activeIndex, setActiveIndex] = useState(0);
+  const current = SHOWCASE_PANELS[activeIndex] ?? SHOWCASE_PANELS[0];
 
-          <div className="relative z-10 mx-auto max-w-4xl px-4 text-center text-white">
-            <LiveStatusDot label={panel.status} tone={panel.tone} surface="dark" />
-            <h3 className="mt-4 text-[36px] sm:text-[50px] md:text-[62px] font-light leading-[1.04] tracking-[-0.035em] text-white">
-              {panel.title}
-            </h3>
-            <p className="mt-4 text-[11px] sm:text-[12px] font-medium uppercase tracking-[0.22em] text-white/85">
-              {panel.specs}
+  const cascadeItems = useMemo<TiltCascadeItem[]>(
+    () =>
+      SHOWCASE_PANELS.map((panel) => ({
+        title: panel.title,
+        caption: `${panel.developer} · ${panel.status}`,
+        src: panel.image,
+        alt: `${panel.title} by ${panel.developer}`,
+        href: panel.href,
+      })),
+    []
+  );
+
+  return (
+    <section
+      aria-label="Featured Dubai Residences Showcase"
+      className="relative overflow-hidden bg-gradient-to-b from-[#07111d]/96 via-[#0a1829]/95 to-[#0b131e]/97 py-20 sm:py-24 text-white backdrop-blur-xl border-b border-white/10"
+    >
+      {/* Subtle Ambient Sapphire Halo Behind Active Stage */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute top-1/2 left-1/2 h-[540px] w-[820px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(87,210,244,0.16)_0%,rgba(27,106,167,0.08)_42%,transparent_72%)] blur-3xl"
+      />
+
+      <div className="relative z-10 mx-auto max-w-[1260px] px-4 sm:px-8">
+        {/* Top Synced Architectural Header */}
+        <div className="flex flex-wrap items-end justify-between gap-6">
+          <div>
+            <LiveStatusDot
+              label={current.status}
+              tone={current.tone}
+              surface="dark"
+            />
+            <h2 className="mt-4 text-[34px] sm:text-[48px] md:text-[58px] font-medium leading-[1.03] tracking-[-0.04em] text-white">
+              {current.title}
+            </h2>
+            <p className="mt-3 text-[11px] sm:text-[12px] font-medium uppercase tracking-[0.22em] text-white/70">
+              {current.specs}
             </p>
-            <div className="mt-9">
-              <BracketLink href={panel.href} variant="dark" size="md">
-                View Residence
-              </BracketLink>
-            </div>
           </div>
 
-          {panel.isRender ? (
-            <span className="absolute bottom-5 right-5 z-10 text-[10px] font-medium uppercase tracking-[0.18em] text-white/60">
-              Architectural Visual
+          <div className="flex flex-wrap items-center gap-4">
+            <span className="hidden sm:inline-block font-mono text-xs text-white/55">
+              DRAG · SWIPE · CLICK FRONT CARD
             </span>
-          ) : null}
+            <BracketLink href={current.href} variant="white" size="md">
+              View Residence
+            </BracketLink>
+          </div>
         </div>
-      ))}
+      </div>
+
+      {/* 21st.dev Dual-Spring Tilted Card Image Carousel (User Bookmark #35229) */}
+      <div className="relative z-10 mt-6 w-full">
+        <TiltCascadeCarousel
+          items={cascadeItems}
+          index={activeIndex}
+          defaultIndex={0}
+          onIndexChange={setActiveIndex}
+          onSelect={(item) => {
+            if (item.href) router.push(item.href);
+          }}
+          height="570px"
+          slideSize="clamp(230px, 42vmin, 360px)"
+          angle={22}
+          drop={0.4}
+          inactiveScale={0.68}
+          radius={22}
+          loop
+          autoplay={4500}
+          background="transparent"
+          color="#ffffff"
+          ariaLabel="Interactive Dubai Flagship Residences Cascade"
+        />
+      </div>
+
+      {/* Interactive Quick-Jump Landmark Selector Pills */}
+      <div className="relative z-10 mx-auto mt-4 max-w-[1260px] px-4 sm:px-8">
+        <div className="flex flex-wrap items-center justify-center gap-2">
+          {SHOWCASE_PANELS.map((panel, idx) => {
+            const active = idx === activeIndex;
+            return (
+              <button
+                key={panel.title}
+                type="button"
+                onClick={() => setActiveIndex(idx)}
+                className={`cursor-pointer rounded-full px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.14em] transition-colors duration-200 ${
+                  active
+                    ? "bg-white text-[#0a1624] shadow-[0_8px_28px_rgba(255,255,255,0.26)]"
+                    : "border border-white/20 bg-white/[0.08] text-white/85 hover:border-white/45 hover:bg-white/15 hover:text-white"
+                }`}
+              >
+                <span className="mr-1.5 font-mono opacity-65">0{idx + 1}</span>
+                {panel.title}
+              </button>
+            );
+          })}
+        </div>
+      </div>
     </section>
   );
 }
@@ -766,19 +813,23 @@ const BEYOND_CARDS = [
 function CredentialLaurel({ top, bottom }: { top: string; bottom: string }) {
   return (
     <div className="flex flex-col items-center text-center">
-      <div className="relative flex h-24 w-24 items-center justify-center rounded-full border border-dashed border-white/25 bg-[#1e1e1e]/70">
+      <div className="relative flex h-24 w-24 items-center justify-center rounded-full border border-dashed border-[#51fec0]/40 bg-white/[0.06] backdrop-blur-md">
         <div className="text-center px-2">
-          <div className="text-sm font-medium tracking-[-0.02em] text-white">{top}</div>
+          <div className="text-sm font-medium tracking-[-0.02em] text-white">
+            {top}
+          </div>
         </div>
       </div>
-      <p className="mt-3 max-w-[120px] text-[11px] leading-snug text-[#8b8b8b]">{bottom}</p>
+      <p className="mt-3 max-w-[120px] text-[11px] leading-snug text-[#94a3b8]">
+        {bottom}
+      </p>
     </div>
   );
 }
 
 export function ServicesAndTrackRecord() {
   return (
-    <section className="bg-[#121212] py-24 sm:py-32 text-white">
+    <section className="bg-[#0b131e]/95 py-24 sm:py-32 text-white backdrop-blur-xl">
       <div className="mx-auto max-w-[1260px] px-4 sm:px-8">
         {/* Part A: Services Header */}
         <div className="flex flex-wrap items-end justify-between gap-6">
@@ -802,24 +853,26 @@ export function ServicesAndTrackRecord() {
             <Link
               key={srv.num}
               href={srv.href}
-              className="group grid grid-cols-1 items-center gap-6 py-9 sm:py-11 md:grid-cols-12 transition-colors hover:bg-white/[0.02]"
+              className="group grid grid-cols-1 items-center gap-6 py-9 sm:py-11 md:grid-cols-12 transition-colors hover:bg-white/[0.03]"
             >
               <div className="md:col-span-5 flex items-baseline gap-6">
-                <span className="font-mono text-sm text-[#8b8b8b]">{srv.num}</span>
+                <span className="font-mono text-sm text-[#57d2f4]">{srv.num}</span>
                 <h3 className="text-2xl sm:text-[28px] font-medium tracking-[-0.03em] text-white group-hover:text-[#51fec0] transition-colors">
                   {srv.title}
                 </h3>
               </div>
-              <ul className="md:col-span-5 space-y-2 text-sm text-[#a7a7a7]">
+              <ul className="md:col-span-5 space-y-2 text-sm text-[#cbd5e1]">
                 {srv.items.map((pt) => (
                   <li key={pt} className="flex items-start gap-2.5">
-                    <span className="text-[#8b8b8b]" aria-hidden="true">+</span>
+                    <span className="text-[#51fec0]" aria-hidden="true">
+                      +
+                    </span>
                     <span>{pt}</span>
                   </li>
                 ))}
               </ul>
               <div className="md:col-span-2 flex md:justify-end">
-                <span className="inline-flex h-16 w-12 items-center justify-center rounded-xl bg-[#1e1e1e] text-white transition-colors duration-200 group-hover:bg-[#51fec0] group-hover:text-[#121212]">
+                <span className="inline-flex h-16 w-12 items-center justify-center rounded-xl border border-white/15 bg-white/[0.06] text-white transition-all duration-200 group-hover:border-[#51fec0] group-hover:bg-[#51fec0] group-hover:text-[#0a1624]">
                   <ArrowRight className="h-4 w-4" />
                 </span>
               </div>
@@ -827,7 +880,7 @@ export function ServicesAndTrackRecord() {
           ))}
         </div>
 
-        {/* Part B: Support Beyond Buying and Selling (3 Dedicated Architectural Spotlight Cards) */}
+        {/* Part B: Support Beyond Buying and Selling */}
         <div className="mt-24">
           <SplitHeading
             tone="dark"
@@ -837,7 +890,11 @@ export function ServicesAndTrackRecord() {
           />
           <div className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-3">
             {BEYOND_CARDS.map((card) => (
-              <SpotlightCard key={card.title} tone="dark" spotlightColor="rgba(81, 254, 192, 0.16)">
+              <SpotlightCard
+                key={card.title}
+                tone="dark"
+                spotlightColor="rgba(81, 254, 192, 0.18)"
+              >
                 <Link
                   href={card.href}
                   className="group relative flex min-h-[380px] sm:min-h-[430px] flex-col justify-between overflow-hidden p-6"
@@ -848,7 +905,7 @@ export function ServicesAndTrackRecord() {
                     loading="lazy"
                     className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-b from-[#121212]/72 via-[#121212]/15 to-[#121212]/68" />
+                  <div className="absolute inset-0 bg-gradient-to-b from-[#08131f]/76 via-[#08131f]/20 to-[#08131f]/74" />
                   <h3 className="relative z-10 text-2xl font-medium tracking-[-0.03em] text-white">
                     {card.title}
                   </h3>
@@ -868,28 +925,39 @@ export function ServicesAndTrackRecord() {
         <div className="mt-28 border-t border-white/[0.1] pt-20">
           <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-12">
             <div className="lg:col-span-5 grid grid-cols-3 gap-4">
-              <CredentialLaurel top="ORN 51517" bottom="RERA Registered Dubai Brokerage" />
-              <CredentialLaurel top="Direct Desk" bottom="Premier UAE Master Developers" />
-              <CredentialLaurel top="Est. 2008" bottom="Al Saqr Building · SZR" />
+              <CredentialLaurel
+                top="ORN 51517"
+                bottom="RERA Registered Dubai Brokerage"
+              />
+              <CredentialLaurel
+                top="Direct Desk"
+                bottom="Premier UAE Master Developers"
+              />
+              <CredentialLaurel
+                top="Est. 2008"
+                bottom="Al Saqr Building · SZR"
+              />
             </div>
 
             <div className="lg:col-span-7">
               <h2 className="text-[30px] sm:text-[42px] md:text-[48px] font-medium leading-[1.1] tracking-[-0.04em] text-white">
                 Eighteen years advising Dubai buyers and investors —{" "}
-                <span className="text-[#8b8b8b]">
-                  pairing DLD transaction evidence with street-level floor-plate knowledge.
+                <span className="text-[#94a3b8]">
+                  pairing DLD transaction evidence with street-level floor-plate
+                  knowledge.
                 </span>
               </h2>
             </div>
           </div>
 
-          {/* 2x2 Crisp White Avenlo Stat Cards */}
           <div className="mt-14 grid grid-cols-1 gap-5 sm:grid-cols-2">
             {stats.map((st) => (
-              <SpotlightCard key={st.label} className="bg-white">
+              <SpotlightCard key={st.label} className="bg-white/95">
                 <div className="flex min-h-[136px] items-center justify-between gap-6 px-7 py-6 sm:px-9 text-[#121212]">
-                  <p className="max-w-[220px] text-sm leading-snug text-[#737373]">{st.label}</p>
-                  <p className="text-[42px] sm:text-[56px] font-medium leading-none tracking-[-0.045em] text-[#121212] tabular-nums">
+                  <p className="max-w-[220px] text-sm leading-snug text-[#475569]">
+                    {st.label}
+                  </p>
+                  <p className="text-[42px] sm:text-[56px] font-medium leading-none tracking-[-0.045em] text-[#0a1624] tabular-nums">
                     {st.value}
                     {st.suffix}
                   </p>
@@ -904,7 +972,7 @@ export function ServicesAndTrackRecord() {
 }
 
 /* -------------------------------------------------------------------------- */
-/* 06. TICKER MARQUEE + DUBAI COMMUNITIES ARCHITECTURAL GRID                  */
+/* 06. GLASS TICKER + 21ST.DEV 3D PERSPECTIVE FLIP DUBAI COMMUNITIES          */
 /* -------------------------------------------------------------------------- */
 const TICKER_ITEMS = [
   "RERA ORN 51517",
@@ -917,20 +985,23 @@ const TICKER_ITEMS = [
 
 export function CommunitiesAndTicker() {
   return (
-    <section className="bg-white">
-      {/* Crisp White Uppercase Marquee Ticker */}
-      <div className="overflow-hidden border-b border-black/[0.08] py-5">
-        <div className="avenlo-marquee-track flex items-center gap-8 text-[11px] font-medium uppercase tracking-[0.22em] text-[#121212]">
+    <section className="relative bg-white/16 backdrop-blur-[1px]">
+      {/* Luminous Translucent Uppercase Marquee Ticker */}
+      <div className="overflow-hidden border-b border-white/70 bg-white/62 py-5 backdrop-blur-xl">
+        <div className="avenlo-marquee-track flex items-center gap-8 text-[11px] font-semibold uppercase tracking-[0.22em] text-[#0c233a]">
           {[...TICKER_ITEMS, ...TICKER_ITEMS].map((item, idx) => (
             <React.Fragment key={`${item}-${idx}`}>
               <span className="whitespace-nowrap">{item}</span>
-              <span className="h-[5px] w-[5px] shrink-0 bg-[#121212]" aria-hidden="true" />
+              <span
+                className="h-[5px] w-[5px] shrink-0 bg-[#1b6aa7]"
+                aria-hidden="true"
+              />
             </React.Fragment>
           ))}
         </div>
       </div>
 
-      {/* Flagship Dubai Communities — Ultra-Sharp Unique Photography */}
+      {/* Flagship Dubai Communities — 21st.dev 3D Perspective Flip Cards */}
       <div className="mx-auto max-w-[1260px] px-4 py-24 sm:px-8">
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div>
@@ -946,31 +1017,15 @@ export function CommunitiesAndTicker() {
           </BracketLink>
         </div>
 
-        <div className="mt-12 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {communities.map((comm) => (
-            <SpotlightCard key={comm.slug} className="bg-[#f7f7f7]">
-              <Link href={`/communities/${comm.slug}`} className="group block h-full">
-                <div className="relative aspect-[4/3] w-full overflow-hidden bg-[#ececec]">
-                  <img
-                    src={comm.image}
-                    alt={comm.name}
-                    loading="lazy"
-                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  />
-                </div>
-                <div className="p-5">
-                  <div className="flex items-center justify-between gap-2">
-                    <h3 className="text-[18px] font-medium tracking-[-0.025em] text-[#121212] group-hover:text-[#0e9f6e] transition-colors">
-                      {comm.name}
-                    </h3>
-                    <ArrowUpRight className="h-4 w-4 shrink-0 text-[#8b8b8b] transition-colors group-hover:text-[#121212]" />
-                  </div>
-                  <p className="mt-1.5 line-clamp-2 text-xs leading-relaxed text-[#737373]">
-                    {comm.blurb}
-                  </p>
-                </div>
-              </Link>
-            </SpotlightCard>
+            <CommunityFlipCard
+              key={comm.slug}
+              name={comm.name}
+              slug={comm.slug}
+              image={comm.image}
+              blurb={comm.blurb}
+            />
           ))}
         </div>
       </div>
@@ -979,7 +1034,7 @@ export function CommunitiesAndTicker() {
 }
 
 /* -------------------------------------------------------------------------- */
-/* 07. STAGES OF ACQUISITION — 4-COLUMN STAGGERED WAVE (AVENLO SIGNATURE)     */
+/* 07. STAGES OF ACQUISITION — 4-COLUMN GLASS WAVE CARDS                      */
 /* -------------------------------------------------------------------------- */
 const ACQUISITION_STAGES = [
   {
@@ -1014,7 +1069,7 @@ const ACQUISITION_STAGES = [
 
 export function AcquisitionStagesWave() {
   return (
-    <section className="border-t border-black/[0.06] bg-[#f7f7f7] py-24 sm:py-28">
+    <section className="border-t border-white/60 bg-white/24 py-24 sm:py-28 backdrop-blur-[2px]">
       <div className="mx-auto max-w-[1260px] px-4 sm:px-8">
         <div className="text-center">
           <SectionEyebrow align="center">STAGES OF A TRANSACTION</SectionEyebrow>
@@ -1033,11 +1088,11 @@ export function AcquisitionStagesWave() {
               <SpotlightCard className="h-full">
                 <div className="flex min-h-[290px] flex-col justify-between p-7 sm:p-8">
                   {stage.dashed ? (
-                    <div className="flex h-16 w-16 items-center justify-center rounded-full border border-dashed border-[#cfcfcf] font-mono text-sm font-medium text-[#121212]">
+                    <div className="flex h-16 w-16 items-center justify-center rounded-full border border-dashed border-[#1b6aa7]/45 bg-[#eef7fc]/80 font-mono text-sm font-semibold text-[#0c233a]">
                       {stage.num}
                     </div>
                   ) : (
-                    <span className="font-mono text-xs font-medium tracking-[0.18em] text-[#8b8b8b]">
+                    <span className="font-mono text-xs font-semibold tracking-[0.18em] text-[#1b6aa7]">
                       STAGE {stage.num}
                     </span>
                   )}
@@ -1046,7 +1101,9 @@ export function AcquisitionStagesWave() {
                     <h3 className="text-[20px] font-medium tracking-[-0.025em] text-[#121212]">
                       {stage.title}
                     </h3>
-                    <p className="mt-3 text-sm leading-[1.6] text-[#737373]">{stage.body}</p>
+                    <p className="mt-3 text-sm leading-[1.6] text-[#475569]">
+                      {stage.body}
+                    </p>
                   </div>
                 </div>
               </SpotlightCard>
@@ -1059,14 +1116,24 @@ export function AcquisitionStagesWave() {
 }
 
 /* -------------------------------------------------------------------------- */
-/* 08. CLIENT STORIES STRIP                                                   */
+/* 08. 21ST.DEV EDITORIAL TESTIMONIAL SLIDER (USER BOOKMARK #9203)            */
 /* -------------------------------------------------------------------------- */
 export function ClientVoices() {
-  // Show non-overlapping stories (index 3..5 + horizontalTestimonials) so portraits don't duplicate EditorialBento's quotePool[0..2]
-  const allVoices = [...testimonials.slice(3), ...horizontalTestimonials].slice(0, 6);
+  // Non-overlapping stories (index 3..5 + horizontalTestimonials) keeping EditorialBento's quotePool[0..2] distinct
+  const sliderReviews = useMemo<SliderReview[]>(() => {
+    const allVoices = [...testimonials.slice(3), ...horizontalTestimonials].slice(0, 6);
+    return allVoices.map((item) => ({
+      id: item.id,
+      name: item.name,
+      affiliation: `${item.role} · ${item.city}`,
+      quote: item.quote,
+      imageSrc: item.image,
+      thumbnailSrc: item.image,
+    }));
+  }, []);
 
   return (
-    <section className="bg-[#f7f7f7] pt-10 pb-8">
+    <section className="bg-white/20 pt-14 pb-12 backdrop-blur-[2px]">
       <div className="mx-auto max-w-[1260px] px-4 sm:px-8">
         <div className="text-center">
           <SectionEyebrow align="center">WHAT CLIENTS SAY</SectionEyebrow>
@@ -1078,39 +1145,7 @@ export function ClientVoices() {
           />
         </div>
 
-        <div className="mt-14 grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
-          {allVoices.map((item) => (
-            <SpotlightCard key={item.id}>
-              <article className="flex h-full flex-col justify-between p-7">
-                <div>
-                  <span
-                    aria-hidden="true"
-                    className="font-mono text-sm tracking-[0.2em] text-[#cfcfcf]"
-                  >
-                    {"//"}
-                  </span>
-                  <p className="mt-4 text-[15px] leading-[1.65] text-[#4a4a4a]">
-                    &ldquo;{item.quote}&rdquo;
-                  </p>
-                </div>
-                <div className="mt-8 flex items-center gap-3.5 pt-4 border-t border-black/[0.05]">
-                  <img
-                    src={item.image}
-                    alt={item.name}
-                    loading="lazy"
-                    className="h-10 w-10 rounded-lg object-cover"
-                  />
-                  <div>
-                    <p className="text-sm font-medium text-[#121212]">{item.name}</p>
-                    <p className="text-xs text-[#8b8b8b]">
-                      {item.role} · {item.city}
-                    </p>
-                  </div>
-                </div>
-              </article>
-            </SpotlightCard>
-          ))}
-        </div>
+        <TestimonialSlider reviews={sliderReviews} className="mt-12" />
       </div>
     </section>
   );
@@ -1123,7 +1158,7 @@ export function InsightsPreview() {
   const latest = blogArticles.slice(0, 3);
 
   return (
-    <section className="bg-white py-24">
+    <section className="bg-white/24 py-24 backdrop-blur-[2px]">
       <div className="mx-auto max-w-[1260px] px-4 sm:px-8">
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div>
@@ -1137,13 +1172,13 @@ export function InsightsPreview() {
           <div className="flex flex-wrap items-center gap-3">
             <Link
               href="/guides/buying"
-              className="rounded-full border border-black/10 bg-[#f7f7f7] px-4 py-2.5 text-xs font-medium text-[#121212] hover:bg-[#ececec]"
+              className="rounded-full border border-white/80 bg-white/80 px-4 py-2.5 text-xs font-medium text-[#121212] shadow-xs backdrop-blur-xl transition-colors hover:bg-[#121212] hover:text-white"
             >
               Buying Guide
             </Link>
             <Link
               href="/guides/investing"
-              className="rounded-full border border-black/10 bg-[#f7f7f7] px-4 py-2.5 text-xs font-medium text-[#121212] hover:bg-[#ececec]"
+              className="rounded-full border border-white/80 bg-white/80 px-4 py-2.5 text-xs font-medium text-[#121212] shadow-xs backdrop-blur-xl transition-colors hover:bg-[#121212] hover:text-white"
             >
               Investor Guide
             </Link>
@@ -1156,9 +1191,12 @@ export function InsightsPreview() {
         <div className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-3">
           {latest.map((art) => (
             <SpotlightCard key={art.slug}>
-              <Link href={`/insights/${art.slug}`} className="group flex h-full flex-col justify-between">
+              <Link
+                href={`/insights/${art.slug}`}
+                className="group flex h-full flex-col justify-between"
+              >
                 <div>
-                  <div className="relative aspect-[16/10] w-full overflow-hidden bg-[#f5f5f5]">
+                  <div className="relative aspect-[16/10] w-full overflow-hidden bg-[#e7f2f9]">
                     <img
                       src={art.image}
                       alt={art.title}
@@ -1167,13 +1205,13 @@ export function InsightsPreview() {
                     />
                   </div>
                   <div className="p-6">
-                    <p className="text-[11px] font-medium uppercase tracking-[0.16em] text-[#8b8b8b]">
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#1b6aa7]">
                       {art.category} · {art.readTime}
                     </p>
                     <h3 className="mt-2.5 text-[20px] font-medium leading-[1.25] tracking-[-0.025em] text-[#121212] group-hover:text-[#0e9f6e] transition-colors">
                       {art.title}
                     </h3>
-                    <p className="mt-2.5 line-clamp-3 text-sm leading-relaxed text-[#666666]">
+                    <p className="mt-2.5 line-clamp-3 text-sm leading-relaxed text-[#475569]">
                       {art.excerpt}
                     </p>
                   </div>

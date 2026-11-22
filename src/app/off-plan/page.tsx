@@ -42,7 +42,7 @@ export default function OffPlanPage() {
   }, [emirate, devSlug, query, onlyPriority, devMap]);
 
   return (
-    <div className="bg-white">
+    <div className="bg-transparent">
       <AvenloPageHeader
         eyebrow="OFF-PLAN LAUNCHES · PREMIER UAE DEVELOPERS"
         title="New projects"
@@ -94,7 +94,7 @@ export default function OffPlanPage() {
           </button>
         </div>
 
-        <div className="mt-8 grid grid-cols-1 gap-3 rounded-2xl border border-black/[0.07] bg-[#f7f7f7] p-4 sm:grid-cols-12">
+        <div className="mt-8 grid grid-cols-1 gap-3 rounded-2xl border border-white/80 bg-white/80 backdrop-blur-xl shadow-[0_14px_40px_rgba(12,56,96,0.08)] p-4 sm:grid-cols-12">
           <div className="relative sm:col-span-6">
             <Search className="pointer-events-none absolute top-1/2 left-3.5 h-4 w-4 -translate-y-1/2 text-[#8b8b8b]" />
             <input
@@ -142,7 +142,7 @@ export default function OffPlanPage() {
 
         {/* Project Grid */}
         {filtered.length === 0 ? (
-          <div className="mt-12 rounded-2xl border border-black/[0.06] bg-[#f7f7f7] p-12 text-center">
+          <div className="mt-12 rounded-2xl border border-white/80 bg-white/80 backdrop-blur-xl shadow-[0_14px_40px_rgba(12,56,96,0.08)] p-12 text-center">
             <h2 className="text-2xl font-medium tracking-[-0.03em] text-[#121212]">
               No matching off-plan launches
             </h2>
@@ -229,7 +229,7 @@ export default function OffPlanPage() {
       </section>
 
       {/* Browse Launches by Community Corridor (pSEO Area Hubs) */}
-      <section className="border-t border-black/[0.06] bg-[#f7f7f7] py-20">
+      <section className="border-t border-white/60 bg-white/24 backdrop-blur-[2px] py-20">
         <div className="mx-auto max-w-[1260px] px-4 sm:px-8">
           <SectionEyebrow>BROWSE BY CORRIDOR</SectionEyebrow>
           <SplitHeading

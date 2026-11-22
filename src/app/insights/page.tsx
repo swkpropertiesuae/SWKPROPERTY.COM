@@ -25,7 +25,7 @@ export const metadata: Metadata = buildMetadata({
 
 export default function InsightsPage() {
   return (
-    <div className="bg-white">
+    <div className="bg-transparent">
       <JsonLd
         id="ld-insights-breadcrumb"
         data={breadcrumbSchema([
@@ -57,7 +57,7 @@ export default function InsightsPage() {
             <Link
               key={art.slug}
               href={`/insights/${art.slug}`}
-              className="group flex flex-col justify-between overflow-hidden rounded-2xl border border-black/[0.07] bg-white transition-all duration-300 hover:border-black/20 hover:shadow-[0_20px_50px_rgba(18,18,18,0.08)]"
+              className="group flex flex-col justify-between overflow-hidden rounded-2xl border border-white/80 bg-white/84 backdrop-blur-xl shadow-[0_16px_44px_rgba(12,56,96,0.08)] transition-all duration-300 hover:border-black/20 hover:shadow-[0_20px_50px_rgba(18,18,18,0.08)]"
             >
               <div>
                 <div className="relative aspect-[16/10] w-full overflow-hidden bg-[#f5f5f5]">
@@ -92,7 +92,7 @@ export default function InsightsPage() {
       </section>
 
       {/* Core Dubai Handbooks Strip */}
-      <section className="border-y border-black/[0.06] bg-[#f7f7f7] py-16">
+      <section className="border-y border-white/60 bg-white/24 backdrop-blur-[2px] py-16">
         <div className="mx-auto max-w-[1260px] px-4 sm:px-8">
           <SectionEyebrow>CORE HANDBOOKS</SectionEyebrow>
           <SplitHeading
@@ -107,7 +107,7 @@ export default function InsightsPage() {
               <Link
                 key={g.slug}
                 href={`/guides/${g.slug}`}
-                className="group rounded-2xl border border-black/[0.06] bg-white p-6 transition-all hover:border-black/20"
+                className="group rounded-2xl border border-white/80 bg-white/84 backdrop-blur-xl shadow-[0_14px_40px_rgba(12,56,96,0.08)] p-6 transition-all hover:border-black/20"
               >
                 <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-[#8b8b8b]">
                   {g.eyebrow}

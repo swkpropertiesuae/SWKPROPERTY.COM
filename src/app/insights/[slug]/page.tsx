@@ -58,7 +58,7 @@ export default async function InsightArticlePage({
   const authorInTeam = team.some((m) => m.slug === article.author.slug);
 
   return (
-    <div className="bg-white">
+    <div className="bg-transparent">
       <JsonLd
         id="ld-article"
         data={articleSchema({
@@ -110,8 +110,8 @@ export default async function InsightArticlePage({
         }
       />
 
-      {/* Avenlo Single-Column Editorial Reading Flow */}
-      <article className="mx-auto max-w-3xl px-4 py-12 sm:px-8 space-y-10">
+      {/* Avenlo Single-Column Frosted Glass Editorial Reading Flow */}
+      <article className="mx-auto my-12 max-w-3xl rounded-3xl border border-white/80 bg-white/86 px-6 py-10 sm:px-10 shadow-[0_20px_54px_rgba(12,56,96,0.09)] backdrop-blur-2xl space-y-10">
         <div className="overflow-hidden rounded-2xl bg-[#f5f5f5]">
           <img
             src={article.image}
@@ -121,7 +121,7 @@ export default async function InsightArticlePage({
         </div>
 
         {/* Direct Summary Callout */}
-        <div className="rounded-2xl border border-black/[0.08] bg-[#f7f7f7] p-6 sm:p-8">
+        <div className="rounded-2xl border border-white/80 bg-white/80 backdrop-blur-xl shadow-[0_14px_40px_rgba(12,56,96,0.08)] p-6 sm:p-8">
           <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-[#8b8b8b]">
             KEY SUMMARY
           </p>
@@ -142,7 +142,7 @@ export default async function InsightArticlePage({
 
         {/* Key Takeaways */}
         {article.keyTakeaways.length > 0 ? (
-          <div className="rounded-2xl border border-black/[0.07] bg-[#f7f7f7] p-6 sm:p-8">
+          <div className="rounded-2xl border border-white/80 bg-white/80 backdrop-blur-xl shadow-[0_14px_40px_rgba(12,56,96,0.08)] p-6 sm:p-8">
             <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-[#8b8b8b]">
               TAKEAWAYS
             </p>
