@@ -220,14 +220,7 @@ function PropertiesExplorer() {
   };
 
   return (
-    <div className="bg-white">
-      <AvenloPageHeader
-        eyebrow="PROPERTIES · DUBAI & UAE"
-        title="Residences we are"
-        italic="advising on now"
-        lead="Ready apartments, beachfront villas, townhouses, annual leases, and off-plan releases across Dubai's premier freehold corridors."
-      />
-
+    <>
       {/* Avenlo Pill Filter Bar + Minimal Controls */}
       <section className="mx-auto max-w-[1260px] px-4 py-10 sm:px-8">
         <div className="flex flex-wrap items-center justify-center gap-2">
@@ -631,14 +624,22 @@ function PropertiesExplorer() {
       ) : null}
 
       <CtaBanner />
-    </div>
+    </>
   );
 }
 
 export default function PropertiesPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-white" />}>
-      <PropertiesExplorer />
-    </Suspense>
+    <div className="bg-white">
+      <AvenloPageHeader
+        eyebrow="PROPERTIES · DUBAI & UAE"
+        title="Residences we are"
+        italic="advising on now"
+        lead="Ready apartments, beachfront villas, townhouses, annual leases, and off-plan releases across Dubai's premier freehold corridors."
+      />
+      <Suspense fallback={<div className="min-h-[60vh] bg-white" />}>
+        <PropertiesExplorer />
+      </Suspense>
+    </div>
   );
 }

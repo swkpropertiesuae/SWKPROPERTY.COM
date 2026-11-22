@@ -270,15 +270,15 @@ export function SiteFooter() {
       </div>
 
       {/* Monumental Clipped SWK Wordmark Band + 3 Floating Pills (Avenlo Signature) */}
-      <div className="relative mx-auto max-w-[1260px] overflow-hidden px-4 pt-6 pb-20 sm:px-8 sm:pt-10 sm:pb-16">
+      <div className="relative mx-auto max-w-[1260px] overflow-hidden px-4 pt-8 pb-24 sm:px-8 sm:pt-12 sm:pb-24">
         <div
           aria-hidden="true"
-          className="pointer-events-none select-none text-center text-[22vw] xl:text-[260px] font-medium leading-[0.82] tracking-[-0.055em] text-white/[0.06]"
+          className="pointer-events-none select-none text-center text-[24vw] xl:text-[310px] font-medium leading-[0.8] tracking-[-0.055em] text-white/[0.08]"
         >
           SWK
         </div>
 
-        <div className="relative z-10 -mt-8 sm:-mt-14 flex flex-col items-center justify-between gap-3 sm:flex-row">
+        <div className="relative z-10 -mt-10 sm:-mt-16 flex flex-col items-center justify-between gap-3 sm:flex-row">
           {/* Pill 1: Socials */}
           <div className="inline-flex items-center gap-3 rounded-full border border-white/10 bg-[#1e1e1e]/95 px-4 py-2 text-xs text-white/80 backdrop-blur-md">
             {SOCIAL_LINKS.filter(([, href]) => href).map(([label, href]) => (
