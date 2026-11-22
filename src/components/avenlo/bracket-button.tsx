@@ -1,0 +1,161 @@
+"use client";
+
+import React from "react";
+import Link from "next/link";
+import { cn } from "@/lib/utils";
+
+type BracketVariant = "light" | "dark" | "white";
+type BracketSize = "sm" | "md" | "lg";
+
+interface SharedProps {
+  children: React.ReactNode;
+  variant?: BracketVariant;
+  size?: BracketSize;
+  fullWidth?: boolean;
+  className?: string;
+}
+
+const SIZE_CLASSES: Record<BracketSize, string> = {
+  sm: "px-5 py-2.5 text-[11px] tracking-[0.14em]",
+  md: "px-7 py-3.5 text-[12px] tracking-[0.14em]",
+  lg: "px-9 py-4 text-[12px] tracking-[0.16em]",
+};
+
+const SURFACE_CLASSES: Record<BracketVariant, string> = {
+  light:
+    "bg-[#f5f5f5] text-[#121212] hover:bg-[#121212] hover:text-white",
+  dark:
+    "bg-[#121212]/90 text-white backdrop-blur-sm hover:bg-white hover:text-[#121212]",
+  white:
+    "bg-white text-[#121212] hover:bg-[#51fec0] hover:text-[#121212]",
+};
+
+const BRACKET_BORDER: Record<BracketVariant, string> = {
+  light: "border-[#cfcfcf] group-hover/brk:border-[#121212]",
+  dark: "border-white/45 group-hover/brk:border-white",
+  white: "border-white/50 group-hover/brk:border-[#51fec0]",
+};
+
+function CornerTicks({ variant }: { variant: BracketVariant }) {
+  const color = BRACKET_BORDER[variant];
+  return (
+    <>
+      <span
+        aria-hidden="true"
+        className={cn(
+          "pointer-events-none absolute -top-[4px] -left-[4px] h-[8px] w-[8px] border-t border-l transition-all duration-200 group-hover/brk:-top-[2px] group-hover/brk:-left-[2px]",
+          color
+        )}
+      />
+      <span
+        aria-hidden="true"
+        className={cn(
+          "pointer-events-none absolute -top-[4px] -right-[4px] h-[8px] w-[8px] border-t border-r transition-all duration-200 group-hover/brk:-top-[2px] group-hover/brk:-right-[2px]",
+          color
+        )}
+      />
+      <span
+        aria-hidden="true"
+        className={cn(
+          "pointer-events-none absolute -bottom-[4px] -left-[4px] h-[8px] w-[8px] border-b border-l transition-all duration-200 group-hover/brk:-bottom-[2px] group-hover/brk:-left-[2px]",
+          color
+        )}
+      />
+      <span
+        aria-hidden="true"
+        className={cn(
+          "pointer-events-none absolute -bottom-[4px] -right-[4px] h-[8px] w-[8px] border-b border-r transition-all duration-200 group-hover/brk:-bottom-[2px] group-hover/brk:-right-[2px]",
+          color
+        )}
+      />
+    </>
+  );
+}
+
+export interface BracketLinkProps extends SharedProps {
+  href: string;
+  external?: boolean;
+  onClick?: () => void;
+  ariaLabel?: string;
+}
+
+export function BracketLink({
+  href,
+  external,
+  onClick,
+  ariaLabel,
+  children,
+  variant = "light",
+  size = "md",
+  fullWidth = false,
+  className,
+}: BracketLinkProps) {
+  const innerClass = cn(
+    "group/brk relative inline-flex items-center justify-center gap-2 font-medium uppercase whitespace-nowrap transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#121212]",
+    SIZE_CLASSES[size],
+    SURFACE_CLASSES[variant],
+    fullWidth && "w-full",
+    className
+  );
+
+  if (external) {
+    return (
+      <a
+        href={href}
+        target="_blank"
+        rel="noopener noreferrer"
+        onClick={onClick}
+        aria-label={ariaLabel}
+        className={innerClass}
+      >
+        <CornerTicks variant={variant} />
+        <span>{children}</span>
+      </a>
+    );
+  }
+
+  return (
+    <Link href={href} onClick={onClick} aria-label={ariaLabel} className={innerClass}>
+      <CornerTicks variant={variant} />
+      <span>{children}</span>
+    </Link>
+  );
+}
+
+export interface BracketButtonProps extends SharedProps {
+  type?: "button" | "submit" | "reset";
+  disabled?: boolean;
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
+  ariaLabel?: string;
+}
+
+export function BracketButton({
+  type = "button",
+  disabled,
+  onClick,
+  ariaLabel,
+  children,
+  variant = "light",
+  size = "md",
+  fullWidth = false,
+  className,
+}: BracketButtonProps) {
+  return (
+    <button
+      type={type}
+      disabled={disabled}
+      onClick={onClick}
+      aria-label={ariaLabel}
+      className={cn(
+        "group/brk relative inline-flex cursor-pointer items-center justify-center gap-2 font-medium uppercase whitespace-nowrap transition-colors duration-200 disabled:cursor-not-allowed disabled:opacity-50 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#121212]",
+        SIZE_CLASSES[size],
+        SURFACE_CLASSES[variant],
+        fullWidth && "w-full",
+        className
+      )}
+    >
+      <CornerTicks variant={variant} />
+      <span>{children}</span>
+    </button>
+  );
+}

@@ -1,56 +1,55 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
-/* SWK Properties palette — "Onyx & Champagne" (matches the Matte Gold brand kit):
- * Warm Ivory Paper (#faf7f2), Crisp White (#ffffff), Soft Sand (#f4efe6),
- * Onyx (#17130e) and Espresso (#2a2219 / #3a2e20) for ink and dark surfaces,
- * Desert Bronze (#94652c / #b07a38) and Champagne (#dcb888) as accents.
+/* SWK Properties — Avenlo-Inspired Swiss Architectural Design System
+ * Pure Light Canvas (#FFFFFF / #F7F7F7 / #F5F5F5) + Selective Obsidian Contrast (#121212 / #1E1E1E)
+ * Crisp Architectural Greys (#8B8B8B / #CFCFCF) + Live Launch Mint/Emerald (#51FEC0 / #0E9F6E)
  */
 :root {
-  --paper-0: #ffffff;
-  --paper-50: #faf7f2;
-  --paper-100: #f4efe6;
-  --paper-200: #ebe3d5;
-  --onyx-950: #17130e;
-  --onyx-900: #2a2219;
-  --onyx-800: #3a2e20;
-  --onyx-700: #4a3b28;
-  --ease-cinematic: cubic-bezier(0.22, 1, 0.36, 1);
-  --ease-film: cubic-bezier(0.65, 0, 0.35, 1);
-  --gold-700: #94652c;
-  --gold-600: #b07a38;
-  --gold-500: #c99a63;
-  --gold-400: #dcb888;
-  --gold-100: #f6ead7;
+  --bg-white: #ffffff;
+  --bg-offwhite: #f7f7f7;
+  --bg-cta-light: #f5f5f5;
+  --bg-subtle: #ececec;
+  --bg-obsidian: #121212;
+  --bg-obsidian-card: #1e1e1e;
 
-  --background: #faf7f2;
-  --foreground: #17130e;
+  --ink-primary: #121212;
+  --ink-secondary: #4a4a4a;
+  --ink-muted: #8b8b8b;
+  --ink-subtle: #a7a7a7;
+
+  --border-light: #e5e5e5;
+  --border-hairline: #cfcfcf;
+  --border-dark: #2b2b2b;
+
+  --accent-mint: #51fec0;
+  --accent-mint-deep: #0e9f6e;
+  --status-sale: #62c584;
+  --status-offer: #a5ce3a;
+  --status-sold: #dc2626;
+
+  --ease-swiss: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* Semantic tokens for Base UI / shadcn compatibility */
+  --background: #ffffff;
+  --foreground: #121212;
   --card: #ffffff;
-  --card-foreground: #17130e;
+  --card-foreground: #121212;
   --popover: #ffffff;
-  --popover-foreground: #17130e;
-  --primary: #17130e;
+  --popover-foreground: #121212;
+  --primary: #121212;
   --primary-foreground: #ffffff;
-  --secondary: #f4efe6;
-  --secondary-foreground: #17130e;
-  --muted: #f4efe6;
-  --muted-foreground: #786e60;
-  --accent: #f6ead7;
-  --accent-foreground: #94652c;
-  --destructive: #a52437;
-  --border: #e6dfd2;
-  --input: #e6dfd2;
-  --ring: #94652c;
-  --chart-1: #17130e;
-  --chart-2: #94652c;
-  --chart-3: #2f5d3a;
-  --chart-4: #b07a38;
-  --chart-5: #3a2e20;
-  --swk-gold: #94652c;
-  --swk-gold-deep: #7a4f1d;
-  --swk-red: #a52437;
-  --swk-green: #2f5d3a;
-  --radius: 0.75rem;
+  --secondary: #f7f7f7;
+  --secondary-foreground: #121212;
+  --muted: #f5f5f5;
+  --muted-foreground: #737373;
+  --accent: #f5f5f5;
+  --accent-foreground: #121212;
+  --destructive: #dc2626;
+  --border: #e5e5e5;
+  --input: #d4d4d4;
+  --ring: #121212;
+  --radius: 1rem;
 }
 
 @theme inline {
@@ -72,31 +71,19 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
-  --color-chart-1: var(--chart-1);
-  --color-chart-2: var(--chart-2);
-  --color-chart-3: var(--chart-3);
-  --color-chart-4: var(--chart-4);
-  --color-chart-5: var(--chart-5);
-  --color-gold: var(--swk-gold);
-  --color-gold-deep: var(--swk-gold-deep);
-  --color-swk-red: var(--swk-red);
-  --color-swk-green: var(--swk-green);
-  --radius-lg: var(--radius);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-sm: calc(var(--radius) - 4px);
-  --font-sans: var(--font-geist-sans);
-  --font-serif: var(--font-serif-display);
-  --font-mono: var(--font-geist-mono);
-  --font-raleway: var(--font-raleway);
-  /* Slower, film-style easing for every Tailwind transition utility. */
-  --default-transition-duration: 450ms;
-  --default-transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
-}
+  --color-mint: var(--accent-mint);
+  --color-obsidian: var(--bg-obsidian);
 
-.font-hero-raleway {
-  font-family: var(--font-raleway), system-ui, -apple-system, sans-serif;
-  font-weight: 300;
-  letter-spacing: 0.05em;
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 4px);
+  --radius-sm: calc(var(--radius) - 8px);
+
+  --font-sans: var(--font-switzer), var(--font-inter), system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-serif: var(--font-switzer), var(--font-inter), system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, monospace;
+
+  --default-transition-duration: 240ms;
+  --default-transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 * {
@@ -112,12 +99,14 @@ html {
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-sans), system-ui, -apple-system, sans-serif;
-  line-height: 1.65;
-  letter-spacing: -0.005em;
+  background: var(--bg-white);
+  color: var(--ink-primary);
+  font-family: var(--font-sans);
+  font-feature-settings: "cv03" 1, "cv04" 1, "cv09" 1, "cv11" 1;
+  line-height: 1.55;
+  letter-spacing: -0.015em;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   overflow-x: clip;
 }
 
@@ -129,6 +118,43 @@ textarea {
   touch-action: manipulation;
 }
 
+h1,
+h2,
+h3,
+h4 {
+  letter-spacing: -0.035em;
+  line-height: 1.05;
+}
+
+::selection {
+  background: #121212;
+  color: #51fec0;
+}
+
+/* Signature Avenlo Vertical Architectural Hairline Grid */
+.bg-arch-grid {
+  background-image: repeating-linear-gradient(
+    to right,
+    rgba(18, 18, 18, 0.042) 0px,
+    rgba(18, 18, 18, 0.042) 1px,
+    transparent 1px,
+    transparent 24px
+  );
+}
+
+.bg-arch-grid-fade {
+  background-image:
+    linear-gradient(to bottom, rgba(255, 255, 255, 0) 68%, #ffffff 100%),
+    repeating-linear-gradient(
+      to right,
+      rgba(18, 18, 18, 0.042) 0px,
+      rgba(18, 18, 18, 0.042) 1px,
+      transparent 1px,
+      transparent 24px
+    );
+}
+
+/* Scrollbar utilities */
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
@@ -137,109 +163,98 @@ textarea {
   scrollbar-width: none;
 }
 
-h1,
-h2,
-h3,
-h4,
-.font-serif {
-  letter-spacing: -0.015em;
-  line-height: 1.15;
+/* Avenlo Custom Architectural Range Slider */
+input[type="range"].avenlo-range {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 2px;
+  border-radius: 999px;
+  outline: none;
+  cursor: pointer;
 }
 
-/* Natural-Light Spotlight Card & Interactive Hover System */
-button,
-a[class*="rounded-"] {
-  transition: transform 0.5s var(--ease-cinematic),
-    box-shadow 0.5s var(--ease-cinematic),
-    border-color 0.45s var(--ease-cinematic),
-    background-color 0.45s var(--ease-cinematic),
-    color 0.45s var(--ease-cinematic);
+input[type="range"].avenlo-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  background: #ffffff;
+  border: 2px solid #121212;
+  box-shadow: 0 2px 6px rgba(18, 18, 18, 0.16);
+  transition: transform 180ms var(--ease-swiss), background-color 180ms ease;
 }
 
-button:hover:not(:disabled),
-a[class*="rounded-full"]:hover,
-a[class*="rounded-xl"]:hover,
-a[class*="rounded-2xl"]:hover {
-  transform: translateY(-1.5px);
+input[type="range"].avenlo-range::-webkit-slider-thumb:hover {
+  transform: scale(1.12);
+  background: #121212;
 }
 
-div[class*="rounded-3xl"] {
-  box-shadow: 0 14px 36px rgba(23,19,14, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.55);
-  transition: transform 0.7s var(--ease-cinematic),
-    box-shadow 0.7s var(--ease-cinematic),
-    border-color 0.5s var(--ease-cinematic);
+input[type="range"].avenlo-range::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  background: #ffffff;
+  border: 2px solid #121212;
+  box-shadow: 0 2px 6px rgba(18, 18, 18, 0.16);
+  transition: transform 180ms var(--ease-swiss), background-color 180ms ease;
 }
 
+/* Smooth Architectural Marquee */
+@keyframes avenlo-marquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
 
-/* ---- Cinematic page transitions (React <ViewTransition> in app/template.tsx) ---- */
+.avenlo-marquee-track {
+  display: flex;
+  width: max-content;
+  animation: avenlo-marquee 38s linear infinite;
+}
+
+.avenlo-marquee-track:hover {
+  animation-play-state: paused;
+}
+
+/* Subtle ViewTransition crossfade */
 ::view-transition {
   pointer-events: none;
 }
-/* The persistent header/footer stay put; only page content transitions. */
 ::view-transition-old(root),
 ::view-transition-new(root) {
   animation: none;
 }
 ::view-transition-old(.cine-out) {
-  animation: cine-out 420ms var(--ease-film) both;
+  animation: swiss-out 220ms ease both;
 }
 ::view-transition-new(.cine-in) {
-  animation: cine-in 900ms var(--ease-cinematic) 120ms both;
+  animation: swiss-in 380ms var(--ease-swiss) both;
 }
-@keyframes cine-out {
+@keyframes swiss-out {
   to {
     opacity: 0;
-    filter: blur(6px) brightness(0.85);
-    transform: scale(0.985);
   }
 }
-@keyframes cine-in {
+@keyframes swiss-in {
   from {
     opacity: 0;
-    filter: blur(10px) brightness(1.12);
-    transform: scale(1.015);
+    transform: translateY(8px);
   }
-}
-
-::selection {
-  background: #17130e;
-  color: #f3dfb1;
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .avenlo-marquee-track {
+    animation: none;
+  }
   ::view-transition-old(*),
   ::view-transition-new(*),
   ::view-transition-group(*) {
     animation-duration: 0s !important;
     animation-delay: 0s !important;
-  }
-}
-
-/* ---- Lively scroll reveals: each section eases up as it enters the viewport (pure CSS, no JS) ---- */
-@supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) {
-    main section + section,
-    main article section {
-      animation: reveal-up linear both;
-      animation-timeline: view();
-      animation-range: entry 0% cover 24%;
-    }
-    main img[class*="object-cover"] {
-      animation: reveal-zoom linear both;
-      animation-timeline: view();
-      animation-range: entry 0% cover 40%;
-    }
-  }
-}
-@keyframes reveal-up {
-  from {
-    opacity: 0;
-    transform: translateY(48px);
-  }
-}
-@keyframes reveal-zoom {
-  from {
-    scale: 1.08;
   }
 }
