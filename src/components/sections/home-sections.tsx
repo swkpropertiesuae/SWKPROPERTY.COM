@@ -38,9 +38,10 @@ import {
   type GalleryItem,
 } from "@/components/ui/interactive-image-gallery";
 import { HoverExpand, type HoverExpandItem } from "@/components/ui/hover-expand";
-import TiltStackScroll, {
-  type TiltStackCard,
-} from "@/components/ui/tilt-stack-scroll";
+import {
+  SignatureHorizontalDeck,
+  type SignatureDeckItem,
+} from "@/components/ui/signature-horizontal-deck";
 
 /* -------------------------------------------------------------------------- */
 /* 01. ACTIVE ARCHITECTURAL HERO OVER LIVE 21ST.DEV MESH DRIFT SHADER WAVES   */
@@ -543,7 +544,7 @@ const CAROUSEL_SLUGS_BY_TAB: Record<LaunchCategory, string[]> = {
   ],
 };
 
-const SIGNATURE_TILT_CONFIG = [
+const SIGNATURE_DECK_CONFIG = [
   {
     slug: "palm-springs-beachfront-villas",
     kicker: "Nakheel · Palm Jebel Ali & Palm Jumeirah",
@@ -586,39 +587,44 @@ const SIGNATURE_TILT_CONFIG = [
     priceNote: "Ready & Off-Plan Phases",
     accent: "#51fec0",
   },
+  {
+    slug: "como-residences",
+    kicker: "Nakheel · Palm Jumeirah Curved Tower",
+    price: "From AED 21.0M",
+    priceNote: "360° Gulf & Marina Views",
+    accent: "#67e8f9",
+  },
+  {
+    slug: "binghatti-jvc-boutique-residences",
+    kicker: "Binghatti · Jumeirah Village Circle",
+    price: "From AED 950K",
+    priceNote: "High-Yield Urban Corridor",
+    accent: "#51fec0",
+  },
 ] as const;
 
-function SignatureIconsTiltShowcase() {
-  const tiltCards = useMemo<TiltStackCard[]>(() => {
-    return SIGNATURE_TILT_CONFIG.map((cfg) => {
+function SignatureIconsHorizontalShowcase() {
+  const deckItems = useMemo<SignatureDeckItem[]>(() => {
+    return SIGNATURE_DECK_CONFIG.map((cfg) => {
       const proj = projects.find((p) => p.slug === cfg.slug) ?? projects[0];
       return {
+        slug: proj.slug,
         title: proj.name,
+        developer: proj.developer,
+        community: proj.community,
         kicker: cfg.kicker,
-        description: proj.summary,
+        summary: proj.summary,
         image: proj.image,
-        alt: `${proj.name} by ${proj.developer} in ${proj.community}`,
-        tags: proj.tags.slice(0, 3),
         price: cfg.price,
         priceNote: cfg.priceNote,
-        cta: "Explore Residence",
+        tags: proj.tags,
         href: `/off-plan/${proj.slug}`,
         accent: cfg.accent,
       };
     });
   }, []);
 
-  return (
-    <div className="mt-6">
-      <TiltStackScroll
-        cards={tiltCards}
-        eyebrow="SIGNATURE ICONS · SCROLL TO EXPLORE"
-        heading="Six landmark Dubai launches"
-        height="84svh"
-        snap={false}
-      />
-    </div>
-  );
+  return <SignatureHorizontalDeck items={deckItems} className="mt-8" />;
 }
 
 export function DubaiDeveloperPulse() {
@@ -713,9 +719,9 @@ export function DubaiDeveloperPulse() {
           })}
         </div>
 
-        {/* Signature Icons -> GSAP TiltStackScroll; other developer clusters -> Gallery Hover Carousel */}
+        {/* Signature Icons -> 21st.dev Interactive Horizontal Expanding Deck; other clusters -> Gallery Hover Carousel */}
         {activeTab === "signature" ? (
-          <SignatureIconsTiltShowcase />
+          <SignatureIconsHorizontalShowcase />
         ) : (
           <GalleryHoverCarousel items={galleryItems} className="mt-8" />
         )}

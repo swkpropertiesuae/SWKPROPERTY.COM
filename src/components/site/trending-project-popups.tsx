@@ -132,8 +132,10 @@ export function TrendingProjectPopups() {
   // Quick exit-intent callback form
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
   const [sent, setSent] = useState(false);
   const [sending, setSending] = useState(false);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   // Rotate live trending pill every 6.5s
   useEffect(() => {
@@ -198,23 +200,38 @@ export function TrendingProjectPopups() {
 
   const handleExitSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!phone.trim()) return;
+    setErrorMsg(null);
+    if (phone.replace(/[^\d+]/g, "").length < 7) {
+      setErrorMsg("Enter a valid phone or WhatsApp number (with country code).");
+      return;
+    }
     setSending(true);
     try {
-      await fetch("/api/enquiries", {
+      const res = await fetch("/api/enquiries", {
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({
           context: "exit-intent-brief",
           name: name.trim() || "Dubai Property Investor",
           phone: phone.trim(),
+          email: email.trim(),
           message: "Requested priority Dubai off-plan & secondary brief via exit popup.",
           pageUrl: typeof window !== "undefined" ? window.location.href : SITE.url,
         }),
       });
-      setSent(true);
+      const data = (await res.json().catch(() => ({}))) as { ok?: boolean; error?: string };
+      if (!res.ok || !data.ok) {
+        setErrorMsg(
+          data.error ||
+            `Instant dispatch is offline — message us directly on WhatsApp (${SITE.phoneDisplay}) for immediate floor plans.`
+        );
+      } else {
+        setSent(true);
+      }
     } catch {
-      setSent(true);
+      setErrorMsg(
+        `Network issue — message our Sheikh Zayed Road desk on WhatsApp at ${SITE.phoneDisplay}.`
+      );
     } finally {
       setSending(false);
     }
@@ -497,7 +514,7 @@ export function TrendingProjectPopups() {
                         Receive direct master-developer floor plans, real net rental yields, and pre-launch allocations for Palm Jebel Ali, Creek Harbour, Bugatti, Mercedes-Benz Places, and ready Dubai homes.
                       </p>
 
-                      <form onSubmit={handleExitSubmit} className="mt-5 space-y-3">
+                      <form onSubmit={handleExitSubmit} className="mt-5 space-y-3" noValidate>
                         <input
                           type="text"
                           value={name}
@@ -513,6 +530,18 @@ export function TrendingProjectPopups() {
                           placeholder="WhatsApp / Phone (e.g. +971 50 000 0000)"
                           className="w-full rounded-xl border border-black/12 bg-white px-4 py-3 text-sm text-[#121212] placeholder:text-[#94a3b8] focus:border-[#121212] focus:outline-none"
                         />
+                        <input
+                          type="email"
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                          placeholder="Email (optional, for PDF floor plans)"
+                          className="w-full rounded-xl border border-black/12 bg-white px-4 py-3 text-sm text-[#121212] placeholder:text-[#94a3b8] focus:border-[#121212] focus:outline-none"
+                        />
+                        {errorMsg ? (
+                          <p className="text-xs text-rose-600" role="alert">
+                            {errorMsg}
+                          </p>
+                        ) : null}
                         <button
                           type="submit"
                           disabled={sending}

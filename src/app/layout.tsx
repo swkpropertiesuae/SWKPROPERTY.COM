@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import Script from "next/script";
 import localFont from "next/font/local";
 import { Inter, Geist_Mono } from "next/font/google";
 import "./globals.css";
@@ -96,16 +97,16 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: "/favicon.ico", sizes: "16x16 32x32 48x48 64x64 256x256" },
-      { url: "/favicon-16.png", sizes: "16x16", type: "image/png" },
-      { url: "/favicon-32.png", sizes: "32x32", type: "image/png" },
-      { url: "/favicon-48.png", sizes: "48x48", type: "image/png" },
-      { url: "/favicon-96.png", sizes: "96x96", type: "image/png" },
-      { url: "/favicon-192.png", sizes: "192x192", type: "image/png" },
-      { url: "/favicon-512.png", sizes: "512x512", type: "image/png" },
+      { url: "/favicon.ico?v=3", sizes: "16x16 24x24 32x32 48x48 64x64 128x128 256x256" },
+      { url: "/favicon-16.png?v=3", sizes: "16x16", type: "image/png" },
+      { url: "/favicon-32.png?v=3", sizes: "32x32", type: "image/png" },
+      { url: "/favicon-48.png?v=3", sizes: "48x48", type: "image/png" },
+      { url: "/favicon-96.png?v=3", sizes: "96x96", type: "image/png" },
+      { url: "/favicon-192.png?v=3", sizes: "192x192", type: "image/png" },
+      { url: "/favicon-512.png?v=3", sizes: "512x512", type: "image/png" },
     ],
-    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
-    shortcut: ["/favicon.ico"],
+    apple: [{ url: "/apple-touch-icon.png?v=3", sizes: "180x180", type: "image/png" }],
+    shortcut: ["/favicon.ico?v=3"],
   },
   openGraph: {
     type: "website",
@@ -143,17 +144,25 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta name="geo.placename" content="Dubai, United Arab Emirates" />
         <meta name="geo.position" content="25.213925;55.277978" />
         <meta name="ICBM" content="25.213925, 55.277978" />
-        <script async src="https://www.googletagmanager.com/gtm.js?id=GTM-NMJ9MVNG" />
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-1FXMV3FTYL" />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: CONSENT_DEFAULT_SCRIPT,
-          }}
-        />
       </head>
       <body
         className={`${switzer.variable} ${inter.variable} ${geistMono.variable} min-h-screen overflow-x-clip bg-transparent text-[#121212] antialiased selection:bg-[#121212] selection:text-[#51fec0]`}
       >
+        <Script
+          id="swk-consent-default"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{ __html: CONSENT_DEFAULT_SCRIPT }}
+        />
+        <Script
+          id="swk-gtm"
+          src="https://www.googletagmanager.com/gtm.js?id=GTM-NMJ9MVNG"
+          strategy="afterInteractive"
+        />
+        <Script
+          id="swk-ga4"
+          src="https://www.googletagmanager.com/gtag/js?id=G-1FXMV3FTYL"
+          strategy="afterInteractive"
+        />
         {/* Global 21st.dev Mesh Drift WebGL Wave Canvas — Active Across Every Route */}
         <div
           aria-hidden="true"

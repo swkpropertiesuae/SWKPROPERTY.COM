@@ -25,6 +25,9 @@ export interface CalendlyCarouselProps extends HTMLAttributes<HTMLDivElement> {
   items: CarouselItem[];
   autoPlayInterval?: number;
   pauseOnHover?: boolean;
+  /** Keep slide 0 static until scrolled into viewport, then wait initialHoldMs before slow auto-advance. */
+  startOnView?: boolean;
+  initialHoldMs?: number;
 }
 
 type ScreenTier = "mobile" | "tablet" | "desktop";
@@ -42,6 +45,8 @@ export function CalendlyCarousel({
   items,
   autoPlayInterval = 6000,
   pauseOnHover = true,
+  startOnView = false,
+  initialHoldMs = 4000,
   className,
   ...props
 }: CalendlyCarouselProps) {
@@ -55,12 +60,40 @@ export function CalendlyCarousel({
   const [page, setPage] = useState<number>(0);
   const [progress, setProgress] = useState<number>(0);
   const [isHovered, setIsHovered] = useState<boolean>(false);
+  const [inView, setInView] = useState<boolean>(!startOnView);
+  const [holdCompleted, setHoldCompleted] = useState<boolean>(!startOnView);
   const [tier, setTier] = useState<ScreenTier>("desktop");
   const [viewportWidth, setViewportWidth] = useState<number>(1200);
 
   // Global State/Hooks
   const total = items.length;
   const activeIndex = total > 0 ? ((page % total) + total) % total : 0;
+
+  useEffect(() => {
+    if (!startOnView) return;
+    const node = containerRef.current;
+    if (!node) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0];
+        if (entry?.isIntersecting) {
+          setInView(true);
+        }
+      },
+      { threshold: 0.35 }
+    );
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, [startOnView]);
+
+  useEffect(() => {
+    if (!startOnView || !inView || holdCompleted) return;
+    const timer = window.setTimeout(() => {
+      setHoldCompleted(true);
+    }, initialHoldMs);
+    return () => window.clearTimeout(timer);
+  }, [startOnView, inView, holdCompleted, initialHoldMs]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -85,7 +118,7 @@ export function CalendlyCarousel({
   }, []);
 
   useEffect(() => {
-    if (total <= 1 || (pauseOnHover && isHovered)) {
+    if (total <= 1 || !inView || !holdCompleted || (pauseOnHover && isHovered)) {
       lastTimeRef.current = null;
       return;
     }
@@ -119,7 +152,7 @@ export function CalendlyCarousel({
       }
       lastTimeRef.current = null;
     };
-  }, [page, pauseOnHover, isHovered, autoPlayInterval, total]);
+  }, [page, pauseOnHover, isHovered, autoPlayInterval, total, inView, holdCompleted]);
 
   // Handlers
   const handlePrev = useCallback(() => {

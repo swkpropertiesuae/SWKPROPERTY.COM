@@ -316,7 +316,7 @@ export function SiteFooter() {
 
           {/* Pill 2: Copyright */}
           <div className="inline-flex items-center rounded-full border border-white/10 bg-[#1e1e1e]/95 px-4 py-2 text-xs text-white/70 backdrop-blur-md">
-            © {new Date().getFullYear()} {SITE.legalName}. All rights reserved. RERA ORN {SITE.reraOrn}.
+            © <span suppressHydrationWarning>{new Date().getFullYear()}</span> {SITE.legalName}. All rights reserved. RERA ORN {SITE.reraOrn}.
           </div>
 
           {/* Pill 3: Back to Top */}

@@ -216,7 +216,9 @@ export default function AboutPage() {
         <div className="mt-10">
           <CalendlyCarousel
             items={ADVISORY_CAROUSEL_ITEMS}
-            autoPlayInterval={6500}
+            autoPlayInterval={8500}
+            startOnView
+            initialHoldMs={4500}
             pauseOnHover
             aria-label="SWK Properties Advisory Desk profiles"
           />

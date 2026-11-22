@@ -257,7 +257,8 @@ export async function POST(req: NextRequest) {
       { status: 400 }
     );
   }
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+  const isQuickCallback = context === "exit-intent-brief";
+  if ((!isQuickCallback || email.length > 0) && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     return NextResponse.json({ ok: false, error: "Please enter a valid email address." }, { status: 400 });
   }
 

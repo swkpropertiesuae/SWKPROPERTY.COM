@@ -51,7 +51,7 @@ const DEFAULT_CARDS: CollapsingCardItem[] = [
     wordmark: "DAMAC",
     title: "DAMAC Casa — Al Sufouh & Palm Vista",
     subtitle: "Sky-high tropical terraces and resort-style wellness decks",
-    img: "/img/projects/damac/damac-casa.webp",
+    img: "/img/projects/damac/damac-casa.webp?v=2",
     href: "/off-plan/damac-casa",
   },
   {
