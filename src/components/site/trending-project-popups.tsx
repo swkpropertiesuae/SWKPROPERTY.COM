@@ -6,6 +6,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { ArrowUpRight, CheckCircle2, Flame, ShieldCheck, Sparkles, X } from "lucide-react";
 import { SITE } from "@/lib/swk";
 import { WhatsAppIcon } from "@/components/site/whatsapp-icon";
+import promotionsJson from "@/data/promotions.json";
 
 interface TrendingDeal {
   id: string;
@@ -22,103 +23,8 @@ interface TrendingDeal {
   benefits: string[];
 }
 
-const TRENDING_DEALS: TrendingDeal[] = [
-  {
-    id: "palm-jebel-ali",
-    tab: "off-plan",
-    eyebrow: "TRENDING OFF-PLAN LAUNCH · NAKHEEL",
-    title: "Palm Jebel Ali Beachfront Frond Villas",
-    shortTitle: "Palm Jebel Ali Villas",
-    developer: "Nakheel",
-    community: "Palm Jebel Ali, Dubai",
-    priceGuide: "From AED 18.5M",
-    planHighlight: "80/20 Construction-Linked · 0% Buyer Fee",
-    image: "/img/projects/nakheel/palm-jebel-ali.webp",
-    href: "/off-plan/palm-jebel-ali",
-    benefits: [
-      "0% brokerage commission on direct developer release",
-      "Protected under Dubai RERA Escrow Law No. 8 of 2007",
-      "Qualifies directly for 10-Year UAE Golden Visa",
-      "Private sandy beach access across 16 masterplanned fronds",
-    ],
-  },
-  {
-    id: "mercedes-benz-places",
-    tab: "off-plan",
-    eyebrow: "BRANDED DOWNTOWN ICON · BINGHATTI",
-    title: "Mercedes-Benz Places by Binghatti",
-    shortTitle: "Mercedes-Benz Places",
-    developer: "Binghatti",
-    community: "Downtown Dubai · Burj Khalifa Views",
-    priceGuide: "From AED 8.8M",
-    planHighlight: "70/30 Structured Plan · Direct Allocation",
-    image: "/img/projects/binghatti/mercedes-benz-places-hd.webp",
-    href: "/off-plan/mercedes-benz-places",
-    benefits: [
-      "65-storey architectural landmark facing Burj Khalifa",
-      "Direct developer floor-plate & inventory access via SWK",
-      "10-Year UAE Golden Visa eligibility on DLD Oqood",
-      "Zero annual property tax & zero capital gains tax in Dubai",
-    ],
-  },
-  {
-    id: "creek-haven",
-    tab: "off-plan",
-    eyebrow: "BLUE LINE WATERFRONT · EMAAR",
-    title: "Creek Haven & Dubai Creek Harbour",
-    shortTitle: "Creek Haven · Emaar",
-    developer: "Emaar Properties",
-    community: "Dubai Creek Harbour",
-    priceGuide: "From AED 1.65M",
-    planHighlight: "80/20 Emaar Schedule · Metro Blue Line Axis",
-    image: "/img/projects/emaar/creek-haven-hd.webp",
-    href: "/off-plan/creek-haven",
-    benefits: [
-      "Positioned directly along the confirmed Dubai Metro Blue Line",
-      "Emaar's flagship waterfront track record & resale liquidity",
-      "Strong long-term rental yield potential overlooking Ras Al Khor",
-      "Full written AED closing & Mollak fee sheet before booking",
-    ],
-  },
-  {
-    id: "downtown-ready-secondary",
-    tab: "secondary",
-    eyebrow: "PRIME SECONDARY & HANDOVER · READY TITLE DEED",
-    title: "Burj Crown, Palm Shoreline & Dubai Hills Ready Homes",
-    shortTitle: "Ready Dubai Homes",
-    developer: "Emaar · Nakheel · Sobha · Ellington",
-    community: "Downtown · Palm Jumeirah · Dubai Hills",
-    priceGuide: "Ready Title Deed Stock",
-    planHighlight: "Immediate Transfer · Vacant on Handover Options",
-    image: "/img/listings/burj-crown-boulevard-3br-downtown-dubai.webp",
-    href: "/buy",
-    benefits: [
-      "Start earning tax-free rental income or move in immediately",
-      "Independent DLD achieved-transfer comparable pricing audit",
-      "Form F, Developer NOC & DLD Trustee transfer managed end-to-end",
-      "UAE resident & non-resident mortgage pre-approval guidance",
-    ],
-  },
-  {
-    id: "szr-commercial",
-    tab: "commercial",
-    eyebrow: "GRADE-A COMMERCIAL SPACES · SZR & DIFC",
-    title: "Freehold Offices & Headquarters Along Sheikh Zayed Road",
-    shortTitle: "SZR & DIFC Offices",
-    developer: "DIFC · Business Bay · Sheikh Zayed Road",
-    community: "Prime Commercial Corridors",
-    priceGuide: "Fitted & Full-Floor Suites",
-    planHighlight: "High Corporate Occupancy · Strong Commercial Yields",
-    image: "/img/listings/business-bay-canal-executive-headquarters-commercial.webp",
-    href: "/properties?type=Office",
-    benefits: [
-      "Tightest Grade-A office vacancy across DIFC, SZR & Business Bay",
-      "Dedicated parking ratios & direct Red Line Metro connectivity",
-      "Clear DED mainland & DMCC/DIFC commercial title options",
-      "Full 5% VAT & corporate Ejari leasing structuring",
-    ],
-  },
-];
+// Managed from SWK OS (Website studio → Publish & deploy). Hot-offer listings come first.
+const TRENDING_DEALS = promotionsJson as TrendingDeal[];
 
 const EXIT_BENEFITS = [
   "0% buyer commission on all direct Dubai off-plan launches",
@@ -253,6 +159,9 @@ export function TrendingProjectPopups() {
     }
   };
 
+
+  // Every promotion paused in SWK OS: show nothing rather than an empty spotlight.
+  if (!currentPillDeal) return null;
   return (
     <>
       {/* 1. Floating Live Trending Project Alert Pill (Ultra-compact & dismissible on Mobile + Desktop) */}

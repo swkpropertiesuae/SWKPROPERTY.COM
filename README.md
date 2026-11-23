@@ -47,10 +47,15 @@ See `.env.example`:
 
 | Variable | Purpose |
 | --- | --- |
-| `LEAD_WEBHOOK_URL`, `LEAD_WEBHOOK_SECRET` | Forward enquiries to CRM / Make / Zapier webhook |
+| `LEAD_WEBHOOK_URL`, `LEAD_WEBHOOK_SECRET` | Forward enquiries to SWK OS (or a CRM / Make / Zapier webhook) |
 | `RESEND_API_KEY`, `LEAD_EMAIL_TO`, `LEAD_EMAIL_FROM` | Send enquiry notifications via Resend |
 | `NEXT_PUBLIC_GTM_ID`, `NEXT_PUBLIC_GA_ID` | Google Tag Manager & GA4 (Consent Mode v2) |
 | `NEXT_PUBLIC_*_VERIFICATION` | Google, Bing, Yandex, and Meta domain verification tags |
+
+## SWK OS link
+
+- **Enquiries into SWK OS:** set `LEAD_WEBHOOK_URL` to `https://<SWK OS host>/api/public/lead/<lead webhook secret>`. The secret is the one shown in SWK OS under Settings > Integrations. Every website enquiry then lands in SWK OS as a lead (source "Website"). A repeated delivery of the same enquiry does not create a second lead.
+- **Inventory and hot offers from SWK OS:** Website Studio in SWK OS publishes by committing `src/data/listings-expanded.json` and `src/data/promotions.json` to `main`. The Trending spotlight reads `src/data/promotions.json`. Edit these two files through SWK OS, not by hand, or the next publish overwrites the change.
 
 ## Production Deployment
 
