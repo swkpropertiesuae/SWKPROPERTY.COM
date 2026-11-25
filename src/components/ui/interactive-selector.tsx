@@ -76,7 +76,6 @@ export function InteractiveSelector({
   className?: string;
 }) {
   const [activeIndex, setActiveIndex] = useState(0);
-  const [animatedOptions, setAnimatedOptions] = useState<number[]>([]);
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
@@ -86,19 +85,6 @@ export function InteractiveSelector({
     mq.addEventListener("change", update);
     return () => mq.removeEventListener("change", update);
   }, []);
-
-  useEffect(() => {
-    const timers: ReturnType<typeof setTimeout>[] = [];
-    options.forEach((_, i) => {
-      const timer = setTimeout(() => {
-        setAnimatedOptions((prev) => (prev.includes(i) ? prev : [...prev, i]));
-      }, 110 * i);
-      timers.push(timer);
-    });
-    return () => {
-      timers.forEach((timer) => clearTimeout(timer));
-    };
-  }, [options]);
 
   return (
     <div
@@ -122,31 +108,18 @@ export function InteractiveSelector({
       <div className="flex h-[560px] sm:h-[450px] w-full max-w-[1140px] flex-col sm:flex-row items-stretch gap-2.5 overflow-hidden">
         {options.map((option, index) => {
           const isActive = activeIndex === index;
-          const isAnimated = animatedOptions.includes(index);
           return (
             <div
               key={option.title}
-              role="button"
-              tabIndex={0}
-              aria-expanded={isActive}
-              onClick={() => setActiveIndex(index)}
               onMouseEnter={() => {
                 if (!isMobile) setActiveIndex(index);
               }}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" || e.key === " ") {
-                  e.preventDefault();
-                  setActiveIndex(index);
-                }
-              }}
               className={cn(
-                "relative flex cursor-pointer flex-col overflow-hidden rounded-2xl border-2 transition-all duration-500 ease-out",
+                "relative flex flex-col overflow-hidden rounded-2xl border-2 transition-all duration-500 ease-out",
                 isActive ? "justify-end" : "justify-center sm:justify-end",
                 "min-h-[60px] sm:min-w-[68px]"
               )}
               style={{
-                opacity: isAnimated ? 1 : 0,
-                transform: isAnimated ? "translateX(0)" : "translateX(-20px)",
                 borderColor: isActive
                   ? "rgba(81,254,192,0.85)"
                   : "rgba(255,255,255,0.14)",
@@ -158,6 +131,13 @@ export function InteractiveSelector({
                 willChange: "flex-grow, box-shadow",
               }}
             >
+              <button
+                type="button"
+                aria-expanded={isActive}
+                aria-label={`Select ${option.title}`}
+                onClick={() => setActiveIndex(index)}
+                className="absolute inset-0 z-[5] cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#51fec0]"
+              />
               <img
                 src={option.image}
                 alt={option.title}
@@ -176,7 +156,7 @@ export function InteractiveSelector({
               />
 
               {/* Medallion Icon + Animated Label & Action */}
-              <div className="relative z-10 flex items-center justify-between gap-3 p-3.5 sm:p-5">
+              <div className="pointer-events-none relative z-10 flex items-center justify-between gap-3 p-3.5 sm:p-5">
                 <div className="flex items-center gap-3 min-w-0">
                   <div className="flex h-10 w-10 sm:h-11 sm:w-11 shrink-0 items-center justify-center rounded-full border border-white/25 bg-[#0a1624]/82 backdrop-blur-md shadow-md">
                     {option.icon}
@@ -203,8 +183,7 @@ export function InteractiveSelector({
                 {isActive ? (
                   <Link
                     href={option.href}
-                    onClick={(e) => e.stopPropagation()}
-                    className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-[#51fec0] sm:bg-white px-3.5 py-2 sm:px-4 text-[10.5px] sm:text-[11px] font-semibold uppercase tracking-[0.14em] text-[#0a1624] transition-colors hover:bg-[#51fec0]"
+                    className="pointer-events-auto relative z-20 inline-flex shrink-0 items-center gap-1.5 rounded-full bg-[#51fec0] sm:bg-white px-3.5 py-2 sm:px-4 text-[10.5px] sm:text-[11px] font-semibold uppercase tracking-[0.14em] text-[#0a1624] transition-colors hover:bg-[#51fec0]"
                   >
                     <span>View</span>
                     <ArrowUpRight className="h-3.5 w-3.5" />

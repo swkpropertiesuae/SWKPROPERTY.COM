@@ -23,6 +23,7 @@ export async function generateMetadata({
       title: "Property Not Found",
       description: "Browse verified Dubai real estate listings with SWK Properties.",
       path: "/properties",
+      noIndex: true,
     });
   }
 
@@ -32,7 +33,7 @@ export async function generateMetadata({
     // Listings may only be indexed once their Trakheesi permit is verified.
     noindex: !isPermitVerified(listing),
     path: `/properties/${listing.slug}`,
-    image: listing.images[0],
+    image: listing.images?.[0] || "/og-default.jpg",
     keywords: [
       listing.title,
       listing.community,
@@ -58,19 +59,39 @@ export default async function PropertyDetailPage({
       (item.communitySlug === listing.communitySlug || item.purpose === listing.purpose)
   ).slice(0, 3);
 
+  const emirateRegion = /abu dhabi|saadiyat|yas island|reem/i.test(listing.community)
+    ? "Abu Dhabi"
+    : /sharjah|aljada/i.test(listing.community)
+      ? "Sharjah"
+      : /marjan|ras al khaimah/i.test(listing.community)
+        ? "Ras Al Khaimah"
+        : /siniya|umm al quwain/i.test(listing.community)
+          ? "Umm Al Quwain"
+          : "Dubai";
+
   const realEstateListingLd = {
     "@context": "https://schema.org",
     "@type": "RealEstateListing",
     name: listing.title,
     description: listing.subtitle,
     url: `${SITE.url}/properties/${listing.slug}`,
-    image: listing.images.map((img) => `${SITE.url}${img}`),
+    image: (listing.images || []).map((img) => (img.startsWith("http") ? img : `${SITE.url}${img}`)),
     datePosted: listing.listedAt,
     identifier: listing.reference,
     offers: {
       "@type": "Offer",
       priceCurrency: "AED",
       price: listing.priceAed,
+      ...(listing.purpose === "rent"
+        ? {
+            priceSpecification: {
+              "@type": "UnitPriceSpecification",
+              price: listing.priceAed,
+              priceCurrency: "AED",
+              unitCode: listing.rentalPeriod === "monthly" ? "MON" : "ANN",
+            },
+          }
+        : {}),
       availability:
         listing.status === "available"
           ? "https://schema.org/InStock"
@@ -80,7 +101,7 @@ export default async function PropertyDetailPage({
       "@type": "PostalAddress",
       streetAddress: listing.building,
       addressLocality: listing.community,
-      addressRegion: "Dubai",
+      addressRegion: emirateRegion,
       addressCountry: "AE",
     },
     geo: {

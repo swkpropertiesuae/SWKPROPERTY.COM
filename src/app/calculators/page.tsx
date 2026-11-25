@@ -1,18 +1,16 @@
 "use client";
 
 import React, { useMemo, useState } from "react";
-import { ChevronDown, ChevronUp } from "lucide-react";
+import Link from "next/link";
+import { Mail, ShieldCheck } from "lucide-react";
 import { usePrefs } from "@/lib/prefs";
+import { SITE } from "@/lib/swk";
 import { AvenloPageHeader } from "@/components/avenlo/page-header";
 import { BracketLink } from "@/components/avenlo/bracket-button";
 import { CtaBanner } from "@/components/avenlo/motion";
-import {
-  DonutChart,
-  ObsidianBarChart,
-  PayoffAreaChart,
-  type PayoffPoint,
-} from "@/components/avenlo/calculator-charts";
+import { DonutChart, ObsidianBarChart } from "@/components/avenlo/calculator-charts";
 import { EnquiryForm } from "@/components/site/enquiry-form";
+import { WhatsAppIcon } from "@/components/site/whatsapp-icon";
 
 type CalcMode = "mortgage" | "dld" | "offplan" | "yield" | "buyrent";
 
@@ -31,30 +29,55 @@ const OFFPLAN_PLANS = {
   "1pct": { label: "1% Monthly Structured Plan", booking: 20, during: 45, handover: 35 },
 } as const;
 
+const DEV_ADMIN_MIN = 4000;
+const DEV_ADMIN_MAX = 5500;
+
+function clampFinite(raw: number, min: number, max: number, fallback: number): number {
+  if (!Number.isFinite(raw)) return fallback;
+  return Math.max(min, Math.min(max, raw));
+}
+
 function sliderBg(val: number, min: number, max: number) {
-  const pct = Math.max(0, Math.min(100, ((val - min) / Math.max(1, max - min)) * 100));
+  const safeVal = Number.isFinite(val) ? val : min;
+  const pct = Math.max(0, Math.min(100, ((safeVal - min) / Math.max(1, max - min)) * 100));
   return {
     background: `linear-gradient(to right, #121212 ${pct}%, #d4d4d4 ${pct}%)`,
   };
 }
 
 export default function CalculatorsPage() {
-  const { formatPrice } = usePrefs();
+  const { formatPrice, trackEvent } = usePrefs();
   const [mode, setMode] = useState<CalcMode>("mortgage");
 
-  // 1. UAE Mortgage State (UAE Central Bank LTV: 20% Resident / 40% Non-Resident)
+  // 1. UAE Mortgage State — directly adjustable Property Price & Loan Amount (UAE Central Bank LTV: 20%–80%)
   const [price, setPrice] = useState(2500000);
-  const [depositPct, setDepositPct] = useState(20);
+  const [loanAmount, setLoanAmount] = useState(2000000);
   const [termYears, setTermYears] = useState(25);
   const [ratePct, setRatePct] = useState(4.49);
-  const [monthlyService, setMonthlyService] = useState(1450);
-  const [monthlyInsurance, setMonthlyInsurance] = useState(220);
-  const [showSchedule, setShowSchedule] = useState(false);
 
-  // 2. DLD Upfront State
+  // Keep loanAmount strictly within [20% of price, 80% of price] when price changes
+  const handlePriceChange = (nextRaw: number) => {
+    const nextPrice = clampFinite(nextRaw, 300000, 100000000, 2500000);
+    const currentLtv = price > 0 ? loanAmount / price : 0.8;
+    const boundedLtv = Math.max(0.2, Math.min(0.8, currentLtv));
+    setPrice(nextPrice);
+    setLoanAmount(Math.round((nextPrice * boundedLtv) / 5000) * 5000);
+  };
+
+  const handleLoanChange = (nextRaw: number) => {
+    const minLoan = Math.round(price * 0.1);
+    const maxLoan = Math.round(price * 0.8);
+    setLoanAmount(clampFinite(Math.round(nextRaw), minLoan, maxLoan, maxLoan));
+  };
+
+  const applyDepositPreset = (depositPct: number) => {
+    const targetLoan = Math.round(price * ((100 - depositPct) / 100));
+    setLoanAmount(Math.max(0, Math.min(Math.round(price * 0.8), targetLoan)));
+  };
+
+  // 2. DLD Upfront State (Off-Plan default: 0 mortgage reg, 0 trustee fees, Developer Admin approx AED 4,000-5,500)
   const [dldPrice, setDldPrice] = useState(2500000);
-  const [dldType, setDldType] = useState<"secondary" | "offplan">("secondary");
-  const [dldFinanced, setDldFinanced] = useState(true);
+  const [dldType, setDldType] = useState<"offplan" | "secondary">("offplan");
 
   // 3. Off-Plan State
   const [opPrice, setOpPrice] = useState(2200000);
@@ -73,76 +96,123 @@ export default function CalculatorsPage() {
   const [brRentGrowth, setBrRentGrowth] = useState(4);
   const [brAppreciation, setBrAppreciation] = useState(5);
 
-  // Mortgage calculations + amortization curve
+  // Mortgage calculations — lifelong static core financing structure (no fluctuating service charge / insurance / total interest / payoff curve)
   const mortgage = useMemo(() => {
-    const deposit = Math.round((price * depositPct) / 100);
-    const loan = Math.max(0, price - deposit);
-    const ltv = Math.round((loan / Math.max(1, price)) * 100);
+    const safeLoan = Math.max(0, Math.min(Math.round(price * 0.8), loanAmount));
+    const deposit = Math.max(0, price - safeLoan);
+    const depositPct = Math.round((deposit / Math.max(1, price)) * 100);
+    const ltv = Math.round((safeLoan / Math.max(1, price)) * 100);
     const r = ratePct / 100 / 12;
     const n = termYears * 12;
     const monthlyPI =
-      loan === 0
+      safeLoan === 0
         ? 0
         : r === 0
-        ? loan / n
-        : (loan * (r * Math.pow(1 + r, n))) / (Math.pow(1 + r, n) - 1);
-    const totalMonthly = monthlyPI + monthlyService + monthlyInsurance;
-    const totalRepaid = monthlyPI * n;
-    const totalInterest = Math.max(0, totalRepaid - loan);
-
-    const points: PayoffPoint[] = [
-      { year: 0, balance: loan, principalPaid: 0, interestPaid: 0 },
-    ];
-    let bal = loan;
-    let cumP = 0;
-    let cumI = 0;
-    for (let yr = 1; yr <= termYears; yr++) {
-      for (let m = 0; m < 12; m++) {
-        const interest = bal * r;
-        const principal = Math.min(bal, Math.max(0, monthlyPI - interest));
-        bal = Math.max(0, bal - principal);
-        cumP += principal;
-        cumI += interest;
-      }
-      points.push({
-        year: yr,
-        balance: Math.round(bal),
-        principalPaid: Math.round(cumP),
-        interestPaid: Math.round(cumI),
-      });
-    }
+        ? safeLoan / n
+        : (safeLoan * (r * Math.pow(1 + r, n))) / (Math.pow(1 + r, n) - 1);
+    const roundedMonthly = Math.round(monthlyPI);
+    const annualRepayment = roundedMonthly * 12;
+    // UAE Central Bank Debt Burden Ratio (50% DBR) indicative minimum qualifying monthly income
+    const minMonthlyIncome = roundedMonthly * 2;
+    const borrowerProfile =
+      ltv <= 60 ? "Eligible for UAE Resident & Non-Resident (≤ 60% LTV)" : "UAE Resident Financing Tier (up to 80% LTV)";
 
     return {
       deposit,
-      loan,
+      depositPct,
+      loan: safeLoan,
       ltv,
-      monthlyPI: Math.round(monthlyPI),
-      totalMonthly: Math.round(totalMonthly),
-      totalRepaid: Math.round(totalRepaid),
-      totalInterest: Math.round(totalInterest),
-      points,
+      monthlyPI: roundedMonthly,
+      annualRepayment,
+      minMonthlyIncome,
+      borrowerProfile,
+      minLoan: Math.round(price * 0.1),
+      maxLoan: Math.round(price * 0.8),
     };
-  }, [price, depositPct, termYears, ratePct, monthlyService, monthlyInsurance]);
+  }, [price, loanAmount, termYears, ratePct]);
 
-  // DLD 4% Upfront calculations
+  // Direct WhatsApp & Email links carrying the user's live mortgage calculation
+  const mortgageContact = useMemo(() => {
+    const summaryText = [
+      "Hello SWK Properties, I calculated a UAE mortgage estimate on swkpropertiesuae.com:",
+      `• Property Price: AED ${price.toLocaleString("en-US")}`,
+      `• Financed Loan Amount: AED ${mortgage.loan.toLocaleString("en-US")} (${mortgage.ltv}% LTV)`,
+      `• Down Payment: AED ${mortgage.deposit.toLocaleString("en-US")} (${mortgage.depositPct}%)`,
+      `• Tenure & Indicative Rate: ${termYears} years @ ${ratePct.toFixed(2)}% p.a.`,
+      `• Estimated Monthly Payment: AED ${mortgage.monthlyPI.toLocaleString("en-US")}/mo`,
+      "Please share current UAE bank pre-approval options and written cost sheets.",
+    ].join("\n");
+
+    return {
+      whatsappHref: `${SITE.whatsappUrl}?text=${encodeURIComponent(summaryText)}`,
+      emailHref: `mailto:${SITE.email}?subject=${encodeURIComponent(
+        `UAE Mortgage Quote Request — AED ${price.toLocaleString("en-US")} Property`
+      )}&body=${encodeURIComponent(summaryText)}`,
+    };
+  }, [price, mortgage, termYears, ratePct]);
+
+  // DLD 4% Upfront calculations — No trustee/admin, No 0.25% DLD mortgage reg fee; Developers Admin fees (Approx.) AED 4,000–5,500
   const dldCalc = useMemo(() => {
     const dldFee = Math.round(dldPrice * 0.04);
-    const adminFee = dldType === "secondary" ? (dldPrice >= 500000 ? 4200 : 2100) + 580 : 3000;
     const agencyFee = dldType === "secondary" ? Math.round(dldPrice * 0.02 * 1.05) : 0;
-    const mortgageReg = dldFinanced ? Math.round(dldPrice * 0.8 * 0.0025) + 290 : 0;
-    const totalFees = dldFee + adminFee + agencyFee + mortgageReg;
-    const pct = ((totalFees / Math.max(1, dldPrice)) * 100).toFixed(2);
-    return { dldFee, adminFee, agencyFee, mortgageReg, totalFees, pct };
-  }, [dldPrice, dldType, dldFinanced]);
+    const totalMin = dldFee + agencyFee + DEV_ADMIN_MIN;
+    const totalMax = dldFee + agencyFee + DEV_ADMIN_MAX;
+    const pctMin = ((totalMin / Math.max(1, dldPrice)) * 100).toFixed(2);
+    const pctMax = ((totalMax / Math.max(1, dldPrice)) * 100).toFixed(2);
+    return {
+      dldFee,
+      agencyFee,
+      devAdminMin: DEV_ADMIN_MIN,
+      devAdminMax: DEV_ADMIN_MAX,
+      devAdminMid: Math.round((DEV_ADMIN_MIN + DEV_ADMIN_MAX) / 2),
+      totalMin,
+      totalMax,
+      pctMin,
+      pctMax,
+    };
+  }, [dldPrice, dldType]);
 
-  // Off-Plan schedule
+  const dldContact = useMemo(() => {
+    const summaryText = [
+      `Hello SWK Properties, I calculated Dubai DLD upfront costs (${dldType === "offplan" ? "Primary Off-Plan" : "Ready Secondary"}):`,
+      `• Purchase Price: AED ${dldPrice.toLocaleString("en-US")}`,
+      `• 4% DLD / Oqood Fee: AED ${dldCalc.dldFee.toLocaleString("en-US")}`,
+      `• Developers Admin Fees (Approx.): AED ${DEV_ADMIN_MIN.toLocaleString("en-US")} – ${DEV_ADMIN_MAX.toLocaleString("en-US")}`,
+      dldType === "offplan"
+        ? "• Mortgage Registration & Trustee Fees: AED 0 (Not applicable on off-plan)"
+        : `• Agency Fee (2% + 5% VAT): AED ${dldCalc.agencyFee.toLocaleString("en-US")}`,
+      `• Estimated Total Upfront Fees: AED ${dldCalc.totalMin.toLocaleString("en-US")} – ${dldCalc.totalMax.toLocaleString("en-US")}`,
+      "Please share a written developer cost sheet and current availability.",
+    ].join("\n");
+
+    return {
+      whatsappHref: `${SITE.whatsappUrl}?text=${encodeURIComponent(summaryText)}`,
+      emailHref: `mailto:${SITE.email}?subject=${encodeURIComponent(
+        `Dubai DLD Cost Sheet Request — AED ${dldPrice.toLocaleString("en-US")}`
+      )}&body=${encodeURIComponent(summaryText)}`,
+    };
+  }, [dldPrice, dldType, dldCalc]);
+
+  // Off-Plan schedule (No mortgage registration fees & no trustee fees; Developers Admin fees approx AED 4,000–5,500)
   const opCalc = useMemo(() => {
     const plan = OFFPLAN_PLANS[opPlanKey];
     const bookingAed = Math.round((opPrice * plan.booking) / 100);
-    const dldOqood = Math.round(opPrice * 0.04) + 3000;
+    const dld4Pct = Math.round(opPrice * 0.04);
+    const dldOqoodMin = dld4Pct + DEV_ADMIN_MIN;
+    const dldOqoodMax = dld4Pct + DEV_ADMIN_MAX;
     const duringAed = Math.round((opPrice * plan.during) / 100);
     const handoverAed = Math.round((opPrice * plan.handover) / 100);
-    return { plan, bookingAed, dldOqood, duringAed, handoverAed, upfront: bookingAed + dldOqood };
+    return {
+      plan,
+      bookingAed,
+      dld4Pct,
+      dldOqoodMin,
+      dldOqoodMax,
+      duringAed,
+      handoverAed,
+      upfrontMin: bookingAed + dldOqoodMin,
+      upfrontMax: bookingAed + dldOqoodMax,
+    };
   }, [opPrice, opPlanKey]);
 
   // Net rental yield
@@ -155,7 +225,7 @@ export default function CalculatorsPage() {
     return { annualService, mgmtFee, netRent, grossPct, netPct };
   }, [yPrice, yAnnualRent, yAreaSqFt, yServiceRate, yMgmtPct]);
 
-  // 5-Year Buy vs Rent
+  // 5-Year Buy vs Rent (exact 60-month amortization principal paid)
   const buyRent = useMemo(() => {
     let totalRent5Yr = 0;
     let yrRent = brAnnualRent;
@@ -164,14 +234,21 @@ export default function CalculatorsPage() {
       yrRent *= 1 + brRentGrowth / 100;
     }
     const downPayment = brPrice * 0.2;
-    const dldUpfront = brPrice * 0.062;
+    const dldUpfront = brPrice * 0.04 + 4750 + brPrice * 0.021;
     const loan = brPrice * 0.8;
     const r = 0.045 / 12;
     const n = 300;
     const mPay = (loan * (r * Math.pow(1 + r, n))) / (Math.pow(1 + r, n) - 1);
     const payments5Yr = mPay * 60;
+    // Exact principal paid over 60 months
+    let remBal = loan;
+    for (let m = 0; m < 60; m++) {
+      const interest = remBal * r;
+      remBal = Math.max(0, remBal - (mPay - interest));
+    }
+    const principalPaid5Yr = loan - remBal;
     const estFutureValue = brPrice * Math.pow(1 + brAppreciation / 100, 5);
-    const equityGained = estFutureValue - brPrice + loan * 0.13;
+    const equityGained = estFutureValue - brPrice + principalPaid5Yr;
     const netBuyCost = Math.max(0, dldUpfront + payments5Yr - equityGained);
     const advantage = Math.round(totalRent5Yr - netBuyCost);
     return {
@@ -189,7 +266,7 @@ export default function CalculatorsPage() {
         eyebrow="CALCULATORS · DUBAI & UAE"
         title="What it"
         italic="really costs"
-        lead="Model UAE mortgage repayments, 4% DLD transfer fees, off-plan payment milestones, net rental yields, and 5-year buy-vs-rent outcomes in real time."
+        lead="Model UAE mortgage repayments with direct loan-amount adjustment, 4% DLD upfront costs (with zero off-plan mortgage registration or trustee fees), off-plan payment schedules, net rental yields, and 5-year buy-vs-rent outcomes."
         breadcrumb={[
           { label: "Home", href: "/" },
           { label: "Calculators" },
@@ -197,12 +274,14 @@ export default function CalculatorsPage() {
       />
 
       <section className="mx-auto max-w-[1260px] px-4 py-12 sm:px-8">
-        {/* Avenlo Pill Mode Selector */}
-        <div className="flex flex-wrap items-center justify-center gap-2">
+        {/* Mode Selector */}
+        <div className="flex flex-wrap items-center justify-center gap-2" role="tablist" aria-label="Calculator modes">
           {MODES.map((m) => (
             <button
               key={m.id}
               type="button"
+              role="tab"
+              aria-selected={mode === m.id}
               onClick={() => setMode(m.id)}
               className={`cursor-pointer rounded-full px-5 py-2.5 text-xs font-medium transition-colors ${
                 mode === m.id
@@ -215,12 +294,12 @@ export default function CalculatorsPage() {
           ))}
         </div>
 
-        {/* MODE 1: UAE MORTGAGE (Exact Avenlo 2-Column + Full-Width Mint Payoff Curve) */}
+        {/* MODE 1: UAE MORTGAGE — Clean Static Financing Data + Direct Loan Adjustment + WhatsApp & Email Buttons */}
         {mode === "mortgage" ? (
-          <div className="mt-10 space-y-6">
+          <div className="mt-10">
             <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
-              {/* Left Crisp #F7F7F7 Sliders Card */}
-              <div className="lg:col-span-6 rounded-2xl border border-white/80 bg-white/80 backdrop-blur-xl shadow-[0_14px_40px_rgba(12,56,96,0.08)] p-6 sm:p-8 space-y-6">
+              {/* Left Input Controls Card */}
+              <div className="lg:col-span-6 rounded-2xl border border-white/80 bg-white/84 backdrop-blur-xl shadow-[0_14px_40px_rgba(12,56,96,0.08)] p-6 sm:p-8 space-y-6">
                 {/* Property Price */}
                 <div>
                   <div className="flex items-center justify-between text-xs">
@@ -237,10 +316,10 @@ export default function CalculatorsPage() {
                       id="m-price"
                       type="number"
                       min={300000}
-                      max={50000000}
+                      max={100000000}
                       step={50000}
                       value={price}
-                      onChange={(e) => setPrice(Math.max(300000, Number(e.target.value) || 0))}
+                      onChange={(e) => handlePriceChange(Number(e.target.value))}
                       className="w-full bg-transparent text-base font-medium text-[#121212] tabular-nums focus:outline-none"
                     />
                   </div>
@@ -250,60 +329,75 @@ export default function CalculatorsPage() {
                     min={500000}
                     max={25000000}
                     step={50000}
-                    value={Math.min(25000000, price)}
-                    onChange={(e) => setPrice(Number(e.target.value))}
-                    style={sliderBg(Math.min(25000000, price), 500000, 25000000)}
+                    value={Math.min(25000000, Math.max(500000, price))}
+                    onChange={(e) => handlePriceChange(Number(e.target.value))}
+                    style={sliderBg(Math.min(25000000, Math.max(500000, price)), 500000, 25000000)}
                     className="avenlo-range mt-4"
                   />
                 </div>
 
-                {/* Deposit + UAE Central Bank LTV Presets */}
+                {/* Direct Loan Amount Adjustment + UAE Central Bank LTV Presets */}
                 <div>
                   <div className="flex flex-wrap items-center justify-between gap-2 text-xs">
-                    <span className="font-medium text-[#121212]">Down payment</span>
-                    <span className="font-medium text-[#737373] tabular-nums">
-                      {formatPrice(mortgage.deposit, { includeApprox: false })} · {depositPct}%
+                    <label htmlFor="m-loan" className="font-medium text-[#121212]">
+                      Adjust loan amount
+                    </label>
+                    <span className="font-medium text-[#0e9f6e] tabular-nums">
+                      {mortgage.ltv}% LTV · Down Payment {mortgage.depositPct}%
                     </span>
                   </div>
-                  <div className="mt-2 flex flex-wrap gap-2">
+                  <div className="mt-2 flex items-center rounded-xl border border-black/10 bg-white px-4 py-3">
+                    <span className="mr-2 text-xs font-medium text-[#8b8b8b]">AED</span>
+                    <input
+                      id="m-loan"
+                      type="number"
+                      min={mortgage.minLoan}
+                      max={mortgage.maxLoan}
+                      step={25000}
+                      value={mortgage.loan}
+                      onChange={(e) => handleLoanChange(Number(e.target.value))}
+                      className="w-full bg-transparent text-base font-medium text-[#121212] tabular-nums focus:outline-none"
+                    />
+                  </div>
+                  <input
+                    type="range"
+                    aria-label="Loan amount slider"
+                    min={mortgage.minLoan}
+                    max={mortgage.maxLoan}
+                    step={25000}
+                    value={mortgage.loan}
+                    onChange={(e) => handleLoanChange(Number(e.target.value))}
+                    style={sliderBg(mortgage.loan, mortgage.minLoan, mortgage.maxLoan)}
+                    className="avenlo-range mt-4"
+                  />
+                  <div className="mt-3 flex flex-wrap gap-2">
                     {[
-                      { pct: 20, label: "UAE Resident (20% min)" },
-                      { pct: 40, label: "Non-Resident (40% min)" },
-                      { pct: 50, label: "50% Equity" },
+                      { pct: 20, label: "UAE Resident (80% LTV / 20% Down)" },
+                      { pct: 40, label: "Non-Resident (60% LTV / 40% Down)" },
+                      { pct: 50, label: "50% Loan / 50% Equity" },
                     ].map((preset) => (
                       <button
                         key={preset.pct}
                         type="button"
-                        onClick={() => setDepositPct(preset.pct)}
-                        className={`cursor-pointer rounded-full px-3 py-1 text-[11px] font-medium transition-colors ${
-                          depositPct === preset.pct
+                        onClick={() => applyDepositPreset(preset.pct)}
+                        className={`cursor-pointer rounded-full px-3 py-1.5 text-[11px] font-medium transition-colors ${
+                          mortgage.depositPct === preset.pct
                             ? "bg-[#121212] text-white"
-                            : "border border-black/10 bg-white text-[#525252] hover:text-[#121212]"
+                            : "border border-black/10 bg-white text-[#525252] hover:border-[#121212] hover:text-[#121212]"
                         }`}
                       >
                         {preset.label}
                       </button>
                     ))}
                   </div>
-                  <input
-                    type="range"
-                    aria-label="Down payment percentage"
-                    min={20}
-                    max={80}
-                    step={1}
-                    value={depositPct}
-                    onChange={(e) => setDepositPct(Number(e.target.value))}
-                    style={sliderBg(depositPct, 20, 80)}
-                    className="avenlo-range mt-4"
-                  />
                 </div>
 
                 {/* Term & Interest Rate */}
-                <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+                <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 border-t border-black/[0.08] pt-5">
                   <div>
                     <div className="flex items-center justify-between text-xs">
                       <label htmlFor="m-term" className="font-medium text-[#121212]">
-                        Term
+                        Mortgage term
                       </label>
                       <span className="text-[#737373]">{termYears} years</span>
                     </div>
@@ -315,7 +409,7 @@ export default function CalculatorsPage() {
                         max={25}
                         value={termYears}
                         onChange={(e) =>
-                          setTermYears(Math.max(5, Math.min(25, Number(e.target.value) || 5)))
+                          setTermYears(clampFinite(Number(e.target.value), 5, 25, 25))
                         }
                         className="w-20 bg-transparent text-sm font-medium text-[#121212] tabular-nums focus:outline-none"
                       />
@@ -327,7 +421,7 @@ export default function CalculatorsPage() {
                       min={5}
                       max={25}
                       value={termYears}
-                      onChange={(e) => setTermYears(Number(e.target.value))}
+                      onChange={(e) => setTermYears(clampFinite(Number(e.target.value), 5, 25, 25))}
                       style={sliderBg(termYears, 5, 25)}
                       className="avenlo-range mt-3.5"
                     />
@@ -336,9 +430,9 @@ export default function CalculatorsPage() {
                   <div>
                     <div className="flex items-center justify-between text-xs">
                       <label htmlFor="m-rate" className="font-medium text-[#121212]">
-                        Interest rate
+                        Indicative interest rate
                       </label>
-                      <span className="text-[#737373]">{ratePct.toFixed(2)}%</span>
+                      <span className="text-[#737373]">{ratePct.toFixed(2)}% p.a.</span>
                     </div>
                     <div className="mt-2 flex items-center justify-between rounded-xl border border-black/10 bg-white px-4 py-2.5">
                       <input
@@ -349,7 +443,7 @@ export default function CalculatorsPage() {
                         step={0.05}
                         value={ratePct}
                         onChange={(e) =>
-                          setRatePct(Math.max(1, Math.min(12, Number(e.target.value) || 1)))
+                          setRatePct(clampFinite(Number(e.target.value), 1, 12, 4.49))
                         }
                         className="w-20 bg-transparent text-sm font-medium text-[#121212] tabular-nums focus:outline-none"
                       />
@@ -362,211 +456,159 @@ export default function CalculatorsPage() {
                       max={8}
                       step={0.05}
                       value={Math.min(8, Math.max(2.5, ratePct))}
-                      onChange={(e) => setRatePct(Number(e.target.value))}
+                      onChange={(e) => setRatePct(clampFinite(Number(e.target.value), 2.5, 8, 4.49))}
                       style={sliderBg(Math.min(8, Math.max(2.5, ratePct)), 2.5, 8)}
                       className="avenlo-range mt-3.5"
                     />
                   </div>
                 </div>
 
-                {/* Monthly Extras */}
-                <div className="border-t border-black/[0.08] pt-5">
-                  <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-[#8b8b8b]">
-                    MONTHLY EXTRAS (EST.)
-                  </p>
-                  <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
-                    <div>
-                      <label htmlFor="m-service" className="mb-1 block text-xs text-[#737373]">
-                        Service charge (AED/mo)
-                      </label>
-                      <input
-                        id="m-service"
-                        type="number"
-                        min={0}
-                        step={50}
-                        value={monthlyService}
-                        onChange={(e) => setMonthlyService(Math.max(0, Number(e.target.value) || 0))}
-                        className="w-full rounded-xl border border-black/10 bg-white px-3.5 py-2.5 text-sm font-medium text-[#121212] tabular-nums"
-                      />
-                    </div>
-                    <div>
-                      <label htmlFor="m-ins" className="mb-1 block text-xs text-[#737373]">
-                        Building / life insurance (AED/mo)
-                      </label>
-                      <input
-                        id="m-ins"
-                        type="number"
-                        min={0}
-                        step={25}
-                        value={monthlyInsurance}
-                        onChange={(e) =>
-                          setMonthlyInsurance(Math.max(0, Number(e.target.value) || 0))
-                        }
-                        className="w-full rounded-xl border border-black/10 bg-white px-3.5 py-2.5 text-sm font-medium text-[#121212] tabular-nums"
-                      />
-                    </div>
-                  </div>
+                {/* Off-Plan & Financing Rule Callout */}
+                <div className="rounded-xl border border-[#0e9f6e]/20 bg-[#0e9f6e]/[0.06] px-4 py-3 text-xs leading-relaxed text-[#334155]">
+                  <span className="font-semibold text-[#0b7a55]">UAE Financing Clarity:</span>{" "}
+                  Off-plan purchases carry <strong>no mortgage registration fees</strong> and <strong>no trustee fees</strong>. Mortgage terms are subject to bank underwriting &amp; UAE Central Bank LTV/DBR rules.
                 </div>
               </div>
 
-              {/* Right #121212 Obsidian Summary + Donut Chart Card */}
+              {/* Right #121212 Obsidian Static Mortgage Summary + WhatsApp & Email Buttons */}
               <div className="lg:col-span-6 flex flex-col justify-between rounded-2xl bg-[#121212] p-6 sm:p-9 text-white">
                 <div>
-                  <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-[#8b8b8b]">
-                    ESTIMATED MONTHLY PAYMENT
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-[#8b8b8b]">
+                      ESTIMATED MONTHLY MORTGAGE PAYMENT
+                    </p>
+                    <span className="inline-flex items-center gap-1.5 rounded-full border border-[#51fec0]/30 bg-[#51fec0]/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-[#51fec0]">
+                      <ShieldCheck className="h-3 w-3" />
+                      {mortgage.ltv}% LTV
+                    </span>
+                  </div>
+
+                  <p className="mt-3 text-[40px] sm:text-[54px] font-medium leading-none tracking-[-0.04em] text-white tabular-nums">
+                    {formatPrice(mortgage.monthlyPI, { includeApprox: false })}
+                    <span className="ml-1.5 text-base font-normal text-[#8b8b8b]">/ mo</span>
                   </p>
-                  <p className="mt-2 text-[40px] sm:text-[54px] font-medium leading-none tracking-[-0.04em] text-white tabular-nums">
-                    {formatPrice(mortgage.totalMonthly, { includeApprox: false })}
+                  <p className="mt-2 text-xs text-[#a7a7a7]">
+                    {mortgage.borrowerProfile} · {termYears}-year term at {ratePct.toFixed(2)}% p.a.
                   </p>
 
-                  <div className="mt-8">
-                    <DonutChart
-                      slices={[
-                        {
-                          label: "Capital & interest",
-                          value: mortgage.monthlyPI,
-                          color: "#ffffff",
-                          display: formatPrice(mortgage.monthlyPI, { includeApprox: false }),
-                        },
-                        {
-                          label: "Service charge",
-                          value: monthlyService,
-                          color: "#51fec0",
-                          display: formatPrice(monthlyService, { includeApprox: false }),
-                        },
-                        {
-                          label: "Insurance",
-                          value: monthlyInsurance,
-                          color: "#8b8b8b",
-                          display: formatPrice(monthlyInsurance, { includeApprox: false }),
-                        },
-                      ]}
-                    />
+                  {/* Static Financing Capital Structure Bar */}
+                  <div className="mt-7 space-y-2.5">
+                    <div className="flex items-center justify-between text-[11px] uppercase tracking-[0.16em] text-[#8b8b8b]">
+                      <span>Loan Financing ({mortgage.ltv}%)</span>
+                      <span>Down Payment Equity ({mortgage.depositPct}%)</span>
+                    </div>
+                    <div className="flex h-3 w-full overflow-hidden rounded-full bg-white/10">
+                      <div
+                        className="h-full bg-[#51fec0] transition-all duration-300"
+                        style={{ width: `${mortgage.ltv}%` }}
+                      />
+                      <div
+                        className="h-full bg-white/85 transition-all duration-300"
+                        style={{ width: `${mortgage.depositPct}%` }}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Lifelong Static Calculation Data Grid */}
+                  <div className="mt-7 grid grid-cols-2 gap-4 sm:gap-5 border-t border-white/[0.12] pt-6">
+                    <div className="rounded-xl border border-white/[0.08] bg-white/[0.04] p-4">
+                      <p className="text-[11px] uppercase tracking-[0.14em] text-[#8b8b8b]">
+                        Loan Amount
+                      </p>
+                      <p className="mt-1.5 text-lg sm:text-xl font-medium text-[#51fec0] tabular-nums">
+                        {formatPrice(mortgage.loan, { includeApprox: false })}
+                      </p>
+                    </div>
+                    <div className="rounded-xl border border-white/[0.08] bg-white/[0.04] p-4">
+                      <p className="text-[11px] uppercase tracking-[0.14em] text-[#8b8b8b]">
+                        Down Payment ({mortgage.depositPct}%)
+                      </p>
+                      <p className="mt-1.5 text-lg sm:text-xl font-medium text-white tabular-nums">
+                        {formatPrice(mortgage.deposit, { includeApprox: false })}
+                      </p>
+                    </div>
+                    <div className="rounded-xl border border-white/[0.08] bg-white/[0.04] p-4">
+                      <p className="text-[11px] uppercase tracking-[0.14em] text-[#8b8b8b]">
+                        Annual Repayment
+                      </p>
+                      <p className="mt-1.5 text-base sm:text-lg font-medium text-white tabular-nums">
+                        {formatPrice(mortgage.annualRepayment, { includeApprox: false })}
+                      </p>
+                    </div>
+                    <div className="rounded-xl border border-white/[0.08] bg-white/[0.04] p-4">
+                      <p className="text-[11px] uppercase tracking-[0.14em] text-[#8b8b8b]">
+                        Min. Qualifying Income (50% DBR)
+                      </p>
+                      <p className="mt-1.5 text-base sm:text-lg font-medium text-white tabular-nums">
+                        {formatPrice(mortgage.minMonthlyIncome, { includeApprox: false })}
+                        <span className="text-xs font-normal text-[#8b8b8b]"> / mo</span>
+                      </p>
+                    </div>
                   </div>
                 </div>
 
-                <div className="mt-9 grid grid-cols-2 gap-6 border-t border-white/[0.12] pt-7">
-                  <div>
-                    <p className="text-xs text-[#8b8b8b]">Loan amount</p>
-                    <p className="mt-1 text-lg font-medium text-white tabular-nums">
-                      {formatPrice(mortgage.loan, { includeApprox: false })}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-[#8b8b8b]">Loan to value (LTV)</p>
-                    <p className="mt-1 text-lg font-medium text-[#51fec0] tabular-nums">
-                      {mortgage.ltv}%
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-[#8b8b8b]">Total interest</p>
-                    <p className="mt-1 text-lg font-medium text-white tabular-nums">
-                      {formatPrice(mortgage.totalInterest, { includeApprox: false })}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-[#8b8b8b]">Total repaid</p>
-                    <p className="mt-1 text-lg font-medium text-white tabular-nums">
-                      {formatPrice(mortgage.totalRepaid, { includeApprox: false })}
-                    </p>
+                {/* Direct WhatsApp & Email ID Action Buttons */}
+                <div className="mt-7 border-t border-white/[0.12] pt-6 space-y-3">
+                  <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-[#8b8b8b]">
+                    SEND THIS CALCULATION TO OUR ADVISORY DESK
+                  </p>
+                  <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                    <a
+                      href={mortgageContact.whatsappHref}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={() => trackEvent("whatsapp_click", { location: "mortgage_calculator" })}
+                      className="inline-flex items-center justify-center gap-2 rounded-full bg-[#25D366] px-5 py-3 text-xs font-semibold uppercase tracking-[0.14em] text-[#06130b] transition-all hover:-translate-y-0.5 hover:bg-[#51fec0]"
+                    >
+                      <WhatsAppIcon className="h-4 w-4" />
+                      <span>WhatsApp Us</span>
+                    </a>
+                    <a
+                      href={mortgageContact.emailHref}
+                      className="inline-flex items-center justify-center gap-2 rounded-full border border-white/25 bg-white/10 px-5 py-3 text-xs font-semibold tracking-[0.04em] text-white transition-all hover:-translate-y-0.5 hover:border-[#51fec0] hover:bg-white hover:text-[#121212]"
+                    >
+                      <Mail className="h-4 w-4 shrink-0" />
+                      <span className="truncate">{SITE.email}</span>
+                    </a>
                   </div>
                 </div>
               </div>
-            </div>
-
-            {/* Full-Width "What you still owe" Payoff Mint Area Chart Card */}
-            <div className="rounded-2xl border border-white/80 bg-white/86 backdrop-blur-xl shadow-[0_18px_48px_rgba(12,56,96,0.09)] p-6 sm:p-8">
-              <div className="flex flex-wrap items-center justify-between gap-4">
-                <div>
-                  <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-[#8b8b8b]">
-                    WHAT YOU STILL OWE
-                  </p>
-                  <h2 className="mt-1.5 text-2xl sm:text-3xl font-medium tracking-[-0.03em] text-[#121212]">
-                    {formatPrice(mortgage.loan, { includeApprox: false })} paid down over {termYears}{" "}
-                    years
-                  </h2>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => setShowSchedule((v) => !v)}
-                  className="inline-flex cursor-pointer items-center gap-2 rounded-full border border-black/12 bg-white px-5 py-2.5 text-xs font-medium text-[#121212] hover:bg-[#f7f7f7]"
-                >
-                  <span>{showSchedule ? "Hide year-by-year" : "Show the year-by-year"}</span>
-                  {showSchedule ? (
-                    <ChevronUp className="h-3.5 w-3.5" />
-                  ) : (
-                    <ChevronDown className="h-3.5 w-3.5" />
-                  )}
-                </button>
-              </div>
-
-              <div className="mt-6">
-                <PayoffAreaChart
-                  points={mortgage.points}
-                  formatVal={(v) => formatPrice(v, { compact: true, includeApprox: false })}
-                />
-              </div>
-
-              {showSchedule ? (
-                <div className="mt-6 max-h-72 overflow-y-auto rounded-xl border border-black/[0.08]">
-                  <table className="w-full text-left text-xs">
-                    <thead className="sticky top-0 bg-[#f7f7f7] text-[#121212]">
-                      <tr>
-                        <th className="p-3 font-medium">Year</th>
-                        <th className="p-3 font-medium">Remaining Balance</th>
-                        <th className="p-3 font-medium">Cumulative Principal</th>
-                        <th className="p-3 font-medium">Cumulative Interest</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-black/[0.05] tabular-nums">
-                      {mortgage.points.slice(1).map((row) => (
-                        <tr key={row.year}>
-                          <td className="p-3 font-medium">Year {row.year}</td>
-                          <td className="p-3">{formatPrice(row.balance, { includeApprox: false })}</td>
-                          <td className="p-3 text-[#0e9f6e]">
-                            {formatPrice(row.principalPaid, { includeApprox: false })}
-                          </td>
-                          <td className="p-3 text-[#737373]">
-                            {formatPrice(row.interestPaid, { includeApprox: false })}
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              ) : null}
             </div>
           </div>
         ) : null}
 
-        {/* MODE 2: DLD 4% UPFRONT COSTS */}
+        {/* MODE 2: DLD 4% UPFRONT COSTS (No Trustee/Admin, No 0.25% Mortgage Fee; Developers Admin Fees Approx AED 4,000-5,500) */}
         {mode === "dld" ? (
           <div className="mt-10 grid grid-cols-1 gap-6 lg:grid-cols-12">
-            <div className="lg:col-span-6 rounded-2xl border border-white/80 bg-white/80 backdrop-blur-xl shadow-[0_14px_40px_rgba(12,56,96,0.08)] p-6 sm:p-8 space-y-6">
+            <div className="lg:col-span-6 rounded-2xl border border-white/80 bg-white/84 backdrop-blur-xl shadow-[0_14px_40px_rgba(12,56,96,0.08)] p-6 sm:p-8 space-y-6">
               <div>
                 <div className="flex items-center justify-between text-xs">
                   <label htmlFor="dld-price" className="font-medium text-[#121212]">
                     Purchase price (AED)
                   </label>
-                  <span className="text-[#737373]">{formatPrice(dldPrice, { includeApprox: false })}</span>
+                  <span className="text-[#737373] tabular-nums">
+                    {formatPrice(dldPrice, { includeApprox: false })}
+                  </span>
                 </div>
                 <input
                   id="dld-price"
                   type="number"
                   min={300000}
+                  max={100000000}
                   step={50000}
                   value={dldPrice}
-                  onChange={(e) => setDldPrice(Math.max(300000, Number(e.target.value) || 0))}
+                  onChange={(e) => setDldPrice(clampFinite(Number(e.target.value), 300000, 100000000, 2500000))}
                   className="mt-2 w-full rounded-xl border border-black/10 bg-white px-4 py-3 text-base font-medium text-[#121212] tabular-nums"
                 />
                 <input
                   type="range"
+                  aria-label="Purchase price slider"
                   min={500000}
                   max={25000000}
                   step={50000}
-                  value={Math.min(25000000, dldPrice)}
-                  onChange={(e) => setDldPrice(Number(e.target.value))}
-                  style={sliderBg(Math.min(25000000, dldPrice), 500000, 25000000)}
+                  value={Math.min(25000000, Math.max(500000, dldPrice))}
+                  onChange={(e) => setDldPrice(clampFinite(Number(e.target.value), 500000, 25000000, 2500000))}
+                  style={sliderBg(Math.min(25000000, Math.max(500000, dldPrice)), 500000, 25000000)}
                   className="avenlo-range mt-4"
                 />
               </div>
@@ -574,46 +616,59 @@ export default function CalculatorsPage() {
               <div className="grid grid-cols-2 gap-3">
                 <button
                   type="button"
-                  onClick={() => setDldType("secondary")}
-                  className={`cursor-pointer rounded-xl px-4 py-3 text-xs font-medium transition-colors ${
-                    dldType === "secondary"
-                      ? "bg-[#121212] text-white"
-                      : "border border-black/10 bg-white text-[#525252]"
-                  }`}
-                >
-                  Ready Secondary Resale
-                </button>
-                <button
-                  type="button"
                   onClick={() => setDldType("offplan")}
                   className={`cursor-pointer rounded-xl px-4 py-3 text-xs font-medium transition-colors ${
                     dldType === "offplan"
                       ? "bg-[#121212] text-white"
-                      : "border border-black/10 bg-white text-[#525252]"
+                      : "border border-black/10 bg-white text-[#525252] hover:border-[#121212]"
                   }`}
                 >
                   Primary Off-Plan Launch
                 </button>
+                <button
+                  type="button"
+                  onClick={() => setDldType("secondary")}
+                  className={`cursor-pointer rounded-xl px-4 py-3 text-xs font-medium transition-colors ${
+                    dldType === "secondary"
+                      ? "bg-[#121212] text-white"
+                      : "border border-black/10 bg-white text-[#525252] hover:border-[#121212]"
+                  }`}
+                >
+                  Ready Secondary Resale
+                </button>
               </div>
 
-              <label className="flex cursor-pointer items-center gap-3 rounded-xl border border-black/10 bg-white px-4 py-3.5 text-sm">
-                <input
-                  type="checkbox"
-                  checked={dldFinanced}
-                  onChange={(e) => setDldFinanced(e.target.checked)}
-                  className="h-4 w-4 accent-[#121212]"
-                />
-                <span>Include 0.25% DLD mortgage registration fee</span>
-              </label>
+              {/* Explicit Transparent Fee Rules Card */}
+              <div className="rounded-2xl border border-black/[0.08] bg-white p-5 space-y-3 text-xs text-[#475569]">
+                <div className="flex items-center justify-between gap-3">
+                  <span className="font-medium text-[#121212]">Developers Admin Fees (Approx.)</span>
+                  <span className="font-mono font-semibold text-[#121212]">
+                    AED 4,000 – 5,500
+                  </span>
+                </div>
+                <div className="flex items-center justify-between gap-3 border-t border-black/[0.06] pt-2.5">
+                  <span className="font-medium text-[#121212]">Off-Plan Mortgage Registration Fee</span>
+                  <span className="font-mono font-semibold text-[#0e9f6e]">AED 0 (None)</span>
+                </div>
+                <div className="flex items-center justify-between gap-3 border-t border-black/[0.06] pt-2.5">
+                  <span className="font-medium text-[#121212]">Off-Plan Trustee Fee</span>
+                  <span className="font-mono font-semibold text-[#0e9f6e]">AED 0 (None)</span>
+                </div>
+                <p className="border-t border-black/[0.06] pt-2.5 leading-relaxed text-[#64748b]">
+                  In off-plan purchases, there are <strong>no mortgage registration fees</strong> and <strong>no trustee fees</strong>. Exact developer admin fees vary by master developer (approx. AED 4,000 – 5,500) and are confirmed in your official SPA.
+                </p>
+              </div>
             </div>
 
             <div className="lg:col-span-6 rounded-2xl bg-[#121212] p-6 sm:p-9 text-white flex flex-col justify-between">
               <div>
                 <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-[#8b8b8b]">
-                  TOTAL UPFRONT TRANSACTION FEES ({dldCalc.pct}%)
+                  TOTAL UPFRONT TRANSACTION FEES ({dldCalc.pctMin}% – {dldCalc.pctMax}%)
                 </p>
-                <p className="mt-2 text-[40px] sm:text-[50px] font-medium leading-none tracking-[-0.04em] tabular-nums">
-                  {formatPrice(dldCalc.totalFees, { includeApprox: false })}
+                <p className="mt-2 text-[32px] sm:text-[42px] font-medium leading-tight tracking-[-0.04em] tabular-nums">
+                  {formatPrice(dldCalc.totalMin, { includeApprox: false })}
+                  <span className="mx-2 text-[#8b8b8b]">–</span>
+                  {formatPrice(dldCalc.totalMax, { includeApprox: false })}
                 </p>
 
                 <div className="mt-8">
@@ -626,26 +681,48 @@ export default function CalculatorsPage() {
                         display: formatPrice(dldCalc.dldFee, { includeApprox: false }),
                       },
                       {
-                        label: dldType === "secondary" ? "Agency Fee (2% + VAT)" : "0% Primary Agency",
+                        label: "Developers Admin Fees (Approx.)",
+                        value: dldCalc.devAdminMid,
+                        color: "#8b8b8b",
+                        display: "AED 4,000 – 5,500",
+                      },
+                      {
+                        label: dldType === "secondary" ? "Agency Fee (2% + 5% VAT)" : "0% Primary Agency Fee",
                         value: dldCalc.agencyFee,
                         color: "#51fec0",
                         display: formatPrice(dldCalc.agencyFee, { includeApprox: false }),
-                      },
-                      {
-                        label: "Trustee / Admin & Mortgage Reg",
-                        value: dldCalc.adminFee + dldCalc.mortgageReg,
-                        color: "#8b8b8b",
-                        display: formatPrice(dldCalc.adminFee + dldCalc.mortgageReg, {
-                          includeApprox: false,
-                        }),
                       },
                     ]}
                   />
                 </div>
               </div>
-              <p className="mt-8 border-t border-white/10 pt-5 text-xs text-[#8b8b8b]">
-                Off-plan launches typically carry 0% buyer agency commission; secondary resales include 2% + 5% VAT plus DLD Trustee fees.
-              </p>
+
+              <div className="mt-8 border-t border-white/10 pt-5 space-y-4">
+                <p className="text-xs text-[#8b8b8b]">
+                  {dldType === "offplan"
+                    ? "Primary off-plan launches carry 0% buyer commission, no mortgage registration fees, and no trustee fees. Developers Admin fees are approximately AED 4,000 – 5,500 depending on the developer."
+                    : "Ready secondary resales include 4% DLD transfer fee, standard 2% + 5% VAT buyer agency commission, and approximate Developers Admin / NOC fees of AED 4,000 – 5,500 (varying by developer). In off-plan purchases, there are no mortgage registration fees and no trustee fees."}
+                </p>
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                  <a
+                    href={dldContact.whatsappHref}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => trackEvent("whatsapp_click", { location: "dld_calculator" })}
+                    className="inline-flex items-center justify-center gap-2 rounded-full bg-[#25D366] px-4 py-2.5 text-xs font-semibold uppercase tracking-[0.14em] text-[#06130b] transition-all hover:bg-[#51fec0]"
+                  >
+                    <WhatsAppIcon className="h-4 w-4" />
+                    <span>WhatsApp Cost Sheet</span>
+                  </a>
+                  <a
+                    href={dldContact.emailHref}
+                    className="inline-flex items-center justify-center gap-2 rounded-full border border-white/25 bg-white/10 px-4 py-2.5 text-xs font-semibold text-white transition-all hover:bg-white hover:text-[#121212]"
+                  >
+                    <Mail className="h-4 w-4 shrink-0" />
+                    <span className="truncate">{SITE.email}</span>
+                  </a>
+                </div>
+              </div>
             </div>
           </div>
         ) : null}
@@ -653,31 +730,35 @@ export default function CalculatorsPage() {
         {/* MODE 3: OFF-PLAN SCHEDULE */}
         {mode === "offplan" ? (
           <div className="mt-10 grid grid-cols-1 gap-6 lg:grid-cols-12">
-            <div className="lg:col-span-6 rounded-2xl border border-white/80 bg-white/80 backdrop-blur-xl shadow-[0_14px_40px_rgba(12,56,96,0.08)] p-6 sm:p-8 space-y-6">
+            <div className="lg:col-span-6 rounded-2xl border border-white/80 bg-white/84 backdrop-blur-xl shadow-[0_14px_40px_rgba(12,56,96,0.08)] p-6 sm:p-8 space-y-6">
               <div>
                 <div className="flex items-center justify-between text-xs">
                   <label htmlFor="op-price" className="font-medium text-[#121212]">
                     Off-plan unit price (AED)
                   </label>
-                  <span className="text-[#737373]">{formatPrice(opPrice, { includeApprox: false })}</span>
+                  <span className="text-[#737373] tabular-nums">
+                    {formatPrice(opPrice, { includeApprox: false })}
+                  </span>
                 </div>
                 <input
                   id="op-price"
                   type="number"
-                  min={500000}
+                  min={400000}
+                  max={100000000}
                   step={50000}
                   value={opPrice}
-                  onChange={(e) => setOpPrice(Math.max(500000, Number(e.target.value) || 0))}
+                  onChange={(e) => setOpPrice(clampFinite(Number(e.target.value), 400000, 100000000, 2200000))}
                   className="mt-2 w-full rounded-xl border border-black/10 bg-white px-4 py-3 text-base font-medium text-[#121212] tabular-nums"
                 />
                 <input
                   type="range"
-                  min={600000}
+                  aria-label="Off-plan unit price slider"
+                  min={500000}
                   max={20000000}
                   step={50000}
-                  value={Math.min(20000000, opPrice)}
-                  onChange={(e) => setOpPrice(Number(e.target.value))}
-                  style={sliderBg(Math.min(20000000, opPrice), 600000, 20000000)}
+                  value={Math.min(20000000, Math.max(500000, opPrice))}
+                  onChange={(e) => setOpPrice(clampFinite(Number(e.target.value), 500000, 20000000, 2200000))}
+                  style={sliderBg(Math.min(20000000, Math.max(500000, opPrice)), 500000, 20000000)}
                   className="avenlo-range mt-4"
                 />
               </div>
@@ -693,7 +774,7 @@ export default function CalculatorsPage() {
                       className={`cursor-pointer rounded-xl px-4 py-3 text-left text-xs font-medium transition-colors ${
                         opPlanKey === k
                           ? "bg-[#121212] text-white"
-                          : "border border-black/10 bg-white text-[#525252]"
+                          : "border border-black/10 bg-white text-[#525252] hover:border-[#121212]"
                       }`}
                     >
                       {OFFPLAN_PLANS[k].label}
@@ -701,15 +782,21 @@ export default function CalculatorsPage() {
                   ))}
                 </div>
               </div>
+
+              <div className="rounded-xl border border-[#0e9f6e]/20 bg-[#0e9f6e]/[0.06] px-4 py-3 text-xs leading-relaxed text-[#334155]">
+                <strong>Off-Plan Advantages:</strong> No mortgage registration fees, no trustee fees, and 0% buyer agency commission on primary launches. Developers Admin fees approx. AED 4,000 – 5,500.
+              </div>
             </div>
 
             <div className="lg:col-span-6 rounded-2xl bg-[#121212] p-6 sm:p-9 text-white flex flex-col justify-between">
               <div>
                 <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-[#8b8b8b]">
-                  DAY-ONE BOOKING + 4% DLD OQOOD
+                  DAY-ONE BOOKING + 4% DLD OQOOD &amp; DEVELOPER ADMIN
                 </p>
-                <p className="mt-2 text-[40px] sm:text-[50px] font-medium leading-none tracking-[-0.04em] text-[#51fec0] tabular-nums">
-                  {formatPrice(opCalc.upfront, { includeApprox: false })}
+                <p className="mt-2 text-[30px] sm:text-[42px] font-medium leading-tight tracking-[-0.04em] text-[#51fec0] tabular-nums">
+                  {formatPrice(opCalc.upfrontMin, { includeApprox: false })}
+                  <span className="mx-1.5 text-white/40">–</span>
+                  {formatPrice(opCalc.upfrontMax, { includeApprox: false })}
                 </p>
 
                 <div className="mt-8">
@@ -722,9 +809,9 @@ export default function CalculatorsPage() {
                         color: "#51fec0",
                       },
                       {
-                        label: "4% DLD Oqood + Admin",
-                        value: opCalc.dldOqood,
-                        display: formatPrice(opCalc.dldOqood, { includeApprox: false }),
+                        label: "4% DLD Oqood + Developers Admin (Approx. AED 4,000–5,500)",
+                        value: opCalc.dldOqoodMax,
+                        display: `${formatPrice(opCalc.dldOqoodMin, { includeApprox: false })} – ${formatPrice(opCalc.dldOqoodMax, { includeApprox: false })}`,
                         color: "#8b8b8b",
                       },
                       {
@@ -743,8 +830,8 @@ export default function CalculatorsPage() {
                   />
                 </div>
               </div>
-              <div className="mt-8 border-t border-white/10 pt-5 flex items-center justify-between text-xs text-[#8b8b8b]">
-                <span>0% Buyer Agency Fee on primary launches</span>
+              <div className="mt-8 border-t border-white/10 pt-5 flex flex-wrap items-center justify-between gap-3 text-xs text-[#8b8b8b]">
+                <span>0% Buyer Agency Fee · No Mortgage Reg or Trustee Fees</span>
                 <BracketLink href="/off-plan" variant="dark" size="sm">
                   Explore Premier Projects
                 </BracketLink>
@@ -756,7 +843,7 @@ export default function CalculatorsPage() {
         {/* MODE 4: NET RENTAL YIELD */}
         {mode === "yield" ? (
           <div className="mt-10 grid grid-cols-1 gap-6 lg:grid-cols-12">
-            <div className="lg:col-span-6 rounded-2xl border border-white/80 bg-white/80 backdrop-blur-xl shadow-[0_14px_40px_rgba(12,56,96,0.08)] p-6 sm:p-8 space-y-5">
+            <div className="lg:col-span-6 rounded-2xl border border-white/80 bg-white/84 backdrop-blur-xl shadow-[0_14px_40px_rgba(12,56,96,0.08)] p-6 sm:p-8 space-y-5">
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div>
                   <label htmlFor="y-price" className="mb-1.5 block text-xs font-medium">
@@ -765,9 +852,11 @@ export default function CalculatorsPage() {
                   <input
                     id="y-price"
                     type="number"
+                    min={200000}
+                    max={100000000}
                     step={50000}
                     value={yPrice}
-                    onChange={(e) => setYPrice(Math.max(200000, Number(e.target.value) || 0))}
+                    onChange={(e) => setYPrice(clampFinite(Number(e.target.value), 200000, 100000000, 2000000))}
                     className="w-full rounded-xl border border-black/10 bg-white px-4 py-3 text-sm font-medium tabular-nums"
                   />
                 </div>
@@ -778,9 +867,11 @@ export default function CalculatorsPage() {
                   <input
                     id="y-rent"
                     type="number"
+                    min={10000}
+                    max={15000000}
                     step={5000}
                     value={yAnnualRent}
-                    onChange={(e) => setYAnnualRent(Math.max(10000, Number(e.target.value) || 0))}
+                    onChange={(e) => setYAnnualRent(clampFinite(Number(e.target.value), 10000, 15000000, 160000))}
                     className="w-full rounded-xl border border-black/10 bg-white px-4 py-3 text-sm font-medium tabular-nums"
                   />
                 </div>
@@ -791,9 +882,11 @@ export default function CalculatorsPage() {
                   <input
                     id="y-area"
                     type="number"
+                    min={200}
+                    max={50000}
                     step={50}
                     value={yAreaSqFt}
-                    onChange={(e) => setYAreaSqFt(Math.max(200, Number(e.target.value) || 0))}
+                    onChange={(e) => setYAreaSqFt(clampFinite(Number(e.target.value), 200, 50000, 1150))}
                     className="w-full rounded-xl border border-black/10 bg-white px-4 py-3 text-sm font-medium tabular-nums"
                   />
                 </div>
@@ -804,9 +897,11 @@ export default function CalculatorsPage() {
                   <input
                     id="y-sc"
                     type="number"
+                    min={0}
+                    max={150}
                     step={1}
                     value={yServiceRate}
-                    onChange={(e) => setYServiceRate(Math.max(0, Number(e.target.value) || 0))}
+                    onChange={(e) => setYServiceRate(clampFinite(Number(e.target.value), 0, 150, 18))}
                     className="w-full rounded-xl border border-black/10 bg-white px-4 py-3 text-sm font-medium tabular-nums"
                   />
                 </div>
@@ -818,11 +913,12 @@ export default function CalculatorsPage() {
                 </div>
                 <input
                   type="range"
+                  aria-label="Property management allowance slider"
                   min={0}
                   max={10}
                   step={1}
                   value={yMgmtPct}
-                  onChange={(e) => setYMgmtPct(Number(e.target.value))}
+                  onChange={(e) => setYMgmtPct(clampFinite(Number(e.target.value), 0, 10, 5))}
                   style={sliderBg(yMgmtPct, 0, 10)}
                   className="avenlo-range mt-3"
                 />
@@ -885,7 +981,7 @@ export default function CalculatorsPage() {
         {/* MODE 5: 5-YEAR BUY VS RENT */}
         {mode === "buyrent" ? (
           <div className="mt-10 grid grid-cols-1 gap-6 lg:grid-cols-12">
-            <div className="lg:col-span-6 rounded-2xl border border-white/80 bg-white/80 backdrop-blur-xl shadow-[0_14px_40px_rgba(12,56,96,0.08)] p-6 sm:p-8 space-y-5">
+            <div className="lg:col-span-6 rounded-2xl border border-white/80 bg-white/84 backdrop-blur-xl shadow-[0_14px_40px_rgba(12,56,96,0.08)] p-6 sm:p-8 space-y-5">
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div>
                   <label htmlFor="br-price" className="mb-1.5 block text-xs font-medium">
@@ -894,9 +990,11 @@ export default function CalculatorsPage() {
                   <input
                     id="br-price"
                     type="number"
+                    min={400000}
+                    max={100000000}
                     step={50000}
                     value={brPrice}
-                    onChange={(e) => setBrPrice(Math.max(400000, Number(e.target.value) || 0))}
+                    onChange={(e) => setBrPrice(clampFinite(Number(e.target.value), 400000, 100000000, 2400000))}
                     className="w-full rounded-xl border border-black/10 bg-white px-4 py-3 text-sm font-medium tabular-nums"
                   />
                 </div>
@@ -907,9 +1005,11 @@ export default function CalculatorsPage() {
                   <input
                     id="br-rent"
                     type="number"
+                    min={20000}
+                    max={15000000}
                     step={5000}
                     value={brAnnualRent}
-                    onChange={(e) => setBrAnnualRent(Math.max(20000, Number(e.target.value) || 0))}
+                    onChange={(e) => setBrAnnualRent(clampFinite(Number(e.target.value), 20000, 15000000, 165000))}
                     className="w-full rounded-xl border border-black/10 bg-white px-4 py-3 text-sm font-medium tabular-nums"
                   />
                 </div>
@@ -921,11 +1021,12 @@ export default function CalculatorsPage() {
                 </div>
                 <input
                   type="range"
+                  aria-label="Annual rent escalation slider"
                   min={0}
                   max={10}
                   step={0.5}
                   value={brRentGrowth}
-                  onChange={(e) => setBrRentGrowth(Number(e.target.value))}
+                  onChange={(e) => setBrRentGrowth(clampFinite(Number(e.target.value), 0, 10, 4))}
                   style={sliderBg(brRentGrowth, 0, 10)}
                   className="avenlo-range mt-3"
                 />
@@ -937,11 +1038,12 @@ export default function CalculatorsPage() {
                 </div>
                 <input
                   type="range"
+                  aria-label="Annual capital growth slider"
                   min={0}
                   max={10}
                   step={0.5}
                   value={brAppreciation}
-                  onChange={(e) => setBrAppreciation(Number(e.target.value))}
+                  onChange={(e) => setBrAppreciation(clampFinite(Number(e.target.value), 0, 10, 5))}
                   style={sliderBg(brAppreciation, 0, 10)}
                   className="avenlo-range mt-3"
                 />
@@ -984,15 +1086,19 @@ export default function CalculatorsPage() {
                 </div>
               </div>
               <p className="mt-8 border-t border-white/10 pt-5 text-xs text-[#8b8b8b]">
-                Assumes 20% resident deposit ({formatPrice(buyRent.downPayment, { includeApprox: false })}), 4.5% mortgage rate over 25 years, and 6.2% upfront DLD/resale costs.
+                Assumes 20% resident deposit ({formatPrice(buyRent.downPayment, { includeApprox: false })}), 4.5% indicative rate over 25 years, 4% DLD, and approx. developer admin fees.
               </p>
             </div>
           </div>
         ) : null}
 
-        {/* Mandatory AED & Financial Disclaimer */}
-        <p className="mt-6 text-center text-xs text-[#8b8b8b]">
-          All calculator figures are indicative estimates in UAE Dirhams (AED) for general guidance only—not financial, mortgage, or tax advice. Foreign currency display conversions are approximate.
+        {/* Mandatory AED, Developer Pricing & Financial Disclaimer */}
+        <p className="mt-8 text-center text-xs leading-relaxed text-[#64748b]">
+          All calculator outputs, properties, and prices depend on the respective developer, lending bank, and current market conditions. Figures are indicative estimates in UAE Dirhams (AED) for general guidance only—not binding offers, financial, mortgage, or tax advice.{" "}
+          <Link href="/terms" className="font-medium text-[#121212] underline underline-offset-4 hover:text-[#0e9f6e]">
+            Read full Terms &amp; Conditions
+          </Link>
+          .
         </p>
       </section>
 
@@ -1001,7 +1107,7 @@ export default function CalculatorsPage() {
           <EnquiryForm
             context="buying"
             heading="Request a written bank pre-approval & DLD cost sheet"
-            subheading="Compare resident and non-resident UAE bank offers alongside exact developer or Trustee fees."
+            subheading="Compare resident and non-resident UAE bank offers alongside exact developer fees and current project availability."
           />
         </div>
       </section>

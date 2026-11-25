@@ -29,17 +29,7 @@ export function PerspectiveFlipCard({
 }: PerspectiveFlipCardProps) {
   return (
     <div
-      role="button"
-      tabIndex={0}
-      aria-pressed={flipped}
-      onClick={onToggleFlip}
-      onKeyDown={(e) => {
-        if (e.key === "Enter" || e.key === " ") {
-          e.preventDefault();
-          onToggleFlip?.();
-        }
-      }}
-      className={cn("group/p-card w-full cursor-pointer outline-none [perspective:2000px]", h, className)}
+      className={cn("group/p-card relative w-full [perspective:2000px]", h, className)}
     >
       <div
         className={cn(
@@ -54,6 +44,13 @@ export function PerspectiveFlipCard({
             flipped && "pointer-events-none opacity-0"
           )}
         >
+          <button
+            type="button"
+            aria-pressed={flipped}
+            aria-label="Flip community card for brief"
+            onClick={onToggleFlip}
+            className="absolute inset-0 z-10 cursor-pointer rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1b6aa7]"
+          />
           <div className="size-full p-3 [transform-style:preserve-3d] [backface-visibility:hidden]">
             {front}
           </div>
@@ -66,7 +63,14 @@ export function PerspectiveFlipCard({
             flipped && "pointer-events-auto opacity-100"
           )}
         >
-          <div className="size-full p-5 sm:p-6 flex flex-col justify-between [transform-style:preserve-3d] [backface-visibility:hidden]">
+          <button
+            type="button"
+            aria-pressed={flipped}
+            aria-label="Flip community card back"
+            onClick={onToggleFlip}
+            className="absolute inset-0 z-10 cursor-pointer rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#51fec0]"
+          />
+          <div className="pointer-events-none relative z-20 size-full p-5 sm:p-6 flex flex-col justify-between [transform-style:preserve-3d] [backface-visibility:hidden]">
             {back}
           </div>
         </div>
@@ -161,8 +165,7 @@ export function CommunityFlipCard({
 
             <Link
               href={`/communities/${slug}`}
-              onClick={(e) => e.stopPropagation()}
-              className="flex h-10 sm:h-11 w-full items-center justify-center gap-2 rounded-xl bg-[#51fec0] md:bg-white text-[11px] sm:text-[11.5px] font-semibold uppercase tracking-[0.15em] text-[#121212] shadow-[0_14px_30px_rgba(0,0,0,0.35)] transition-all hover:bg-[#51fec0] [transform:translateZ(56px)]"
+              className="pointer-events-auto relative z-30 flex h-10 sm:h-11 w-full items-center justify-center gap-2 rounded-xl bg-[#51fec0] md:bg-white text-[11px] sm:text-[11.5px] font-semibold uppercase tracking-[0.15em] text-[#121212] shadow-[0_14px_30px_rgba(0,0,0,0.35)] transition-all hover:bg-[#51fec0] [transform:translateZ(56px)]"
             >
               <span>Explore District Guide</span>
               <ArrowUpRight className="h-3.5 w-3.5" />

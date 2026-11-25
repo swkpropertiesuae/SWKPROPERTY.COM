@@ -55,7 +55,7 @@ export default function GuidesIndexPage() {
               >
                 <div>
                   <div className="flex items-center justify-between font-mono text-[11px] font-semibold uppercase tracking-[0.18em] text-[#1b6aa7]">
-                    <span>0{idx + 1} · {g.eyebrow}</span>
+                    <span>{String(idx + 1).padStart(2, "0")} · {g.eyebrow}</span>
                     <span className="rounded-full border border-black/10 bg-white px-3 py-1 text-[10px] text-[#475569]">
                       {g.readTime}
                     </span>

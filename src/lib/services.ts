@@ -127,7 +127,7 @@ const rawServicePages: RawServicePage[] = [
       { step: "Transfer", text: "Attend the Dubai Land Department registration, receive the Title Deed, and complete utility changes." },
     ],
     fees:
-      "On resale transactions buyers pay a 4% Dubai Land Department transfer fee plus an AED 4,200 administrative fee, and a 2% agency commission. SWK states its own commission in writing before you sign anything.",
+      "On ready resale transactions buyers budget the 4% Dubai Land Department transfer fee, applicable registration/Title Deed charges (AED 580), and a 2% agency commission (+ 5% UAE VAT). Primary off-plan purchases carry 0% buyer agency commission, no mortgage registration fees, and no trustee fees (approx. AED 4,000–5,500 Developers Admin fees apply). SWK states its own commission in writing before you sign anything.",
     whoFor: [
       "Buyers who want to see the finished home and move quickly",
       "Owners who want an honest price and a clean sale",
@@ -137,7 +137,7 @@ const rawServicePages: RawServicePage[] = [
       {
         question: "What are the total costs of buying a ready property in Dubai?",
         answer:
-          "Besides the purchase price, expect the 4% DLD transfer fee, a AED 4,200 DLD admin fee, a 2% agency commission, and, if you take a mortgage, bank arrangement and valuation fees.",
+          "Besides the purchase price, ready resale buyers budget the 4% DLD transfer fee, applicable registration and Title Deed fees (AED 580), a 2% agency commission (+ 5% VAT), and, if taking a mortgage, lender arrangement and valuation fees. Primary off-plan launches carry no mortgage registration fees, no trustee fees, and 0% buyer commission (approx. AED 4,000–5,500 Developers Admin fees apply).",
       },
       {
         question: "How long does a resale take?",

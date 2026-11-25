@@ -69,6 +69,12 @@ export function InteractiveImageGallery({
             onMouseLeave={() => {
               if (canHover) setHoveredId(null);
             }}
+            onFocus={() => {
+              if (canHover) setHoveredId(item.id);
+            }}
+            onBlur={() => {
+              if (canHover) setHoveredId(null);
+            }}
           >
             {item.href ? (
               <Link

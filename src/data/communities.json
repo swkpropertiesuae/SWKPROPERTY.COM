@@ -1,122 +1,122 @@
 [
- {
-  "id": "downtown-dubai",
-  "name": "Downtown Dubai",
-  "image": "assets/images/communities/downtown-dubai.webp",
-  "blurb": "Home to Burj Khalifa and Dubai Mall — the city's most iconic address."
- },
- {
-  "id": "dubai-marina",
-  "name": "Dubai Marina",
-  "image": "assets/images/communities/dubai-marina.webp",
-  "blurb": "Waterfront towers, yacht life, and one of Dubai's liveliest promenades."
- },
- {
-  "id": "palm-jumeirah",
-  "name": "Palm Jumeirah",
-  "image": "assets/images/communities/palm-jumeirah.webp",
-  "blurb": "The world-famous man-made island of beachfront villas and resorts."
- },
- {
-  "id": "business-bay",
-  "name": "Business Bay",
-  "image": "assets/images/communities/business-bay.webp",
-  "blurb": "Dubai's dynamic business hub on the canal, minutes from Downtown."
- },
- {
-  "id": "dubai-hills-estate",
-  "name": "Dubai Hills Estate",
-  "image": "assets/images/communities/dubai-hills-estate.webp",
-  "blurb": "Master-planned green community around an 18-hole championship golf course."
- },
- {
-  "id": "jvc",
-  "name": "Jumeirah Village Circle",
-  "image": "assets/images/communities/jvc.webp",
-  "blurb": "Family-friendly, high-yield community at the centre of New Dubai."
- },
- {
-  "id": "dubai-creek-harbour",
-  "name": "Dubai Creek Harbour",
-  "image": "assets/images/communities/dubai-creek-harbour.webp",
-  "blurb": "Waterfront masterplan facing the Ras Al Khor wildlife sanctuary."
- },
- {
-  "id": "sheikh-zayed-road",
-  "name": "Sheikh Zayed Road",
-  "image": "assets/images/communities/sheikh-zayed-road.webp",
-  "blurb": "Dubai's iconic business spine, lined with landmark towers and swift metro access to every district."
- },
- {
-  "id": "palm-jebel-ali",
-  "name": "Palm Jebel Ali",
-  "image": "/img/projects/nakheel/palm-jebel-ali.webp",
-  "blurb": "Nakheel's 16-frond coastal masterplan offering private beachfront villas twice the scale of Palm Jumeirah."
- },
- {
-  "id": "damac-lagoons",
-  "name": "DAMAC Lagoons",
-  "image": "/img/projects/damac/damac-lagoons-hd.webp",
-  "blurb": "Mediterranean-inspired family villa and townhouse clusters encircling crystal swimmable lagoons."
- },
- {
-  "id": "emaar-beachfront",
-  "name": "Emaar Beachfront",
-  "image": "/img/communities/business-bay-hd.webp",
-  "blurb": "Gated private island inside Dubai Harbour with 1.5 km of white sandy beach and yacht berths."
- },
- {
-  "id": "difc",
-  "name": "DIFC",
-  "image": "/img/listings/sheikh-zayed-road-executive-1br-difc-corridor-rent.webp",
-  "blurb": "The Middle East's premier financial hub combining Grade-A offices, art galleries, and luxury towers."
- },
- {
-  "id": "mbr-city",
-  "name": "MBR City",
-  "image": "/img/projects/azizi/riviera-hd.webp",
-  "blurb": "Lagoon-framed villa enclaves and modern apartment boulevards minutes from Downtown Dubai."
- },
- {
-  "id": "tilal-al-ghaf",
-  "name": "Tilal Al Ghaf",
-  "image": "/img/projects/emaar/emaar-the-oasis.webp",
-  "blurb": "Resort-style family sanctuary centred on Lagoon Al Ghaf, shaded parks, and flagship international schooling."
- },
- {
-  "id": "arabian-ranches",
-  "name": "Arabian Ranches",
-  "image": "/img/projects/nakheel/jumeirah-islands.webp",
-  "blurb": "Dubai's quintessential green desert-golf villa neighbourhood prized by long-term families."
- },
- {
-  "id": "dubai-south",
-  "name": "Dubai South",
-  "image": "/img/projects/azizi/azizi-venice.webp",
-  "blurb": "Aviation, Expo City, and crystal-lagoon growth corridor anchored by Al Maktoum International Airport."
- },
- {
-  "id": "al-furjan",
-  "name": "Al Furjan",
-  "image": "/img/projects/azizi/azizi-milan.webp",
-  "blurb": "Metro-connected family villas, townhouses, and mid-rise residences bordering Discovery Gardens and Jebel Ali."
- },
- {
-  "id": "jlt",
-  "name": "Jumeirah Lake Towers",
-  "image": "/img/projects/select-group/marina-gate.webp",
-  "blurb": "Vibrant lakefront live-work clusters opposite Dubai Marina with two Red Line Metro stations and DMCC offices."
- },
- {
-  "id": "bluewaters-island",
-  "name": "Bluewaters Island",
-  "image": "/img/communities/business-bay-hd.webp",
-  "blurb": "Pedestrian coastal island off JBR offering low-rise sea-facing apartments and boutique hospitality."
- },
- {
-  "id": "dubai-islands",
-  "name": "Dubai Islands",
-  "image": "/img/projects/nakheel/dubai-islands.webp",
-  "blurb": "Five-island coastal destination blending resort beaches, marinas, and architectural low-rise residences."
- }
+  {
+    "id": "downtown-dubai",
+    "name": "Downtown Dubai",
+    "image": "/img/communities/downtown-dubai-hd.webp",
+    "blurb": "Home to Burj Khalifa and Dubai Mall — the city's most iconic address."
+  },
+  {
+    "id": "dubai-marina",
+    "name": "Dubai Marina",
+    "image": "/img/communities/dubai-marina-hd.webp",
+    "blurb": "Waterfront towers, yacht life, and one of Dubai's liveliest promenades."
+  },
+  {
+    "id": "palm-jumeirah",
+    "name": "Palm Jumeirah",
+    "image": "/img/communities/palm-jumeirah-hd.webp",
+    "blurb": "The world-famous man-made island of beachfront villas and resorts."
+  },
+  {
+    "id": "business-bay",
+    "name": "Business Bay",
+    "image": "/img/communities/business-bay-hd.webp",
+    "blurb": "Dubai's dynamic business hub on the canal, minutes from Downtown."
+  },
+  {
+    "id": "dubai-hills-estate",
+    "name": "Dubai Hills Estate",
+    "image": "/img/communities/dubai-hills-estate-hd.webp",
+    "blurb": "Master-planned green community around an 18-hole championship golf course."
+  },
+  {
+    "id": "jvc",
+    "name": "Jumeirah Village Circle",
+    "image": "/img/communities/jvc-hd.webp",
+    "blurb": "Family-friendly, high-yield community at the centre of New Dubai."
+  },
+  {
+    "id": "dubai-creek-harbour",
+    "name": "Dubai Creek Harbour",
+    "image": "/img/communities/dubai-creek-harbour-hd.webp",
+    "blurb": "Waterfront masterplan facing the Ras Al Khor wildlife sanctuary."
+  },
+  {
+    "id": "sheikh-zayed-road",
+    "name": "Sheikh Zayed Road",
+    "image": "/img/communities/sheikh-zayed-road-hd.webp",
+    "blurb": "Dubai's iconic business spine, lined with landmark towers and swift metro access to every district."
+  },
+  {
+    "id": "palm-jebel-ali",
+    "name": "Palm Jebel Ali",
+    "image": "/img/projects/nakheel/palm-jebel-ali.webp",
+    "blurb": "Nakheel's 16-frond coastal masterplan offering private beachfront villas twice the scale of Palm Jumeirah."
+  },
+  {
+    "id": "damac-lagoons",
+    "name": "DAMAC Lagoons",
+    "image": "/img/projects/damac/damac-lagoons-hd.webp",
+    "blurb": "Mediterranean-inspired family villa and townhouse clusters encircling crystal swimmable lagoons."
+  },
+  {
+    "id": "emaar-beachfront",
+    "name": "Emaar Beachfront",
+    "image": "/img/projects/emaar/rashid-yachts-and-marina.webp",
+    "blurb": "Gated private island inside Dubai Harbour with 1.5 km of white sandy beach and yacht berths."
+  },
+  {
+    "id": "difc",
+    "name": "DIFC",
+    "image": "/img/listings/sheikh-zayed-road-executive-1br-difc-corridor-rent.webp",
+    "blurb": "The Middle East's premier financial hub combining Grade-A offices, art galleries, and luxury towers."
+  },
+  {
+    "id": "mbr-city",
+    "name": "MBR City",
+    "image": "/img/projects/azizi/riviera-hd.webp",
+    "blurb": "Lagoon-framed villa enclaves and modern apartment boulevards minutes from Downtown Dubai."
+  },
+  {
+    "id": "tilal-al-ghaf",
+    "name": "Tilal Al Ghaf",
+    "image": "/img/projects/lunaya/lunaya-the-bloom-villa.webp",
+    "blurb": "Resort-style family sanctuary centred on Lagoon Al Ghaf, shaded parks, and flagship international schooling."
+  },
+  {
+    "id": "arabian-ranches",
+    "name": "Arabian Ranches",
+    "image": "/img/projects/emaar/dubai-hills-estate-residences.webp",
+    "blurb": "Dubai's quintessential green desert-golf villa neighbourhood prized by long-term families."
+  },
+  {
+    "id": "dubai-south",
+    "name": "Dubai South",
+    "image": "/img/projects/azizi/azizi-venice.webp",
+    "blurb": "Aviation, Expo City, and crystal-lagoon growth corridor anchored by Al Maktoum International Airport."
+  },
+  {
+    "id": "al-furjan",
+    "name": "Al Furjan",
+    "image": "/img/projects/azizi/azizi-raffi.webp",
+    "blurb": "Metro-connected family villas, townhouses, and mid-rise residences bordering Discovery Gardens and Jebel Ali."
+  },
+  {
+    "id": "jlt",
+    "name": "Jumeirah Lake Towers",
+    "image": "/img/projects/danube/diamondz.webp",
+    "blurb": "Vibrant lakefront live-work clusters opposite Dubai Marina with two Red Line Metro stations and DMCC offices."
+  },
+  {
+    "id": "bluewaters-island",
+    "name": "Bluewaters Island",
+    "image": "/img/projects/meraas/bluewaters-bay.webp",
+    "blurb": "Pedestrian coastal island off JBR offering low-rise sea-facing apartments and boutique hospitality."
+  },
+  {
+    "id": "dubai-islands",
+    "name": "Dubai Islands",
+    "image": "/img/projects/nakheel/dubai-islands.webp",
+    "blurb": "Five-island coastal destination blending resort beaches, marinas, and architectural low-rise residences."
+  }
 ]

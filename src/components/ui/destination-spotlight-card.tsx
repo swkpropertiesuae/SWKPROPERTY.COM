@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { ArrowUpRight, Compass } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -35,20 +35,30 @@ export function DestinationSpotlightCard({
   className,
 }: DestinationSpotlightProps) {
   const [isHovered, setIsHovered] = useState(false);
+  const reduced = useReducedMotion();
 
   return (
-    <Link href={href} className={cn("block h-full", className)}>
+    <Link
+      href={href}
+      onFocus={() => setIsHovered(true)}
+      onBlur={() => setIsHovered(false)}
+      className={cn("block h-full focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#51fec0] rounded-[2rem]", className)}
+    >
       <motion.div
         className="relative flex h-full min-h-[470px] w-full flex-col justify-between overflow-hidden rounded-[2rem] border border-white/15 bg-[#08121e]/92 p-4 shadow-[0_30px_70px_-18px_rgba(6,18,32,0.55)] backdrop-blur-xl transition-colors"
-        initial={{ opacity: 0, y: 18 }}
+        initial={reduced ? false : { opacity: 0, y: 18 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-40px" }}
-        transition={{ duration: 0.45, ease: "easeOut" }}
-        whileHover={{
-          scale: 1.018,
-          borderColor: "rgba(81, 254, 192, 0.45)",
-          boxShadow: "0 36px 78px -15px rgba(8, 25, 44, 0.72)",
-        }}
+        transition={reduced ? { duration: 0 } : { duration: 0.45, ease: "easeOut" }}
+        whileHover={
+          reduced
+            ? undefined
+            : {
+                scale: 1.018,
+                borderColor: "rgba(81, 254, 192, 0.45)",
+                boxShadow: "0 36px 78px -15px rgba(8, 25, 44, 0.72)",
+              }
+        }
         onHoverStart={() => setIsHovered(true)}
         onHoverEnd={() => setIsHovered(false)}
       >

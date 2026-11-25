@@ -11,7 +11,7 @@ import { TrendingProjectPopups } from "@/components/site/trending-project-popups
 import { AvenloPreloader } from "@/components/avenlo/preloader";
 import { ShaderBackground } from "@/components/ui/shader-background";
 import { JsonLd } from "@/components/seo/json-ld";
-import { Analytics, CONSENT_DEFAULT_SCRIPT } from "@/components/seo/analytics";
+import { Analytics, CONSENT_DEFAULT_SCRIPT, GA_ID, GTM_ID } from "@/components/seo/analytics";
 import { KEYWORDS, OG_DEFAULT, organizationLd, websiteLd } from "@/lib/seo";
 import { SITE } from "@/lib/swk";
 
@@ -153,16 +153,20 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           strategy="beforeInteractive"
           dangerouslySetInnerHTML={{ __html: CONSENT_DEFAULT_SCRIPT }}
         />
-        <Script
-          id="swk-gtm"
-          src="https://www.googletagmanager.com/gtm.js?id=GTM-NMJ9MVNG"
-          strategy="afterInteractive"
-        />
-        <Script
-          id="swk-ga4"
-          src="https://www.googletagmanager.com/gtag/js?id=G-1FXMV3FTYL"
-          strategy="afterInteractive"
-        />
+        {GTM_ID ? (
+          <Script
+            id="swk-gtm"
+            src={`https://www.googletagmanager.com/gtm.js?id=${encodeURIComponent(GTM_ID)}`}
+            strategy="afterInteractive"
+          />
+        ) : null}
+        {GA_ID ? (
+          <Script
+            id="swk-ga4"
+            src={`https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(GA_ID)}`}
+            strategy="afterInteractive"
+          />
+        ) : null}
         {/* Global 21st.dev Mesh Drift WebGL Wave Canvas — Active Across Every Route */}
         <div
           aria-hidden="true"

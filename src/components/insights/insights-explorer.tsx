@@ -1,11 +1,10 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { useId, useMemo, useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowLeft, ArrowRight, ArrowUpRight, Calendar, Search } from "lucide-react";
-import type { BlogIndexEntry } from "@/lib/blog";
-import { BLOG_ERAS } from "@/lib/blog";
+import { BLOG_ERAS, type BlogIndexEntry } from "@/lib/blog-index";
 import { SpotlightCard } from "@/components/ui/spotlight-card";
 
 const PAGE_SIZE = 18;
@@ -17,6 +16,7 @@ export function InsightsExplorer({
   entries: BlogIndexEntry[];
   categories: string[];
 }) {
+  const uid = useId();
   const [category, setCategory] = useState("All");
   const [eraId, setEraId] = useState<string>("all");
   const [query, setQuery] = useState("");
@@ -29,7 +29,7 @@ export function InsightsExplorer({
     return entries.filter((item) => {
       if (category !== "All" && item.category !== category) return false;
       const yr = Number(item.date.slice(0, 4));
-      if (yr < selectedEra.minYear || yr > selectedEra.maxYear) return false;
+      if (Number.isFinite(yr) && (yr < selectedEra.minYear || yr > selectedEra.maxYear)) return false;
       if (q) {
         const hay = `${item.title} ${item.excerpt} ${item.category} ${item.date} ${item.keywords.join(" ")}`.toLowerCase();
         if (!hay.includes(q)) return false;
@@ -120,7 +120,7 @@ export function InsightsExplorer({
               >
                 {active && (
                   <motion.span
-                    layoutId="insights-category-pill"
+                    layoutId={`${uid}-insights-category-pill`}
                     transition={{ type: "spring", stiffness: 380, damping: 32 }}
                     className="absolute inset-0 rounded-full bg-[#121212] shadow-sm"
                   />

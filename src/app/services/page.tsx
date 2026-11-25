@@ -4,7 +4,7 @@ import { ArrowRight } from "lucide-react";
 import { EnquiryForm } from "@/components/site/enquiry-form";
 import { JsonLd } from "@/components/seo/json-ld";
 import { servicePages } from "@/lib/services";
-import { breadcrumbLd, buildMeta, KEYWORDS } from "@/lib/seo";
+import { breadcrumbLd, buildMeta, itemListLd, KEYWORDS } from "@/lib/seo";
 import { AvenloPageHeader } from "@/components/avenlo/page-header";
 import { BracketLink } from "@/components/avenlo/bracket-button";
 import { CtaBanner, SectionEyebrow, SplitHeading } from "@/components/avenlo/motion";
@@ -31,10 +31,16 @@ export default function ServicesPage() {
   return (
     <div className="bg-transparent">
       <JsonLd
-        data={breadcrumbLd([
-          { name: "Home", path: "/" },
-          { name: "Services", path: "/services" },
-        ])}
+        data={[
+          breadcrumbLd([
+            { name: "Home", path: "/" },
+            { name: "Services", path: "/services" },
+          ]),
+          itemListLd(
+            "SWK Properties Dubai Advisory Services",
+            servicePages.map((s) => ({ name: s.title, path: `/services/${s.slug}` }))
+          ),
+        ]}
       />
 
       <AvenloPageHeader
@@ -71,7 +77,7 @@ export default function ServicesPage() {
                 DESKS
               </p>
               <p className="mt-1 text-3xl font-medium tracking-[-0.04em] text-white tabular-nums">
-                +00{servicePages.length}
+                {String(servicePages.length).padStart(2, "0")}
               </p>
             </div>
           </div>

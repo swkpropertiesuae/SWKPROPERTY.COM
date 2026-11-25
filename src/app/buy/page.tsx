@@ -7,6 +7,7 @@ import { breadcrumbLd, buildMeta } from "@/lib/seo";
 import { AvenloPageHeader } from "@/components/avenlo/page-header";
 import { BracketLink } from "@/components/avenlo/bracket-button";
 import { CtaBanner, SectionEyebrow, SplitHeading } from "@/components/avenlo/motion";
+import { ListingDisclaimer } from "@/components/site/listing-disclaimer";
 
 export const metadata: Metadata = buildMeta({
   title: "Buy Ready Property in Dubai | Secondary Market Homes",
@@ -31,6 +32,7 @@ export default function BuyPage() {
       <JsonLd
         data={breadcrumbLd([
           { name: "Home", path: "/" },
+          { name: "Properties", path: "/properties" },
           { name: "Buy Ready Property", path: "/buy" },
         ])}
       />
@@ -62,6 +64,9 @@ export default function BuyPage() {
           {buyListings.map((listing) => (
             <PropertyCard key={listing.slug} listing={listing} />
           ))}
+        </div>
+        <div className="mt-10">
+          <ListingDisclaimer variant="secondary" />
         </div>
       </section>
 

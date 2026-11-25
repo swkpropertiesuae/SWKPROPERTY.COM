@@ -1,12 +1,11 @@
 "use client";
 
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import { cn } from "@/lib/utils";
 
 /**
  * 21st.dev Architectural Spotlight Card
- * Interactive cursor-tracking specular illumination framed in luminous frosted glass
- * so the live Mesh Drift wave background shines smoothly around every card.
+ * Zero-re-render cursor-tracking specular illumination via direct CSS variable updates on DOM ref.
  */
 export function SpotlightCard({
   children,
@@ -19,23 +18,27 @@ export function SpotlightCard({
   spotlightColor?: string;
   tone?: "light" | "dark";
 }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const [pos, setPos] = useState({ x: 0, y: 0 });
-  const [hovered, setHovered] = useState(false);
+  const cardRef = useRef<HTMLDivElement>(null);
+  const glowRef = useRef<HTMLDivElement>(null);
 
   const handleMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const el = ref.current;
-    if (!el) return;
+    const el = cardRef.current;
+    const glow = glowRef.current;
+    if (!el || !glow) return;
     const rect = el.getBoundingClientRect();
-    setPos({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+    glow.style.background = `radial-gradient(420px circle at ${e.clientX - rect.left}px ${e.clientY - rect.top}px, ${spotlightColor}, transparent 68%)`;
   };
 
   return (
     <div
-      ref={ref}
+      ref={cardRef}
       onMouseMove={handleMove}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
+      onMouseEnter={() => {
+        if (glowRef.current) glowRef.current.style.opacity = "1";
+      }}
+      onMouseLeave={() => {
+        if (glowRef.current) glowRef.current.style.opacity = "0";
+      }}
       className={cn(
         "relative overflow-hidden rounded-2xl border transition-all duration-300",
         tone === "light"
@@ -45,12 +48,9 @@ export function SpotlightCard({
       )}
     >
       <div
+        ref={glowRef}
         aria-hidden="true"
-        className="pointer-events-none absolute -inset-px rounded-2xl transition-opacity duration-300"
-        style={{
-          opacity: hovered ? 1 : 0,
-          background: `radial-gradient(420px circle at ${pos.x}px ${pos.y}px, ${spotlightColor}, transparent 68%)`,
-        }}
+        className="pointer-events-none absolute -inset-px rounded-2xl opacity-0 transition-opacity duration-300"
       />
       <div className="relative z-10 h-full">{children}</div>
     </div>

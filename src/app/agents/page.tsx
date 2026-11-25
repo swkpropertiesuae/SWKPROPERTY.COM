@@ -34,7 +34,7 @@ export default function AgentsPage() {
         eyebrow={`THE TEAM · RERA ORN ${SITE.reraOrn}`}
         title="The people you will"
         italic="actually deal with"
-        lead="Every enquiry goes straight to the specialist covering your target Dubai community, developer, or transaction type—speaking English, Arabic, Urdu, Hindi, Punjabi, Pashto, and French."
+        lead="Every enquiry goes straight to the specialist covering your target Dubai community, developer, or transaction type—speaking English, Hindi, Bangladeshi, Urdu, Arabic, Punjabi, Pashto, Marathi, and French."
         breadcrumb={[
           { label: "Home", href: "/" },
           { label: "Advisors" },
@@ -74,9 +74,21 @@ export default function AgentsPage() {
                   </p>
                 </div>
 
-                <div className="mt-5 flex flex-wrap items-center justify-between gap-2 border-t border-black/[0.06] pt-4 text-[11px] text-[#737373]">
-                  <span>{member.languages.join(" · ")}</span>
-                  <span className="font-medium text-[#121212]">{member.experienceYears}</span>
+                <div className="mt-5 space-y-2 border-t border-black/[0.06] pt-4 text-[11px] text-[#737373]">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <span>
+                      {member.languages.join(" · ")}
+                      {member.addonLanguages.length > 0
+                        ? ` · + ${member.addonLanguages.join(", ")} (Add-on)`
+                        : ""}
+                    </span>
+                    <span className="font-medium text-[#121212]">{member.experienceYears}</span>
+                  </div>
+                  {member.directPhone ? (
+                    <p className="font-mono text-[11px] font-medium text-[#0e9f6e]">
+                      Direct: {member.phoneDisplay}
+                    </p>
+                  ) : null}
                 </div>
               </div>
             </Link>

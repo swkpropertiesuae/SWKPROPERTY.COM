@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useId, useState } from "react";
 import Link from "next/link";
 import { AlertCircle, CheckCircle2, Phone } from "lucide-react";
 import { usePrefs } from "@/lib/prefs";
@@ -52,12 +52,16 @@ const COUNTRY_CODES = [
 
 const INQUIRY_OPTIONS: { value: EnquiryContextType; label: string }[] = [
   { value: "general", label: "General Advisory & Shortlist" },
+  { value: "advisory", label: "Specialist Property Advisory" },
+  { value: "property", label: "Specific Residence Enquiry" },
+  { value: "brochure", label: "Project Brochure & Floor Plans" },
   { value: "investment", label: "Off-Plan Developer Launches" },
   { value: "buying", label: "Buying Ready Property" },
   { value: "renting", label: "Annual Leasing / Renting" },
   { value: "selling", label: "Selling a Property (Form A)" },
   { value: "renting-out", label: "Leasing Out / Management" },
   { value: "viewing", label: "Schedule Private Viewing" },
+  { value: "callback", label: "Request Direct Callback" },
 ];
 
 const GST_SLOTS = [
@@ -84,6 +88,9 @@ export function EnquiryForm({
   className = "",
 }: EnquiryFormProps) {
   const { attribution, trackEvent } = usePrefs();
+  const uid = useId();
+  const [formLoadedAt] = useState<number>(() => Date.now());
+  const todayIso = new Date().toISOString().slice(0, 10);
 
   const [name, setName] = useState("");
   const [countryCode, setCountryCode] = useState("+971");
@@ -125,8 +132,9 @@ export function EnquiryForm({
       setError("Please enter your full name.");
       return;
     }
-    if (phone.replace(/[^\d+]/g, "").length < 7) {
-      setError("Please enter a valid phone or WhatsApp number.");
+    const phoneDigits = phone.replace(/\D/g, "");
+    if (phoneDigits.length < 7 || phoneDigits.length > 15) {
+      setError("Please enter a valid phone or WhatsApp number (at least 7 digits).");
       return;
     }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
@@ -156,12 +164,13 @@ export function EnquiryForm({
           community,
           developer,
           agentSlug,
-          pageUrl: typeof window !== "undefined" ? window.location.href : SITE.url,
+          pageUrl: typeof window !== "undefined" ? window.location.pathname : "/",
           attribution,
           companyWebsite,
+          formLoadedAt,
         }),
       });
-      const data = (await res.json()) as {
+      const data = (await res.json().catch(() => ({}))) as {
         ok?: boolean;
         error?: string;
         enquiryId?: string;
@@ -258,11 +267,11 @@ export function EnquiryForm({
       </div>
 
       <form onSubmit={handleSubmit} onFocus={onFocusStart} className="space-y-4" noValidate>
-        {/* Honeypot */}
-        <div className="hidden" aria-hidden="true">
-          <label htmlFor={`hp-${context}`}>Company Website</label>
+        {/* Off-screen honeypot */}
+        <div className="sr-only" aria-hidden="true">
+          <label htmlFor={`${uid}-hp`}>Company Website</label>
           <input
-            id={`hp-${context}`}
+            id={`${uid}-hp`}
             type="text"
             tabIndex={-1}
             autoComplete="off"
@@ -274,12 +283,14 @@ export function EnquiryForm({
         {/* Name & Phone Row */}
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div>
-            <label className="mb-1.5 block text-xs font-medium text-[#525252]">
+            <label htmlFor={`${uid}-name`} className="mb-1.5 block text-xs font-medium text-[#525252]">
               Full name <span className="text-[#121212]">*</span>
             </label>
             <input
+              id={`${uid}-name`}
               type="text"
               required
+              maxLength={120}
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Your name"
@@ -289,7 +300,7 @@ export function EnquiryForm({
           </div>
 
           <div>
-            <label className="mb-1.5 block text-xs font-medium text-[#525252]">
+            <label htmlFor={`${uid}-phone`} className="mb-1.5 block text-xs font-medium text-[#525252]">
               Phone / WhatsApp <span className="text-[#121212]">*</span>
             </label>
             <div className="flex gap-2">
@@ -306,8 +317,10 @@ export function EnquiryForm({
                 ))}
               </select>
               <input
+                id={`${uid}-phone`}
                 type="tel"
                 required
+                maxLength={32}
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
                 placeholder="50 000 0000"
@@ -321,12 +334,14 @@ export function EnquiryForm({
         {/* Email & Inquiry Type */}
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div>
-            <label className="mb-1.5 block text-xs font-medium text-[#525252]">
+            <label htmlFor={`${uid}-email`} className="mb-1.5 block text-xs font-medium text-[#525252]">
               Email address <span className="text-[#121212]">*</span>
             </label>
             <input
+              id={`${uid}-email`}
               type="email"
               required
+              maxLength={254}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="name@domain.com"
@@ -336,10 +351,11 @@ export function EnquiryForm({
           </div>
 
           <div>
-            <label className="mb-1.5 block text-xs font-medium text-[#525252]">
+            <label htmlFor={`${uid}-type`} className="mb-1.5 block text-xs font-medium text-[#525252]">
               Inquiry type
             </label>
             <select
+              id={`${uid}-type`}
               value={inquiryType}
               onChange={(e) => setInquiryType(e.target.value as EnquiryContextType)}
               className="w-full rounded-lg border border-[#d4d4d4] bg-white px-3.5 py-3 text-sm text-[#121212] focus:border-[#121212] focus:outline-none"
@@ -384,21 +400,24 @@ export function EnquiryForm({
         {showViewing ? (
           <div className="grid grid-cols-1 gap-3 rounded-xl border border-black/[0.08] bg-[#f7f7f7] p-4 sm:grid-cols-3">
             <div>
-              <label className="mb-1 block text-[11px] font-medium text-[#525252]">
+              <label htmlFor={`${uid}-vdate`} className="mb-1 block text-[11px] font-medium text-[#525252]">
                 Preferred date
               </label>
               <input
+                id={`${uid}-vdate`}
                 type="date"
+                min={todayIso}
                 value={viewingDate}
                 onChange={(e) => setViewingDate(e.target.value)}
                 className="w-full rounded-lg border border-[#d4d4d4] bg-white px-3 py-2 text-xs text-[#121212]"
               />
             </div>
             <div>
-              <label className="mb-1 block text-[11px] font-medium text-[#525252]">
+              <label htmlFor={`${uid}-vtime`} className="mb-1 block text-[11px] font-medium text-[#525252]">
                 Time (Dubai GST)
               </label>
               <select
+                id={`${uid}-vtime`}
                 value={viewingTimeGst}
                 onChange={(e) => setViewingTimeGst(e.target.value)}
                 className="w-full rounded-lg border border-[#d4d4d4] bg-white px-3 py-2 text-xs text-[#121212]"
@@ -411,10 +430,11 @@ export function EnquiryForm({
               </select>
             </div>
             <div>
-              <label className="mb-1 block text-[11px] font-medium text-[#525252]">
+              <label htmlFor={`${uid}-vmode`} className="mb-1 block text-[11px] font-medium text-[#525252]">
                 Format
               </label>
               <select
+                id={`${uid}-vmode`}
                 value={viewingMode}
                 onChange={(e) => setViewingMode(e.target.value)}
                 className="w-full rounded-lg border border-[#d4d4d4] bg-white px-3 py-2 text-xs text-[#121212]"
@@ -429,11 +449,13 @@ export function EnquiryForm({
 
         {/* Message */}
         <div>
-          <label className="mb-1.5 block text-xs font-medium text-[#525252]">
+          <label htmlFor={`${uid}-msg`} className="mb-1.5 block text-xs font-medium text-[#525252]">
             Brief or notes
           </label>
           <textarea
+            id={`${uid}-msg`}
             rows={compact ? 3 : 4}
+            maxLength={3500}
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             placeholder="Share target community, budget in AED, bedroom count, or timeline..."

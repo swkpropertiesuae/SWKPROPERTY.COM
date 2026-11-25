@@ -79,6 +79,13 @@ export interface BracketLinkProps extends SharedProps {
   ariaLabel?: string;
 }
 
+function sanitizeHref(raw: string): string {
+  const trimmed = (raw || "").trim();
+  if (!trimmed) return "#";
+  if (/^(?:javascript|data|vbscript):/i.test(trimmed)) return "#";
+  return trimmed;
+}
+
 export function BracketLink({
   href,
   external,
@@ -90,18 +97,37 @@ export function BracketLink({
   fullWidth = false,
   className,
 }: BracketLinkProps) {
+  const safeHref = sanitizeHref(href);
+  const isSchemeLink = /^(?:tel|mailto):/i.test(safeHref);
+  const isExternalHttp = Boolean(external) && !isSchemeLink;
+
   const innerClass = cn(
-    "group/brk relative inline-flex items-center justify-center gap-2 font-medium uppercase whitespace-nowrap transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#121212]",
+    "group/brk relative inline-flex items-center justify-center gap-2 font-medium uppercase whitespace-nowrap transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] focus-visible:outline-2 focus-visible:outline-offset-4",
+    variant === "light" ? "focus-visible:outline-[#121212]" : "focus-visible:outline-[#51fec0]",
     SIZE_CLASSES[size],
     SURFACE_CLASSES[variant],
     fullWidth && "w-full",
     className
   );
 
-  if (external) {
+  if (isSchemeLink) {
     return (
       <a
-        href={href}
+        href={safeHref}
+        onClick={onClick}
+        aria-label={ariaLabel}
+        className={innerClass}
+      >
+        <CornerTicks variant={variant} />
+        <span>{children}</span>
+      </a>
+    );
+  }
+
+  if (isExternalHttp) {
+    return (
+      <a
+        href={safeHref}
         target="_blank"
         rel="noopener noreferrer"
         onClick={onClick}
@@ -115,7 +141,7 @@ export function BracketLink({
   }
 
   return (
-    <Link href={href} onClick={onClick} aria-label={ariaLabel} className={innerClass}>
+    <Link href={safeHref} onClick={onClick} aria-label={ariaLabel} className={innerClass}>
       <CornerTicks variant={variant} />
       <span>{children}</span>
     </Link>

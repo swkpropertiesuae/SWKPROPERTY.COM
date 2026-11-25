@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { ArrowLeft, ArrowRight, ArrowUpRight } from "lucide-react";
 
 export interface SignatureDeckItem {
@@ -27,15 +27,22 @@ export function SignatureHorizontalDeck({
   items: SignatureDeckItem[];
   className?: string;
 }) {
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [deckState, setDeckState] = useState({ activeIndex: 0, pageStart: 0 });
   const [hovered, setHovered] = useState(false);
-  const [pageStart, setPageStart] = useState(0);
   const railRef = useRef<HTMLDivElement>(null);
-  const pillRailRef = useRef<HTMLDivElement>(null);
   const programmaticScrollRef = useRef(false);
+  const scrollTimerRef = useRef<number | null>(null);
+  const prefersReducedMotion = useReducedMotion();
 
+  const { activeIndex, pageStart } = deckState;
   const total = items.length;
   const WINDOW_SIZE = 5;
+
+  useEffect(() => {
+    return () => {
+      if (scrollTimerRef.current !== null) window.clearTimeout(scrollTimerRef.current);
+    };
+  }, []);
 
   const scrollMobileRailTo = (idx: number) => {
     const rail = railRef.current;
@@ -44,22 +51,28 @@ export function SignatureHorizontalDeck({
     if (!child) return;
     programmaticScrollRef.current = true;
     const targetLeft = child.offsetLeft - (rail.clientWidth - child.clientWidth) / 2;
-    rail.scrollTo({ left: Math.max(0, targetLeft), behavior: "smooth" });
-    window.setTimeout(() => {
+    rail.scrollTo({ left: Math.max(0, targetLeft), behavior: prefersReducedMotion ? "auto" : "smooth" });
+    if (scrollTimerRef.current !== null) window.clearTimeout(scrollTimerRef.current);
+    scrollTimerRef.current = window.setTimeout(() => {
       programmaticScrollRef.current = false;
+      scrollTimerRef.current = null;
     }, 450);
   };
 
   const selectIndex = (idx: number, syncRail = true) => {
+    if (total === 0) return;
     const wrapped = ((idx % total) + total) % total;
-    setActiveIndex(wrapped);
-    if (total > WINDOW_SIZE) {
-      if (wrapped < pageStart) {
-        setPageStart(wrapped);
-      } else if (wrapped >= pageStart + WINDOW_SIZE) {
-        setPageStart(Math.min(total - WINDOW_SIZE, wrapped - WINDOW_SIZE + 1));
+    setDeckState((prev) => {
+      let nextStart = prev.pageStart;
+      if (total <= WINDOW_SIZE) {
+        nextStart = 0;
+      } else if (wrapped < prev.pageStart) {
+        nextStart = wrapped;
+      } else if (wrapped >= prev.pageStart + WINDOW_SIZE) {
+        nextStart = Math.min(total - WINDOW_SIZE, wrapped - WINDOW_SIZE + 1);
       }
-    }
+      return { activeIndex: wrapped, pageStart: nextStart };
+    });
     if (syncRail) {
       scrollMobileRailTo(wrapped);
     }
@@ -86,30 +99,28 @@ export function SignatureHorizontalDeck({
       }
     }
     if (bestIdx !== activeIndex) {
-      setActiveIndex(bestIdx);
+      selectIndex(bestIdx, false);
     }
   };
 
-  // Gentle auto-advance on desktop (pauses while hovered or on touch mobile so user swipes smoothly)
+  // Gentle auto-advance on desktop (pauses while hovered, reduced motion, or touch mobile)
   useEffect(() => {
-    if (hovered || total <= 1) return;
+    if (hovered || prefersReducedMotion || total <= 1) return;
     const isDesktop = typeof window !== "undefined" && window.matchMedia("(min-width: 1024px)").matches;
     if (!isDesktop) return;
 
     const timer = window.setInterval(() => {
-      setActiveIndex((prev) => {
-        const next = (prev + 1) % total;
-        setPageStart((start) => {
-          if (total <= WINDOW_SIZE) return 0;
-          if (next < start) return next;
-          if (next >= start + WINDOW_SIZE) return Math.min(total - WINDOW_SIZE, next - WINDOW_SIZE + 1);
-          return start;
-        });
-        return next;
+      setDeckState((prev) => {
+        const next = (prev.activeIndex + 1) % total;
+        let nextStart = prev.pageStart;
+        if (total <= WINDOW_SIZE) nextStart = 0;
+        else if (next < prev.pageStart) nextStart = next;
+        else if (next >= prev.pageStart + WINDOW_SIZE) nextStart = Math.min(total - WINDOW_SIZE, next - WINDOW_SIZE + 1);
+        return { activeIndex: next, pageStart: nextStart };
       });
     }, 6200);
     return () => window.clearInterval(timer);
-  }, [hovered, total]);
+  }, [hovered, prefersReducedMotion, total]);
 
   const visibleDesktopItems =
     total <= WINDOW_SIZE
@@ -183,8 +194,17 @@ export function SignatureHorizontalDeck({
             <motion.article
               key={item.slug}
               layout
+              tabIndex={0}
+              aria-expanded={isActive}
               onMouseEnter={() => selectIndex(idx, false)}
+              onFocus={() => selectIndex(idx, false)}
               onClick={() => selectIndex(idx, false)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  selectIndex(idx, false);
+                }
+              }}
               animate={{
                 flexGrow: isActive ? 4.4 : 1,
               }}
@@ -363,7 +383,6 @@ export function SignatureHorizontalDeck({
 
       {/* Bottom Interactive Selector Pills (Horizontal Swipe Rail on Mobile, Wrapped on Desktop) */}
       <div
-        ref={pillRailRef}
         className="mt-4 sm:mt-5 flex flex-nowrap sm:flex-wrap items-center justify-start sm:justify-center gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       >
         {items.map((item, idx) => {

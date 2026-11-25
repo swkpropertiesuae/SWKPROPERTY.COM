@@ -1,5 +1,62 @@
 [
   {
+    "id": "binghatti-studio-hot",
+    "tab": "off-plan",
+    "eyebrow": "HOT PROJECT · BINGHATTI STUDIO · HIGH YIELD",
+    "title": "Binghatti Studio Residences",
+    "shortTitle": "Binghatti Studio · AED 550K",
+    "developer": "Binghatti",
+    "community": "JVC & Dubai Science Park",
+    "priceGuide": "From AED 550,000*",
+    "planHighlight": "0% Buyer Fee · No Off-Plan Mortgage Reg or Trustee Fees",
+    "image": "/img/projects/binghatti/binghatti-jvc-boutique-residences.webp",
+    "href": "/properties/binghatti-studio-residences-jvc-offplan",
+    "benefits": [
+      "Entry-level Binghatti Studio from AED 550,000* (subject to developer & market conditions)",
+      "0% buyer agency commission on primary off-plan release",
+      "No mortgage registration fees & no trustee fees on off-plan purchase",
+      "Protected under Dubai RERA Escrow Law No. 8 of 2007"
+    ]
+  },
+  {
+    "id": "tarrad-studio-hot",
+    "tab": "off-plan",
+    "eyebrow": "HOT PROJECT · TARRAD DEVELOPMENT · DUBAILAND",
+    "title": "Tarrad Residences Dubailand",
+    "shortTitle": "Tarrad · AED 620K",
+    "developer": "Tarrad Development",
+    "community": "Dubailand (DLRC), Dubai",
+    "priceGuide": "From AED 620,000*",
+    "planHighlight": "Structured Developer Plan · 0% Buyer Agency Fee",
+    "image": "/img/projects/tarrad/tarrad-dubailand.webp",
+    "href": "/properties/tarrad-studio-residences-dubailand-offplan",
+    "benefits": [
+      "Contemporary Tarrad Studio from AED 620,000* (subject to developer & market conditions)",
+      "High-growth Dubailand / DLRC rental corridor with strong investor demand",
+      "No mortgage registration fees & no trustee fees on off-plan purchase",
+      "Approx. AED 4,000–5,500 Developers Admin fees; written AED cost sheet before booking"
+    ]
+  },
+  {
+    "id": "azizi-venice-studio-hot",
+    "tab": "off-plan",
+    "eyebrow": "HOT PROJECT · AZIZI VENICE · CRYSTAL LAGOON",
+    "title": "Azizi Venice Studio — Crystal Lagoon Boulevard",
+    "shortTitle": "Azizi Venice Studio · AED 680K",
+    "developer": "Azizi Developments",
+    "community": "Dubai South · Crystal Lagoon",
+    "priceGuide": "From AED 680,000*",
+    "planHighlight": "50/50 Construction-Linked · 0% Buyer Fee",
+    "image": "/img/projects/azizi/azizi-venice.webp",
+    "href": "/properties/azizi-venice-studio-dubai-south-offplan",
+    "benefits": [
+      "Waterfront Lagoon Studio from AED 680,000* (subject to developer & market conditions)",
+      "Positioned in Dubai South beside Al Maktoum International Airport expansion",
+      "No mortgage registration fees & no trustee fees on off-plan purchase",
+      "18 km crystal lagoon promenade, cultural opera district & RERA Escrow account"
+    ]
+  },
+  {
     "id": "palm-jebel-ali",
     "tab": "off-plan",
     "eyebrow": "TRENDING OFF-PLAN LAUNCH · NAKHEEL",
@@ -7,14 +64,14 @@
     "shortTitle": "Palm Jebel Ali Villas",
     "developer": "Nakheel",
     "community": "Palm Jebel Ali, Dubai",
-    "priceGuide": "From AED 18.5M",
+    "priceGuide": "From AED 18.5M*",
     "planHighlight": "80/20 Construction-Linked · 0% Buyer Fee",
     "image": "/img/projects/nakheel/palm-jebel-ali.webp",
     "href": "/off-plan/palm-jebel-ali",
     "benefits": [
       "0% brokerage commission on direct developer release",
       "Protected under Dubai RERA Escrow Law No. 8 of 2007",
-      "Qualifies directly for 10-Year UAE Golden Visa",
+      "Eligible for 10-Year UAE Golden Visa (subject to ICP/DLD rules)",
       "Private sandy beach access across 16 masterplanned fronds"
     ]
   },
@@ -26,14 +83,14 @@
     "shortTitle": "Mercedes-Benz Places",
     "developer": "Binghatti",
     "community": "Downtown Dubai · Burj Khalifa Views",
-    "priceGuide": "From AED 8.8M",
+    "priceGuide": "From AED 8.8M*",
     "planHighlight": "70/30 Structured Plan · Direct Allocation",
     "image": "/img/projects/binghatti/mercedes-benz-places-hd.webp",
     "href": "/off-plan/mercedes-benz-places",
     "benefits": [
       "65-storey architectural landmark facing Burj Khalifa",
       "Direct developer floor-plate & inventory access via SWK",
-      "10-Year UAE Golden Visa eligibility on DLD Oqood",
+      "10-Year UAE Golden Visa eligibility on DLD Oqood (subject to regulations)",
       "Zero annual property tax & zero capital gains tax in Dubai"
     ]
   },
@@ -45,7 +102,7 @@
     "shortTitle": "Creek Haven · Emaar",
     "developer": "Emaar Properties",
     "community": "Dubai Creek Harbour",
-    "priceGuide": "From AED 1.65M",
+    "priceGuide": "From AED 1.65M*",
     "planHighlight": "80/20 Emaar Schedule · Metro Blue Line Axis",
     "image": "/img/projects/emaar/creek-haven-hd.webp",
     "href": "/off-plan/creek-haven",
@@ -64,14 +121,14 @@
     "shortTitle": "Ready Dubai Homes",
     "developer": "Emaar · Nakheel · Sobha · Ellington",
     "community": "Downtown · Palm Jumeirah · Dubai Hills",
-    "priceGuide": "Ready Title Deed Stock",
+    "priceGuide": "Ready Title Deed Stock*",
     "planHighlight": "Immediate Transfer · Vacant on Handover Options",
     "image": "/img/listings/burj-crown-boulevard-3br-downtown-dubai.webp",
     "href": "/buy",
     "benefits": [
-      "Start earning tax-free rental income or move in immediately",
+      "Start earning rental income or move in immediately",
       "Independent DLD achieved-transfer comparable pricing audit",
-      "Form F, Developer NOC & DLD Trustee transfer managed end-to-end",
+      "Form F, Developer NOC & DLD transfer managed end-to-end",
       "UAE resident & non-resident mortgage pre-approval guidance"
     ]
   },
@@ -83,7 +140,7 @@
     "shortTitle": "SZR & DIFC Offices",
     "developer": "DIFC · Business Bay · Sheikh Zayed Road",
     "community": "Prime Commercial Corridors",
-    "priceGuide": "Fitted & Full-Floor Suites",
+    "priceGuide": "Fitted & Full-Floor Suites*",
     "planHighlight": "High Corporate Occupancy · Strong Commercial Yields",
     "image": "/img/listings/business-bay-canal-executive-headquarters-commercial.webp",
     "href": "/properties?type=Office",

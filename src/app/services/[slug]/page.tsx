@@ -27,12 +27,13 @@ export async function generateMetadata({
       title: "Service Not Found",
       description: "Explore SWK Properties real estate services in Dubai.",
       path: "/services",
+      noIndex: true,
     });
   }
 
   return buildMeta({
-    title: `${svc.title} in Dubai | SWK Advisory`,
-    description: `${svc.tagline}. ${svc.description}`,
+    title: svc.metaTitle || `${svc.title} in Dubai | SWK Advisory`,
+    description: svc.metaDescription || `${svc.tagline}. ${svc.description}`,
     path: `/services/${svc.slug}`,
     image: svc.heroImage,
     keywords: svc.keywords,
@@ -62,7 +63,7 @@ export default async function ServiceDetailPage({
             description: svc.description,
             slug: svc.slug,
           }),
-          faqLd(svc.faqs),
+          ...(svc.faqs.length > 0 ? [faqLd(svc.faqs)] : []),
         ]}
       />
 
@@ -193,8 +194,8 @@ export default async function ServiceDetailPage({
         <div className="mx-auto max-w-[1260px] px-4 sm:px-8">
           <SectionEyebrow>ALL ADVISORY DESKS</SectionEyebrow>
           <SplitHeading
-            primary="Explore our other"
-            muted="seven desks"
+            primary="All eight"
+            muted="SWK advisory desks"
             size="md"
             inline
             className="mt-4"
@@ -204,6 +205,7 @@ export default async function ServiceDetailPage({
               <Link
                 key={s.slug}
                 href={`/services/${s.slug}`}
+                aria-current={s.slug === svc.slug ? "page" : undefined}
                 className={`flex items-center justify-between rounded-xl border p-4 text-sm font-medium transition-colors ${
                   s.slug === svc.slug
                     ? "border-[#121212] bg-[#121212] text-white"

@@ -1,4 +1,5 @@
 import listingsExpandedJson from "@/data/listings-expanded.json";
+import { getTeamMember, SITE } from "@/lib/swk";
 
 export type ListingPurpose = "buy" | "rent" | "off-plan";
 export type ListingStatus = "available" | "reserved" | "rented" | "sold";
@@ -83,7 +84,232 @@ export interface PropertyListing {
   dld: DldCompliance;
 }
 
-export const LISTINGS: PropertyListing[] = [
+const RAW_LISTINGS: PropertyListing[] = [
+  {
+    slug: "binghatti-studio-residences-jvc-offplan",
+    reference: "SWK-DXB-2026-HOT1",
+    title: "Binghatti Studio — Contemporary Off-Plan Residence",
+    subtitle: "High-yield Dubai studio by Binghatti with signature architectural facade, smart home layout, and direct developer payment plan",
+    purpose: "off-plan",
+    status: "available",
+    propertyType: "Apartment",
+    communitySlug: "jvc",
+    community: "Jumeirah Village Circle (JVC)",
+    building: "Binghatti Studio Residences",
+    developerSlug: "binghatti",
+    developer: "Binghatti",
+    priceAed: 550000,
+    bedrooms: 0,
+    bathrooms: 1,
+    areaSqFt: 410,
+    furnished: "Unfurnished",
+    completion: "Off-Plan",
+    handover: "2027 (Developer Schedule)",
+    paymentPlan: "70/30 (20% Booking · 50% Construction · 30% Handover)",
+    downPaymentPct: 20,
+    serviceChargePerSqFt: 14.5,
+    parkingSpaces: 1,
+    floorLevel: "Mid-High Tier",
+    views: ["Community Park", "Skyline"],
+    features: ["Balcony", "Parking", "Step-free access"],
+    amenities: [
+      "Temperature-controlled swimming pool & sun deck",
+      "Modern indoor fitness suite",
+      "Landscaped podium gardens & retail promenade",
+      "24/7 concierge and access-controlled lobby",
+    ],
+    accessibility: ["Step-free lobby", "High-speed passenger elevators", "Covered resident parking"],
+    petPolicy: "Pet-friendly",
+    nearMetro: false,
+    badge: "New Launch",
+    isRender: true,
+    agentSlug: "mohammed-islam",
+    agentName: "Mohammed Islam (Rex)",
+    agentRole: "Assistant Director · UK & Dubai Advisory",
+    agentPhone: "+447704302019",
+    agentLanguages: ["English", "Hindi", "Bangladeshi", "Urdu", "Arabic (Add-on)"],
+    lastChecked: "2026-11-25",
+    listedAt: "2026-11-25",
+    lat: 25.0598,
+    lng: 55.2094,
+    mapZone: "green-suburban",
+    images: ["/img/projects/binghatti/binghatti-jvc-boutique-residences.webp"],
+    floorPlan: {
+      label: "Signature Studio · 410 sq ft (Indicative)",
+      totalAreaSqFt: 410,
+      internalSqFt: 355,
+      balconySqFt: 55,
+      rooms: [
+        { name: "Open Studio Living & Sleeping Suite", dimensions: "6.1m × 3.8m" },
+        { name: "Fitted Kitchenette & Bath", dimensions: "3.2m × 2.4m" },
+      ],
+    },
+    description: [
+      "Direct developer studio release from Binghatti positioned for strong rental yield and capital accessibility in Dubai. Starting price from AED 550,000, subject to developer availability and prevailing market conditions.",
+      "Off-plan purchases carry 0% buyer brokerage fee, 4% DLD Oqood registration, and approximately AED 4,000–5,500 in developer administration fees (no mortgage registration fee and no trustee fee apply on off-plan purchases).",
+    ],
+    dld: {
+      permitNumber: "",
+      permitIssued: "",
+      permitExpiry: "",
+      orn: SITE.orn,
+      brn: "",
+      madmounQrId: "",
+      escrowBank: "RERA Project Escrow Account (Verified prior to booking)",
+      verificationUrl: "https://dubailand.gov.ae",
+      permitVerified: false,
+    },
+  },
+  {
+    slug: "tarrad-studio-residences-dubailand-offplan",
+    reference: "SWK-DXB-2026-HOT2",
+    title: "Tarrad — Boutique Off-Plan Studio in Dubailand (DLRC)",
+    subtitle: "Design-led residential studio by Tarrad Development featuring resort-style podium pool, sunlit glazing, and flexible instalments",
+    purpose: "off-plan",
+    status: "available",
+    propertyType: "Apartment",
+    communitySlug: "dubailand",
+    community: "Dubailand (DLRC)",
+    building: "Tarrad Residences Dubailand",
+    developerSlug: "tarrad",
+    developer: "Tarrad Development",
+    priceAed: 620000,
+    bedrooms: 0,
+    bathrooms: 1,
+    areaSqFt: 435,
+    furnished: "Partly furnished",
+    completion: "Off-Plan",
+    handover: "2027–2028 (Developer Schedule)",
+    paymentPlan: "60/40 Flexible Developer Schedule",
+    downPaymentPct: 20,
+    serviceChargePerSqFt: 13.5,
+    parkingSpaces: 1,
+    floorLevel: "Mid Floor",
+    views: ["Community", "Pool Deck"],
+    features: ["Balcony", "Parking", "Step-free access"],
+    amenities: [
+      "Resort podium swimming pool & cabanas",
+      "Equipped gymnasium & wellness lounge",
+      "Co-working hub and landscaped courtyard",
+      "Dedicated covered resident parking",
+    ],
+    accessibility: ["Step-free arrival lobby", "Wide passenger elevators"],
+    petPolicy: "Pet-friendly",
+    nearMetro: false,
+    badge: "New Launch",
+    isRender: true,
+    agentSlug: "mohammed-islam",
+    agentName: "Mohammed Islam (Rex)",
+    agentRole: "Assistant Director · UK & Dubai Advisory",
+    agentPhone: "+447704302019",
+    agentLanguages: ["English", "Hindi", "Bangladeshi", "Urdu", "Arabic (Add-on)"],
+    lastChecked: "2026-11-25",
+    listedAt: "2026-11-25",
+    lat: 25.0912,
+    lng: 55.3792,
+    mapZone: "green-suburban",
+    images: ["/img/projects/tarrad/tarrad-dubailand.webp"],
+    floorPlan: {
+      label: "Boutique Studio · 435 sq ft (Indicative)",
+      totalAreaSqFt: 435,
+      internalSqFt: 375,
+      balconySqFt: 60,
+      rooms: [
+        { name: "Living & Sleeping Gallery", dimensions: "6.3m × 3.9m" },
+        { name: "Kitchen & Contemporary Bath", dimensions: "3.4m × 2.5m" },
+      ],
+    },
+    description: [
+      "Boutique off-plan studio by Tarrad Development in the rapidly expanding Dubailand Residence Complex (DLRC) corridor. Indicative starting price from AED 620,000, subject to developer pricing releases and current market conditions.",
+      "Zero buyer brokerage fee on direct developer allocation; DLD Oqood registration (4%) and approximate developer admin fees (AED 4,000–5,500) apply. No mortgage registration fee or trustee fee on off-plan bookings.",
+    ],
+    dld: {
+      permitNumber: "",
+      permitIssued: "",
+      permitExpiry: "",
+      orn: SITE.orn,
+      brn: "",
+      madmounQrId: "",
+      escrowBank: "RERA Project Escrow Account (Verified prior to booking)",
+      verificationUrl: "https://dubailand.gov.ae",
+      permitVerified: false,
+    },
+  },
+  {
+    slug: "azizi-venice-studio-dubai-south-offplan",
+    reference: "SWK-DXB-2026-HOT3",
+    title: "Azizi Venice Studio — Crystal Lagoon Residence in Dubai South",
+    subtitle: "Waterfront studio inside Azizi's 18-km swimmable lagoon masterplan beside Al Maktoum International Airport (DWC)",
+    purpose: "off-plan",
+    status: "available",
+    propertyType: "Apartment",
+    communitySlug: "dubai-south",
+    community: "Dubai South",
+    building: "Azizi Venice · Lagoon Boulevard",
+    developerSlug: "azizi",
+    developer: "Azizi Developments",
+    priceAed: 680000,
+    bedrooms: 0,
+    bathrooms: 1,
+    areaSqFt: 390,
+    furnished: "Unfurnished",
+    completion: "Off-Plan",
+    handover: "2027–2028 (Developer Schedule)",
+    paymentPlan: "50/50 (10% Booking · 40% Construction · 50% Handover)",
+    downPaymentPct: 10,
+    serviceChargePerSqFt: 15.0,
+    parkingSpaces: 1,
+    floorLevel: "Lagoon & Boulevard Tier",
+    views: ["Crystal Lagoon", "Boulevard"],
+    features: ["Balcony", "Parking", "Waterfront", "Step-free access"],
+    amenities: [
+      "18-km swimmable crystal lagoon & sandy beaches",
+      "700-metre climate-controlled retail boulevard",
+      "Opera house, waterfront cinemas & fine dining",
+      "Dedicated fitness clubs, infinity pools & parks",
+    ],
+    accessibility: ["Step-free promenade access", "Modern high-speed elevators"],
+    petPolicy: "Pet-friendly",
+    nearMetro: false,
+    badge: "Waterfront",
+    isRender: true,
+    agentSlug: "mohammed-islam",
+    agentName: "Mohammed Islam (Rex)",
+    agentRole: "Assistant Director · UK & Dubai Advisory",
+    agentPhone: "+447704302019",
+    agentLanguages: ["English", "Hindi", "Bangladeshi", "Urdu", "Arabic (Add-on)"],
+    lastChecked: "2026-11-25",
+    listedAt: "2026-11-25",
+    lat: 24.8896,
+    lng: 55.1742,
+    mapZone: "green-suburban",
+    images: ["/img/projects/azizi/azizi-venice.webp"],
+    floorPlan: {
+      label: "Lagoon Studio · 390 sq ft (Indicative)",
+      totalAreaSqFt: 390,
+      internalSqFt: 340,
+      balconySqFt: 50,
+      rooms: [
+        { name: "Studio Living & Dining", dimensions: "5.9m × 3.8m" },
+        { name: "Kitchenette & Bathroom", dimensions: "3.1m × 2.3m" },
+      ],
+    },
+    description: [
+      "Off-plan studio residence inside Azizi Venice in Dubai South — a waterfront crystal-lagoon master community strategically located near Al Maktoum International Airport (DWC) and Expo City Dubai. Indicative starting price from AED 680,000, subject to developer availability and current market conditions.",
+      "Direct developer booking carries 0% buyer brokerage fee, 4% DLD Oqood registration, and approximately AED 4,000–5,500 in developer admin fees, with no mortgage registration fees and no trustee fees on off-plan purchases.",
+    ],
+    dld: {
+      permitNumber: "",
+      permitIssued: "",
+      permitExpiry: "",
+      orn: SITE.orn,
+      brn: "",
+      madmounQrId: "",
+      escrowBank: "RERA Project Escrow Account (Verified prior to booking)",
+      verificationUrl: "https://dubailand.gov.ae",
+      permitVerified: false,
+    },
+  },
   {
     slug: "burj-crown-boulevard-3br-downtown-dubai",
     reference: "SWK-DXB-2026-101",
@@ -719,7 +945,7 @@ export const LISTINGS: PropertyListing[] = [
     purpose: "off-plan",
     status: "available",
     propertyType: "Villa",
-    communitySlug: "dubai-hills-estate",
+    communitySlug: "dubailand",
     community: "The Oasis by Emaar",
     building: "Palmiera & Mirage at The Oasis",
     developerSlug: "emaar",
@@ -776,7 +1002,7 @@ export const LISTINGS: PropertyListing[] = [
       ],
     },
     description: [
-      "Emaar The Oasis is one of Dubai's largest low-density luxury villa masterplans, dedicarating a quarter of its land area to interconnected swimmable lagoons, linear parks, and waterfront promenades.",
+      "Emaar The Oasis is one of Dubai's largest low-density luxury villa masterplans, dedicating a quarter of its land area to interconnected swimmable lagoons, linear parks, and waterfront promenades.",
       "Designed for end-user families and long-term capital growth investors, each villa offers generous plot sizes, show and back kitchens, staff quarters, and direct access to the water canal network.",
     ],
     dld: {
@@ -798,7 +1024,7 @@ export const LISTINGS: PropertyListing[] = [
     purpose: "off-plan",
     status: "available",
     propertyType: "Townhouse",
-    communitySlug: "dubai-hills-estate",
+    communitySlug: "dubailand",
     community: "DAMAC Islands, Dubailand",
     building: "Bora Bora & Maldives Clusters · DAMAC Islands",
     developerSlug: "damac",
@@ -877,7 +1103,7 @@ export const LISTINGS: PropertyListing[] = [
     purpose: "off-plan",
     status: "available",
     propertyType: "Apartment",
-    communitySlug: "dubai-marina",
+    communitySlug: "sheikh-zayed-road",
     community: "Sheikh Zayed Road Corridor",
     building: "Sobha Century / Sobha Central",
     developerSlug: "sobha",
@@ -955,7 +1181,7 @@ export const LISTINGS: PropertyListing[] = [
     purpose: "off-plan",
     status: "available",
     propertyType: "Apartment",
-    communitySlug: "dubai-creek-harbour",
+    communitySlug: "dubai-islands",
     community: "Dubai Islands",
     building: "The Meriva by Ellington",
     developerSlug: "ellington",
@@ -1059,7 +1285,7 @@ export const LISTINGS: PropertyListing[] = [
     ],
     accessibility: ["Step-free arrival court", "Destination-dispatch elevators"],
     petPolicy: "Subject to landlord approval",
-    nearMetro: true,
+    nearMetro: false,
     metroStation: "Business Bay / Burj Khalifa Metro (8 min drive)",
     badge: "New Launch",
     isRender: true,
@@ -1216,7 +1442,7 @@ export const LISTINGS: PropertyListing[] = [
     ],
     accessibility: ["Step-free arrival plaza", "Dedicated commercial lift bank"],
     petPolicy: "No pets",
-    nearMetro: true,
+    nearMetro: false,
     metroStation: "Business Bay Metro (7 min drive)",
     badge: "Direct Mandate",
     isRender: false,
@@ -1260,6 +1486,49 @@ export const LISTINGS: PropertyListing[] = [
   },
   ...(listingsExpandedJson as PropertyListing[]),
 ];
+
+function hydrateAndSanitizeListing(item: PropertyListing): PropertyListing {
+  const member = getTeamMember(item.agentSlug);
+  const verified = item.dld?.permitVerified === true;
+
+  const agentLanguages = member
+    ? [
+        ...member.languages,
+        ...member.addonLanguages.map((lang) => `${lang} (Add-on)`),
+      ]
+    : item.agentLanguages;
+
+  const badge =
+    !verified && item.badge === "Verified Permit"
+      ? item.purpose === "off-plan"
+        ? "New Launch"
+        : "Direct Mandate"
+      : item.badge;
+
+  return {
+    ...item,
+    badge,
+    agentName: member?.name ?? item.agentName,
+    agentRole: member?.role ?? item.agentRole,
+    agentPhone: member?.phoneRaw ?? SITE.phoneRaw,
+    agentLanguages,
+    dld: verified
+      ? item.dld
+      : {
+          permitNumber: "",
+          permitIssued: "",
+          permitExpiry: "",
+          orn: SITE.orn,
+          brn: "",
+          madmounQrId: "",
+          escrowBank: item.dld?.escrowBank,
+          verificationUrl: item.dld?.verificationUrl || "https://dubailand.gov.ae",
+          permitVerified: false,
+        },
+  };
+}
+
+export const LISTINGS: PropertyListing[] = RAW_LISTINGS.map(hydrateAndSanitizeListing);
 
 export const listings = LISTINGS;
 

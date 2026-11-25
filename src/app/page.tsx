@@ -73,8 +73,7 @@ export default function Home() {
       {/* 10 · Four-Column Staggered Glass Acquisition Stages Wave */}
       <AcquisitionStagesWave />
 
-      {/* 11 · 21st.dev Editorial Testimonial Slider & Frosted-Glass FAQ */}
-      <ClientVoices />
+      {/* 11 · Frosted-Glass FAQ */}
       <Faq />
 
       {/* 12 · Dubai Market Insights & Buyer Guides Preview */}
@@ -82,6 +81,9 @@ export default function Home() {
 
       {/* 13 · Full-Bleed Dubai Architectural CTA Banner */}
       <CtaBanner />
+
+      {/* 14 · Discreet Bottom-Hidden International Client Perspectives (South Asia, UK, Mauritius, Singapore) */}
+      <ClientVoices />
     </>
   );
 }

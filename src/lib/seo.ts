@@ -204,7 +204,12 @@ export const KW = {
 }
 
 /* ------------------------------------------------------------- JSON-LD */
-const abs = (p: string) => (p.startsWith("http") ? p : `${SITE_URL}${p}`)
+const abs = (p: string) => {
+  if (!p) return SITE_URL
+  if (/^https?:\/\//i.test(p)) return p
+  if (p.startsWith("//")) return `${SITE_URL}/${p.replace(/^\/+/, "")}`
+  return `${SITE_URL}${p.startsWith("/") ? p : `/${p}`}`
+}
 
 export const organizationLd = {
   "@context": "https://schema.org",
@@ -240,9 +245,11 @@ export const organizationLd = {
     { "@type": "City", name: "Dubai" },
     { "@type": "City", name: "Abu Dhabi" },
     { "@type": "City", name: "Sharjah" },
+    { "@type": "City", name: "Ras Al Khaimah" },
+    { "@type": "City", name: "Umm Al Quwain" },
     { "@type": "Country", name: "United Arab Emirates" },
   ],
-  knowsLanguage: ["en", "ar", "hi", "ur", "ru", "fr"],
+  knowsLanguage: ["en", "ar", "hi", "bn", "ur", "pa", "ps", "mr", "fr"],
   sameAs: Object.values(SITE.socials).filter(Boolean),
   hasMap: `https://www.google.com/maps?q=${SITE.geo.lat},${SITE.geo.lng}`,
   slogan: SITE.tagline,
@@ -259,7 +266,20 @@ export const organizationLd = {
     "Property management in Dubai",
   ],
   contactPoint: [
-    { "@type": "ContactPoint", telephone: SITE.phone, contactType: "sales", areaServed: "AE", availableLanguage: ["English", "Arabic", "Hindi", "Urdu", "Russian", "French"] },
+    {
+      "@type": "ContactPoint",
+      telephone: SITE.phone,
+      contactType: "sales",
+      areaServed: "AE",
+      availableLanguage: ["English", "Arabic", "Hindi", "Bangladeshi", "Urdu", "Punjabi", "Pashto", "Marathi", "French"],
+    },
+    {
+      "@type": "ContactPoint",
+      telephone: SITE.ukAdvisoryPhone,
+      contactType: "sales",
+      areaServed: ["GB", "AE"],
+      availableLanguage: ["English", "Hindi", "Bangladeshi", "Urdu", "Arabic"],
+    },
   ],
 }
 
@@ -332,7 +352,9 @@ export function articleLd(a: {
     dateModified: mod,
     articleSection: a.category ?? "Real Estate Briefing",
     mainEntityOfPage: abs(p),
-    author: { "@type": "Person", name: a.authorName ?? SITE.name },
+    author: a.authorName
+      ? { "@type": "Person", name: a.authorName }
+      : { "@type": "Organization", name: SITE.name, "@id": `${SITE_URL}/#organization` },
     publisher: { "@id": `${SITE_URL}/#organization` },
     inLanguage: "en-AE",
     // Lets voice assistants read the headline and direct-answer summary aloud.
@@ -358,6 +380,7 @@ export function serviceLd(s: { name: string; description: string; path?: string;
 
 export function placeLd(p: { name: string; description: string; path?: string; slug?: string; image: string; lat?: number; lng?: number }) {
   const urlPath = p.path ?? `/communities/${p.slug ?? ""}`
+  const hasGeo = typeof p.lat === "number" && Number.isFinite(p.lat) && typeof p.lng === "number" && Number.isFinite(p.lng)
   return {
     "@context": "https://schema.org",
     "@type": "Place",
@@ -365,6 +388,7 @@ export function placeLd(p: { name: string; description: string; path?: string; s
     description: p.description,
     url: abs(urlPath),
     image: abs(p.image),
+    ...(hasGeo ? { geo: { "@type": "GeoCoordinates", latitude: p.lat, longitude: p.lng } } : {}),
     containedInPlace: { "@type": "City", name: "Dubai" },
   }
 }

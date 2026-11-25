@@ -74,7 +74,7 @@ export function PropertyCard({
         >
           <Link href={`/properties/${listing.slug}`} className="block h-full w-full">
             <img
-              src={listing.images[0]}
+              src={listing.images?.[0] || "/og-default.jpg"}
               alt={listing.title}
               loading="lazy"
               className="h-full w-full object-cover transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-110 group-hover:brightness-[0.82]"
@@ -99,6 +99,7 @@ export function PropertyCard({
             <button
               type="button"
               onClick={() => toggleSaved(listing.slug)}
+              aria-pressed={isSaved}
               aria-label={isSaved ? "Remove from shortlist" : "Save to shortlist"}
               className={`flex h-8 w-8 cursor-pointer items-center justify-center rounded-full backdrop-blur-md transition-colors ${
                 isSaved
@@ -111,7 +112,8 @@ export function PropertyCard({
             <button
               type="button"
               onClick={() => toggleCompare(listing.slug)}
-              aria-label="Compare property"
+              aria-pressed={isCompared}
+              aria-label={isCompared ? "Remove from comparison" : "Compare property"}
               className={`flex h-8 w-8 cursor-pointer items-center justify-center rounded-full backdrop-blur-md transition-colors ${
                 isCompared
                   ? "bg-[#121212] text-[#51fec0]"
@@ -126,7 +128,7 @@ export function PropertyCard({
           <Link
             href={`/properties/${listing.slug}`}
             aria-label={`Open ${listing.title}`}
-            className="absolute bottom-3.5 right-3.5 flex h-11 w-11 translate-y-2 items-center justify-center rounded-full bg-white text-[#121212] opacity-0 shadow-lg transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100 hover:bg-[#51fec0]"
+            className="absolute bottom-3.5 right-3.5 flex h-11 w-11 translate-y-2 items-center justify-center rounded-full bg-white text-[#121212] opacity-0 shadow-lg transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100 focus-visible:translate-y-0 focus-visible:opacity-100 hover:bg-[#51fec0]"
           >
             <ArrowUpRight className="h-4 w-4" />
           </Link>
@@ -140,7 +142,7 @@ export function PropertyCard({
               <span className="shrink-0 font-mono text-[10px] text-[#64748b]">{listing.reference}</span>
             </div>
 
-            <div className="mt-2.5 flex items-start justify-between gap-3">
+            <div className="mt-2.5 flex flex-col gap-2.5">
               <div className="min-w-0">
                 <Link
                   href={`/properties/${listing.slug}`}
@@ -153,13 +155,13 @@ export function PropertyCard({
                 </p>
               </div>
 
-              {/* 21st.dev Signature Price Pill */}
-              <div className="shrink-0 rounded-full border border-[#0e9f6e]/20 bg-[#0e9f6e]/10 px-3 py-1.5 text-right">
-                <span className="block text-sm font-semibold tracking-[-0.02em] text-[#0b7a55] tabular-nums whitespace-nowrap">
-                  {formatPrice(listing.priceAed)}
+              {/* 21st.dev Signature Price Pill (wraps cleanly across all currency conversions) */}
+              <div className="inline-flex w-fit max-w-full flex-wrap items-baseline gap-1.5 rounded-2xl border border-[#0e9f6e]/20 bg-[#0e9f6e]/10 px-3 py-1.5">
+                <span className="text-sm font-semibold tracking-[-0.02em] text-[#0b7a55] tabular-nums">
+                  {formatPrice(listing.priceAed, { compact: true })}
                 </span>
                 {listing.purpose === "rent" ? (
-                  <span className="block text-[9.5px] font-medium uppercase tracking-[0.12em] text-[#0b7a55]/75">
+                  <span className="text-[9.5px] font-medium uppercase tracking-[0.12em] text-[#0b7a55]/75">
                     / {listing.rentalPeriod === "monthly" ? "mo" : "yr"}
                   </span>
                 ) : null}

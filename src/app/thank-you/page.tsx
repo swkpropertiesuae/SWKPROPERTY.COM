@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Check } from "lucide-react";
-import { SITE } from "@/lib/swk";
+import { SITE, team } from "@/lib/swk";
 import { buildMetadata } from "@/lib/seo";
 import { BracketLink } from "@/components/avenlo/bracket-button";
 import { SectionEyebrow } from "@/components/avenlo/motion";
@@ -13,21 +13,40 @@ export const metadata: Metadata = buildMetadata({
   noIndex: true,
 });
 
+const SAFE_REF_RE = /^SWK-(?:ENQ|NEWS)-\d{4}-[A-Z0-9]{6,12}$/;
+
+const ALLOWED_AGENT_LABELS = new Set<string>([
+  "SWK Advisory Desk",
+  "SWK Sheikh Zayed Road Desk",
+  ...team.map((m) => m.name),
+  ...team.map((m) => `${m.name} (${m.role})`),
+]);
+
+function sanitizeAgentLabel(raw: string | undefined, fallback: string): string {
+  if (!raw) return fallback;
+  const trimmed = raw.trim();
+  return ALLOWED_AGENT_LABELS.has(trimmed) ? trimmed : fallback;
+}
+
 export default async function ThankYouPage({
   searchParams,
 }: {
   searchParams: Promise<{ ref?: string; agent?: string; backup?: string }>;
 }) {
   const sp = await searchParams;
-  const referenceId = sp.ref || "SWK-ENQ-VERIFIED";
-  const assignedAgent = sp.agent || "Mohammad Haseeb (Sales & Operations Manager)";
-  const backupAgent = sp.backup || "SWK Sheikh Zayed Road Desk";
+  const rawRef = (sp.ref || "").trim();
+  const referenceId = SAFE_REF_RE.test(rawRef) ? rawRef : "SWK-ENQ-VERIFIED";
+  const assignedAgent = sanitizeAgentLabel(
+    sp.agent,
+    "Mohammad Haseeb (Sales & Operations Manager)"
+  );
+  const backupAgent = sanitizeAgentLabel(sp.backup, "SWK Sheikh Zayed Road Desk");
 
   return (
     <section className="flex min-h-[75vh] items-center justify-center bg-white/20 backdrop-blur-[2px] bg-arch-grid-fade px-4 py-20 sm:px-8">
-      <div className="w-full max-w-2xl rounded-2xl border border-white/80 bg-white/86 backdrop-blur-xl shadow-[0_18px_48px_rgba(12,56,96,0.09)] p-8 sm:p-12 text-center shadow-[0_24px_60px_rgba(18,18,18,0.06)]">
+      <div className="w-full max-w-2xl rounded-2xl border border-white/80 bg-white/86 backdrop-blur-xl shadow-[0_24px_60px_rgba(12,56,96,0.1)] p-8 sm:p-12 text-center">
         <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-[#121212] text-[#51fec0]">
-          <Check className="h-6 w-6" />
+          <Check className="h-6 w-6" aria-hidden="true" />
         </div>
 
         <div className="mt-6">

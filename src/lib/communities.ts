@@ -62,7 +62,7 @@ const G: Record<string, Base> = {
       "Dubai Marina is a high-rise waterfront district around a man-made canal, with a long promenade, restaurants and direct access to the beach at JBR. It is a mature rental market popular with young professionals and families who want an active neighbourhood.",
     propertyTypes: ["Studios to three-bedroom apartments", "Penthouses", "Waterfront and marina-view units"],
     transport: [
-      "Dubai Marina and Jumeirah Lakes Towers metro stations on the Red Line",
+      "Sobha Realty (formerly Dubai Marina) and DMCC (formerly JLT) metro stations on the Red Line",
       "Dubai Tram along the Marina and JBR",
       "Sheikh Zayed Road within a few minutes (estimate, traffic dependent)",
     ],
@@ -386,21 +386,24 @@ const G: Record<string, Base> = {
   },
 }
 
-export const communityGuides: CommunityGuide[] = communities.map((c) => {
+export const communityGuides: CommunityGuide[] = communities.flatMap((c) => {
   const base = G[c.id]
-  return {
-    slug: c.id,
-    name: c.name,
-    image: c.image,
-    thumb: c.thumb,
-    blurb: c.blurb,
-    tagline: c.blurb,
-    ...base,
-    connectivity: base.transport,
-    nearbySchoolsHealthcare: base.schoolsHealth,
-    coordinates: { lat: base.lat, lng: base.lng },
-    considerations: base.drawbacks,
-  }
+  if (!base) return []
+  return [
+    {
+      slug: c.id,
+      name: c.name,
+      image: c.image,
+      thumb: c.thumb,
+      blurb: c.blurb,
+      tagline: c.blurb,
+      ...base,
+      connectivity: base.transport,
+      nearbySchoolsHealthcare: base.schoolsHealth,
+      coordinates: { lat: base.lat, lng: base.lng },
+      considerations: base.drawbacks,
+    },
+  ]
 })
 
 export const getCommunity = (slug: string) => communityGuides.find((c) => c.slug === slug)

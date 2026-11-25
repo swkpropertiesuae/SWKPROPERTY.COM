@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useId, useState } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowUpRight, Building2, Landmark, ShieldCheck, TrendingUp } from "lucide-react";
@@ -145,16 +145,18 @@ const DISTRICTS: DistrictIntel[] = [
   },
 ];
 
-const YIELD_BARS = [
-  { name: "JVC", yieldVal: 8.2, psf: "1,380", slug: "jvc" },
-  { name: "DAMAC Lagoons", yieldVal: 7.4, psf: "1,560", slug: "damac-lagoons" },
-  { name: "Business Bay", yieldVal: 7.2, psf: "2,340", slug: "business-bay" },
-  { name: "Creek Harbour", yieldVal: 7.1, psf: "2,210", slug: "dubai-creek-harbour" },
-  { name: "Dubai Marina", yieldVal: 7.0, psf: "2,290", slug: "dubai-marina" },
-  { name: "Dubai Hills", yieldVal: 6.7, psf: "2,420", slug: "dubai-hills-estate" },
-  { name: "Downtown", yieldVal: 6.4, psf: "2,840", slug: "downtown-dubai" },
-  { name: "Palm Jumeirah", yieldVal: 5.8, psf: "3,650", slug: "palm-jumeirah" },
-];
+const YIELD_BARS = [...DISTRICTS]
+  .map((d) => ({
+    name: d.name
+      .replace("Jumeirah Village Circle", "JVC")
+      .replace("Dubai Creek Harbour", "Creek Harbour")
+      .replace("Dubai Hills Estate", "Dubai Hills")
+      .replace("Downtown Dubai", "Downtown"),
+    yieldVal: parseFloat(d.grossYield) || 0,
+    psf: d.psfAed.replace(/^AED\s*/i, ""),
+    slug: d.slug,
+  }))
+  .sort((a, b) => b.yieldVal - a.yieldVal);
 
 function buildSmoothPath(points: number[], w: number, h: number, padX = 24, padY = 20) {
   const usableW = w - padX * 2;
@@ -176,8 +178,11 @@ function buildSmoothPath(points: number[], w: number, h: number, padX = 24, padY
 }
 
 export function MarketIntelligenceBento() {
+  const uid = useId();
   const [selectedSlug, setSelectedSlug] = useState<string>("downtown-dubai");
   const [hoveredYearIdx, setHoveredYearIdx] = useState<number | null>(null);
+  const areaGradId = `${uid}-intel-area`;
+  const strokeGradId = `${uid}-intel-stroke`;
 
   const active = DISTRICTS.find((d) => d.slug === selectedSlug) ?? DISTRICTS[0];
   const { line, area, coords } = buildSmoothPath(active.trendPoints, 540, 200);
@@ -295,7 +300,7 @@ export function MarketIntelligenceBento() {
                 <div className="mt-6 rounded-2xl border border-black/[0.06] bg-gradient-to-b from-[#f8fbff] to-white p-4 sm:p-5">
                   <div className="mb-2 flex flex-wrap items-center justify-between gap-2 text-[10px] sm:text-[11px]">
                     <span className="font-mono font-semibold uppercase tracking-[0.14em] sm:tracking-[0.16em] text-[#1b6aa7]">
-                      2021–2026 DEMAND CURVE · <span className="sm:hidden">TAP POINTS</span><span className="hidden sm:inline">HOVER POINTS</span>
+                      2021–2026 ILLUSTRATIVE DEMAND INDEX · <span className="sm:hidden">TAP POINTS</span><span className="hidden sm:inline">HOVER OR FOCUS POINTS</span>
                     </span>
                     <span className="font-mono font-semibold text-[#0e9f6e]">
                       {hoveredYearIdx !== null
@@ -303,13 +308,18 @@ export function MarketIntelligenceBento() {
                         : `Liquidity: ${active.liquidity}`}
                     </span>
                   </div>
-                  <svg viewBox="0 0 540 215" className="h-[180px] w-full overflow-visible">
+                  <svg
+                    viewBox="0 0 540 215"
+                    role="img"
+                    aria-label={`Illustrative 2021 to 2026 market demand trajectory for ${active.name}`}
+                    className="h-[180px] w-full overflow-visible"
+                  >
                     <defs>
-                      <linearGradient id="swkIntelArea" x1="0" y1="0" x2="0" y2="1">
+                      <linearGradient id={areaGradId} x1="0" y1="0" x2="0" y2="1">
                         <stop offset="0%" stopColor="#0e9f6e" stopOpacity="0.24" />
                         <stop offset="100%" stopColor="#1b6aa7" stopOpacity="0.01" />
                       </linearGradient>
-                      <linearGradient id="swkIntelStroke" x1="0" y1="0" x2="1" y2="0">
+                      <linearGradient id={strokeGradId} x1="0" y1="0" x2="1" y2="0">
                         <stop offset="0%" stopColor="#1b6aa7" />
                         <stop offset="100%" stopColor="#0e9f6e" />
                       </linearGradient>
@@ -329,7 +339,7 @@ export function MarketIntelligenceBento() {
 
                     <motion.path
                       d={area}
-                      fill="url(#swkIntelArea)"
+                      fill={`url(#${areaGradId})`}
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       transition={{ duration: 0.45 }}
@@ -337,7 +347,7 @@ export function MarketIntelligenceBento() {
                     <motion.path
                       d={line}
                       fill="none"
-                      stroke="url(#swkIntelStroke)"
+                      stroke={`url(#${strokeGradId})`}
                       strokeWidth="3"
                       strokeLinecap="round"
                       initial={{ pathLength: 0 }}
@@ -350,10 +360,15 @@ export function MarketIntelligenceBento() {
                       return (
                         <g
                           key={active.years[idx]}
+                          tabIndex={0}
+                          role="button"
+                          aria-label={`${active.name} ${active.years[idx]} illustrative index ${Math.round(active.trendPoints[idx] * 1.9)}`}
                           onMouseEnter={() => setHoveredYearIdx(idx)}
                           onMouseLeave={() => setHoveredYearIdx(null)}
+                          onFocus={() => setHoveredYearIdx(idx)}
+                          onBlur={() => setHoveredYearIdx(null)}
                           onClick={() => setHoveredYearIdx(idx)}
-                          className="cursor-pointer"
+                          className="cursor-pointer focus:outline-none"
                         >
                           <circle cx={pt.x} cy={pt.y} r="14" fill="transparent" />
                           <circle

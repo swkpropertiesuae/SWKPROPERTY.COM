@@ -1,19 +1,18 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowRight, ArrowUpRight, Play, X } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Flame, MessageCircle, Play, ShieldCheck, X } from "lucide-react";
 import {
   communities,
   SITE,
   stats,
   team,
   testimonials,
-  horizontalTestimonials,
 } from "@/lib/swk";
 import { developers, projects, type Project } from "@/lib/developers";
-import { blogIndex } from "@/lib/blog";
+import { blogIndex } from "@/lib/blog-index";
 import { BracketLink } from "@/components/avenlo/bracket-button";
 import {
   BlurReveal,
@@ -49,6 +48,20 @@ import { HeroDubaiReel } from "@/components/site/hero-dubai-reel";
 /* -------------------------------------------------------------------------- */
 export function AvenloHero() {
   const [briefOpen, setBriefOpen] = useState(false);
+
+  useEffect(() => {
+    if (!briefOpen) return;
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setBriefOpen(false);
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.body.style.overflow = prevOverflow;
+      window.removeEventListener("keydown", onKeyDown);
+    };
+  }, [briefOpen]);
 
   return (
     <section className="relative overflow-hidden bg-transparent pt-14 pb-0 sm:pt-20">
@@ -189,6 +202,9 @@ export function AvenloHero() {
             onClick={() => setBriefOpen(false)}
           >
             <motion.div
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="briefing-dialog-title"
               initial={{ opacity: 0, scale: 0.96, y: 12 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.96, y: 12 }}
@@ -207,7 +223,7 @@ export function AvenloHero() {
                 </button>
               </div>
               <div className="flex-1 overflow-y-auto overscroll-contain p-5 sm:p-8 space-y-4 sm:space-y-5">
-                <h2 className="text-2xl sm:text-3xl font-medium tracking-[-0.03em]">
+                <h2 id="briefing-dialog-title" className="text-2xl sm:text-3xl font-medium tracking-[-0.03em]">
                   How SWK navigates Dubai&apos;s flagship developer pipeline
                 </h2>
                 <p className="text-sm leading-relaxed text-white/75">
@@ -311,10 +327,6 @@ const ARCHITECTURAL_MOSAIC_ITEMS: GalleryItem[] = [
 ];
 
 export function EditorialBento() {
-  const quotePool = useMemo(() => testimonials.slice(0, 3), []);
-  const [activeQuote, setActiveQuote] = useState(0);
-  const current = quotePool[activeQuote] ?? quotePool[0];
-
   return (
     <section className="relative overflow-hidden bg-white/22 py-24 sm:py-32 backdrop-blur-[2px]">
       <div className="relative mx-auto max-w-[1120px] px-4 sm:px-8">
@@ -340,64 +352,52 @@ export function EditorialBento() {
 
         {/* 2-Card Glass Spotlight Bento Row */}
         <div className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-2">
-          {/* Left Card: Frosted Glass Client Outcome Spotlight */}
+          {/* Left Card: SWK DLD & Escrow Advisory Standard */}
           <SpotlightCard>
             <div className="flex min-h-[420px] sm:min-h-[460px] flex-col justify-between p-8 sm:p-10">
-              <div className="flex items-center justify-between">
-                <span className="text-xl font-semibold tracking-[-0.04em] text-[#0c233a]">
-                  client note
+              <div className="flex items-center justify-between gap-3">
+                <span className="inline-flex items-center gap-2 rounded-full border border-[#0e9f6e]/25 bg-[#0e9f6e]/10 px-3.5 py-1.5 text-[11px] font-semibold uppercase tracking-[0.16em] text-[#0e9f6e]">
+                  <ShieldCheck className="h-3.5 w-3.5" aria-hidden="true" />
+                  SWK Advisory Standard
                 </span>
-                <div className="flex items-center gap-1.5" role="tablist" aria-label="Client stories">
-                  {quotePool.map((q, idx) => (
-                    <button
-                      key={q.id}
-                      type="button"
-                      role="tab"
-                      aria-selected={activeQuote === idx}
-                      aria-label={`Read quote from ${q.name}`}
-                      onClick={() => setActiveQuote(idx)}
-                      className={`h-2.5 cursor-pointer rounded-full transition-all ${
-                        activeQuote === idx
-                          ? "w-7 bg-[#121212]"
-                          : "w-2.5 bg-[#121212]/20 hover:bg-[#121212]/50"
-                      }`}
-                    />
-                  ))}
+                <span className="font-mono text-[11px] font-semibold uppercase tracking-[0.14em] text-[#64748b]">
+                  RERA ORN {SITE.reraOrn}
+                </span>
+              </div>
+
+              <div className="my-7 space-y-4">
+                <h2 className="text-[24px] sm:text-[28px] font-medium leading-[1.2] tracking-[-0.03em] text-[#121212]">
+                  Every AED accounted for before you reserve a unit.
+                </h2>
+                <p className="text-sm leading-[1.65] text-[#475569]">
+                  Before any booking cheque is written, we lay out 4% DLD registration, approximate developer admin charges (AED 4,000–5,500), zero off-plan mortgage registration or trustee fees, and verified RERA escrow account details.
+                </p>
+                <div className="grid grid-cols-2 gap-3 pt-1">
+                  <div className="rounded-xl border border-black/[0.06] bg-white/80 p-3.5">
+                    <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-[#1b6aa7]">Off-Plan Buyer Fee</p>
+                    <p className="mt-1 text-lg font-semibold text-[#121212]">0%</p>
+                  </div>
+                  <div className="rounded-xl border border-black/[0.06] bg-white/80 p-3.5">
+                    <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-[#1b6aa7]">Escrow Compliance</p>
+                    <p className="mt-1 text-lg font-semibold text-[#121212]">Law No. 8</p>
+                  </div>
                 </div>
               </div>
 
-              {current ? (
-                <blockquote className="my-8 text-[22px] sm:text-[26px] font-medium leading-[1.3] tracking-[-0.03em] text-[#121212]">
-                  &ldquo;{current.quote}&rdquo;
-                </blockquote>
-              ) : null}
-
-              {current ? (
-                <div className="flex items-center justify-between gap-4 border-t border-black/[0.07] pt-5">
-                  <div className="flex items-center gap-3">
-                    <img
-                      src={current.image}
-                      alt={current.name}
-                      loading="lazy"
-                      className="h-11 w-11 rounded-xl object-cover object-top"
-                    />
-                    <div className="text-xs">
-                      <span className="font-semibold text-[#121212]">{current.name}</span>
-                      <span className="mx-1.5 text-[#94a3b8]">•</span>
-                      <span className="uppercase tracking-[0.14em] text-[#1b6aa7] font-medium">
-                        {current.city}
-                      </span>
-                      <span className="block text-[#64748b]">{current.role}</span>
-                    </div>
-                  </div>
-                  <Link
-                    href="/about"
-                    className="text-xs font-semibold text-[#121212] underline underline-offset-4 hover:text-[#0e9f6e]"
-                  >
-                    About SWK
-                  </Link>
-                </div>
-              ) : null}
+              <div className="flex flex-wrap items-center justify-between gap-4 border-t border-black/[0.07] pt-5">
+                <Link
+                  href="/calculators"
+                  className="text-xs font-semibold text-[#121212] underline underline-offset-4 hover:text-[#0e9f6e]"
+                >
+                  Open UAE Mortgage &amp; DLD Calculator →
+                </Link>
+                <Link
+                  href="/terms"
+                  className="text-xs font-medium text-[#64748b] hover:text-[#121212]"
+                >
+                  Terms &amp; Conditions
+                </Link>
+              </div>
             </div>
           </SpotlightCard>
 
@@ -584,24 +584,66 @@ const SIGNATURE_DECK_CONFIG = [
   },
 ] as const;
 
+const HOT_PROJECTS = [
+  {
+    id: "hot-binghatti-studio",
+    tag: "HOT PROJECT · HIGH-YIELD STUDIO",
+    name: "Binghatti Studio",
+    developer: "Binghatti",
+    location: "Jumeirah Village Circle (JVC), Dubai",
+    priceLabel: "AED 550,000*",
+    meta: "Off-Plan Studio · 0% Buyer Fee · Flexible Plan",
+    image: "/img/projects/binghatti/binghatti-jvc-boutique-residences.webp",
+    href: "/properties/binghatti-studio-residences-jvc-offplan",
+    whatsappText: "Hello SWK Properties, please share floor plans and live unit availability for Binghatti Studio (from AED 550,000).",
+  },
+  {
+    id: "hot-tarrad",
+    tag: "HOT PROJECT · NEW RELEASE",
+    name: "Tarrad",
+    developer: "Tarrad Development",
+    location: "Dubailand (DLRC), Dubai",
+    priceLabel: "AED 620,000*",
+    meta: "Boutique Off-Plan Studio · 0% Buyer Fee · Podium Pool",
+    image: "/img/projects/tarrad/tarrad-dubailand.webp",
+    href: "/properties/tarrad-studio-residences-dubailand-offplan",
+    whatsappText: "Hello SWK Properties, please share the brochure and latest availability for Tarrad Residences (from AED 620,000).",
+  },
+  {
+    id: "hot-azizi-venice-studio",
+    tag: "HOT PROJECT · CRYSTAL LAGOON",
+    name: "Azizi Venice Studio",
+    developer: "Azizi Developments",
+    location: "Dubai South · Crystal Lagoon Boulevard",
+    priceLabel: "AED 680,000*",
+    meta: "Off-Plan Lagoon Studio · 0% Buyer Fee · Near DWC",
+    image: "/img/projects/azizi/azizi-venice.webp",
+    href: "/properties/azizi-venice-studio-dubai-south-offplan",
+    whatsappText: "Hello SWK Properties, please share current studio inventory and payment plans for Azizi Venice Studio (from AED 680,000).",
+  },
+] as const;
+
 function SignatureIconsHorizontalShowcase() {
   const deckItems = useMemo<SignatureDeckItem[]>(() => {
-    return SIGNATURE_DECK_CONFIG.map((cfg) => {
-      const proj = projects.find((p) => p.slug === cfg.slug) ?? projects[0];
-      return {
-        slug: proj.slug,
-        title: proj.name,
-        developer: proj.developer,
-        community: proj.community,
-        kicker: cfg.kicker,
-        summary: proj.summary,
-        image: proj.image,
-        price: cfg.price,
-        priceNote: cfg.priceNote,
-        tags: proj.tags,
-        href: `/off-plan/${proj.slug}`,
-        accent: cfg.accent,
-      };
+    return SIGNATURE_DECK_CONFIG.flatMap((cfg) => {
+      const proj = projects.find((p) => p.slug === cfg.slug);
+      if (!proj) return [];
+      return [
+        {
+          slug: proj.slug,
+          title: proj.name,
+          developer: proj.developer,
+          community: proj.community,
+          kicker: cfg.kicker,
+          summary: proj.summary,
+          image: proj.image,
+          price: cfg.price,
+          priceNote: cfg.priceNote,
+          tags: proj.tags,
+          href: `/off-plan/${proj.slug}`,
+          accent: cfg.accent,
+        },
+      ];
     });
   }, []);
 
@@ -676,8 +718,100 @@ export function DubaiDeveloperPulse() {
           </BracketLink>
         </div>
 
+        {/* Hot Projects Spotlight: Binghatti Studio (550K), Tarrad (620K), Azizi Venice Studio (680K) */}
+        <div
+          id="hot-projects"
+          className="mt-10 rounded-3xl border border-white/85 bg-white/80 p-5 sm:p-7 shadow-[0_18px_52px_rgba(12,56,96,0.1)] backdrop-blur-2xl"
+        >
+          <div className="flex flex-wrap items-end justify-between gap-4">
+            <div>
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-[#d97706]/30 bg-[#fef3c7] px-3 py-1 text-[10.5px] font-semibold uppercase tracking-[0.18em] text-[#92400e]">
+                <Flame className="h-3.5 w-3.5 text-[#d97706]" aria-hidden="true" />
+                Hot Projects · Direct Developer Pricing
+              </span>
+              <h3 className="mt-2.5 text-xl sm:text-2xl font-medium tracking-[-0.03em] text-[#0a1624]">
+                High-demand Dubai off-plan studios starting from AED 550,000*
+              </h3>
+            </div>
+            <Link
+              href="/off-plan"
+              className="text-xs font-semibold text-[#1b6aa7] underline underline-offset-4 hover:text-[#0a1624]"
+            >
+              View all off-plan launches →
+            </Link>
+          </div>
+
+          <div className="mt-5 grid grid-cols-1 gap-5 md:grid-cols-3">
+            {HOT_PROJECTS.map((hp) => (
+              <article
+                key={hp.id}
+                className="group flex flex-col overflow-hidden rounded-2xl border border-black/[0.08] bg-white shadow-xs transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_18px_42px_rgba(12,56,96,0.14)]"
+              >
+                <Link href={hp.href} className="relative block aspect-[16/10] overflow-hidden bg-[#eaf3f9]">
+                  <img
+                    src={hp.image}
+                    alt={`${hp.name} by ${hp.developer} in ${hp.location}`}
+                    loading="lazy"
+                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#08131f]/75 via-transparent to-transparent" />
+                  <span className="absolute top-3 left-3 rounded-full bg-[#08131f]/82 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-[#51fec0] backdrop-blur-md">
+                    {hp.tag}
+                  </span>
+                  <div className="absolute bottom-3 left-3 right-3 flex items-end justify-between gap-2 text-white">
+                    <div>
+                      <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-white/80">
+                        {hp.developer}
+                      </p>
+                      <h4 className="text-lg font-semibold leading-tight tracking-[-0.02em]">
+                        {hp.name}
+                      </h4>
+                    </div>
+                    <span className="shrink-0 rounded-full bg-[#51fec0] px-3 py-1 text-xs font-bold text-[#08131f] tabular-nums shadow-sm">
+                      {hp.priceLabel}
+                    </span>
+                  </div>
+                </Link>
+
+                <div className="flex flex-1 flex-col justify-between p-4 sm:p-5">
+                  <div>
+                    <p className="text-xs font-medium text-[#0c233a]">{hp.location}</p>
+                    <p className="mt-1 text-xs text-[#64748b]">{hp.meta}</p>
+                  </div>
+                  <div className="mt-4 flex items-center gap-2 border-t border-black/[0.06] pt-3.5">
+                    <Link
+                      href={hp.href}
+                      className="inline-flex flex-1 items-center justify-center gap-1 rounded-full bg-[#0c233a] px-3.5 py-2 text-[11px] font-semibold uppercase tracking-[0.12em] text-white transition-colors hover:bg-[#1b6aa7]"
+                    >
+                      <span>Details</span>
+                      <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />
+                    </Link>
+                    <a
+                      href={`${SITE.whatsappUrl}?text=${encodeURIComponent(hp.whatsappText)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center justify-center gap-1.5 rounded-full border border-[#0e9f6e]/30 bg-[#0e9f6e]/10 px-3.5 py-2 text-[11px] font-semibold uppercase tracking-[0.12em] text-[#0e9f6e] transition-colors hover:bg-[#0e9f6e] hover:text-white"
+                    >
+                      <MessageCircle className="h-3.5 w-3.5" aria-hidden="true" />
+                      <span>WhatsApp</span>
+                    </a>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+
+          <p className="mt-4 text-[11px] leading-relaxed text-[#64748b]">
+            *Indicative starting prices only. All properties, unit availability, payment schedules, and prices depend on the respective developer and prevailing market conditions. Off-plan purchases carry 0% buyer brokerage fee and no mortgage registration or trustee fees (4% DLD Oqood + approx. AED 4,000–5,500 developer admin fee apply).{" "}
+            <Link href="/terms" className="font-semibold text-[#1b6aa7] underline underline-offset-2 hover:text-[#0a1624]">
+              Read full Terms &amp; Conditions
+            </Link>
+            .
+          </p>
+        </div>
+
         {/* 21st.dev Bidirectional Flowing Developer Logo Cloud — 100% Authentic Original Colors */}
-        <LogoCloudMarquee developers={logoDevelopers} className="mt-12" />
+        <LogoCloudMarquee developers={logoDevelopers} className="mt-10" />
 
         {/* Interactive Glass Category Pill Filters (Swipeable Rail on Mobile) */}
         <div className="mt-10 sm:mt-12 flex flex-nowrap sm:flex-wrap items-center gap-2 sm:gap-2.5 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
@@ -776,8 +910,8 @@ export function FullBleedResidences() {
   const current = SHOWCASE_PANELS[activeIndex] ?? SHOWCASE_PANELS[0];
   const marqueePanels = useMemo(
     () => [
-      ...SHOWCASE_PANELS.map((p, idx) => ({ ...p, originalIdx: idx, loopKey: `a-${p.title}` })),
-      ...SHOWCASE_PANELS.map((p, idx) => ({ ...p, originalIdx: idx, loopKey: `b-${p.title}` })),
+      ...SHOWCASE_PANELS.map((p, idx) => ({ ...p, originalIdx: idx, isDuplicate: false, loopKey: `a-${p.title}` })),
+      ...SHOWCASE_PANELS.map((p, idx) => ({ ...p, originalIdx: idx, isDuplicate: true, loopKey: `b-${p.title}` })),
     ],
     []
   );
@@ -831,13 +965,15 @@ export function FullBleedResidences() {
             "linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%)",
         }}
       >
-        <div className="animate-residence-marquee gap-6 pr-6 group-hover/res-marquee:[animation-play-state:paused]">
+        <div className="animate-residence-marquee gap-6 pr-6 group-hover/res-marquee:[animation-play-state:paused] group-focus-within/res-marquee:[animation-play-state:paused]">
           {marqueePanels.map((panel) => {
             const isHighlighted = panel.originalIdx === activeIndex;
             return (
               <Link
                 key={panel.loopKey}
                 href={panel.href}
+                aria-hidden={panel.isDuplicate ? true : undefined}
+                tabIndex={panel.isDuplicate ? -1 : undefined}
                 onMouseEnter={() => setActiveIndex(panel.originalIdx)}
                 onFocus={() => setActiveIndex(panel.originalIdx)}
                 className={`group/rcard relative flex h-[385px] sm:h-[500px] w-[275px] sm:w-[400px] lg:w-[440px] shrink-0 flex-col justify-between overflow-hidden rounded-[24px] sm:rounded-[28px] border bg-[#0d1928] transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] sm:hover:-translate-y-2.5 sm:hover:scale-[1.02] hover:border-[#51fec0]/80 hover:shadow-[0_30px_76px_rgba(81,254,192,0.2)] ${
@@ -1126,7 +1262,7 @@ export function ServicesAndTrackRecord() {
           <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-12">
             <div className="lg:col-span-5 grid grid-cols-3 gap-4">
               <CredentialLaurel
-                top="ORN 51517"
+                top={`ORN ${SITE.reraOrn}`}
                 bottom="RERA Registered Dubai Brokerage"
               />
               <CredentialLaurel
@@ -1175,8 +1311,8 @@ export function ServicesAndTrackRecord() {
 /* 06. GLASS TICKER + 21ST.DEV 3D PERSPECTIVE FLIP DUBAI COMMUNITIES          */
 /* -------------------------------------------------------------------------- */
 const TICKER_ITEMS = [
-  "RERA ORN 51517",
-  "NAKHEEL · BINGHATTI · EMAAR · DAMAC · AZIZI",
+  `RERA ORN ${SITE.reraOrn}`,
+  "NAKHEEL · BINGHATTI · EMAAR · DAMAC · AZIZI · TARRAD",
   "ESCROW-REGISTERED OFF-PLAN",
   "25TH FLOOR · AL SAQR BUILDING · SZR",
   "RESIDENTIAL, LEASING & COMMERCIAL SPACES",
@@ -1191,7 +1327,12 @@ export function CommunitiesAndTicker() {
         <div className="avenlo-marquee-track flex items-center gap-8 text-[11px] font-semibold uppercase tracking-[0.22em] text-[#0c233a]">
           {[...TICKER_ITEMS, ...TICKER_ITEMS].map((item, idx) => (
             <React.Fragment key={`${item}-${idx}`}>
-              <span className="whitespace-nowrap">{item}</span>
+              <span
+                className="whitespace-nowrap"
+                aria-hidden={idx >= TICKER_ITEMS.length ? true : undefined}
+              >
+                {item}
+              </span>
               <span
                 className="h-[5px] w-[5px] shrink-0 bg-[#1b6aa7]"
                 aria-hidden="true"
@@ -1316,7 +1457,7 @@ export function AcquisitionStagesWave() {
 }
 
 /* -------------------------------------------------------------------------- */
-/* 08. 21ST.DEV ANIMATED TESTIMONIALS — ALL 10 VERIFIED REPO CLIENT REVIEWS   */
+/* 08. INTERNATIONAL CLIENT PERSPECTIVES — NAMELESS, BESPOKE, HIDDEN AT BOTTOM */
 /* -------------------------------------------------------------------------- */
 const TRUSTED_MASTER_DEVELOPERS = [
   "Nakheel",
@@ -1324,6 +1465,7 @@ const TRUSTED_MASTER_DEVELOPERS = [
   "Binghatti",
   "DAMAC",
   "Azizi Developments",
+  "Tarrad Development",
   "Sobha Realty",
   "Omniyat",
   "Ellington",
@@ -1332,20 +1474,11 @@ const TRUSTED_MASTER_DEVELOPERS = [
 ];
 
 export function ClientVoices() {
-  const allClientReviews = useMemo<Testimonial[]>(() => {
-    const combined = [...testimonials, ...horizontalTestimonials];
-    const seen = new Set<string>();
-    const unique = combined.filter((item) => {
-      if (seen.has(item.name)) return false;
-      seen.add(item.name);
-      return true;
-    });
-
-    return unique.map((item, idx) => ({
-      id: idx + 1,
-      name: item.name,
-      role: item.role,
-      company: item.city,
+  const internationalReviews = useMemo<Testimonial[]>(() => {
+    return testimonials.map((item) => ({
+      id: item.id,
+      region: item.city,
+      context: item.role,
       content: item.quote,
       rating: item.rating ?? 5,
       avatar: item.image,
@@ -1354,13 +1487,14 @@ export function ClientVoices() {
 
   return (
     <AnimatedTestimonials
-      badgeText="What Clients Say · Verified Reviews"
-      title="Judged on outcomes, not on brochures"
-      subtitle="Hear directly from international buyers, relocating families, and yield-focused investors advised by our Sheikh Zayed Road desk across Dubai."
-      testimonials={allClientReviews}
-      autoRotateInterval={6500}
+      badgeText="International Client Perspectives"
+      title="Judged on numbers and outcomes"
+      subtitle="Anonymous perspectives from international buyers advised across Dubai and the UAE — representing South Asia, the United Kingdom, Mauritius, and Singapore."
+      testimonials={internationalReviews}
+      autoRotateInterval={7000}
       trustedCompanies={TRUSTED_MASTER_DEVELOPERS}
       trustedCompaniesTitle="Advising acquisitions across Dubai & UAE master developers"
+      defaultCollapsed
     />
   );
 }

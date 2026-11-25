@@ -62,6 +62,13 @@ export default function CookieSettingsPage() {
   const [analytics, setAnalytics] = React.useState(cookieConsent?.analytics ?? false);
   const [preferences, setPreferences] = React.useState(cookieConsent?.preferences ?? true);
   const [savedToast, setSavedToast] = React.useState(false);
+  const toastTimerRef = React.useRef<number | null>(null);
+
+  React.useEffect(() => {
+    return () => {
+      if (toastTimerRef.current !== null) window.clearTimeout(toastTimerRef.current);
+    };
+  }, []);
 
   const [syncedConsent, setSyncedConsent] = React.useState(cookieConsent);
   if (cookieConsent !== syncedConsent) {
@@ -77,7 +84,11 @@ export default function CookieSettingsPage() {
     setPreferences(nextP);
     updateCookieConsent({ analytics: nextA, preferences: nextP });
     setSavedToast(true);
-    setTimeout(() => setSavedToast(false), 3000);
+    if (toastTimerRef.current !== null) window.clearTimeout(toastTimerRef.current);
+    toastTimerRef.current = window.setTimeout(() => {
+      setSavedToast(false);
+      toastTimerRef.current = null;
+    }, 3000);
   };
 
   return (
@@ -96,7 +107,7 @@ export default function CookieSettingsPage() {
 
       <div className="mx-auto max-w-4xl px-4 py-14 sm:px-8 space-y-12">
         {/* Interactive Consent Panel */}
-        <section className="rounded-2xl border border-white/80 bg-white/86 backdrop-blur-xl shadow-[0_18px_48px_rgba(12,56,96,0.09)]/24 backdrop-blur-[2px] p-6 sm:p-8 space-y-6">
+        <section className="rounded-2xl border border-white/80 bg-white/86 backdrop-blur-xl shadow-[0_18px_48px_rgba(12,56,96,0.09)] p-6 sm:p-8 space-y-6">
           <div className="flex items-start justify-between gap-4 border-b border-black/[0.08] pb-5">
             <div>
               <h2 className="text-base font-medium text-[#121212]">

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { useId, useMemo, useState } from "react";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowUpRight, Building2, MapPin, Search, Sparkles } from "lucide-react";
@@ -15,13 +15,15 @@ const FILTER_TABS = [
   { id: "Abu Dhabi", label: "Abu Dhabi" },
   { id: "Sharjah", label: "Sharjah" },
   { id: "Ras Al Khaimah", label: "Ras Al Khaimah" },
+  { id: "Umm Al Quwain", label: "Umm Al Quwain" },
 ] as const;
 
 type FilterTabId = (typeof FILTER_TABS)[number]["id"];
 
-const FEATURED_SLUGS = ["nakheel", "binghatti", "emaar", "damac", "azizi", "sobha", "omniyat", "ellington"];
+const FEATURED_SLUGS = ["nakheel", "binghatti", "emaar", "damac", "azizi", "tarrad", "sobha", "omniyat", "ellington"];
 
 export function DevelopersDirectory({ developers }: { developers: Developer[] }) {
+  const uid = useId();
   const [activeTab, setActiveTab] = useState<FilterTabId>("All");
   const [query, setQuery] = useState("");
   const [spotlightSlug, setSpotlightSlug] = useState("nakheel");
@@ -55,7 +57,10 @@ export function DevelopersDirectory({ developers }: { developers: Developer[] })
     return developers.filter((d) => {
       if (activeTab === "Dubai" && d.emirate !== "Dubai" && d.emirate !== "UAE") return false;
       if (
-        (activeTab === "Abu Dhabi" || activeTab === "Sharjah" || activeTab === "Ras Al Khaimah") &&
+        (activeTab === "Abu Dhabi" ||
+          activeTab === "Sharjah" ||
+          activeTab === "Ras Al Khaimah" ||
+          activeTab === "Umm Al Quwain") &&
         d.emirate !== activeTab
       ) {
         return false;
@@ -101,7 +106,7 @@ export function DevelopersDirectory({ developers }: { developers: Developer[] })
                   >
                     {isSelected && (
                       <motion.span
-                        layoutId="dev-spotlight-pill"
+                        layoutId={`${uid}-spotlight-pill`}
                         transition={{ type: "spring", stiffness: 380, damping: 32 }}
                         className="absolute inset-0 rounded-full bg-[#121212]"
                       />
@@ -187,6 +192,7 @@ export function DevelopersDirectory({ developers }: { developers: Developer[] })
               <button
                 key={tab.id}
                 type="button"
+                aria-pressed={active}
                 onClick={() => setActiveTab(tab.id)}
                 className={`relative cursor-pointer rounded-full px-5 py-2.5 text-xs font-medium transition-all duration-200 hover:-translate-y-0.5 ${
                   active
@@ -196,7 +202,7 @@ export function DevelopersDirectory({ developers }: { developers: Developer[] })
               >
                 {active && (
                   <motion.span
-                    layoutId="developers-filter-pill"
+                    layoutId={`${uid}-filter-pill`}
                     transition={{ type: "spring", stiffness: 380, damping: 32 }}
                     className="absolute inset-0 rounded-full bg-[#121212] shadow-md"
                   />
@@ -220,6 +226,24 @@ export function DevelopersDirectory({ developers }: { developers: Developer[] })
         </div>
 
         {/* 4. Framer Motion Animated Developer Grid (Original Full-Color Logos) */}
+        {filtered.length === 0 ? (
+          <div className="mt-10 rounded-3xl border border-white/85 bg-white/84 p-12 text-center backdrop-blur-xl">
+            <h3 className="text-xl font-medium text-[#121212]">No developers match your filter</h3>
+            <p className="mt-2 text-sm text-[#475569]">
+              Try resetting your search or switching to All UAE Developers.
+            </p>
+            <button
+              type="button"
+              onClick={() => {
+                setActiveTab("All");
+                setQuery("");
+              }}
+              className="mt-5 cursor-pointer rounded-full bg-[#121212] px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.14em] text-white hover:bg-[#0e9f6e]"
+            >
+              Reset Filter
+            </button>
+          </div>
+        ) : (
         <motion.div
           layout
           className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3"
@@ -305,6 +329,7 @@ export function DevelopersDirectory({ developers }: { developers: Developer[] })
             ))}
           </AnimatePresence>
         </motion.div>
+        )}
       </div>
     </section>
   );

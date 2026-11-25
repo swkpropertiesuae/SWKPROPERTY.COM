@@ -96,16 +96,13 @@ export function BlurReveal({
   className?: string;
 }) {
   const reduced = useReducedMotion();
-  if (reduced) {
-    return <div className={className}>{children}</div>;
-  }
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 14, filter: "blur(8px)" }}
+      initial={reduced ? false : { opacity: 0, y: 14, filter: "blur(8px)" }}
       whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
       viewport={{ once: true, margin: "-40px" }}
-      transition={{ duration: 0.65, delay, ease: [0.22, 1, 0.36, 1] }}
+      transition={reduced ? { duration: 0 } : { duration: 0.65, delay, ease: [0.22, 1, 0.36, 1] }}
       className={className}
     >
       {children}
@@ -117,24 +114,28 @@ function ScrollWord({
   word,
   range,
   progress,
+  reduced,
 }: {
   word: string;
   range: [number, number];
   progress: MotionValue<number>;
+  reduced: boolean | null;
 }) {
   const opacity = useTransform(progress, range, [0.24, 1]);
   return (
-    <span className="relative mr-[0.26em] inline-block">
-      <span className="text-[#8b8b8b]/45" aria-hidden="true">
-        {word}
-      </span>
-      <motion.span
-        style={{ opacity }}
-        className="absolute inset-0 text-[#121212]"
-      >
-        {word}
-      </motion.span>
-    </span>
+    <>
+      <span className="relative mr-[0.26em] inline-block">
+        <span className="text-[#8b8b8b]/45" aria-hidden="true">
+          {word}
+        </span>
+        <motion.span
+          style={reduced ? { opacity: 1 } : { opacity }}
+          className="absolute inset-0 text-[#121212]"
+        >
+          {word}
+        </motion.span>
+      </span>{" "}
+    </>
   );
 }
 
@@ -154,19 +155,6 @@ export function ScrollRevealStatement({
 
   const words = text.split(" ");
 
-  if (reduced) {
-    return (
-      <p
-        className={cn(
-          "text-[28px] sm:text-[38px] md:text-[48px] font-medium leading-[1.15] tracking-[-0.04em] text-[#121212]",
-          className
-        )}
-      >
-        {text}
-      </p>
-    );
-  }
-
   return (
     <p
       ref={ref}
@@ -184,6 +172,7 @@ export function ScrollRevealStatement({
             word={word}
             range={[start, end]}
             progress={scrollYProgress}
+            reduced={reduced}
           />
         );
       })}

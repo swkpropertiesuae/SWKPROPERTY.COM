@@ -39,18 +39,24 @@ export function TrendingProjectPopups() {
   const [pillDismissed, setPillDismissed] = useState(false);
   const [spotlightOpen, setSpotlightOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<"off-plan" | "secondary" | "commercial">("off-plan");
+  const [selectedDealId, setSelectedDealId] = useState<string | null>(null);
   const [exitOpen, setExitOpen] = useState(false);
 
   // Quick exit-intent callback form
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
+  const [companyWebsite, setCompanyWebsite] = useState("");
+  const [formLoadedAt] = useState<number>(() => Date.now());
   const [sent, setSent] = useState(false);
   const [sending, setSending] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
+  const hasDeals = TRENDING_DEALS.length > 0;
+
   // Rotate live trending pill every 6.5s
   useEffect(() => {
+    if (TRENDING_DEALS.length <= 1) return;
     const id = window.setInterval(() => {
       setTickerIdx((v) => (v + 1) % TRENDING_DEALS.length);
     }, 6500);
@@ -59,16 +65,17 @@ export function TrendingProjectPopups() {
 
   // Lock background body scroll while any modal is open
   useEffect(() => {
-    if (!spotlightOpen && !exitOpen) return;
+    if (!hasDeals || (!spotlightOpen && !exitOpen)) return;
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     return () => {
       document.body.style.overflow = prev;
     };
-  }, [spotlightOpen, exitOpen]);
+  }, [hasDeals, spotlightOpen, exitOpen]);
 
   // Gentle timed spotlight once per browser session (38s) unless already closed or exit shown
   useEffect(() => {
+    if (!hasDeals) return;
     try {
       if (sessionStorage.getItem("swk_spotlight_seen")) return;
     } catch {
@@ -85,10 +92,11 @@ export function TrendingProjectPopups() {
       }
     }, 38000);
     return () => window.clearTimeout(timer);
-  }, []);
+  }, [hasDeals]);
 
   // Desktop Exit-Intent listener (triggers once per session when cursor leaves top of viewport)
   useEffect(() => {
+    if (!hasDeals) return;
     const handleMouseLeave = (e: MouseEvent) => {
       if (e.clientY > 6) return;
       try {
@@ -114,17 +122,21 @@ export function TrendingProjectPopups() {
       document.removeEventListener("mouseleave", handleMouseLeave);
       window.removeEventListener("keydown", handleKey);
     };
-  }, []);
+  }, [hasDeals]);
 
   const currentPillDeal = TRENDING_DEALS[tickerIdx] ?? TRENDING_DEALS[0];
   const tabDeals = TRENDING_DEALS.filter((d) => d.tab === activeTab);
-  const featuredDeal = tabDeals[0] ?? TRENDING_DEALS[0];
+  const featuredDeal =
+    (selectedDealId ? tabDeals.find((d) => d.id === selectedDealId) : undefined) ??
+    tabDeals[0] ??
+    TRENDING_DEALS[0];
 
   const handleExitSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMsg(null);
-    if (phone.replace(/[^\d+]/g, "").length < 7) {
-      setErrorMsg("Enter a valid phone or WhatsApp number (with country code).");
+    const digitsOnly = phone.replace(/\D/g, "");
+    if (digitsOnly.length < 7 || digitsOnly.length > 15) {
+      setErrorMsg("Enter a valid phone or WhatsApp number (at least 7 digits).");
       return;
     }
     setSending(true);
@@ -137,8 +149,10 @@ export function TrendingProjectPopups() {
           name: name.trim() || "Dubai Property Investor",
           phone: phone.trim(),
           email: email.trim(),
+          companyWebsite,
+          formLoadedAt,
           message: "Requested priority Dubai off-plan & secondary brief via exit popup.",
-          pageUrl: typeof window !== "undefined" ? window.location.href : SITE.url,
+          pageUrl: typeof window !== "undefined" ? window.location.pathname : "/",
         }),
       });
       const data = (await res.json().catch(() => ({}))) as { ok?: boolean; error?: string };
@@ -172,7 +186,11 @@ export function TrendingProjectPopups() {
           <button
             type="button"
             onClick={() => {
+              try {
+                sessionStorage.setItem("swk_spotlight_seen", "1");
+              } catch {}
               setActiveTab(currentPillDeal.tab);
+              setSelectedDealId(currentPillDeal.id);
               setSpotlightOpen(true);
             }}
             className="flex min-w-0 flex-1 cursor-pointer items-center gap-2 sm:gap-2.5 text-left"
@@ -350,15 +368,19 @@ export function TrendingProjectPopups() {
 
                       {tabDeals.length > 1 ? (
                         <div className="mt-3.5 sm:mt-5 hidden sm:flex flex-wrap gap-2">
-                          {TRENDING_DEALS.filter((d) => d.tab === "off-plan").map((deal) => (
-                            <Link
+                          {tabDeals.map((deal) => (
+                            <button
                               key={deal.id}
-                              href={deal.href}
-                              onClick={() => setSpotlightOpen(false)}
-                              className="rounded-full border border-black/10 bg-[#f8fafc] px-3 py-1.5 text-[11px] font-medium text-[#121212] transition-all hover:border-[#121212] hover:bg-[#121212] hover:text-white"
+                              type="button"
+                              onClick={() => setSelectedDealId(deal.id)}
+                              className={`cursor-pointer rounded-full border px-3 py-1.5 text-[11px] font-medium transition-all ${
+                                deal.id === featuredDeal.id
+                                  ? "border-[#121212] bg-[#121212] text-white"
+                                  : "border-black/10 bg-[#f8fafc] text-[#121212] hover:border-[#121212] hover:bg-[#121212] hover:text-white"
+                              }`}
                             >
-                              {deal.developer}: {deal.shortTitle} ↗
-                            </Link>
+                              {deal.developer}: {deal.shortTitle}
+                            </button>
                           ))}
                         </div>
                       ) : null}
@@ -504,8 +526,21 @@ export function TrendingProjectPopups() {
                         </p>
 
                         <form onSubmit={handleExitSubmit} className="mt-3 sm:mt-5 space-y-2.5 sm:space-y-3" noValidate>
+                          <div className="sr-only" aria-hidden="true">
+                            <label htmlFor="exit-hp-url">Company website</label>
+                            <input
+                              id="exit-hp-url"
+                              type="text"
+                              tabIndex={-1}
+                              autoComplete="off"
+                              value={companyWebsite}
+                              onChange={(e) => setCompanyWebsite(e.target.value)}
+                            />
+                          </div>
                           <input
                             type="text"
+                            aria-label="Your name"
+                            maxLength={100}
                             value={name}
                             onChange={(e) => setName(e.target.value)}
                             placeholder="Your name"
@@ -513,7 +548,9 @@ export function TrendingProjectPopups() {
                           />
                           <input
                             type="tel"
+                            aria-label="WhatsApp or phone number"
                             required
+                            maxLength={32}
                             value={phone}
                             onChange={(e) => setPhone(e.target.value)}
                             placeholder="WhatsApp / Phone (+971 50 000 0000)"
@@ -521,6 +558,8 @@ export function TrendingProjectPopups() {
                           />
                           <input
                             type="email"
+                            aria-label="Email address (optional)"
+                            maxLength={200}
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             placeholder="Email (optional, for PDF floor plans)"
@@ -538,6 +577,11 @@ export function TrendingProjectPopups() {
                           >
                             {sending ? "Sending Brief Request..." : "Send Me The Priority Brief"}
                           </button>
+                          <p className="text-[10.5px] leading-relaxed text-[#64748b]">
+                            Protected under UAE PDPL. Prices depend on developers &amp; market conditions.{" "}
+                            <Link href="/privacy" onClick={() => setExitOpen(false)} className="underline">Privacy</Link> ·{" "}
+                            <Link href="/terms" onClick={() => setExitOpen(false)} className="underline">Terms</Link>.
+                          </p>
                         </form>
 
                         <div className="mt-3 sm:mt-4 flex flex-wrap items-center justify-between gap-2 text-[11.5px] sm:text-xs text-[#64748b]">

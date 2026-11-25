@@ -1,8 +1,10 @@
-import blogIndexJson from "@/data/blog-index.json"
 import era20232026Json from "@/data/blog-articles/era-2023-2026.json"
 import era20192022Json from "@/data/blog-articles/era-2019-2022.json"
 import era20142018Json from "@/data/blog-articles/era-2014-2018.json"
 import era20082013Json from "@/data/blog-articles/era-2008-2013.json"
+import { blogIndex, blogCategories, BLOG_ERAS, type BlogIndexEntry } from "@/lib/blog-index"
+
+export { blogIndex, blogCategories, BLOG_ERAS, type BlogIndexEntry }
 
 export interface BlogSection {
   title: string
@@ -12,20 +14,6 @@ export interface BlogSection {
 export interface BlogSource {
   title: string
   url: string
-}
-
-export interface BlogIndexEntry {
-  slug: string
-  title: string
-  category: string
-  date: string
-  updated: string
-  readTime: string
-  image: string
-  excerpt: string
-  keywords: string[]
-  authorSlug: string
-  shard: string
 }
 
 export interface BlogArticle {
@@ -126,6 +114,26 @@ const AUTHOR_BY_SLUG: Record<string, BlogArticle["author"]> = {
 
 const AUTHOR_LIST = Object.values(AUTHOR_BY_SLUG)
 
+/** Extract the first full sentence without breaking on decimals (e.g. 6.5%) or abbreviations (No., St., Dr.). */
+function firstSentence(text: string): string {
+  const cleaned = text.replace(/\s+/g, " ").trim()
+  if (!cleaned) return ""
+  const re = /[.!?](?=\s+[A-Z0-9(“"']|$)/g
+  let m: RegExpExecArray | null
+  while ((m = re.exec(cleaned)) !== null) {
+    const end = m.index
+    const prefix = cleaned.slice(Math.max(0, end - 8), end + 1)
+    if (/(?:\bNo\.|\bArt\.|\bLaw\.|\bSt\.|\bDr\.|\bMr\.|\bMs\.|\bSq\.|\bEst\.|\bApprox\.|\bvs\.|\be\.g\.|\bi\.e\.)$/i.test(prefix)) {
+      continue
+    }
+    if (end >= 1 && /\d/.test(cleaned[end - 1]) && end + 1 < cleaned.length && /\d/.test(cleaned[end + 1])) {
+      continue
+    }
+    return cleaned.slice(0, end + 1)
+  }
+  return cleaned.endsWith(".") ? cleaned : `${cleaned}.`
+}
+
 function hydrateArticle(item: RawBlogItem, idx: number): BlogArticle {
   const normalizedImage = item.image.startsWith("assets/images/")
     ? item.image.replace(/^assets\/images\//, "/img/")
@@ -137,6 +145,13 @@ function hydrateArticle(item: RawBlogItem, idx: number): BlogArticle {
     (item.authorSlug ? AUTHOR_BY_SLUG[item.authorSlug] : undefined) ??
     AUTHOR_LIST[idx % AUTHOR_LIST.length]
 
+  const cleanExcerpt = item.excerpt.trim()
+  const cleanContent = item.content.trim()
+  const directAnswer =
+    cleanExcerpt && cleanExcerpt.length >= 40 && cleanExcerpt !== cleanContent
+      ? cleanExcerpt
+      : cleanContent
+
   return {
     slug: item.slug,
     title: item.title,
@@ -145,14 +160,14 @@ function hydrateArticle(item: RawBlogItem, idx: number): BlogArticle {
     updatedAt: item.updated || item.date,
     readTime: item.readTime,
     image: normalizedImage,
-    excerpt: item.excerpt,
-    directAnswer: item.content,
-    content: item.content,
+    excerpt: cleanExcerpt,
+    directAnswer,
+    content: cleanContent,
     keywords: item.keywords && item.keywords.length > 0 ? item.keywords : [item.title, item.category, "Dubai real estate"],
     sections: item.sections || [],
     sources:
       item.sources && item.sources.length > 0
-        ? item.sources
+        ? item.sources.filter((s) => /^https?:\/\//i.test(s.url))
         : [
             {
               title: "Dubai Land Department (DLD) Official Portal",
@@ -171,11 +186,11 @@ function hydrateArticle(item: RawBlogItem, idx: number): BlogArticle {
     },
     keyTakeaways: (item.sections || [])
       .slice(0, 4)
-      .map((s) => `${s.title}: ${s.text.split(".")[0]}.`),
+      .map((s) => `${s.title}: ${firstSentence(s.text)}`),
     faqs: [
       {
         q: `What is the key guidance from "${item.title}"?`,
-        a: item.content,
+        a: directAnswer,
       },
       {
         q: "How can I verify Dubai project escrow, Title Deed, or transaction comparables independently?",
@@ -188,8 +203,6 @@ function hydrateArticle(item: RawBlogItem, idx: number): BlogArticle {
     ],
   }
 }
-
-export const blogIndex: BlogIndexEntry[] = blogIndexJson as BlogIndexEntry[]
 
 const ALL_RAW: RawBlogItem[] = [
   ...(era20232026Json as RawBlogItem[]),
@@ -205,17 +218,3 @@ const ARTICLE_MAP = new Map<string, BlogArticle>(blogArticles.map((a) => [a.slug
 export function getBlogArticle(slug: string): BlogArticle | undefined {
   return ARTICLE_MAP.get(slug)
 }
-
-export const blogCategories = [
-  "All",
-  ...Array.from(new Set(blogIndex.map((a) => a.category))),
-]
-
-export const BLOG_ERAS = [
-  { id: "all", label: "All Archives", minYear: 2008, maxYear: 2026 },
-  { id: "2025-2026", label: "2025 – 2026", minYear: 2025, maxYear: 2026 },
-  { id: "2023-2024", label: "2023 – 2024", minYear: 2023, maxYear: 2024 },
-  { id: "2020-2022", label: "2020 – 2022", minYear: 2020, maxYear: 2022 },
-  { id: "2015-2019", label: "2015 – 2019", minYear: 2015, maxYear: 2019 },
-  { id: "2008-2014", label: "2008 – 2014", minYear: 2008, maxYear: 2014 },
-] as const

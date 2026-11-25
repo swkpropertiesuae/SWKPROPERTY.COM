@@ -9,8 +9,11 @@ import { AvenloPageHeader } from "@/components/avenlo/page-header";
 import { BracketLink } from "@/components/avenlo/bracket-button";
 import { CtaBanner, SectionEyebrow, SplitHeading } from "@/components/avenlo/motion";
 import { SpotlightCard } from "@/components/ui/spotlight-card";
+import { ListingDisclaimer } from "@/components/site/listing-disclaimer";
+import { JsonLd } from "@/components/seo/json-ld";
+import { breadcrumbLd, itemListLd } from "@/lib/seo";
 
-const EMIRATES = ["All", "Dubai", "Abu Dhabi", "Sharjah", "Ras Al Khaimah"] as const;
+const EMIRATES = ["All", "Dubai", "Abu Dhabi", "Sharjah", "Ras Al Khaimah", "Umm Al Quwain"] as const;
 
 export default function OffPlanPage() {
   const [emirate, setEmirate] = useState<(typeof EMIRATES)[number]>("All");
@@ -26,12 +29,7 @@ export default function OffPlanPage() {
       if (onlyPriority && !p.priorityTarget) return false;
       if (devSlug && p.developerSlug !== devSlug) return false;
       if (emirate !== "All") {
-        const d = devMap.get(p.developerSlug);
-        const matchEmirate =
-          d?.emirate === emirate ||
-          p.community.toLowerCase().includes(emirate.toLowerCase()) ||
-          (emirate === "Dubai" && d?.emirate === "UAE");
-        if (!matchEmirate) return false;
+        if (p.emirate !== emirate) return false;
       }
       if (q) {
         const hay = `${p.name} ${p.developer} ${p.community} ${p.collection} ${p.tags.join(" ")}`.toLowerCase();
@@ -39,10 +37,22 @@ export default function OffPlanPage() {
       }
       return true;
     });
-  }, [emirate, devSlug, query, onlyPriority, devMap]);
+  }, [emirate, devSlug, query, onlyPriority]);
 
   return (
     <div className="bg-transparent">
+      <JsonLd
+        data={[
+          breadcrumbLd([
+            { name: "Home", path: "/" },
+            { name: "Off-Plan Projects", path: "/off-plan" },
+          ]),
+          itemListLd(
+            "Off-plan projects in Dubai and the UAE",
+            projects.slice(0, 50).map((p) => ({ name: `${p.name} by ${p.devName}`, path: `/off-plan/${p.slug}` }))
+          ),
+        ]}
+      />
       <AvenloPageHeader
         eyebrow="OFF-PLAN LAUNCHES · PREMIER UAE DEVELOPERS"
         title="New projects"
@@ -71,6 +81,7 @@ export default function OffPlanPage() {
             <button
               key={em}
               type="button"
+              aria-pressed={emirate === em}
               onClick={() => setEmirate(em)}
               className={`cursor-pointer rounded-full px-5 py-2.5 text-xs font-medium transition-colors ${
                 emirate === em
@@ -83,6 +94,7 @@ export default function OffPlanPage() {
           ))}
           <button
             type="button"
+            aria-pressed={onlyPriority}
             onClick={() => setOnlyPriority((v) => !v)}
             className={`cursor-pointer rounded-full px-5 py-2.5 text-xs font-medium transition-colors ${
               onlyPriority
@@ -122,7 +134,7 @@ export default function OffPlanPage() {
           </select>
 
           <div className="sm:col-span-2 flex items-center justify-between sm:justify-end gap-3 px-2 text-xs text-[#525252]">
-            <span className="font-medium text-[#121212]">{filtered.length} releases</span>
+            <span aria-live="polite" className="font-medium text-[#121212]">{filtered.length} releases</span>
             {(query || devSlug || emirate !== "All" || onlyPriority) ? (
               <button
                 type="button"
@@ -226,6 +238,10 @@ export default function OffPlanPage() {
             })}
           </div>
         )}
+
+        <div className="mt-10">
+          <ListingDisclaimer variant="off-plan" />
+        </div>
       </section>
 
       {/* Browse Launches by Community Corridor (pSEO Area Hubs) */}

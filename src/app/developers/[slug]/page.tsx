@@ -12,6 +12,7 @@ import { SITE } from "@/lib/swk";
 import { AvenloPageHeader } from "@/components/avenlo/page-header";
 import { BracketLink } from "@/components/avenlo/bracket-button";
 import { CtaBanner, SectionEyebrow, SplitHeading } from "@/components/avenlo/motion";
+import { ListingDisclaimer } from "@/components/site/listing-disclaimer";
 
 export function generateStaticParams() {
   return developers.map((d) => ({ slug: d.slug }));
@@ -29,6 +30,7 @@ export async function generateMetadata({
       title: "Developer Not Found",
       description: "Browse UAE real estate developers with SWK Properties.",
       path: "/developers",
+      noIndex: true,
     });
   }
 
@@ -36,7 +38,7 @@ export async function generateMetadata({
     title: `${dev.name} Projects & Payment Plans | Dubai & UAE`,
     description: `${dev.tagline}. Explore off-plan and ready developments by ${dev.name} and DLD escrow guidance with SWK Properties (ORN ${SITE.reraOrn}).`,
     path: `/developers/${dev.slug}`,
-    image: dev.projects[0]?.images[0] || "/img/hero/banner-developers.webp",
+    image: dev.projects[0]?.images?.[0] || "/img/hero/banner-developers.webp",
     keywords: [
       dev.name,
       `${dev.name} Dubai projects`,
@@ -131,7 +133,7 @@ export default async function DeveloperDetailPage({
               {[
                 ["Primary Emirate", dev.emirate],
                 ["Headquarters", dev.headquarters],
-                ["Signature Focus", dev.knownFor],
+                ["Tracked Releases", `${dev.projects.length} Project${dev.projects.length === 1 ? "" : "s"}`],
                 ["Flagship Corridors", dev.flagshipAreas.join(", ") || "Dubai & UAE"],
               ].map(([k, v]) => (
                 <div key={k} className="flex items-start justify-between gap-4 py-3.5">
@@ -193,6 +195,9 @@ export default async function DeveloperDetailPage({
                 </div>
               </Link>
             ))}
+          </div>
+          <div className="mt-10">
+            <ListingDisclaimer variant="off-plan" />
           </div>
         </div>
       </section>

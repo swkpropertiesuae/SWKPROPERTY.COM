@@ -1,5 +1,4 @@
 import communitiesJson from "@/data/communities.json";
-import servicesJson from "@/data/services.json";
 import teamJson from "@/data/team.json";
 import faqJson from "@/data/faq.json";
 import testimonialsJson from "@/data/testimonials.json";
@@ -15,6 +14,9 @@ export const SITE = {
   phoneTel: "+971564330448",
   whatsapp: "https://wa.me/971564330448",
   whatsappUrl: "https://wa.me/971564330448",
+  ukAdvisoryPhone: "+44 7704 302019",
+  ukAdvisoryPhoneRaw: "+447704302019",
+  ukAdvisoryWhatsappUrl: "https://wa.me/447704302019",
   email: "info@swkpropertiesuae.com",
   address: {
     full: "25th Floor, Al Saqr Building, Sheikh Zayed Road, Dubai, UAE",
@@ -32,7 +34,7 @@ export const SITE = {
   reraOrn: "51517",
   rera: "RERA ORN 51517",
   announcement:
-    "18+ Years UAE Experience · Direct Master Developer Access · Nakheel, Emaar, Binghatti, DAMAC, Azizi & More Across the UAE",
+    "18+ Years UAE Experience · Direct Master Developer Access · Nakheel, Emaar, Binghatti, DAMAC, Azizi, Tarrad & More Across the UAE",
   geo: {
     lat: 25.213925,
     lng: 55.277978,
@@ -66,7 +68,10 @@ export const stats = [
   { label: "RERA Licensed Brokerage ORN", value: 51517, suffix: "" },
 ];
 
-const img = (p: string) => `/img/${p}`;
+const img = (p: string) => {
+  const clean = p.replace(/^assets\/images\//, "");
+  return clean.startsWith("/") ? clean : `/img/${clean}`;
+};
 
 export const communities = communitiesJson.map((c) => {
   const imagePath = c.image.startsWith("/")
@@ -83,11 +88,9 @@ export const communities = communitiesJson.map((c) => {
   };
 });
 
-export const services = servicesJson;
-
 const TEAM_LANGUAGES: Record<string, string[]> = {
   "mohammad-haseeb": ["English", "Urdu", "Hindi", "Punjabi"],
-  "mohammed-islam": ["English", "Arabic", "Urdu", "Hindi"],
+  "mohammed-islam": ["English", "Hindi", "Bangladeshi", "Urdu"],
   "talha-shabbir": ["English", "Urdu", "Punjabi"],
   "fareed-choudhary": ["English", "Urdu", "Hindi"],
   "issaadi-chahrazed": ["English", "French", "Arabic"],
@@ -97,20 +100,49 @@ const TEAM_LANGUAGES: Record<string, string[]> = {
   "mohd-shahid-khan": ["English", "Hindi", "Urdu"],
 };
 
-export const team = teamJson.map((m) => {
+const TEAM_ADDON_LANGUAGES: Record<string, string[]> = {
+  "mohammed-islam": ["Arabic"],
+};
+
+type RawTeamMember = (typeof teamJson)[number] & {
+  phone?: string;
+  phoneDisplay?: string;
+  whatsappUrl?: string;
+  languages?: string[];
+  addonLanguages?: string[];
+};
+
+export const team = (teamJson as RawTeamMember[]).map((m) => {
   const slug = m.name
     .toLowerCase()
     .replace(/\([^)]*\)/g, "")
     .trim()
     .replace(/\s+/g, "-");
+  const primaryLanguages = m.languages ?? TEAM_LANGUAGES[slug] ?? ["English", "Arabic"];
+  const addonLanguages = m.addonLanguages ?? TEAM_ADDON_LANGUAGES[slug] ?? [];
+  const allLanguages = [
+    ...primaryLanguages,
+    ...addonLanguages.map((l) => `${l} (Add-on)`),
+  ];
+  const directPhone = Boolean(m.phone);
   return {
     ...m,
     slug,
     focus: m.bio,
-    languages: TEAM_LANGUAGES[slug] ?? ["English", "Arabic"],
-    photo: img(m.photo.replace("assets/images/", "")),
+    languages: primaryLanguages,
+    addonLanguages,
+    allLanguages,
+    directPhone,
+    phoneRaw: m.phone ?? SITE.phoneRaw,
+    phoneDisplay: m.phoneDisplay ?? SITE.phone,
+    whatsappUrl: m.whatsappUrl ?? SITE.whatsappUrl,
+    photo: img(m.photo),
   };
 });
+
+export function getTeamMember(slug: string) {
+  return team.find((m) => m.slug === slug);
+}
 
 export const faqs = faqJson.map((f) => ({
   ...f,
@@ -119,61 +151,30 @@ export const faqs = faqJson.map((f) => ({
 }));
 
 const COORDS: Record<string, { city: string; code: string; lat: number; lng: number }> = {
-  India: { city: "India", code: "IN", lat: 19.08, lng: 72.88 },
-  Pakistan: { city: "Pakistan", code: "PK", lat: 24.86, lng: 67.01 },
-  Russia: { city: "Russia", code: "RU", lat: 55.76, lng: 37.62 },
+  "South Asia": { city: "South Asia", code: "SA", lat: 23.81, lng: 90.41 },
   "United Kingdom": { city: "United Kingdom", code: "GB", lat: 51.51, lng: -0.13 },
+  Mauritius: { city: "Mauritius", code: "MU", lat: -20.16, lng: 57.5 },
+  Singapore: { city: "Singapore", code: "SG", lat: 1.35, lng: 103.82 },
   UAE: { city: "UAE", code: "AE", lat: 25.2, lng: 55.27 },
-  Canada: { city: "Canada", code: "CA", lat: 43.65, lng: -79.38 },
 };
 
-const UNIQUE_CLIENT_PORTRAIT_BY_NAME: Record<string, string> = {
-  "Arjun S.": "/img/clients/arjun-s.jpg?v=2",
-  "Priya M.": "/img/clients/priya-m.jpg?v=2",
-  "Rohan K.": "/img/clients/rohan-k.jpg?v=2",
-  "Ahmed R.": "/img/clients/ahmed-r.jpg?v=2",
-  "Sana A.": "/img/clients/sana-a.jpg?v=2",
-  "Elena V.": "/img/clients/elena-v.jpg?v=2",
-  "James W.": "/img/clients/james-w.jpg?v=2",
-  "Charlotte B.": "/img/clients/charlotte-b.jpg?v=2",
-  "Khalid A.": "/img/clients/khalid-a.jpg?v=2",
-  "Daniel C.": "/img/clients/daniel-c.jpg?v=2",
-};
-
-const allMappedTestimonials = testimonialsJson
+/** 5 international client stories — zero personal names, realistic bespoke non-generic portraits. */
+export const testimonials = testimonialsJson
   .filter((t) => t.approved)
   .map((t, i) => {
-    const geo = COORDS[t.country] ?? COORDS.UAE;
+    const geo = COORDS[t.region] ?? COORDS.UAE;
     return {
-      id: `t-${i}`,
+      id: t.id || `t-${i}`,
       quote: t.quote,
-      name: t.name,
       role: t.context,
-      city: geo.city,
-      country: geo.code,
+      city: t.region,
+      country: t.flag || geo.code,
       lat: geo.lat,
       lng: geo.lng,
-      image: UNIQUE_CLIENT_PORTRAIT_BY_NAME[t.name] ?? "/img/clients/arjun-s.jpg",
+      image: t.image,
       rating: t.rating,
     };
   });
-
-const GLOBE_NAMES = new Set([
-  "Arjun S.",
-  "Priya M.",
-  "Ahmed R.",
-  "Elena V.",
-  "James W.",
-  "Khalid A.",
-]);
-
-/** 6 unique global client stories for the 3D TestimonialGlobe (each with a unique portrait). */
-export const testimonials = allMappedTestimonials.filter((t) => GLOBE_NAMES.has(t.name));
-
-/** 4 additional verified client stories for the horizontal scrolling marquee below the globe (zero repeated portraits). */
-export const horizontalTestimonials = allMappedTestimonials.filter(
-  (t) => !GLOBE_NAMES.has(t.name)
-);
 
 /** Architectural photography paths (unique per section — zero repetition). */
 export const officeImage = img("about/al-saqr-suite.webp");

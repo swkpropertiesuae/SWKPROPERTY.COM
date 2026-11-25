@@ -7,6 +7,7 @@ import { breadcrumbLd, buildMeta } from "@/lib/seo";
 import { AvenloPageHeader } from "@/components/avenlo/page-header";
 import { BracketLink } from "@/components/avenlo/bracket-button";
 import { CtaBanner, SectionEyebrow, SplitHeading } from "@/components/avenlo/motion";
+import { ListingDisclaimer } from "@/components/site/listing-disclaimer";
 
 export const metadata: Metadata = buildMeta({
   title: "Rent Property in Dubai | Annual Ejari Homes & Villas",
@@ -31,6 +32,7 @@ export default function RentPage() {
       <JsonLd
         data={breadcrumbLd([
           { name: "Home", path: "/" },
+          { name: "Properties", path: "/properties" },
           { name: "Rent & Lease", path: "/rent" },
         ])}
       />
@@ -62,6 +64,9 @@ export default function RentPage() {
           {rentListings.map((listing) => (
             <PropertyCard key={listing.slug} listing={listing} />
           ))}
+        </div>
+        <div className="mt-10">
+          <ListingDisclaimer variant="rent" />
         </div>
       </section>
 

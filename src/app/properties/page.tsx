@@ -1,6 +1,6 @@
 "use client";
 
-import React, { Suspense, useEffect, useMemo, useState } from "react";
+import React, { Suspense, useEffect, useId, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
   Bookmark,
@@ -21,6 +21,9 @@ import { communities } from "@/lib/swk";
 import { usePrefs } from "@/lib/prefs";
 import { PropertyCard } from "@/components/site/property-card";
 import { MapEmbed } from "@/components/site/map-embed";
+import { ListingDisclaimer } from "@/components/site/listing-disclaimer";
+import { JsonLd } from "@/components/seo/json-ld";
+import { breadcrumbLd } from "@/lib/seo";
 import { AvenloPageHeader } from "@/components/avenlo/page-header";
 import { CtaBanner } from "@/components/avenlo/motion";
 
@@ -35,37 +38,64 @@ const QUICK_PILLS = [
   { id: "Villa", label: "Villas" },
   { id: "Townhouse", label: "Townhouses" },
   { id: "Penthouse", label: "Penthouses" },
+  { id: "Duplex", label: "Duplexes" },
 ] as const;
 
 type QuickPillId = (typeof QUICK_PILLS)[number]["id"];
 
+const VALID_PURPOSES = new Set<ListingPurpose>(["buy", "rent", "off-plan"]);
+const VALID_COMPLETIONS = new Set<"Ready" | "Off-Plan">(["Ready", "Off-Plan"]);
+const VALID_TYPES = new Set<PropertyType>(["Apartment", "Villa", "Townhouse", "Penthouse", "Duplex", "Office"]);
+const VALID_SORTS = new Set(["featured", "price-asc", "price-desc", "area-desc"]);
+const VALID_BEDS = new Set(["0", "1", "2", "3", "4"]);
+
+function parsePurpose(v: string | null): "" | ListingPurpose {
+  return v && VALID_PURPOSES.has(v as ListingPurpose) ? (v as ListingPurpose) : "";
+}
+function parseCompletion(v: string | null): "" | "Ready" | "Off-Plan" {
+  return v && VALID_COMPLETIONS.has(v as "Ready" | "Off-Plan") ? (v as "Ready" | "Off-Plan") : "";
+}
+function parseType(v: string | null): "" | PropertyType {
+  return v && VALID_TYPES.has(v as PropertyType) ? (v as PropertyType) : "";
+}
+function parseSort(v: string | null): string {
+  return v && VALID_SORTS.has(v) ? v : "featured";
+}
+function parseBeds(v: string | null): string {
+  return v && VALID_BEDS.has(v) ? v : "";
+}
+function parsePositiveNumStr(v: string | null): string {
+  if (!v) return "";
+  const n = Number(v);
+  return Number.isFinite(n) && n > 0 && n <= 1_000_000_000 ? String(Math.round(n)) : "";
+}
+
 const DEVELOPER_NAMES = Array.from(new Set(LISTINGS.map((l) => l.developer))).sort();
 const VIEW_OPTIONS = Array.from(new Set(LISTINGS.flatMap((l) => l.views))).sort();
 const FEATURE_OPTIONS = Array.from(new Set(LISTINGS.flatMap((l) => l.features))).sort();
+const VALID_COMMUNITIES = new Set(communities.map((c) => c.slug));
 
 function PropertiesExplorer() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const { notify, trackEvent } = usePrefs();
+  const drawerUid = useId();
 
-  const [query, setQuery] = useState(searchParams.get("q") || "");
-  const [purpose, setPurpose] = useState<"" | ListingPurpose>(
-    (searchParams.get("purpose") as ListingPurpose) || ""
-  );
-  const [completion, setCompletion] = useState<"" | "Ready" | "Off-Plan">(
-    (searchParams.get("completion") as "" | "Ready" | "Off-Plan") || ""
-  );
-  const [propertyType, setPropertyType] = useState<"" | PropertyType>(
-    (searchParams.get("type") as PropertyType) || ""
-  );
-  const [community, setCommunity] = useState(searchParams.get("community") || "");
-  const [bedrooms, setBedrooms] = useState(searchParams.get("beds") || "");
-  const [maxPrice, setMaxPrice] = useState(searchParams.get("maxPrice") || "");
-  const [sortBy, setSortBy] = useState(searchParams.get("sort") || "featured");
+  const [query, setQuery] = useState((searchParams.get("q") || "").slice(0, 120));
+  const [purpose, setPurpose] = useState<"" | ListingPurpose>(() => parsePurpose(searchParams.get("purpose")));
+  const [completion, setCompletion] = useState<"" | "Ready" | "Off-Plan">(() => parseCompletion(searchParams.get("completion")));
+  const [propertyType, setPropertyType] = useState<"" | PropertyType>(() => parseType(searchParams.get("type")));
+  const [community, setCommunity] = useState(() => {
+    const c = searchParams.get("community") || "";
+    return VALID_COMMUNITIES.has(c) ? c : "";
+  });
+  const [bedrooms, setBedrooms] = useState(() => parseBeds(searchParams.get("beds")));
+  const [maxPrice, setMaxPrice] = useState(() => parsePositiveNumStr(searchParams.get("maxPrice")));
+  const [sortBy, setSortBy] = useState(() => parseSort(searchParams.get("sort")));
   const [viewMode, setViewMode] = useState<"grid" | "map">("grid");
   const [filtersOpen, setFiltersOpen] = useState(false);
 
-  // Advanced drawer filters (preserved from full repo spec)
+  // Advanced drawer filters
   const [developer, setDeveloper] = useState("");
   const [minBaths, setMinBaths] = useState("");
   const [furnished, setFurnished] = useState<"" | FurnishedState>("");
@@ -76,6 +106,47 @@ function PropertiesExplorer() {
   const [selectedFeature, setSelectedFeature] = useState("");
   const [mapZone, setMapZone] = useState<"" | "central" | "coastal" | "green-suburban" | "creek-east">("");
 
+  // React to external header/nav URL param updates (e.g. clicking Commercial Spaces while on /properties)
+  const spKey = searchParams.toString();
+  /* eslint-disable react-hooks/set-state-in-effect */
+  useEffect(() => {
+    const sp = new URLSearchParams(spKey);
+    const nextQ = (sp.get("q") || "").slice(0, 120);
+    const nextPurpose = parsePurpose(sp.get("purpose"));
+    const nextComp = parseCompletion(sp.get("completion"));
+    const nextType = parseType(sp.get("type"));
+    const rawComm = sp.get("community") || "";
+    const nextComm = VALID_COMMUNITIES.has(rawComm) ? rawComm : "";
+    const nextBeds = parseBeds(sp.get("beds"));
+    const nextMaxPrice = parsePositiveNumStr(sp.get("maxPrice"));
+    const nextSort = parseSort(sp.get("sort"));
+
+    setQuery((prev) => (prev === nextQ ? prev : nextQ));
+    setPurpose((prev) => (prev === nextPurpose ? prev : nextPurpose));
+    setCompletion((prev) => (prev === nextComp ? prev : nextComp));
+    setPropertyType((prev) => (prev === nextType ? prev : nextType));
+    setCommunity((prev) => (prev === nextComm ? prev : nextComm));
+    setBedrooms((prev) => (prev === nextBeds ? prev : nextBeds));
+    setMaxPrice((prev) => (prev === nextMaxPrice ? prev : nextMaxPrice));
+    setSortBy((prev) => (prev === nextSort ? prev : nextSort));
+  }, [spKey]);
+  /* eslint-enable react-hooks/set-state-in-effect */
+
+  // Lock body scroll & close drawer on Escape
+  useEffect(() => {
+    if (!filtersOpen) return;
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setFiltersOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = prevOverflow;
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [filtersOpen]);
+
   const activePill: QuickPillId = useMemo(() => {
     if (completion === "Ready" && !purpose && !propertyType) return "ready";
     if (purpose) return purpose;
@@ -84,7 +155,8 @@ function PropertiesExplorer() {
       propertyType === "Apartment" ||
       propertyType === "Villa" ||
       propertyType === "Townhouse" ||
-      propertyType === "Penthouse"
+      propertyType === "Penthouse" ||
+      propertyType === "Duplex"
     ) {
       return propertyType;
     }
@@ -111,9 +183,14 @@ function PropertiesExplorer() {
     }
   };
 
-  // Sync key URL params
+  // Sync URL params while preserving any UTM attribution params
   useEffect(() => {
     const p = new URLSearchParams();
+    for (const [k, v] of new URLSearchParams(spKey).entries()) {
+      if (k.startsWith("utm_") || k === "gclid" || k === "fbclid") {
+        p.set(k, v);
+      }
+    }
     if (query.trim()) p.set("q", query.trim());
     if (purpose) p.set("purpose", purpose);
     if (completion) p.set("completion", completion);
@@ -123,8 +200,10 @@ function PropertiesExplorer() {
     if (maxPrice) p.set("maxPrice", maxPrice);
     if (sortBy && sortBy !== "featured") p.set("sort", sortBy);
     const qs = p.toString();
-    router.replace(qs ? `/properties?${qs}` : "/properties", { scroll: false });
-  }, [query, purpose, completion, propertyType, community, bedrooms, maxPrice, sortBy, router]);
+    if (qs !== spKey) {
+      router.replace(qs ? `/properties?${qs}` : "/properties", { scroll: false });
+    }
+  }, [query, purpose, completion, propertyType, community, bedrooms, maxPrice, sortBy, router, spKey]);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -135,15 +214,26 @@ function PropertiesExplorer() {
       if (community && item.communitySlug !== community) return false;
       if (bedrooms !== "") {
         const b = Number(bedrooms);
+        // Exclude commercial offices from Studio (0 bedroom) residential searches
+        if (b === 0 && item.propertyType === "Office") return false;
         if (b === 4 ? item.bedrooms < 4 : item.bedrooms !== b) return false;
       }
-      if (maxPrice && item.priceAed > Number(maxPrice)) return false;
+      if (maxPrice) {
+        const mp = Number(maxPrice);
+        if (Number.isFinite(mp) && item.priceAed > mp) return false;
+      }
       if (developer && item.developer !== developer) return false;
-      if (minBaths && item.bathrooms < Number(minBaths)) return false;
+      if (minBaths) {
+        const mb = Number(minBaths);
+        if (Number.isFinite(mb) && item.bathrooms < mb) return false;
+      }
       if (furnished && item.furnished !== furnished) return false;
       if (nearMetroOnly && !item.nearMetro) return false;
       if (petFriendlyOnly && item.petPolicy !== "Pet-friendly") return false;
-      if (maxServiceCharge && item.serviceChargePerSqFt > Number(maxServiceCharge)) return false;
+      if (maxServiceCharge) {
+        const msc = Number(maxServiceCharge);
+        if (Number.isFinite(msc) && msc >= 0 && item.serviceChargePerSqFt > msc) return false;
+      }
       if (selectedView && !item.views.includes(selectedView)) return false;
       if (selectedFeature && !item.features.includes(selectedFeature)) return false;
       if (mapZone && item.mapZone !== mapZone) return false;
@@ -213,7 +303,8 @@ function PropertiesExplorer() {
 
   const handleSaveSearch = () => {
     try {
-      const existing = JSON.parse(localStorage.getItem("swk_saved_searches") || "[]");
+      const parsed: unknown = JSON.parse(localStorage.getItem("swk_saved_searches") || "[]");
+      const existing = Array.isArray(parsed) ? parsed : [];
       const entry = {
         id: Date.now(),
         label: query || community || purpose || "All Dubai Properties",
@@ -336,7 +427,7 @@ function PropertiesExplorer() {
               <span className="hidden sm:inline text-[#64748b]">
                 · Additional private &amp; off-market stock available on request
               </span>
-              {(query || purpose || propertyType || community || bedrooms || maxPrice || activeAdvancedCount > 0) ? (
+              {(query || purpose || completion || propertyType || community || bedrooms || maxPrice || activeAdvancedCount > 0) ? (
                 <button
                   type="button"
                   onClick={resetAll}
@@ -473,6 +564,9 @@ function PropertiesExplorer() {
                 )
               )}
             </div>
+            <div className="mt-8">
+              <ListingDisclaimer variant="general" />
+            </div>
           </div>
         )}
       </section>
@@ -484,11 +578,16 @@ function PropertiesExplorer() {
           onClick={() => setFiltersOpen(false)}
         >
           <div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby={`${drawerUid}-title`}
             onClick={(e) => e.stopPropagation()}
             className="flex h-full w-full max-w-md flex-col bg-white text-[#121212] shadow-2xl"
           >
             <div className="flex items-center justify-between border-b border-black/[0.08] px-6 py-5">
-              <h2 className="text-lg font-medium tracking-[-0.02em]">Advanced Filters</h2>
+              <h2 id={`${drawerUid}-title`} className="text-lg font-medium tracking-[-0.02em]">
+                Advanced Filters
+              </h2>
               <button
                 type="button"
                 onClick={() => setFiltersOpen(false)}
@@ -501,8 +600,9 @@ function PropertiesExplorer() {
 
             <div className="flex-1 space-y-5 overflow-y-auto p-6 text-sm">
               <div>
-                <label className="mb-1.5 block text-xs font-medium text-[#525252]">Developer</label>
+                <label htmlFor={`${drawerUid}-dev`} className="mb-1.5 block text-xs font-medium text-[#525252]">Developer</label>
                 <select
+                  id={`${drawerUid}-dev`}
                   value={developer}
                   onChange={(e) => setDeveloper(e.target.value)}
                   className="w-full rounded-lg border border-black/12 bg-white px-3 py-2.5 text-sm"
@@ -652,6 +752,12 @@ function PropertiesExplorer() {
 export default function PropertiesPage() {
   return (
     <div className="bg-transparent">
+      <JsonLd
+        data={breadcrumbLd([
+          { name: "Home", path: "/" },
+          { name: "Properties", path: "/properties" },
+        ])}
+      />
       <AvenloPageHeader
         eyebrow="PROPERTIES · DUBAI & UAE"
         title="Residences we are"

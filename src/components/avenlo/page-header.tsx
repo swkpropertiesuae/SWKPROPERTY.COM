@@ -50,23 +50,32 @@ export function AvenloPageHeader({
         {breadcrumb && breadcrumb.length > 0 ? (
           <nav
             aria-label="Breadcrumb"
-            className={cn(
-              "mb-6 flex flex-wrap items-center gap-2 text-[11px] font-medium uppercase tracking-[0.16em] text-[#8b8b8b]",
-              align === "center" && "justify-center"
-            )}
+            className="mb-6"
           >
-            {breadcrumb.map((item, idx) => (
-              <React.Fragment key={`${item.label}-${idx}`}>
-                {idx > 0 ? <span aria-hidden="true">/</span> : null}
-                {item.href ? (
-                  <Link href={item.href} className="hover:text-[#121212] transition-colors">
-                    {item.label}
-                  </Link>
-                ) : (
-                  <span className="text-[#121212]">{item.label}</span>
-                )}
-              </React.Fragment>
-            ))}
+            <ol
+              className={cn(
+                "flex flex-wrap items-center gap-2 text-[11px] font-medium uppercase tracking-[0.16em] text-[#8b8b8b]",
+                align === "center" && "justify-center"
+              )}
+            >
+              {breadcrumb.map((item, idx) => {
+                const isLast = idx === breadcrumb.length - 1;
+                return (
+                  <li key={`${item.label}-${idx}`} className="inline-flex items-center gap-2">
+                    {idx > 0 ? <span aria-hidden="true">/</span> : null}
+                    {item.href && !isLast ? (
+                      <Link href={item.href} className="hover:text-[#121212] transition-colors">
+                        {item.label}
+                      </Link>
+                    ) : (
+                      <span aria-current={isLast ? "page" : undefined} className="text-[#121212]">
+                        {item.label}
+                      </span>
+                    )}
+                  </li>
+                );
+              })}
+            </ol>
           </nav>
         ) : null}
 

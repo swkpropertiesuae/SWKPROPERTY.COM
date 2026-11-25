@@ -41,9 +41,9 @@ const RAW_GUIDES: Record<RealEstateGuide["slug"], RawGuide> = {
     title: "Complete Guide to Buying Property in Dubai (Ready & Off-Plan)",
     subtitle: "Step-by-step RERA & Dubai Land Department (DLD) process, upfront acquisition costs, Form F / SPA rules, and mortgage vs cash timelines.",
     directAnswer:
-      "Both UAE residents and non-resident foreign nationals can purchase 100% freehold property in designated Dubai zones. On top of the agreed purchase price, buyers should budget approximately 6% to 7.5% in upfront transaction costs—primarily the 4% Dubai Land Department (DLD) transfer/Oqood fee, DLD Trustee fee (AED 2,100–4,200), Title Deed issuance (AED 580), and 2% brokerage commission (+5% VAT) on secondary resales.",
-    lastUpdated: "2026-11-01",
-    reviewedBy: "Mohammad Haseeb · Founder & CEO (RERA ORN 51517)",
+      "Both UAE residents and non-resident foreign nationals can purchase 100% freehold property in designated Dubai zones. Buyers budget the 4% Dubai Land Department (DLD) transfer/Oqood fee plus approximate Developers Admin fees (AED 4,000–5,500). In primary off-plan launches, there are no mortgage registration fees, no trustee fees, and 0% buyer agency commission; secondary resales carry 2% brokerage commission (+5% VAT) and applicable transfer fees.",
+    lastUpdated: "2026-11-25",
+    reviewedBy: "Mohammad Haseeb · Sales & Operations Manager (RERA ORN 51517)",
     readTime: "7 min read",
     sections: [
       {
@@ -82,14 +82,14 @@ const RAW_GUIDES: Record<RealEstateGuide["slug"], RawGuide> = {
       },
     ],
     comparisonTable: {
-      caption: "Typical Upfront Buyer Costs in Dubai (Indicative)",
+      caption: "Typical Upfront Buyer Costs in Dubai (Indicative · Subject to Developer & DLD Schedules)",
       headers: ["Fee Item", "Ready Secondary Purchase", "Off-Plan Developer Purchase", "Paid To"],
       rows: [
-        ["DLD Transfer / Oqood Fee", "4% of purchase price + AED 580 admin", "4% of purchase price + AED 1,000–5,000 Oqood admin", "Dubai Land Department (DLD)"],
-        ["DLD Registration Trustee Fee", "AED 4,200 (incl. VAT) if price ≥ AED 500,000", "Not applicable on direct developer SPA", "DLD Trustee Office"],
-        ["Agency Brokerage Fee", "Typically 2% of purchase price + 5% VAT", "0% buyer commission on most primary launches", "RERA Licensed Brokerage"],
-        ["Mortgage Registration (if financed)", "0.25% of loan amount + AED 290", "0.25% of loan amount + AED 290 (if mortgaged)", "Dubai Land Department"],
-        ["Bank Valuation & Arrangement", "AED 2,500–3,500 valuation + 0%–1% bank fee", "N/A during construction payment plan", "Lending Bank"],
+        ["DLD Transfer / Oqood Fee", "4% of purchase price + AED 580 Title Deed", "4% of purchase price (Oqood registration)", "Dubai Land Department (DLD)"],
+        ["Developers Admin Fees (Approx.)", "Developer NOC (AED 500–5,000, seller-paid)", "Approx. AED 4,000 – 5,500 (depends on developer)", "Master Developer"],
+        ["Trustee Fees", "Applicable on secondary transfer", "None (AED 0 — no trustee fees on off-plan)", "DLD Registration Trustee"],
+        ["Agency Brokerage Fee", "Typically 2% of purchase price + 5% VAT", "0% buyer commission on primary launches", "RERA Licensed Brokerage"],
+        ["Mortgage Registration Fee", "Subject to lender & DLD terms if financed", "None (AED 0 — no mortgage registration fees on off-plan)", "Dubai Land Department"],
       ],
     },
     faqs: [
@@ -110,8 +110,8 @@ const RAW_GUIDES: Record<RealEstateGuide["slug"], RawGuide> = {
     subtitle: "How residential and executive leases work in Dubai—from RERA Unified Tenancy Contracts and Ejari to DEWA, chiller, and the RERA Rental Index.",
     directAnswer:
       "Residential leases in Dubai are governed by RERA and must be registered in the official Ejari system. Tenants typically pay annual rent in 1 to 4 post-dated cheques, provide a refundable security deposit (5% unfurnished or 10% furnished), pay a 5% agency commission (+5% VAT), and activate DEWA utilities (AED 2,000 refundable deposit for apartments or AED 4,000 for villas).",
-    lastUpdated: "2026-11-01",
-    reviewedBy: "Fareed Choudhary · Leasing Specialist (RERA ORN 51517)",
+    lastUpdated: "2026-11-25",
+    reviewedBy: "Fareed Choudhary · Senior Property Consultant (RERA ORN 51517)",
     readTime: "6 min read",
     sections: [
       {
@@ -174,8 +174,8 @@ const RAW_GUIDES: Record<RealEstateGuide["slug"], RawGuide> = {
     subtitle: "Required seller documents, RERA Form A marketing permits, accurate DLD comparable pricing, NOC timelines, and transfer day settlement.",
     directAnswer:
       "To legally market and sell a property in Dubai, the registered owner must sign RERA Form A with a licensed brokerage (maximum 3 brokerages at any one time) via the Dubai REST app so a DLD Trakheesi marketing permit and Madmoun QR code can be issued. Sellers typically pay the Developer NOC fee (AED 500–5,000), mortgage early-settlement fee if financed (up to 1% capped at AED 10,000), and agreed agency fee.",
-    lastUpdated: "2026-11-01",
-    reviewedBy: "Issaadi Chahrazed · Senior Sales Consultant (RERA ORN 51517)",
+    lastUpdated: "2026-11-25",
+    reviewedBy: "Issaadi Chahrazed · Off-Plan Property Consultant (RERA ORN 51517)",
     readTime: "6 min read",
     sections: [
       {
@@ -235,8 +235,8 @@ const RAW_GUIDES: Record<RealEstateGuide["slug"], RawGuide> = {
     subtitle: "An analytical framework for evaluating gross vs net rental yields, off-plan payment schedules, currency peg stability, and UAE Golden Visa qualification.",
     directAnswer:
       "Dubai residential real estate offers 0% annual property tax and 0% personal rental income tax in the UAE, with the UAE Dirham pegged to the US Dollar at 3.6725 AED/USD since 1997. However, disciplined investors always calculate Net Yield rather than Gross Yield—deducting annual RERA Mollak service charges, maintenance reserves, leasing fees, and vacancy buffers—and verify developer escrow compliance before committing capital.",
-    lastUpdated: "2026-11-01",
-    reviewedBy: "Mohammad Haseeb · Founder & CEO (RERA ORN 51517)",
+    lastUpdated: "2026-11-25",
+    reviewedBy: "Mohammad Haseeb · Sales & Operations Manager (RERA ORN 51517)",
     readTime: "8 min read",
     sections: [
       {

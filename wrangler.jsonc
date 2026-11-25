@@ -11,6 +11,7 @@
     "html_handling": "none",
     "not_found_handling": "none",
     "run_worker_first": [
+      "/api/*",
       "/index.html",
       "/property-details.html",
       "/blog-post.html",
@@ -24,13 +25,33 @@
       "/contact.html",
       "/assets/video/*",
       "/properties/*",
-      "/blog/*"
+      "/blog/*",
+      "/.env*",
+      "/.git*",
+      "/wp-*"
     ]
   },
   "vars": {
     "NEXT_PUBLIC_GA_ID": "G-1FXMV3FTYL",
     "NEXT_PUBLIC_GTM_ID": "GTM-NMJ9MVNG"
   },
+  "ratelimits": [
+    {
+      "name": "EDGE_BURST_LIMITER",
+      "namespace_id": "5151701",
+      "simple": { "limit": 60, "period": 10 }
+    },
+    {
+      "name": "EDGE_SUSTAINED_LIMITER",
+      "namespace_id": "5151702",
+      "simple": { "limit": 240, "period": 60 }
+    },
+    {
+      "name": "API_ENQUIRY_LIMITER",
+      "namespace_id": "5151703",
+      "simple": { "limit": 6, "period": 60 }
+    }
+  ],
   "r2_buckets": [
     { "binding": "MEDIA", "bucket_name": "swk-media" }
   ],

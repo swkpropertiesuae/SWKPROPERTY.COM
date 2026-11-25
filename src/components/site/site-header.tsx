@@ -96,14 +96,44 @@ export function SiteHeader() {
     setDrawerOpen,
   } = usePrefs();
 
-  const [openMenu, setOpenMenu] = useState<"properties" | "pages" | null>(null);
-  const [mobileOpen, setMobileOpen] = useState(false);
+  const [navUi, setNavUi] = useState<{
+    pathname: string;
+    openMenu: "properties" | "pages" | null;
+    mobileOpen: boolean;
+  }>({ pathname, openMenu: null, mobileOpen: false });
   const [scrolled, setScrolled] = useState(false);
   const navRef = useRef<HTMLDivElement>(null);
 
+  const openMenu = navUi.pathname === pathname ? navUi.openMenu : null;
+  const mobileOpen = navUi.pathname === pathname ? navUi.mobileOpen : false;
+
+  const setOpenMenu = (
+    value:
+      | "properties"
+      | "pages"
+      | null
+      | ((prev: "properties" | "pages" | null) => "properties" | "pages" | null),
+  ) => {
+    setNavUi((curr) => {
+      const currentMenu = curr.pathname === pathname ? curr.openMenu : null;
+      const currentMobile = curr.pathname === pathname ? curr.mobileOpen : false;
+      const nextMenu = typeof value === "function" ? value(currentMenu) : value;
+      return { pathname, openMenu: nextMenu, mobileOpen: currentMobile };
+    });
+  };
+
+  const setMobileOpen = (value: boolean | ((prev: boolean) => boolean)) => {
+    setNavUi((curr) => {
+      const currentMenu = curr.pathname === pathname ? curr.openMenu : null;
+      const currentMobile = curr.pathname === pathname ? curr.mobileOpen : false;
+      const nextMobile = typeof value === "function" ? value(currentMobile) : value;
+      return { pathname, openMenu: currentMenu, mobileOpen: nextMobile };
+    });
+  };
+
   const isActive = (href: string) => {
-    const clean = href.split("?")[0];
-    return clean === "/" ? pathname === "/" : pathname === clean || pathname.startsWith(`${clean}/`);
+    if (href.includes("?")) return false;
+    return href === "/" ? pathname === "/" : pathname === href || pathname.startsWith(`${href}/`);
   };
 
   const propertiesActive =
@@ -122,13 +152,12 @@ export function SiteHeader() {
   useEffect(() => {
     const onClickOutside = (e: MouseEvent) => {
       if (navRef.current && !navRef.current.contains(e.target as Node)) {
-        setOpenMenu(null);
+        setNavUi((curr) => ({ ...curr, openMenu: null }));
       }
     };
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
-        setOpenMenu(null);
-        setMobileOpen(false);
+        setNavUi((curr) => ({ ...curr, openMenu: null, mobileOpen: false }));
       }
     };
     document.addEventListener("mousedown", onClickOutside);
@@ -208,7 +237,7 @@ export function SiteHeader() {
               {openMenu === "properties" ? (
                 <div
                   id="swk-properties-panel"
-                  className="absolute left-0 top-[calc(100%+22px)] z-50 w-[640px] rounded-2xl border border-black/[0.08] bg-white p-6 shadow-[0_24px_60px_rgba(18,18,18,0.14)]"
+                  className="absolute left-0 top-[calc(100%+22px)] z-50 w-[640px] max-w-[calc(100vw-2rem)] rounded-2xl border border-black/[0.08] bg-white p-6 shadow-[0_24px_60px_rgba(18,18,18,0.14)]"
                 >
                   <div className="mb-4 flex items-center justify-between border-b border-black/[0.06] pb-3">
                     <span className="text-[10px] font-medium uppercase tracking-[0.22em] text-[#8b8b8b]">
@@ -298,7 +327,7 @@ export function SiteHeader() {
               {openMenu === "pages" ? (
                 <div
                   id="swk-pages-panel"
-                  className="absolute right-0 top-[calc(100%+22px)] z-50 w-[680px] rounded-2xl border border-black/[0.08] bg-white p-8 shadow-[0_24px_60px_rgba(18,18,18,0.14)]"
+                  className="absolute right-0 top-[calc(100%+22px)] z-50 w-[680px] max-w-[calc(100vw-2rem)] rounded-2xl border border-black/[0.08] bg-white p-8 shadow-[0_24px_60px_rgba(18,18,18,0.14)]"
                 >
                   <div className="grid grid-cols-3 gap-x-10 gap-y-5">
                     {PAGES_COLUMNS.map((col) => (
@@ -401,7 +430,7 @@ export function SiteHeader() {
 
       {/* Clean Light Mobile Drawer */}
       {mobileOpen ? (
-        <div className="lg:hidden border-t border-black/[0.08] bg-white px-4 py-6 shadow-xl">
+        <div className="lg:hidden max-h-[calc(100dvh-88px)] overflow-y-auto overscroll-contain border-t border-black/[0.08] bg-white px-4 py-6 shadow-xl">
           <p className="mb-2.5 text-[10px] font-medium uppercase tracking-[0.22em] text-[#8b8b8b]">
             Properties
           </p>
@@ -476,6 +505,7 @@ export function SiteHeader() {
               </select>
               <button
                 type="button"
+                aria-label={`Switch area unit to ${areaUnit === "sqft" ? "square metres" : "square feet"}`}
                 onClick={() => setAreaUnit(areaUnit === "sqft" ? "sqm" : "sqft")}
                 className="rounded-lg border border-black/10 bg-[#f7f7f7] px-3 py-2 text-xs font-medium text-[#121212]"
               >
@@ -483,6 +513,7 @@ export function SiteHeader() {
               </button>
               <button
                 type="button"
+                aria-label={`Open shortlist (${shortlistCount} saved)`}
                 onClick={() => {
                   setMobileOpen(false);
                   setDrawerOpen(true);

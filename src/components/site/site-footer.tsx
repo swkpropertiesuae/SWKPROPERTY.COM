@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useId, useRef, useState } from "react";
 import Link from "next/link";
-import { ArrowUp, Check } from "lucide-react";
+import { ArrowUp, Check, ChevronDown, ChevronUp, ShieldCheck } from "lucide-react";
 import { SITE } from "@/lib/swk";
 import { usePrefs } from "@/lib/prefs";
 import { WhatsAppIcon } from "@/components/site/whatsapp-icon";
@@ -47,19 +47,47 @@ const SOCIAL_LINKS: [string, string][] = [
   ["X", SITE.socials.x],
 ];
 
+const FOOTER_TC_CLAUSES = [
+  {
+    title: "1. Developer-Dependent Pricing & Availability",
+    text: "All properties, starting prices (including Hot Projects such as Azizi Venice Studio, Binghatti Studio, and Tarrad Residences), payment plans, unit sizes, incentives, and handover dates depend strictly on the respective developer, owner, and current prevailing market conditions and are subject to change or withdrawal without prior notice. Website content does not constitute a binding offer.",
+  },
+  {
+    title: "2. Off-Plan Fees, RERA Escrow & Developers Admin Fees",
+    text: "Primary off-plan purchases in Dubai carry no mortgage registration fees, no DLD Registration Trustee fees, and typically 0% buyer agency commission. Buyers pay applicable 4% DLD Oqood registration fees plus approximate Developers Admin fees of AED 4,000–5,500 (varying by developer) as governed solely by the official SPA and Dubai Law No. 8 of 2007 escrow rules.",
+  },
+  {
+    title: "3. Calculator, Currency & Advisory Disclaimer",
+    text: "All UAE mortgage repayments, DLD upfront cost outputs, rental yields, and foreign currency conversions are indicative mathematical estimates in UAE Dirhams (AED) for general information only—not financial, mortgage, investment, Golden Visa, or tax advice. Bank financing is subject to UAE Central Bank LTV/DBR guidelines and independent lender underwriting.",
+  },
+  {
+    title: "4. Trademarks, AML/PDPL Compliance & Governing Law",
+    text: "Developer names, logos, and architectural renders remain the intellectual property of their respective owners. SWK Properties LLC (RERA ORN 51517) operates under UAE AML/CTF Law (Federal Decree-Law No. 20 of 2018), UAE PDPL (Federal Decree-Law No. 45 of 2021), and UAE Cybercrime Law (Federal Decree-Law No. 34 of 2021). Governed exclusively by UAE federal law and the laws of the Emirate of Dubai (Dubai Courts).",
+  },
+];
+
 export function SiteFooter() {
   const { trackEvent, attribution } = usePrefs();
+  const honeypotId = useId();
   const [email, setEmail] = useState("");
   const [consent, setConsent] = useState(false);
+  const [companyWebsite, setCompanyWebsite] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [subscribed, setSubscribed] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [tcExpanded, setTcExpanded] = useState(false);
+  const formLoadedAtRef = useRef<number>(0);
+
+  useEffect(() => {
+    formLoadedAtRef.current = Date.now();
+  }, []);
 
   const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMsg(null);
-    if (!email.trim()) {
-      setErrorMsg("Enter your email address.");
+    const trimmedEmail = email.trim();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(trimmedEmail)) {
+      setErrorMsg("Enter a valid email address.");
       return;
     }
     if (!consent) {
@@ -74,13 +102,15 @@ export function SiteFooter() {
         headers: { "content-type": "application/json" },
         body: JSON.stringify({
           context: "newsletter",
-          email: email.trim(),
+          email: trimmedEmail,
           marketingConsent: true,
+          companyWebsite,
+          formLoadedAt: formLoadedAtRef.current,
           pageUrl: typeof window !== "undefined" ? window.location.href : SITE.url,
           attribution,
         }),
       });
-      const data = (await res.json()) as { ok?: boolean; error?: string };
+      const data = (await res.json().catch(() => ({}))) as { ok?: boolean; error?: string };
       if (!res.ok || !data.ok) {
         setErrorMsg(data.error || `Could not subscribe. Email ${SITE.email} directly.`);
       } else {
@@ -105,7 +135,7 @@ export function SiteFooter() {
   return (
     <footer className="relative w-full overflow-hidden bg-[#121212] text-white">
       <div className="mx-auto max-w-[1260px] px-4 pt-20 pb-24 sm:px-8">
-        {/* Top Brand Row — Highlighted Prominent Transparent Icon + Calligraphic Wordmark */}
+        {/* Top Brand Row */}
         <div className="mb-14 flex flex-wrap items-center justify-between gap-6 border-b border-white/[0.08] pb-10">
           <Link href="/" className="group inline-flex items-center gap-4" aria-label="SWK Properties Home">
             <img
@@ -134,9 +164,9 @@ export function SiteFooter() {
           </div>
         </div>
 
-        {/* Main 4-Column Avenlo Architecture */}
+        {/* Main 4-Column Architecture */}
         <div className="grid grid-cols-1 gap-10 lg:grid-cols-12 lg:gap-8">
-          {/* Col 1: Elevated #1E1E1E Newsletter Card */}
+          {/* Col 1: Newsletter Card */}
           <div className="lg:col-span-4">
             <div className="rounded-2xl border border-white/[0.08] bg-[#1e1e1e] p-6 sm:p-7">
               <p className="text-[11px] font-medium uppercase tracking-[0.22em] text-[#8b8b8b]">
@@ -153,6 +183,22 @@ export function SiteFooter() {
                 </div>
               ) : (
                 <form onSubmit={handleSubscribe} className="mt-5 space-y-3" noValidate>
+                  {/* Off-screen honeypot */}
+                  <div
+                    aria-hidden="true"
+                    className="pointer-events-none absolute -left-[9999px] h-0 w-0 overflow-hidden opacity-0"
+                  >
+                    <label htmlFor={honeypotId}>Company Website</label>
+                    <input
+                      id={honeypotId}
+                      type="text"
+                      name="companyWebsite"
+                      tabIndex={-1}
+                      autoComplete="off"
+                      value={companyWebsite}
+                      onChange={(e) => setCompanyWebsite(e.target.value)}
+                    />
+                  </div>
                   <div>
                     <label htmlFor="footer-newsletter-email" className="sr-only">
                       Email address
@@ -160,6 +206,7 @@ export function SiteFooter() {
                     <input
                       id="footer-newsletter-email"
                       type="email"
+                      maxLength={200}
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="Enter your email"
@@ -195,7 +242,7 @@ export function SiteFooter() {
             </div>
           </div>
 
-          {/* Col 2: MAIN PAGES (2-col subgrid) */}
+          {/* Col 2: MAIN PAGES */}
           <div className="lg:col-span-3">
             <p className="text-[11px] font-medium uppercase tracking-[0.22em] text-[#8b8b8b]">
               MAIN PAGES
@@ -213,12 +260,12 @@ export function SiteFooter() {
               <Link href="/contact" className="hover:text-[#51fec0] transition-colors">Contact</Link>
               <Link href="/communities" className="hover:text-[#51fec0] transition-colors">Communities</Link>
               <Link href="/privacy" className="hover:text-[#51fec0] transition-colors">Privacy</Link>
-              <Link href="/terms" className="hover:text-[#51fec0] transition-colors">Terms</Link>
+              <Link href="/terms" className="font-medium text-[#51fec0] hover:underline transition-colors">Terms &amp; Conditions</Link>
               <Link href="/cookies" className="hover:text-[#51fec0] transition-colors">Cookies</Link>
             </div>
           </div>
 
-          {/* Col 3: SERVICES & PORTFOLIO */}
+          {/* Col 3: SERVICES */}
           <div className="lg:col-span-2">
             <p className="text-[11px] font-medium uppercase tracking-[0.22em] text-[#8b8b8b]">
               SERVICES
@@ -234,10 +281,10 @@ export function SiteFooter() {
             </ul>
           </div>
 
-          {/* Col 4: DUBAI OFFICE & RERA CREDENTIAL */}
+          {/* Col 4: OFFICE & CONTACTS */}
           <div className="lg:col-span-3">
             <p className="text-[11px] font-medium uppercase tracking-[0.22em] text-[#8b8b8b]">
-              OFFICE
+              OFFICE &amp; DESKS
             </p>
             <div className="mt-4 space-y-2.5 text-[14px] text-white/85 leading-relaxed">
               <p>{SITE.address.full}</p>
@@ -266,6 +313,15 @@ export function SiteFooter() {
                   <span>WhatsApp</span>
                 </a>
               </p>
+              <p className="text-xs text-white/70">
+                UK Advisory (Rex):{" "}
+                <a
+                  href={`tel:${SITE.ukAdvisoryPhoneRaw}`}
+                  className="text-white/90 hover:text-[#51fec0] transition-colors"
+                >
+                  {SITE.ukAdvisoryPhone}
+                </a>
+              </p>
               <p className="text-xs text-[#8b8b8b]">{SITE.hours.full}</p>
             </div>
 
@@ -287,17 +343,60 @@ export function SiteFooter() {
           </div>
         </div>
 
-        {/* Mandatory RERA, AED & Trademark Disclosures */}
-        <div className="mt-14 border-t border-white/[0.08] pt-6 text-[11px] leading-relaxed text-[#8b8b8b] space-y-1.5">
-          <p>
-            <strong className="text-white/75 font-medium">Regulatory &amp; Pricing Notice:</strong> Primary prices are quoted in UAE Dirhams (AED). Foreign currency conversions and calculator outputs are approximate and for general information only—not financial, tax, or legal advice. Off-plan visuals include architectural renders; floor plans, service charges, payment plans, and handover timelines are governed by the official Sales &amp; Purchase Agreement (SPA) and Dubai Land Department (DLD) registration.
-          </p>
-          <p>
-            <strong className="text-white/75 font-medium">Developer Trademarks:</strong> Developer names, logos, and project imagery remain the property of their respective developers and are used solely to identify UAE developments. {SITE.legalName} is an independent RERA-licensed brokerage (ORN {SITE.reraOrn}).
-          </p>
-        </div>
+        {/* Prominently Visible Legal Terms & Conditions Box at Footer */}
+        <section
+          aria-label="Terms and Conditions and Mandatory Regulatory Disclosures"
+          className="mt-14 rounded-2xl border border-white/[0.12] bg-[#191919] p-5 sm:p-7"
+        >
+          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/[0.08] pb-4">
+            <div className="flex items-center gap-2.5">
+              <ShieldCheck className="h-4 w-4 shrink-0 text-[#51fec0]" aria-hidden="true" />
+              <h3 className="font-mono text-[11px] font-semibold uppercase tracking-[0.2em] text-white">
+                TERMS &amp; CONDITIONS · DEVELOPER PRICING &amp; MARKET DISCLOSURES
+              </h3>
+            </div>
+            <div className="flex flex-wrap items-center gap-3">
+              <button
+                type="button"
+                onClick={() => setTcExpanded((v) => !v)}
+                aria-expanded={tcExpanded}
+                className="inline-flex cursor-pointer items-center gap-1.5 rounded-full border border-white/15 bg-white/[0.06] px-3.5 py-1.5 text-[11px] font-medium text-white/90 hover:border-[#51fec0] hover:text-[#51fec0]"
+              >
+                <span>{tcExpanded ? "Collapse Legal Clauses" : "View All Clauses"}</span>
+                {tcExpanded ? <ChevronUp className="h-3.5 w-3.5" /> : <ChevronDown className="h-3.5 w-3.5" />}
+              </button>
+              <Link
+                href="/terms"
+                className="inline-flex items-center rounded-full bg-[#51fec0] px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.12em] text-[#0a1624] hover:bg-white transition-colors"
+              >
+                Full Terms &amp; Conditions →
+              </Link>
+            </div>
+          </div>
 
-        {/* Clean Bottom Utility Pill Row (Monumental bottom SWK watermark removed) */}
+          <p className="mt-4 text-[12px] leading-relaxed text-white/80">
+            <strong className="text-white">Mandatory Pricing &amp; Availability Terms:</strong> All properties, starting prices, unit availability, floor plans, incentives, and payment schedules listed on{" "}
+            <strong className="text-white">{SITE.domain}</strong> depend strictly on the respective developer, property owner, and prevailing current market conditions, and are subject to change or withdrawal without prior notice. Nothing on this website constitutes a binding legal offer or financial/tax/mortgage advice. On primary Dubai off-plan purchases, there are{" "}
+            <strong className="text-[#51fec0]">no mortgage registration fees</strong> and{" "}
+            <strong className="text-[#51fec0]">no trustee fees</strong>; approximate{" "}
+            <strong className="text-white">Developers Admin fees (AED 4,000–5,500)</strong> and 4% DLD/Oqood fees apply as confirmed in the official SPA.
+          </p>
+
+          <div
+            className={`mt-4 grid grid-cols-1 gap-4 md:grid-cols-2 border-t border-white/[0.08] pt-4 text-[11.5px] leading-relaxed text-[#a7a7a7] ${
+              tcExpanded ? "grid" : "hidden sm:grid"
+            }`}
+          >
+            {FOOTER_TC_CLAUSES.map((clause) => (
+              <div key={clause.title} className="space-y-1">
+                <p className="font-semibold text-white/90">{clause.title}</p>
+                <p>{clause.text}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Bottom Utility Pill Row */}
         <div className="mt-10 flex flex-col items-center justify-between gap-3 border-t border-white/[0.08] pt-8 sm:flex-row">
           {/* Pill 1: Socials */}
           <div className="inline-flex items-center gap-3 rounded-full border border-white/10 bg-[#1e1e1e]/95 px-4 py-2 text-xs text-white/80 backdrop-blur-md">
@@ -314,9 +413,19 @@ export function SiteFooter() {
             ))}
           </div>
 
-          {/* Pill 2: Copyright */}
-          <div className="inline-flex items-center rounded-full border border-white/10 bg-[#1e1e1e]/95 px-4 py-2 text-xs text-white/70 backdrop-blur-md">
-            © <span suppressHydrationWarning>{new Date().getFullYear()}</span> {SITE.legalName}. All rights reserved. RERA ORN {SITE.reraOrn}.
+          {/* Pill 2: Copyright + Direct Legal Links */}
+          <div className="inline-flex flex-wrap items-center justify-center gap-2 rounded-full border border-white/10 bg-[#1e1e1e]/95 px-4 py-2 text-xs text-white/75 backdrop-blur-md">
+            <span>
+              © <span suppressHydrationWarning>{new Date().getFullYear()}</span> {SITE.legalName}. RERA ORN {SITE.reraOrn}.
+            </span>
+            <span className="text-white/30">·</span>
+            <Link href="/terms" className="text-[#51fec0] hover:underline">
+              Terms &amp; Conditions
+            </Link>
+            <span className="text-white/30">·</span>
+            <Link href="/privacy" className="hover:text-white">
+              Privacy
+            </Link>
           </div>
 
           {/* Pill 3: Back to Top */}

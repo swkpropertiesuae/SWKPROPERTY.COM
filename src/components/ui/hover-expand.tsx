@@ -129,19 +129,13 @@ export function HoverExpand({
                   : collapsedFlex,
             }}
             aria-label={item.title}
-            role="button"
-            tabIndex={0}
-            aria-expanded={isActive}
             className={cn(
-              "relative min-h-0 flex-1 cursor-pointer overflow-hidden rounded-2xl border bg-[#101c2b] text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#51fec0]",
+              "relative min-h-0 flex-1 overflow-hidden rounded-2xl border bg-[#101c2b] text-left transition-colors",
               isHorizontal ? "min-w-[64px]" : "min-h-[56px] w-full",
               isActive ? "border-[#51fec0]/60" : "border-white/15"
             )}
             initial={false}
             key={item.id}
-            onClick={() => setActive(index)}
-            onFocus={() => setActive(index)}
-            onKeyDown={(event) => handleKeyDown(event, index)}
             onMouseEnter={() => {
               if (isHoverDevice && !isMobileViewport) {
                 setActive(index);
@@ -157,6 +151,15 @@ export function HoverExpand({
                 : { bounce: 0.08, duration: 0.42, type: "spring" }
             }
           >
+            <button
+              type="button"
+              aria-label={`Expand ${item.title}`}
+              aria-expanded={isActive}
+              onClick={() => setActive(index)}
+              onFocus={() => setActive(index)}
+              onKeyDown={(event) => handleKeyDown(event as unknown as KeyboardEvent<HTMLDivElement>, index)}
+              className="absolute inset-0 z-10 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#51fec0]"
+            />
             {item.image ? (
               <img
                 alt={item.alt ?? item.title}
@@ -169,19 +172,15 @@ export function HoverExpand({
             ) : null}
             <div
               aria-hidden="true"
-              className="absolute inset-0 bg-gradient-to-t from-[#07111d]/92 via-[#07111d]/38 to-[#07111d]/25"
+              className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#07111d]/92 via-[#07111d]/38 to-[#07111d]/25"
             />
             <motion.div
-              animate={
-                shouldReduceMotion
-                  ? { opacity: shouldShowLabel ? 1 : 0 }
-                  : {
-                      opacity: shouldShowLabel ? 1 : 0,
-                      rotate: isHorizontal && !isActive ? LABEL_ROTATION : 0,
-                    }
-              }
+              animate={{
+                opacity: shouldShowLabel ? 1 : 0,
+                rotate: isHorizontal && !isActive ? LABEL_ROTATION : 0,
+              }}
               className={cn(
-                "absolute inset-0 flex p-4 sm:p-5",
+                "pointer-events-none absolute inset-0 z-20 flex p-4 sm:p-5",
                 isActive || isHorizontal ? "items-end" : "items-center"
               )}
               transition={
@@ -224,8 +223,7 @@ export function HoverExpand({
                 {isActive && item.href ? (
                   <Link
                     href={item.href}
-                    onClick={(e) => e.stopPropagation()}
-                    className="inline-flex w-fit shrink-0 items-center gap-1.5 rounded-full bg-white px-4 py-2 text-[10.5px] sm:text-[11px] font-semibold uppercase tracking-[0.14em] text-[#0a1624] transition-colors hover:bg-[#51fec0]"
+                    className="pointer-events-auto relative z-30 inline-flex w-fit shrink-0 items-center gap-1.5 rounded-full bg-white px-4 py-2 text-[10.5px] sm:text-[11px] font-semibold uppercase tracking-[0.14em] text-[#0a1624] transition-colors hover:bg-[#51fec0]"
                   >
                     <span>Explore</span>
                     <ArrowUpRight className="h-3.5 w-3.5" />

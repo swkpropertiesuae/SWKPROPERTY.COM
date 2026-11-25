@@ -2,7 +2,7 @@
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { ArrowDown, ArrowLeft, ArrowRight, ArrowUpRight, Pause, Play } from "lucide-react";
 
 interface HeroSlide {
@@ -102,6 +102,7 @@ const HERO_SLIDES: HeroSlide[] = [
 const SLIDE_INTERVAL_MS = 4800;
 
 export function HeroDubaiReel() {
+  const prefersReducedMotion = useReducedMotion();
   const [activeIdx, setActiveIdx] = useState(0);
   const [isPlaying, setIsPlaying] = useState(true);
   const [isHovered, setIsHovered] = useState(false);
@@ -129,15 +130,15 @@ export function HeroDubaiReel() {
     setActiveIdx((prev) => (prev - 1 + total) % total);
   }, [total]);
 
-  // Smooth auto-advancing slideshow (pauses cleanly on hover or manual pause)
+  // Smooth auto-advancing slideshow (pauses cleanly on hover, reduced motion, or manual pause)
   useEffect(() => {
-    if (!isPlaying || isHovered) return;
+    if (!isPlaying || isHovered || prefersReducedMotion) return;
     const timer = window.setInterval(() => {
       setDirection(1);
       setActiveIdx((prev) => (prev + 1) % total);
     }, SLIDE_INTERVAL_MS);
     return () => window.clearInterval(timer);
-  }, [isPlaying, isHovered, total]);
+  }, [isPlaying, isHovered, prefersReducedMotion, total]);
 
   // Preload the next slide quietly for zero-flicker instant transitions
   useEffect(() => {

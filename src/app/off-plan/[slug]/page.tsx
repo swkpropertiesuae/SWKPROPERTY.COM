@@ -12,6 +12,7 @@ import { WhatsAppIcon } from "@/components/site/whatsapp-icon";
 import { AvenloPageHeader } from "@/components/avenlo/page-header";
 import { BracketLink } from "@/components/avenlo/bracket-button";
 import { CtaBanner, SectionEyebrow, SplitHeading } from "@/components/avenlo/motion";
+import { ListingDisclaimer } from "@/components/site/listing-disclaimer";
 
 export function generateStaticParams() {
   return projects.map((p) => ({ slug: p.slug }));
@@ -29,14 +30,15 @@ export async function generateMetadata({
       title: "Off-Plan Project Not Found",
       description: "Explore premier UAE off-plan developments with SWK Properties.",
       path: "/off-plan",
+      noIndex: true,
     });
   }
 
   return buildMeta({
     title: `${project.name} by ${project.developer} (${project.community})`,
-    description: `${project.summary} Request floor plans, payment schedule, and DLD escrow details from SWK Properties (RERA ORN ${SITE.reraOrn}).`,
+    description: `${project.summary} Request floor plans, payment schedule, and escrow details from SWK Properties (RERA ORN ${SITE.reraOrn}).`,
     path: `/off-plan/${project.slug}`,
-    image: project.images[0],
+    image: project.images?.[0] || project.image || "/og-default.jpg",
     keywords: [
       project.name,
       `${project.name} ${project.developer}`,
@@ -57,6 +59,26 @@ export default async function OffPlanProjectDetailPage({
   if (!project) notFound();
 
   const dev = getDeveloper(project.developerSlug);
+  const isDubai = project.emirate === "Dubai";
+  const heroImage = project.images?.[0] || project.image || "/og-default.jpg";
+  const regBadge = isDubai
+    ? "Escrow Registered (Dubai Law 8/2007)"
+    : project.emirate === "Abu Dhabi"
+      ? "Abu Dhabi DMT / ADM Regulated Escrow"
+      : `${project.emirate} Off-Plan Escrow Verified`;
+  const dueDiligencePoints = isDubai
+    ? [
+        "Confirm RERA project registration number and official project-specific escrow bank account before transfer.",
+        "Audit floor-plate efficiency, view orientation, and projected Mollak service charges per sq ft.",
+        "Review payment schedule milestones, 4% DLD Oqood fee, and approx. AED 4,000–5,500 developer admin fees (no mortgage registration fee and no trustee fee apply on off-plan purchases).",
+        "Compare delivered communities by the same developer against brochure finishes.",
+      ]
+    : [
+        `Confirm official ${project.emirate} land-authority registration and project-specific escrow bank account before transfer.`,
+        "Audit floor-plate efficiency, view orientation, and projected community service charges per sq ft.",
+        `Review full developer payment schedule, applicable ${project.emirate} off-plan registration fees, approx. AED 4,000–5,500 developer admin fees (no mortgage registration or trustee fees on off-plan), and SPA resale clauses.`,
+        "Compare delivered communities by the same developer against brochure finishes.",
+      ];
   const relatedProjects = projects
     .filter(
       (p) =>
@@ -96,7 +118,7 @@ export default async function OffPlanProjectDetailPage({
             <span className="text-[#cfcfcf]">·</span>
             <span>0% Buyer Commission (Primary Release)</span>
             <span className="text-[#cfcfcf]">·</span>
-            <span>Escrow Registered (Law 8/2007)</span>
+            <span>{regBadge}</span>
           </>
         }
         actions={
@@ -115,7 +137,7 @@ export default async function OffPlanProjectDetailPage({
       <section className="mx-auto max-w-[1260px] px-4 py-12 sm:px-8">
         <div className="relative overflow-hidden rounded-2xl bg-[#f5f5f5]">
           <img
-            src={project.images[0]}
+            src={heroImage}
             alt={`${project.name} architectural render by ${project.developer}`}
             className="h-[340px] sm:h-[520px] md:h-[600px] w-full object-cover"
           />
@@ -175,12 +197,7 @@ export default async function OffPlanProjectDetailPage({
                 SWK DUE DILIGENCE PROTOCOL
               </p>
               <ul className="mt-5 space-y-3.5 text-sm text-[#4a4a4a]">
-                {[
-                  "Confirm RERA project registration number and official project-specific escrow bank account before transfer.",
-                  "Audit floor-plate efficiency, view orientation, and projected Mollak service charges per sq ft.",
-                  "Review full payment schedule milestones, DLD 4% Oqood registration timing, and pre-handover resale clause in the SPA.",
-                  "Compare delivered communities by the same developer against brochure finishes.",
-                ].map((pt) => (
+                {dueDiligencePoints.map((pt) => (
                   <li key={pt} className="flex items-start gap-3">
                     <Check className="mt-0.5 h-4 w-4 shrink-0 text-[#0e9f6e]" />
                     <span>{pt}</span>
@@ -188,6 +205,8 @@ export default async function OffPlanProjectDetailPage({
                 ))}
               </ul>
             </div>
+
+            <ListingDisclaimer variant="off-plan" />
 
             {dev ? (
               <div className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-white/80 bg-white/86 backdrop-blur-xl shadow-[0_18px_48px_rgba(12,56,96,0.09)] p-6">

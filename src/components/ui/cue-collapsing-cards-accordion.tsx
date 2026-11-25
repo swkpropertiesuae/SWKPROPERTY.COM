@@ -5,13 +5,6 @@ import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-/**
- * Cue Foundations · Collapsing Cards Accordion (cue115)
- * Five-image horizontal architectural accordion where hovering/clicking smoothly
- * expands the active card (`flex: 2.8`) while others collapse to vertical wordmarks.
- * All CSS is strictly scoped to `.cc-scope` so it never overrides page body styles.
- */
-
 export interface CollapsingCardItem {
   idx: number;
   wordmark: string;
@@ -64,222 +57,6 @@ const DEFAULT_CARDS: CollapsingCardItem[] = [
   },
 ];
 
-const SCOPED_CSS = `
-.cc-scope {
-  width: 100%;
-}
-.cc-scope .cc-cards {
-  display: flex;
-  gap: 12px;
-  width: 100%;
-  height: 500px;
-}
-.cc-scope .cc-card {
-  position: relative;
-  flex: 0.72;
-  min-width: 82px;
-  border-radius: 20px;
-  overflow: hidden;
-  cursor: pointer;
-  border: 1px solid rgba(255, 255, 255, 0.24);
-  box-shadow: 0 22px 54px rgba(8, 25, 44, 0.22);
-  transition: flex 0.75s cubic-bezier(0.2, 1, 0.3, 1), border-color 0.35s ease;
-  will-change: flex;
-  background: #0d1622;
-}
-.cc-scope .cc-card.active {
-  flex: 2.85;
-  border-color: rgba(81, 254, 192, 0.55);
-}
-.cc-scope .cc-img {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transform: scale(1.05);
-  transition: transform 0.9s cubic-bezier(0.2, 1, 0.3, 1), filter 0.75s cubic-bezier(0.2, 1, 0.3, 1);
-  filter: grayscale(22%) brightness(0.72);
-}
-.cc-scope .cc-card.active .cc-img {
-  transform: scale(1);
-  filter: grayscale(0%) brightness(0.94);
-}
-.cc-scope .cc-card::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    to top,
-    rgba(6, 15, 26, 0.84) 0%,
-    rgba(6, 15, 26, 0.34) 40%,
-    rgba(6, 15, 26, 0.12) 65%,
-    rgba(6, 15, 26, 0.48) 100%
-  );
-  pointer-events: none;
-}
-.cc-scope .cc-content {
-  position: relative;
-  z-index: 2;
-  height: 100%;
-  padding: 24px;
-  display: flex;
-  flex-direction: column;
-  color: #ffffff;
-}
-.cc-scope .cc-idx {
-  font-size: 11px;
-  letter-spacing: 0.18em;
-  color: rgba(255, 255, 255, 0.82);
-  font-weight: 500;
-  font-family: var(--font-mono), monospace;
-}
-.cc-scope .cc-meta {
-  margin-top: auto;
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 16px;
-}
-.cc-scope .cc-title-wrap {
-  opacity: 0;
-  transform: translateY(8px);
-  transition: opacity 0.35s ease 0.14s, transform 0.5s cubic-bezier(0.2, 1, 0.3, 1) 0.14s;
-  max-width: 440px;
-}
-.cc-scope .cc-card.active .cc-title-wrap {
-  opacity: 1;
-  transform: translateY(0);
-}
-.cc-scope .cc-title {
-  font-size: 24px;
-  font-weight: 500;
-  line-height: 1.15;
-  letter-spacing: -0.025em;
-  color: #ffffff;
-}
-.cc-scope .cc-sub {
-  margin-top: 6px;
-  font-size: 13px;
-  line-height: 1.45;
-  color: rgba(255, 255, 255, 0.78);
-}
-.cc-scope .cc-v-title {
-  position: absolute;
-  left: 24px;
-  bottom: 24px;
-  writing-mode: vertical-rl;
-  transform: rotate(180deg);
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.92);
-  transition: opacity 0.3s ease;
-  z-index: 2;
-  pointer-events: none;
-}
-.cc-scope .cc-card.active .cc-v-title {
-  opacity: 0;
-}
-.cc-scope .cc-cta {
-  flex-shrink: 0;
-  font-size: 11px;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: #0a1624;
-  background: #ffffff;
-  padding: 10px 16px;
-  border-radius: 999px;
-  font-weight: 600;
-  text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  opacity: 0;
-  transform: translateY(8px);
-  transition: opacity 0.35s ease 0.2s, transform 0.5s cubic-bezier(0.2, 1, 0.3, 1) 0.2s, background-color 0.2s ease;
-}
-.cc-scope .cc-cta:hover {
-  background: #51fec0;
-}
-.cc-scope .cc-card.active .cc-cta {
-  opacity: 1;
-  transform: translateY(0);
-}
-@media (max-width: 900px) {
-  .cc-scope .cc-cards {
-    height: 440px;
-  }
-  .cc-scope .cc-title {
-    font-size: 19px;
-  }
-}
-@media (max-width: 680px) {
-  .cc-scope .cc-cards {
-    flex-direction: column;
-    height: 650px;
-    gap: 10px;
-  }
-  .cc-scope .cc-card {
-    flex: 0.72;
-    min-width: 0;
-    min-height: 58px;
-    border-radius: 18px;
-  }
-  .cc-scope .cc-card.active {
-    flex: 4.1;
-  }
-  .cc-scope .cc-v-title {
-    writing-mode: horizontal-tb;
-    transform: translateY(-50%);
-    left: auto;
-    right: 16px;
-    top: 50%;
-    bottom: auto;
-    font-size: 12px;
-    letter-spacing: 0.18em;
-  }
-  .cc-scope .cc-content {
-    padding: 16px;
-    justify-content: center;
-  }
-  .cc-scope .cc-card.active .cc-content {
-    justify-content: space-between;
-  }
-  .cc-scope .cc-meta {
-    display: none;
-  }
-  .cc-scope .cc-card.active .cc-meta {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 12px;
-  }
-  .cc-scope .cc-title {
-    font-size: 20px;
-    line-height: 1.15;
-  }
-  .cc-scope .cc-sub {
-    font-size: 12.5px;
-    line-height: 1.45;
-  }
-  .cc-scope .cc-cta {
-    padding: 9px 15px;
-    font-size: 10.5px;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .cc-scope .cc-card,
-  .cc-scope .cc-img,
-  .cc-scope .cc-title-wrap,
-  .cc-scope .cc-cta,
-  .cc-scope .cc-v-title {
-    transition-duration: 0.15s !important;
-  }
-}
-`;
-
 export function CollapsingCards({
   cards = DEFAULT_CARDS,
   className,
@@ -292,7 +69,6 @@ export function CollapsingCards({
 
   return (
     <div className={cn("cc-scope", className)}>
-      <style>{SCOPED_CSS}</style>
       <div className="cc-cards" role="region" aria-label="Expandable UAE Masterplan Accordion">
         {cards.map((c) => {
           const isActive = activeIdx === c.idx;
@@ -301,17 +77,14 @@ export function CollapsingCards({
               key={c.idx}
               className={`cc-card ${isActive ? "active" : ""}`}
               onMouseEnter={() => setActiveIdx(c.idx)}
-              onClick={() => setActiveIdx(c.idx)}
-              role="button"
-              tabIndex={0}
-              aria-expanded={isActive}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" || e.key === " ") {
-                  e.preventDefault();
-                  setActiveIdx(c.idx);
-                }
-              }}
             >
+              <button
+                type="button"
+                aria-expanded={isActive}
+                aria-label={`Expand ${c.title}`}
+                onClick={() => setActiveIdx(c.idx)}
+                className="absolute inset-0 z-[1] cursor-pointer focus-visible:outline-2 focus-visible:outline-inset focus-visible:outline-[#51fec0]"
+              />
               <img
                 src={c.img}
                 alt={c.title}
@@ -332,8 +105,9 @@ export function CollapsingCards({
                   </div>
                   <Link
                     href={c.href}
-                    className="cc-cta"
-                    onClick={(e) => e.stopPropagation()}
+                    tabIndex={isActive ? 0 : -1}
+                    aria-hidden={!isActive}
+                    className="cc-cta relative z-[3]"
                   >
                     <span>Explore</span>
                     <ArrowUpRight className="h-3.5 w-3.5" />

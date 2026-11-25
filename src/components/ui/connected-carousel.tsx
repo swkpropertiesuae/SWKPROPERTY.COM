@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useId, useRef, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { ArrowLeft, ArrowRight, ArrowUpRight } from "lucide-react";
 import type { HTMLAttributes, MouseEvent, KeyboardEvent } from "react";
 import { cn } from "@/lib/utils";
@@ -51,7 +51,10 @@ export function CalendlyCarousel({
   ...props
 }: CalendlyCarouselProps) {
   // Refs
+  const uid = useId();
+  const prefersReducedMotion = useReducedMotion();
   const containerRef = useRef<HTMLDivElement>(null);
+  const progressBarRef = useRef<HTMLDivElement>(null);
   const animationFrameRef = useRef<number | null>(null);
   const lastTimeRef = useRef<number | null>(null);
   const elapsedRef = useRef<number>(0);
@@ -59,12 +62,24 @@ export function CalendlyCarousel({
 
   // State
   const [page, setPage] = useState<number>(0);
-  const [progress, setProgress] = useState<number>(0);
   const [isHovered, setIsHovered] = useState<boolean>(false);
+  const [isVisible, setIsVisible] = useState<boolean>(true);
   const [inView, setInView] = useState<boolean>(!startOnView);
   const [holdCompleted, setHoldCompleted] = useState<boolean>(!startOnView);
   const [tier, setTier] = useState<ScreenTier>("desktop");
   const [viewportWidth, setViewportWidth] = useState<number>(1200);
+
+  const setBarScale = useCallback((ratio: number) => {
+    if (progressBarRef.current) {
+      progressBarRef.current.style.transform = `scaleX(${Math.max(0, Math.min(1, ratio))})`;
+    }
+  }, []);
+
+  useEffect(() => {
+    const onVis = () => setIsVisible(document.visibilityState === "visible");
+    document.addEventListener("visibilitychange", onVis);
+    return () => document.removeEventListener("visibilitychange", onVis);
+  }, []);
 
   // Global State/Hooks
   const total = items.length;
@@ -119,7 +134,15 @@ export function CalendlyCarousel({
   }, []);
 
   useEffect(() => {
-    if (total <= 1 || !inView || !holdCompleted || (pauseOnHover && isHovered)) {
+    if (
+      total <= 1 ||
+      autoPlayInterval <= 0 ||
+      prefersReducedMotion ||
+      !isVisible ||
+      !inView ||
+      !holdCompleted ||
+      (pauseOnHover && isHovered)
+    ) {
       lastTimeRef.current = null;
       return;
     }
@@ -129,19 +152,19 @@ export function CalendlyCarousel({
         lastTimeRef.current = timestamp;
       }
 
-      const delta = timestamp - lastTimeRef.current;
+      const delta = Math.min(timestamp - lastTimeRef.current, 100);
       lastTimeRef.current = timestamp;
       elapsedRef.current += delta;
 
       if (elapsedRef.current >= autoPlayInterval) {
         elapsedRef.current = 0;
         lastTimeRef.current = null;
-        setProgress(0);
+        setBarScale(0);
         setPage((curr) => curr + 1);
         return;
       }
 
-      setProgress(Math.min((elapsedRef.current / autoPlayInterval) * 100, 100));
+      setBarScale(elapsedRef.current / autoPlayInterval);
       animationFrameRef.current = requestAnimationFrame(step);
     };
 
@@ -153,22 +176,22 @@ export function CalendlyCarousel({
       }
       lastTimeRef.current = null;
     };
-  }, [page, pauseOnHover, isHovered, autoPlayInterval, total, inView, holdCompleted]);
+  }, [page, pauseOnHover, isHovered, autoPlayInterval, total, inView, holdCompleted, isVisible, prefersReducedMotion, setBarScale]);
 
   // Handlers
   const handlePrev = useCallback(() => {
     elapsedRef.current = 0;
     lastTimeRef.current = null;
-    setProgress(0);
+    setBarScale(0);
     setPage((curr) => curr - 1);
-  }, []);
+  }, [setBarScale]);
 
   const handleNext = useCallback(() => {
     elapsedRef.current = 0;
     lastTimeRef.current = null;
-    setProgress(0);
+    setBarScale(0);
     setPage((curr) => curr + 1);
-  }, []);
+  }, [setBarScale]);
 
   const handleSelectTab = (event: MouseEvent<HTMLButtonElement>) => {
     const indexStr = event.currentTarget.dataset.index;
@@ -185,7 +208,7 @@ export function CalendlyCarousel({
 
       elapsedRef.current = 0;
       lastTimeRef.current = null;
-      setProgress(0);
+      setBarScale(0);
       setPage((curr) => curr + diff);
     }
   };
@@ -199,7 +222,7 @@ export function CalendlyCarousel({
       if (offset !== 0) {
         elapsedRef.current = 0;
         lastTimeRef.current = null;
-        setProgress(0);
+        setBarScale(0);
         setPage((curr) => curr + offset);
       }
     }
@@ -259,7 +282,7 @@ export function CalendlyCarousel({
       {...props}
     >
       <div
-        id="carousel-view-panel"
+        id={`${uid}-panel`}
         role="tabpanel"
         aria-live="polite"
         className="relative w-full flex items-center justify-center"
@@ -680,6 +703,8 @@ export function CalendlyCarousel({
                         {item.href ? (
                           <Link
                             href={item.href}
+                            tabIndex={isActive ? 0 : -1}
+                            aria-hidden={!isActive}
                             onClick={(e) => e.stopPropagation()}
                             className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-black/15 bg-white px-3.5 py-1.5 sm:py-2 text-[10.5px] sm:text-[11px] font-semibold uppercase tracking-[0.13em] text-[#121212] shadow-xs transition-all duration-200 hover:-translate-y-0.5 hover:border-[#121212] hover:bg-[#121212] hover:text-white hover:shadow-md"
                           >
@@ -734,8 +759,8 @@ export function CalendlyCarousel({
                 type="button"
                 role="tab"
                 data-index={idx}
-                id={`carousel-tab-${idx}`}
-                aria-controls="carousel-view-panel"
+                id={`${uid}-tab-${idx}`}
+                aria-controls={`${uid}-panel`}
                 onClick={handleSelectTab}
                 aria-selected={isSelected}
                 aria-label={`View profile of ${item.author}`}
@@ -749,10 +774,11 @@ export function CalendlyCarousel({
               >
                 {isSelected && (
                   <div
+                    ref={progressBarRef}
                     className="h-full rounded-[4px] bg-gradient-to-r from-[#121212] via-[#1b6aa7] to-[#0e9f6e]"
                     style={{
                       transformOrigin: "0% 50%",
-                      transform: `scaleX(${progress / 100})`,
+                      transform: "scaleX(0)",
                     }}
                   />
                 )}

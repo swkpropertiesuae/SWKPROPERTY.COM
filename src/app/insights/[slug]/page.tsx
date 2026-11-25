@@ -28,7 +28,8 @@ export async function generateMetadata({
     return buildMetadata({
       title: "Article Not Found",
       description: "Requested SWK market briefing could not be found.",
-      path: `/insights/${slug}`,
+      path: "/insights",
+      noIndex: true,
     });
   }
   return buildMetadata({
@@ -57,8 +58,22 @@ export default async function InsightArticlePage({
   const article = getBlogArticle(slug);
   if (!article) notFound();
 
-  const relatedListings = listings.slice(0, 3);
+  const needle = `${article.title} ${article.category} ${article.keywords.join(" ")}`.toLowerCase();
+  const matchedListings = listings.filter((l) => {
+    const commHit = needle.includes(l.community.toLowerCase()) || needle.includes(l.communitySlug.replace(/-/g, " "));
+    const devHit = needle.includes(l.developer.toLowerCase().split(" ")[0]);
+    const purposeHit =
+      (needle.includes("rent") || needle.includes("ejari")) && l.purpose === "rent"
+        ? true
+        : (needle.includes("off-plan") || needle.includes("launch")) && l.purpose === "off-plan";
+    return commHit || devHit || purposeHit;
+  });
+  const relatedListings = (matchedListings.length >= 3 ? matchedListings : [...matchedListings, ...listings])
+    .filter((item, idx, arr) => arr.findIndex((x) => x.slug === item.slug) === idx)
+    .slice(0, 3);
   const authorInTeam = team.some((m) => m.slug === article.author.slug);
+  const safeSources = article.sources.filter((src) => /^https?:\/\//i.test(src.url));
+  const showDistinctBody = article.content.trim() !== article.directAnswer.trim();
 
   return (
     <div className="bg-transparent">
@@ -74,7 +89,7 @@ export default async function InsightArticlePage({
           authorName: article.author.name,
         })}
       />
-      <JsonLd id="ld-article-faq" data={faqSchema(article.faqs)} />
+      {article.faqs.length > 0 ? <JsonLd id="ld-article-faq" data={faqSchema(article.faqs)} /> : null}
       <JsonLd
         id="ld-article-breadcrumb"
         data={breadcrumbSchema([
@@ -131,7 +146,9 @@ export default async function InsightArticlePage({
           <p data-speakable className="mt-3 text-[16px] leading-[1.7] text-[#121212]">{article.directAnswer}</p>
         </div>
 
-        <p className="text-[17px] leading-[1.75] text-[#4a4a4a]">{article.content}</p>
+        {showDistinctBody ? (
+          <p className="text-[17px] leading-[1.75] text-[#4a4a4a]">{article.content}</p>
+        ) : null}
 
         {/* Long-Form Sections */}
         {article.sections.map((sec) => (
@@ -161,13 +178,13 @@ export default async function InsightArticlePage({
         ) : null}
 
         {/* Sources */}
-        {article.sources.length > 0 ? (
+        {safeSources.length > 0 ? (
           <div className="border-t border-black/[0.08] pt-6 text-xs text-[#737373]">
             <p className="font-medium uppercase tracking-[0.18em] text-[#8b8b8b]">
               Official References
             </p>
             <ul className="mt-3 space-y-1.5">
-              {article.sources.map((src) => (
+              {safeSources.map((src) => (
                 <li key={src.url}>
                   <a
                     href={src.url}

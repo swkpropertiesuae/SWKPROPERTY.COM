@@ -1,92 +1,52 @@
 [
- {
-  "name": "Arjun S.",
-  "country": "India",
-  "flag": "IN",
-  "context": "Two-bedroom apartment · Dubai Hills Estate",
-  "quote": "Schools and daily essentials mattered as much as the apartment itself. SWK laid the options side by side and showed us the full cost before we committed.",
-  "rating": 5,
-  "approved": true
- },
- {
-  "name": "Priya M.",
-  "country": "India",
-  "flag": "IN",
-  "context": "One-bedroom apartment · Downtown Dubai",
-  "quote": "As a first-time buyer in Dubai, I had more questions than I knew how to ask. Every step was explained before we reached it, so nothing felt rushed.",
-  "rating": 5,
-  "approved": true
- },
- {
-  "name": "Rohan K.",
-  "country": "India",
-  "flag": "IN",
-  "context": "Studio apartment · Jumeirah Village Circle",
-  "quote": "The purchase price was only one line in my sums. Seeing service charges and likely rental costs beside it gave me a basis I could actually defend.",
-  "rating": 5,
-  "approved": true
- },
- {
-  "name": "Ahmed R.",
-  "country": "Pakistan",
-  "flag": "PK",
-  "context": "Three-bedroom townhouse · Dubai South",
-  "quote": "We needed room for the family without stretching the budget. The shortlist never drifted from that brief.",
-  "rating": 5,
-  "approved": true
- },
- {
-  "name": "Sana A.",
-  "country": "Pakistan",
-  "flag": "PK",
-  "context": "One-bedroom apartment · Business Bay",
-  "quote": "Buying from overseas, I lived on updates. I always knew which documents were due and what came next.",
-  "rating": 5,
-  "approved": true
- },
- {
-  "name": "Elena V.",
-  "country": "Russia",
-  "flag": "RU",
-  "context": "Two-bedroom apartment · Dubai Marina",
-  "quote": "The view won me over on the first visit; the layout and the condition of the building kept me honest. Seeing several options let me choose calmly.",
-  "rating": 5,
-  "approved": true
- },
- {
-  "name": "James W.",
-  "country": "United Kingdom",
-  "flag": "GB",
-  "context": "Two-bedroom apartment · Palm Jumeirah",
-  "quote": "I asked for the drawbacks as openly as the selling points, and got them. That let me decide at my own pace.",
-  "rating": 5,
-  "approved": true
- },
- {
-  "name": "Charlotte B.",
-  "country": "United Kingdom",
-  "flag": "GB",
-  "context": "Four-bedroom villa · Arabian Ranches",
-  "quote": "We were choosing a home for everyday family life. Walking the community, not just the villa, told us what a brochure could not.",
-  "rating": 5,
-  "approved": true
- },
- {
-  "name": "Khalid A.",
-  "country": "UAE",
-  "flag": "AE",
-  "context": "Three-bedroom townhouse · Dubai Hills Estate",
-  "quote": "We arrived with a layout and a location in mind. The search stayed on that brief, and the details were worked through before we went further.",
-  "rating": 5,
-  "approved": true
- },
- {
-  "name": "Daniel C.",
-  "country": "Canada",
-  "flag": "CA",
-  "context": "One-bedroom apartment · Dubai Creek Harbour",
-  "quote": "I wanted the ongoing costs on the table before committing. Having that conversation early let me plan the purchase with confidence.",
-  "rating": 5,
-  "approved": true
- }
+  {
+    "id": "client-south-asia",
+    "region": "South Asia",
+    "flag": "SA",
+    "context": "Studio & One-Bedroom Portfolio · Dubai South & JVC",
+    "quote": "Every figure was laid out in plain AED before we committed—4% DLD, developer admin charges, realistic rental expectations, and escrow verification. Nothing was glossed over.",
+    "image": "/img/clients/buyer-south-asia.webp",
+    "rating": 5,
+    "approved": true
+  },
+  {
+    "id": "client-uk-1",
+    "region": "United Kingdom",
+    "flag": "GB",
+    "context": "Two-Bedroom Waterfront Apartment · Dubai Marina",
+    "quote": "Buying from London meant relying on candid feedback rather than glossy renders. SWK walked us through service charges, resale liquidity, and developer track records at our own pace.",
+    "image": "/img/clients/buyer-uk-london.webp",
+    "rating": 5,
+    "approved": true
+  },
+  {
+    "id": "client-mauritius",
+    "region": "Mauritius",
+    "flag": "MU",
+    "context": "Off-Plan Lagoon Residence · Dubailand & Dubai South",
+    "quote": "Coordinating an off-plan reservation from Mauritius felt effortless. We had direct developer escrow confirmation, clear construction milestones, and regular updates at every step.",
+    "image": "/img/clients/buyer-mauritius.webp",
+    "rating": 5,
+    "approved": true
+  },
+  {
+    "id": "client-singapore",
+    "region": "Singapore",
+    "flag": "SG",
+    "context": "Yield-Focused Residential Acquisition · Business Bay",
+    "quote": "Coming from Singapore, I wanted disciplined numbers—net rental yield after community charges, actual DLD transfer comparables, and exit clarity. The shortlist stayed razor-sharp.",
+    "image": "/img/clients/buyer-singapore.webp",
+    "rating": 5,
+    "approved": true
+  },
+  {
+    "id": "client-uk-2",
+    "region": "United Kingdom",
+    "flag": "GB",
+    "context": "Family Townhouse & Residency Plan · Dubai Hills Estate",
+    "quote": "We asked for the honest drawbacks alongside the upside of each community, and got straight answers. Having a UK-experienced advisor on the Dubai desk made the transition seamless.",
+    "image": "/img/clients/buyer-uk-manchester.webp",
+    "rating": 5,
+    "approved": true
+  }
 ]

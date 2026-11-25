@@ -41,7 +41,7 @@ export default function CommunitiesPage() {
         eyebrow="NEIGHBOURHOOD GUIDES · DUBAI"
         title="Compare Dubai's core"
         italic="freehold districts"
-        lead="Honest street-level briefs covering transport links, schools, typical property types, strengths, and practical trade-offs across eight major Dubai corridors."
+        lead={`Honest street-level briefs covering transport links, schools, typical property types, strengths, and practical trade-offs across ${communityGuides.length} major Dubai corridors.`}
         breadcrumb={[
           { label: "Home", href: "/" },
           { label: "Communities" },

@@ -26,7 +26,8 @@ export async function generateMetadata({
     return buildMetadata({
       title: "Guide Not Found",
       description: "The requested SWK guide could not be found.",
-      path: `/guides/${slug}`,
+      path: "/guides",
+      noIndex: true,
     });
   }
   return buildMetadata({
@@ -53,14 +54,14 @@ export default async function GuideDetailPage({
         data={articleSchema({
           title: guide.title,
           description: guide.directAnswer,
-          slug: `guides/${guide.slug}`,
+          path: `/guides/${guide.slug}`,
           datePublished: "2026-09-01",
           dateModified: guide.updatedAt,
           image: "/img/hero/banner-communities.webp",
           authorName: guide.reviewedBy,
         })}
       />
-      <JsonLd id="ld-guide-faq" data={faqSchema(guide.faqs)} />
+      {guide.faqs.length > 0 ? <JsonLd id="ld-guide-faq" data={faqSchema(guide.faqs)} /> : null}
       <JsonLd
         id="ld-guide-breadcrumb"
         data={breadcrumbSchema([
@@ -103,7 +104,7 @@ export default async function GuideDetailPage({
           <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-[#8b8b8b]">
             DIRECT ANSWER
           </p>
-          <p className="mt-3 text-[16px] leading-[1.7] text-[#121212]">{guide.directAnswer}</p>
+          <p data-speakable className="mt-3 text-[16px] leading-[1.7] text-[#121212]">{guide.directAnswer}</p>
         </div>
 
         {/* Guide Sections */}
@@ -139,7 +140,7 @@ export default async function GuideDetailPage({
               <thead className="bg-[#f7f7f7] text-[#121212]">
                 <tr>
                   {guide.comparisonTable.headers.map((h) => (
-                    <th key={h} className="px-4 py-3.5 font-medium">
+                    <th key={h} scope="col" className="px-4 py-3.5 font-medium">
                       {h}
                     </th>
                   ))}

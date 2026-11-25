@@ -8,6 +8,7 @@ import { buildMetadata, breadcrumbSchema } from "@/lib/seo";
 import { JsonLd } from "@/components/seo/json-ld";
 import { PropertyCard } from "@/components/site/property-card";
 import { EnquiryForm } from "@/components/site/enquiry-form";
+import { WhatsAppIcon } from "@/components/site/whatsapp-icon";
 import { AvenloPageHeader } from "@/components/avenlo/page-header";
 import { BracketLink } from "@/components/avenlo/bracket-button";
 import { CtaBanner, SectionEyebrow, SplitHeading } from "@/components/avenlo/motion";
@@ -40,6 +41,7 @@ export async function generateMetadata({
       title: "Advisor Not Found",
       description: "Meet SWK Properties Dubai real estate advisors.",
       path: "/agents",
+      noIndex: true,
     });
   }
   return buildMetadata({
@@ -86,7 +88,12 @@ export default async function AgentProfilePage({
           <>
             <span>{member.experienceYears}</span>
             <span className="text-[#cfcfcf]">·</span>
-            <span>{member.languages.join(", ")}</span>
+            <span>
+              {member.languages.join(", ")}
+              {member.addonLanguages.length > 0
+                ? ` · Add-on: ${member.addonLanguages.join(", ")}`
+                : ""}
+            </span>
             {member.brn ? (
               <>
                 <span className="text-[#cfcfcf]">·</span>
@@ -151,17 +158,51 @@ export default async function AgentProfilePage({
               </div>
             </div>
 
+            {/* Language Skills */}
+            <div className="flex flex-wrap items-center gap-2 text-xs">
+              <span className="font-mono text-[10.5px] font-semibold uppercase tracking-[0.16em] text-[#8b8b8b] mr-1">
+                Languages:
+              </span>
+              {member.languages.map((lang) => (
+                <span
+                  key={lang}
+                  className="rounded-full border border-black/10 bg-white px-3 py-1 font-medium text-[#121212]"
+                >
+                  {lang}
+                </span>
+              ))}
+              {member.addonLanguages.map((lang) => (
+                <span
+                  key={lang}
+                  className="rounded-full border border-[#0e9f6e]/30 bg-[#0e9f6e]/10 px-3 py-1 font-medium text-[#0b7a55]"
+                >
+                  + {lang} (Add-on)
+                </span>
+              ))}
+            </div>
+
             {/* Direct Contact Strip */}
             <div className="flex flex-wrap items-center gap-5">
               <BracketLink href="#enquire" variant="light" size="md">
                 Book a Call
               </BracketLink>
               <a
-                href={`tel:${SITE.phoneRaw}`}
+                href={`tel:${member.phoneRaw}`}
                 className="inline-flex items-center gap-2 text-sm font-medium text-[#121212] hover:text-[#0e9f6e]"
               >
                 <Phone className="h-4 w-4" />
-                <span>{SITE.phone}</span>
+                <span>{member.phoneDisplay}</span>
+              </a>
+              <a
+                href={`${member.whatsappUrl}?text=${encodeURIComponent(
+                  `Hello ${member.name}, I would like to discuss Dubai property advisory with SWK Properties.`
+                )}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 rounded-full border border-[#0e9f6e]/30 bg-[#0e9f6e]/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.12em] text-[#0b7a55] transition-colors hover:bg-[#0e9f6e] hover:text-white"
+              >
+                <WhatsAppIcon className="h-3.5 w-3.5" />
+                <span>WhatsApp</span>
               </a>
               <a
                 href={`mailto:${SITE.email}`}

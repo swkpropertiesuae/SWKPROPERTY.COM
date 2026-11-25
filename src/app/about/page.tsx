@@ -95,7 +95,9 @@ const ADVISOR_HEADLINE_BY_SLUG: Record<string, string> = {
 
 const ADVISORY_CAROUSEL_ITEMS: CarouselItem[] = team.map((member) => ({
   id: member.slug,
-  badge: member.topDevelopers.slice(0, 3).join(" · "),
+  badge: member.directPhone
+    ? `${member.phoneDisplay} · ${member.topDevelopers.slice(0, 2).join(" · ")}`
+    : member.topDevelopers.slice(0, 3).join(" · "),
   stat: ADVISOR_HEADLINE_BY_SLUG[member.slug] ?? member.specialties[0] ?? member.role,
   quote: member.bio,
   author: member.name,
@@ -254,7 +256,7 @@ export default function AboutPage() {
               <EnquiryForm
                 context="advisory"
                 heading="Schedule an office meeting or call"
-                subheading="Speak directly with our advisory desk in English, Arabic, Urdu, Hindi, or French."
+                subheading="Speak directly with our advisory desk in English, Hindi, Bangladeshi, Urdu, Arabic, or French."
               />
             </div>
           </div>

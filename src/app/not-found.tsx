@@ -1,5 +1,12 @@
+import type { Metadata } from "next";
 import { BracketLink } from "@/components/avenlo/bracket-button";
 import { SectionEyebrow } from "@/components/avenlo/motion";
+
+export const metadata: Metadata = {
+  title: "Page Not Found | SWK Properties",
+  description: "The requested Dubai property page or listing could not be found.",
+  robots: { index: false, follow: true },
+};
 
 export default function NotFoundPage() {
   return (
@@ -8,7 +15,7 @@ export default function NotFoundPage() {
         <SectionEyebrow align="center">ERROR 404</SectionEyebrow>
         <h1 className="mt-6 text-[44px] sm:text-[68px] md:text-[84px] font-medium leading-[1.0] tracking-[-0.045em] text-[#121212]">
           This address{" "}
-          <span className="italic font-light text-[#8b8b8b]">does not exist</span>
+          <span className="italic font-light text-[#525252]">does not exist</span>
         </h1>
         <p className="mx-auto mt-5 max-w-md text-sm sm:text-base text-[#525252] leading-relaxed">
           The page or listing you looked for may have moved or sold. Browse our active Dubai portfolio or return home.

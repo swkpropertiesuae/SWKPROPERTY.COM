@@ -116,13 +116,13 @@ export function GalleryHoverCarousel({
               href={item.url}
               className="group relative block h-[415px] sm:h-[430px] w-full overflow-hidden rounded-[24px] sm:rounded-3xl border border-white/85 bg-white/94 shadow-[0_18px_48px_rgba(12,56,96,0.13)] backdrop-blur-xl transition-all duration-500 md:hover:shadow-[0_28px_72px_rgba(12,56,96,0.2)]"
             >
-              {/* Image Area: Always 52% on mobile (clean split card); full-bleed collapsing to 52% on desktop hover */}
-              <div className="relative h-[52%] md:h-full w-full overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] md:group-hover:h-[52%]">
+              {/* Image Area: Always 52% on mobile/touch; collapses to 52% on hover/focus */}
+              <div className="relative h-[52%] lg:h-full w-full overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] lg:group-hover:h-[52%] lg:group-focus-visible:h-[52%]">
                 <img
                   src={item.image}
                   alt={`${item.title} by ${item.developer}`}
                   loading="lazy"
-                  className="h-full w-full object-cover object-center transition-transform duration-700 ease-out md:group-hover:scale-105"
+                  className="h-full w-full object-cover object-center transition-transform duration-700 ease-out lg:group-hover:scale-105"
                 />
 
                 {/* Top Badge Overlay */}
@@ -138,21 +138,24 @@ export function GalleryHoverCarousel({
                   ) : null}
                 </div>
 
-                {/* Desktop Resting Bottom Scrim & Floating Editorial Title (hidden on mobile split view) */}
-                <div className="hidden md:block absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#08131f]/90 via-[#08131f]/45 to-transparent p-6 pt-16 text-white transition-opacity duration-300 group-hover:opacity-0">
+                {/* Desktop Resting Bottom Scrim & Floating Title (aria-hidden to avoid duplicate h3) */}
+                <div
+                  aria-hidden="true"
+                  className="hidden lg:block absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#08131f]/90 via-[#08131f]/45 to-transparent p-6 pt-16 text-white transition-opacity duration-300 group-hover:opacity-0 group-focus-visible:opacity-0"
+                >
                   <p className="text-[10.5px] font-medium uppercase tracking-[0.2em] text-[#51fec0]">
                     {item.developer} · {item.community}
                   </p>
-                  <h3 className="mt-1.5 text-[23px] font-medium leading-tight tracking-[-0.03em] text-white">
+                  <p className="mt-1.5 text-[23px] font-medium leading-tight tracking-[-0.03em] text-white">
                     {item.title}
-                  </h3>
+                  </p>
                 </div>
 
-                <div className="pointer-events-none absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-black/35 to-transparent opacity-100 md:opacity-0 transition-opacity duration-500 md:group-hover:opacity-100" />
+                <div className="pointer-events-none absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-black/35 to-transparent opacity-100 lg:opacity-0 transition-opacity duration-500 lg:group-hover:opacity-100 lg:group-focus-visible:opacity-100" />
               </div>
 
-              {/* Frosted Glass Dossier Panel (Bottom 48%): Always visible on mobile; slides up on desktop hover */}
-              <div className="absolute inset-x-0 bottom-0 flex h-[48%] flex-col justify-between bg-white/96 px-4 py-4 sm:px-6 sm:py-5 backdrop-blur-xl transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] translate-y-0 opacity-100 md:translate-y-6 md:opacity-0 md:group-hover:translate-y-0 md:group-hover:opacity-100">
+              {/* Frosted Glass Dossier Panel (Bottom 48%): Always visible on mobile/tablet; slides up on desktop hover/focus */}
+              <div className="absolute inset-x-0 bottom-0 flex h-[48%] flex-col justify-between bg-white/96 px-4 py-4 sm:px-6 sm:py-5 backdrop-blur-xl transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] translate-y-0 opacity-100 lg:translate-y-6 lg:opacity-0 lg:group-hover:translate-y-0 lg:group-hover:opacity-100 lg:group-focus-visible:translate-y-0 lg:group-focus-visible:opacity-100">
                 <div>
                   <div className="flex items-center justify-between gap-2 text-[10px] sm:text-[10.5px] font-semibold uppercase tracking-[0.15em] text-[#0e9f6e]">
                     <span className="truncate">{item.developer}</span>

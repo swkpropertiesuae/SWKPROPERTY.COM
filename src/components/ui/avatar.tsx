@@ -28,9 +28,9 @@ export function AvatarImage({
   alt = "",
   ...props
 }: React.ImgHTMLAttributes<HTMLImageElement>) {
-  const [errored, setErrored] = React.useState(false);
+  const [failedSrc, setFailedSrc] = React.useState<string | Blob | undefined>(undefined);
 
-  if (!src || errored) return null;
+  if (!src || failedSrc === src) return null;
 
   return (
     <img
@@ -38,8 +38,8 @@ export function AvatarImage({
       src={src}
       alt={alt}
       loading="lazy"
-      onError={() => setErrored(true)}
-      className={cn("aspect-square h-full w-full object-cover object-top", className)}
+      onError={() => setFailedSrc(src)}
+      className={cn("absolute inset-0 z-10 aspect-square h-full w-full object-cover object-top", className)}
       {...props}
     />
   );

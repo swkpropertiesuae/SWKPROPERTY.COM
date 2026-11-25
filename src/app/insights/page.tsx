@@ -3,7 +3,7 @@ import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { buildMetadata, breadcrumbSchema } from "@/lib/seo";
 import { JsonLd } from "@/components/seo/json-ld";
-import { blogIndex, blogCategories } from "@/lib/blog";
+import { blogIndex, blogCategories } from "@/lib/blog-index";
 import { GUIDES } from "@/lib/guides";
 import { EnquiryForm } from "@/components/site/enquiry-form";
 import { AvenloPageHeader } from "@/components/avenlo/page-header";
@@ -75,7 +75,7 @@ export default function InsightsPage() {
                 >
                   <div>
                     <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-[#1b6aa7]">
-                      0{idx + 1} · {g.eyebrow}
+                      {String(idx + 1).padStart(2, "0")} · {g.eyebrow}
                     </p>
                     <h3 className="mt-2.5 text-lg font-medium tracking-[-0.02em] text-[#121212] transition-colors group-hover:text-[#0e9f6e]">
                       {g.title}

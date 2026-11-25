@@ -2,7 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 /**
@@ -32,26 +32,31 @@ function LogoRow({
     <div className="group/marquee relative flex overflow-hidden py-2">
       <div
         className={cn(
-          "flex w-max shrink-0 items-center gap-4 will-change-transform group-hover/marquee:[animation-play-state:paused]",
+          "flex w-max shrink-0 items-center gap-4 will-change-transform group-hover/marquee:[animation-play-state:paused] group-focus-within/marquee:[animation-play-state:paused]",
           reverse ? "animate-logo-marquee-reverse" : "animate-logo-marquee"
         )}
         style={{ animationDuration: `${durationSec}s` }}
       >
-        {repeated.map((dev, idx) => (
+        {repeated.map((dev, idx) => {
+          const isDup = idx >= items.length;
+          return (
           <Link
             key={`${dev.slug}-${idx}`}
             href={`/developers/${dev.slug}`}
+            aria-hidden={isDup ? true : undefined}
+            tabIndex={isDup ? -1 : undefined}
             title={dev.knownFor ? `${dev.name} — ${dev.knownFor}` : dev.name}
             className="group/card flex h-[78px] w-[196px] sm:w-[214px] shrink-0 items-center justify-center rounded-2xl border border-white/85 bg-white/92 px-5 shadow-[0_10px_28px_rgba(12,56,96,0.08)] backdrop-blur-xl transition-all duration-300 hover:-translate-y-1 hover:border-[#1b6aa7]/40 hover:bg-white hover:shadow-[0_16px_38px_rgba(12,56,96,0.16)]"
           >
             <img
               src={dev.logo}
-              alt={dev.name}
+              alt={isDup ? "" : dev.name}
               loading="lazy"
               className="max-h-10 max-w-[138px] object-contain transition-transform duration-300 group-hover/card:scale-[1.06]"
             />
           </Link>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
@@ -68,6 +73,7 @@ export function LogoCloudMarquee({
   developers: DeveloperLogoItem[];
   className?: string;
 }) {
+  const reduced = useReducedMotion();
   const words = title.split(" ");
   const mid = Math.ceil(developers.length / 2);
   const rowOne = developers.slice(0, mid);
@@ -87,16 +93,17 @@ export function LogoCloudMarquee({
           </p>
           <h3 className="mt-2 text-xl sm:text-2xl font-medium leading-snug tracking-[-0.03em] text-[#121212]">
             {words.map((word, idx) => (
-              <motion.span
-                key={`${word}-${idx}`}
-                initial={{ opacity: 0, filter: "blur(5px)", y: 8 }}
-                whileInView={{ opacity: 1, filter: "blur(0px)", y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.35, delay: Math.min(idx * 0.04, 0.36) }}
-                className="mr-1.5 inline-block"
-              >
-                {word}
-              </motion.span>
+              <React.Fragment key={`${word}-${idx}`}>
+                <motion.span
+                  initial={reduced ? false : { opacity: 0, filter: "blur(5px)", y: 8 }}
+                  whileInView={{ opacity: 1, filter: "blur(0px)", y: 0 }}
+                  viewport={{ once: true }}
+                  transition={reduced ? { duration: 0 } : { duration: 0.35, delay: Math.min(idx * 0.04, 0.36) }}
+                  className="mr-1.5 inline-block"
+                >
+                  {word}
+                </motion.span>{" "}
+              </React.Fragment>
             ))}
           </h3>
           <p className="mt-1.5 text-xs sm:text-sm text-[#475569]">{subtitle}</p>

@@ -10,10 +10,22 @@ type MapEmbedProps = {
   className?: string;
 };
 
-/** Key-less, lazy-loaded Google Maps embed with a directions link (works without JavaScript). */
+/** Hardened, sandboxed, lazy-loaded Google Maps embed with coordinate & zoom validation. */
 export function MapEmbed({ query, lat, lng, zoom = 15, title, className = "" }: MapEmbedProps) {
-  const q = lat !== undefined && lng !== undefined ? `${lat},${lng}` : query ?? "Dubai, UAE";
-  const src = `https://maps.google.com/maps?q=${encodeURIComponent(q)}&z=${zoom}&output=embed`;
+  const validCoords =
+    typeof lat === "number" &&
+    Number.isFinite(lat) &&
+    lat >= -90 &&
+    lat <= 90 &&
+    typeof lng === "number" &&
+    Number.isFinite(lng) &&
+    lng >= -180 &&
+    lng <= 180;
+
+  const safeZoom = Number.isFinite(zoom) ? Math.min(20, Math.max(1, Math.round(zoom))) : 15;
+  const safeQuery = (query ?? "Dubai, UAE").replace(/[\r\n<>"]/g, " ").trim().slice(0, 140) || "Dubai, UAE";
+  const q = validCoords ? `${lat},${lng}` : safeQuery;
+  const src = `https://maps.google.com/maps?q=${encodeURIComponent(q)}&z=${safeZoom}&output=embed`;
   const directions = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(q)}`;
 
   return (
@@ -22,13 +34,14 @@ export function MapEmbed({ query, lat, lng, zoom = 15, title, className = "" }: 
         src={src}
         title={title}
         loading="lazy"
-        referrerPolicy="no-referrer-when-downgrade"
+        sandbox="allow-scripts allow-same-origin allow-popups"
+        referrerPolicy="no-referrer"
         className="block h-72 w-full border-0 md:h-96"
         allowFullScreen
       />
       <figcaption className="flex items-center justify-between gap-3 border-t border-black/[0.06] bg-[#f7f7f7] px-4 py-3 text-xs text-[#525252]">
         <span className="inline-flex items-center gap-1.5">
-          <MapPin className="h-3.5 w-3.5 text-[#121212]" aria-hidden />
+          <MapPin className="h-3.5 w-3.5 text-[#121212]" aria-hidden="true" />
           {title}
         </span>
         <a

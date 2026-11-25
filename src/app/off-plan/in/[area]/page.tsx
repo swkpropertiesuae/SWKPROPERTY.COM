@@ -13,6 +13,7 @@ import { Faq } from "@/components/site/faq";
 import { AvenloPageHeader } from "@/components/avenlo/page-header";
 import { BracketLink } from "@/components/avenlo/bracket-button";
 import { CtaBanner, SectionEyebrow, SplitHeading } from "@/components/avenlo/motion";
+import { ListingDisclaimer } from "@/components/site/listing-disclaimer";
 
 export function generateStaticParams() {
   return offPlanAreas.map((a) => ({ area: a.slug }));
@@ -26,7 +27,14 @@ export async function generateMetadata({
   params: Promise<{ area: string }>;
 }): Promise<Metadata> {
   const area = getOffPlanArea((await params).area);
-  if (!area) return {};
+  if (!area) {
+    return buildMeta({
+      title: "Off-Plan Area Not Found",
+      description: "Browse UAE off-plan property corridors with SWK Properties.",
+      path: "/off-plan",
+      noIndex: true,
+    });
+  }
   return buildMeta({
     title: `Off-Plan Projects in ${area.name} (${area.projects.length} Launches)`,
     description: `${area.projects.length} off-plan projects in ${area.name} from ${area.developers
@@ -51,18 +59,23 @@ export default async function OffPlanAreaPage({
   const area = getOffPlanArea((await params).area);
   if (!area) notFound();
 
+  const primaryEmirate = area.projects[0]?.emirate ?? "Dubai";
+  const isDubaiArea = primaryEmirate === "Dubai";
+
   const areaFaqs = [
     {
       q: `How many off-plan projects in ${area.name} does SWK track?`,
-      a: `SWK Properties tracks ${area.projects.length} off-plan launches in ${area.name} from ${area.developers.length} developer${area.developers.length > 1 ? "s" : ""}: ${area.developers.join(", ")}. Availability and payment terms are confirmed directly with the developer before reservation.`,
+      a: `SWK Properties tracks ${area.projects.length} off-plan launches in ${area.name} from ${area.developers.length} developer${area.developers.length > 1 ? "s" : ""}: ${area.developers.join(", ")}. All prices, availability, and payment terms depend on the respective developer and current market conditions.`,
     },
     {
-      q: `Do I pay commission when buying off-plan in ${area.name}?`,
-      a: "On primary developer sales, the developer normally pays the brokerage commission. Buyers pay the 4% DLD Oqood fee plus admin fee and construction-linked escrow instalments.",
+      q: `Do I pay commission or trustee fees when buying off-plan in ${area.name}?`,
+      a: isDubaiArea
+        ? "On primary developer sales, buyer brokerage commission is 0% (developer-paid). Buyers pay 4% DLD Oqood registration plus approximately AED 4,000–5,500 in developer admin fees. On off-plan purchases, no mortgage registration fees and no trustee fees apply."
+        : `On primary developer sales in ${primaryEmirate}, buyer brokerage commission is 0% (developer-paid). Buyers pay the applicable ${primaryEmirate} land-authority registration fee plus approximately AED 4,000–5,500 in developer admin fees, with no mortgage registration or trustee fees on off-plan bookings.`,
     },
     {
       q: `Can foreign buyers purchase off-plan in ${area.name}?`,
-      a: `Foreign nationals can acquire freehold property in designated UAE freehold zones. SWK confirms title status and RERA escrow registration before any booking.`,
+      a: `Foreign nationals can acquire freehold property in designated UAE freehold zones. SWK confirms title status and official ${isDubaiArea ? "RERA" : primaryEmirate} escrow registration before any booking.`,
     },
   ];
 
@@ -156,7 +169,11 @@ export default async function OffPlanAreaPage({
           })}
         </div>
 
-        <div className="mt-14">
+        <div className="mt-10">
+          <ListingDisclaimer variant="off-plan" />
+        </div>
+
+        <div className="mt-12">
           <MapEmbed query={`${area.name}, UAE`} zoom={13} title={`${area.name} — UAE Corridor Map`} />
         </div>
       </section>

@@ -327,22 +327,42 @@ export function ShaderBackground({ className }: { className?: string }) {
     if (!gl) return
 
     const compile = (type: number, src: string) => {
-      const s = gl.createShader(type)!
+      const s = gl.createShader(type)
+      if (!s) return null
       gl.shaderSource(s, src)
       gl.compileShader(s)
+      if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) {
+        gl.deleteShader(s)
+        return null
+      }
       return s
     }
-    const program = gl.createProgram()!
+    const program = gl.createProgram()
+    if (!program) return
     const vertexShader = compile(gl.VERTEX_SHADER, VERT)
     const fragmentShader = compile(gl.FRAGMENT_SHADER, FRAG)
+    if (!vertexShader || !fragmentShader) {
+      if (vertexShader) gl.deleteShader(vertexShader)
+      if (fragmentShader) gl.deleteShader(fragmentShader)
+      gl.deleteProgram(program)
+      return
+    }
     gl.attachShader(program, vertexShader)
     gl.attachShader(program, fragmentShader)
     gl.linkProgram(program)
     gl.deleteShader(vertexShader)
     gl.deleteShader(fragmentShader)
+    if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+      gl.deleteProgram(program)
+      return
+    }
     gl.useProgram(program)
 
     const buf = gl.createBuffer()
+    if (!buf) {
+      gl.deleteProgram(program)
+      return
+    }
     gl.bindBuffer(gl.ARRAY_BUFFER, buf)
     gl.bufferData(
       gl.ARRAY_BUFFER,
@@ -350,6 +370,11 @@ export function ShaderBackground({ className }: { className?: string }) {
       gl.STATIC_DRAW,
     )
     const loc = gl.getAttribLocation(program, "a_position")
+    if (loc < 0) {
+      gl.deleteBuffer(buf)
+      gl.deleteProgram(program)
+      return
+    }
     gl.enableVertexAttribArray(loc)
     gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0)
 
@@ -415,8 +440,25 @@ export function ShaderBackground({ className }: { className?: string }) {
     let visible = document.visibilityState === "visible"
     let inView = true
     let disposed = false
+    let contextLost = false
+    const reducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ?? false
     const start = performance.now()
-    const timeAnimated = Math.abs(UNIFORMS.timeScale) > 0.0001
+    const timeAnimated = !reducedMotion && Math.abs(UNIFORMS.timeScale) > 0.0001
+
+    const onContextLost = (e: Event) => {
+      e.preventDefault()
+      contextLost = true
+      if (raf !== 0) {
+        cancelAnimationFrame(raf)
+        raf = 0
+      }
+    }
+    const onContextRestored = () => {
+      contextLost = false
+      requestRender()
+    }
+    canvas.addEventListener("webglcontextlost", onContextLost)
+    canvas.addEventListener("webglcontextrestored", onContextRestored)
 
     const resizeCanvas = () => {
       const dpr = Math.min(window.devicePixelRatio || 1, 2)
@@ -436,7 +478,7 @@ export function ShaderBackground({ className }: { className?: string }) {
     }
 
     function requestRender() {
-      if (!disposed && visible && inView && raf === 0) {
+      if (!disposed && !contextLost && visible && inView && raf === 0) {
         raf = requestAnimationFrame(render)
       }
     }
@@ -517,7 +559,7 @@ export function ShaderBackground({ className }: { className?: string }) {
 
     function render(now: number) {
       raf = 0
-      if (disposed || !visible || !inView || !canvas || !gl) return
+      if (disposed || contextLost || !visible || !inView || !canvas || !gl) return
       const dt = lastNow === null ? 0 : Math.min((now - lastNow) / 1000, 0.1)
       lastNow = now
       const follow = 1 - Math.exp(-12 * dt)
@@ -562,6 +604,8 @@ export function ShaderBackground({ className }: { className?: string }) {
       cancelAnimationFrame(raf)
       resizeObserver.disconnect()
       intersectionObserver.disconnect()
+      canvas.removeEventListener("webglcontextlost", onContextLost)
+      canvas.removeEventListener("webglcontextrestored", onContextRestored)
       document.removeEventListener("visibilitychange", onVisibilityChange)
       window.removeEventListener("resize", updateLayout)
       if (UNIFORMS.cursorEnabled) {

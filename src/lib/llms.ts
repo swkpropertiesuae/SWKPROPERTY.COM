@@ -3,7 +3,7 @@ import { communityGuides } from "@/lib/communities"
 import { developers, projects } from "@/lib/developers"
 import { servicePages } from "@/lib/services"
 import { GUIDES } from "@/lib/guides"
-import { blogIndex } from "@/lib/blog"
+import { blogIndex } from "@/lib/blog-index"
 import { offPlanAreas } from "@/lib/areas"
 
 const u = (p: string) => `${SITE.url}${p}`
@@ -13,13 +13,14 @@ const FACTS = [
   `- Legal name: ${SITE.legalName}`,
   `- Licence: Dubai Real Estate Regulatory Agency (RERA) brokerage, Office Registration Number (ORN) ${SITE.orn}`,
   `- Office: ${SITE.address.full}`,
-  `- Phone / WhatsApp: ${SITE.phone}`,
+  `- Dubai Phone / WhatsApp: ${SITE.phone}`,
+  `- UK & International Advisory Desk (Mohammed Islam / Rex): ${SITE.ukAdvisoryPhone}`,
   `- Email: ${SITE.email}`,
   `- Hours: ${SITE.hours.full}`,
   `- Coverage: Dubai, Abu Dhabi, Sharjah, Ras Al Khaimah and Umm Al Quwain`,
   `- Services: off-plan advisory, secondary ready sales, handover transfers, residential leasing, Grade-A commercial spaces, property management, mortgage introductions, 10-Year UAE Golden Visa guidance`,
-  `- Languages: English, Arabic, Hindi, Urdu, Punjabi, Pashto, French`,
-  `- Primary buyer brokerage fee on direct developer off-plan releases: 0%`,
+  `- Languages: English, Arabic, Hindi, Bangladeshi, Urdu, Punjabi, Pashto, Marathi, French`,
+  `- Primary buyer brokerage fee on direct developer off-plan releases: 0% (all properties and prices depend on developers and current market conditions; see ${u("/terms")})`,
 ]
 
 /** Concise machine-readable index for LLMs & AI Answer Engines (https://llmstxt.org — SEO/AEO/AIO/GEO). */
@@ -71,7 +72,12 @@ export function buildLlmsTxt() {
     ...recentBriefings.map((b) => link(`${b.title} (${b.date})`, `/insights/${b.slug}`, b.excerpt)),
     "",
     "## Advisory Desk",
-    ...team.map((m) => link(m.name, `/agents/${m.slug}`, `${m.role} (${m.languages.join(", ")})`)),
+    ...team.map((m) => {
+      const langSummary = m.addonLanguages.length > 0
+        ? `${m.languages.join(", ")} + ${m.addonLanguages.join(", ")} (Add-on)`
+        : m.languages.join(", ")
+      return link(m.name, `/agents/${m.slug}`, `${m.role} (${langSummary})`)
+    }),
     "",
     "## Full Machine-Readable Endpoints",
     link("Full Plain-Text Corpus for LLMs", "/llms-full.txt"),
@@ -88,7 +94,11 @@ export function buildLlmsFullTxt() {
   for (const g of GUIDES) {
     out.push(`# ${g.title}`, "", `Source: ${u(`/guides/${g.slug}`)} (updated ${g.lastUpdated})`, "", g.directAnswer, "")
     out.push("Key takeaways:", ...g.keyTakeaways.map((k) => `- ${k}`), "")
-    for (const s of g.sections) out.push(`## ${s.heading}`, "", s.summary, "", s.body, ...s.bullets.map((b) => `- ${b}`), "")
+    for (const s of g.sections) {
+      out.push(`## ${s.heading}`, "")
+      if (s.summary && s.summary.trim() !== s.body.trim()) out.push(s.summary, "")
+      out.push(s.body, ...s.bullets.map((b) => `- ${b}`), "")
+    }
     for (const f of g.faqs) out.push(`### ${f.q}`, "", f.a, "")
   }
   for (const s of servicePages) {

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import {
@@ -32,7 +32,7 @@ const INITIAL_CHAT: ChatMessage[] = [
   {
     id: "welcome",
     role: "assistant",
-    text: "Welcome to SWK Properties (RERA ORN 51517). Ask about any Dubai developer, 2026 off-plan launch, ready property, or DLD fees and I will point you straight to the right page or specialist.",
+    text: `Welcome to SWK Properties (RERA ORN ${SITE.reraOrn}). Ask about any Dubai developer, hot studios (Binghatti AED 550K, Tarrad AED 620K, Azizi Venice AED 680K), ready homes, or DLD fees and I will point you straight to the right page or specialist.`,
     links: [
       { label: "Off-Plan Launches", href: "/off-plan" },
       { label: "UAE Master Developers", href: "/developers" },
@@ -41,43 +41,84 @@ const INITIAL_CHAT: ChatMessage[] = [
   },
 ];
 
+const STOP_WORDS = new Set(["the", "and", "for", "with", "in", "on", "of", "to", "a", "an", "launches", "launch", "projects", "project", "dubai", "uae"]);
+
+function scoreText(haystack: string, fullQuery: string, tokens: string[]): number {
+  const lower = haystack.toLowerCase();
+  if (lower.includes(fullQuery)) return 10;
+  let score = 0;
+  for (const t of tokens) {
+    if (lower.includes(t)) score += 2;
+  }
+  return score;
+}
+
 function generateAssistantReply(query: string): {
   text: string;
   links: { label: string; href: string }[];
 } {
-  const q = query.toLowerCase();
+  const q = query.toLowerCase().trim();
+  const tokens = q
+    .split(/[^a-z0-9]+/)
+    .filter((w) => w.length >= 2 && !STOP_WORDS.has(w));
+  const searchTokens = tokens.length > 0 ? tokens : q.split(/\s+/).filter(Boolean);
 
-  const matchedProjects = projects
-    .filter(
-      (p) =>
-        p.name.toLowerCase().includes(q) ||
-        p.developer.toLowerCase().includes(q) ||
-        p.community.toLowerCase().includes(q)
-    )
-    .slice(0, 3);
+  // Explicit fee / DLD / mortgage / FAQ intent first when query asks about fees or costs
+  if (/\b(?:fee|fees|dld|oqood|mortgage|trustee|commission|admin|visa|ejari)\b/i.test(q)) {
+    const scoredFaqs = faqs
+      .map((f) => ({ f, s: scoreText(`${f.q} ${f.a}`, q, searchTokens) }))
+      .filter((x) => x.s > 0)
+      .sort((a, b) => b.s - a.s);
+    if (scoredFaqs[0]) {
+      return {
+        text: `${scoredFaqs[0].f.a}\n\nSpeak with our Sheikh Zayed Road desk for case-specific figures.`,
+        links: [
+          { label: "Mortgage & DLD Calculator", href: "/calculators" },
+          { label: "Read Full FAQ", href: "/faq" },
+          { label: "Terms & Conditions", href: "/terms" },
+        ],
+      };
+    }
+  }
 
-  if (matchedProjects.length > 0) {
+  const allMatchedProjects = projects
+    .map((p) => ({
+      p,
+      s: scoreText(`${p.name} ${p.developer} ${p.community} ${p.tags.join(" ")}`, q, searchTokens),
+    }))
+    .filter((x) => x.s > 0)
+    .sort((a, b) => b.s - a.s)
+    .map((x) => x.p);
+
+  if (allMatchedProjects.length > 0) {
+    const shown = allMatchedProjects.slice(0, 3);
+    const countLabel =
+      allMatchedProjects.length > 3
+        ? `${allMatchedProjects.length} developer releases`
+        : `${allMatchedProjects.length} developer release${allMatchedProjects.length === 1 ? "" : "s"}`;
     return {
-      text: `We track ${matchedProjects.length}+ verified developer releases matching "${query}". Current unit availability, payment schedules, and handover dates are confirmed directly with the developer desk.`,
-      links: matchedProjects.map((p) => ({
+      text: `We track ${countLabel} matching "${query}". Current unit availability, payment schedules, and prices depend on the developer and prevailing market conditions.`,
+      links: shown.map((p) => ({
         label: `${p.name} — ${p.developer}`,
         href: `/off-plan/${p.slug}`,
       })),
     };
   }
 
-  const matchedListings = LISTINGS.filter(
-    (l) =>
-      l.title.toLowerCase().includes(q) ||
-      l.community.toLowerCase().includes(q) ||
-      l.developer.toLowerCase().includes(q) ||
-      l.propertyType.toLowerCase().includes(q) ||
-      (q.includes("rent") && l.purpose === "rent") ||
-      (q.includes("buy") && l.purpose === "buy")
-  ).slice(0, 3);
+  const allMatchedListings = LISTINGS.map((l) => {
+    let s = scoreText(`${l.title} ${l.community} ${l.developer} ${l.propertyType}`, q, searchTokens);
+    if (q.includes("rent") && l.purpose === "rent") s += 3;
+    if (q.includes("buy") && l.purpose === "buy") s += 3;
+    if (q.includes("studio") && l.bedrooms === 0 && l.propertyType !== "Office") s += 4;
+    return { l, s };
+  })
+    .filter((x) => x.s > 0)
+    .sort((a, b) => b.s - a.s)
+    .map((x) => x.l);
 
-  if (matchedListings.length > 0) {
-    const summary = matchedListings
+  if (allMatchedListings.length > 0) {
+    const shown = allMatchedListings.slice(0, 3);
+    const summary = shown
       .map(
         (l) =>
           `• ${l.title} (${l.community}) — AED ${l.priceAed.toLocaleString("en-US")}${
@@ -86,17 +127,19 @@ function generateAssistantReply(query: string): {
       )
       .join("\n");
     return {
-      text: `Matching residences on our books:\n${summary}\n\nAvailability is confirmed directly by our consultants prior to viewing.`,
-      links: matchedListings.map((l) => ({
-        label: `${l.title}`,
+      text: `Matching residences on our books (${allMatchedListings.length} total):\n${summary}\n\nAvailability and prices depend on developers and current market conditions.`,
+      links: shown.map((l) => ({
+        label: l.title,
         href: `/properties/${l.slug}`,
       })),
     };
   }
 
-  const matchedFaq = faqs.find(
-    (f) => f.q.toLowerCase().includes(q) || f.a.toLowerCase().includes(q)
-  );
+  const matchedFaq = faqs
+    .map((f) => ({ f, s: scoreText(`${f.q} ${f.a}`, q, searchTokens) }))
+    .filter((x) => x.s > 0)
+    .sort((a, b) => b.s - a.s)[0]?.f;
+
   if (matchedFaq) {
     return {
       text: `${matchedFaq.a}\n\nSpeak with our Sheikh Zayed Road desk for case-specific guidance.`,
@@ -108,7 +151,7 @@ function generateAssistantReply(query: string): {
   }
 
   return {
-    text: "I search SWK Properties' Dubai & UAE portfolio across leading master developers including Nakheel, Binghatti, Emaar, DAMAC, Sobha, and Azizi. Would you like to browse releases, run the DLD & mortgage calculator, or speak directly with our team?",
+    text: "I search SWK Properties' Dubai & UAE portfolio across Nakheel, Binghatti, Emaar, DAMAC, Azizi, Tarrad, and Sobha. Would you like to browse releases, run the DLD & mortgage calculator, or speak directly with our team?",
     links: [
       { label: "Browse All Properties", href: "/properties" },
       { label: "Explore Off-Plan Projects", href: "/off-plan" },
@@ -130,6 +173,7 @@ const QUICK_PILL_LINKS = [
 
 export function FloatingChrome() {
   const {
+    hydrated,
     savedSlugs,
     toggleSaved,
     compareSlugs,
@@ -151,17 +195,42 @@ export function FloatingChrome() {
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>(INITIAL_CHAT);
   const [chatInput, setChatInput] = useState("");
 
-  const handleSendChat = (e: React.FormEvent) => {
-    e.preventDefault();
-    const trimmed = chatInput.trim();
+  useEffect(() => {
+    if (!drawerOpen && !assistantOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setDrawerOpen(false);
+        setAssistantOpen(false);
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [drawerOpen, assistantOpen, setDrawerOpen, setAssistantOpen]);
+
+  useEffect(() => {
+    if (!drawerOpen) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [drawerOpen]);
+
+  const sendQuery = (raw: string) => {
+    const trimmed = raw.trim().slice(0, 200);
     if (!trimmed) return;
     const reply = generateAssistantReply(trimmed);
     setChatMessages((prev) => [
-      ...prev,
+      ...prev.slice(-38),
       { id: `u-${Date.now()}`, role: "user", text: trimmed },
       { id: `a-${Date.now() + 1}`, role: "assistant", text: reply.text, links: reply.links },
     ]);
     setChatInput("");
+  };
+
+  const handleSendChat = (e: React.FormEvent) => {
+    e.preventDefault();
+    sendQuery(chatInput);
   };
 
   const savedListings = LISTINGS.filter((l) => savedSlugs.includes(l.slug));
@@ -182,8 +251,8 @@ export function FloatingChrome() {
         </div>
       ) : null}
 
-      {/* 2. UAE PDPL Cookie Consent Card (Compact & Always-Dismissible on Mobile) */}
-      {!cookieConsent.decided ? (
+      {/* 2. UAE PDPL Cookie Consent Card (Hydration-gated to prevent SSR flash) */}
+      {hydrated && !cookieConsent.decided ? (
         <div className="fixed bottom-[122px] sm:bottom-24 left-3 right-3 sm:left-6 sm:right-auto sm:max-w-sm z-50 rounded-2xl border border-black/10 bg-white/96 p-3.5 sm:p-5 text-[#121212] shadow-[0_18px_46px_rgba(18,18,18,0.18)] backdrop-blur-xl max-w-[360px] mx-auto sm:mx-0">
           <div className="flex items-center justify-between gap-2">
             <div className="flex items-center gap-1.5 text-[10px] sm:text-[11px] font-semibold uppercase tracking-[0.16em] sm:tracking-[0.2em] text-[#525252]">
@@ -339,11 +408,16 @@ export function FloatingChrome() {
 
       {/* 5. Monochrome SWK Property Concierge Panel */}
       {assistantOpen ? (
-        <div className="fixed bottom-20 right-3 sm:right-6 z-[80] flex h-[70dvh] max-h-[500px] w-[calc(100vw-1.5rem)] max-w-md flex-col overflow-hidden rounded-2xl border border-black/12 bg-white text-[#121212] shadow-[0_24px_70px_rgba(18,18,18,0.22)]">
+        <div
+          role="dialog"
+          aria-modal="false"
+          aria-label="SWK Advisory Concierge"
+          className="fixed bottom-20 right-3 sm:right-6 z-[80] flex h-[70dvh] max-h-[500px] w-[calc(100vw-1.5rem)] max-w-md flex-col overflow-hidden rounded-2xl border border-black/12 bg-white text-[#121212] shadow-[0_24px_70px_rgba(18,18,18,0.22)]"
+        >
           <div className="flex items-center justify-between bg-[#121212] px-5 py-4 text-white">
             <div className="flex items-center gap-2.5">
               <img
-                src="/brand/swk-icon-192.webp"
+                src="/brand/swk-icon-192.webp?v=4"
                 width={24}
                 height={24}
                 alt=""
@@ -399,11 +473,11 @@ export function FloatingChrome() {
             ))}
 
             <div className="pt-1 flex flex-wrap gap-1.5">
-              {["Emaar launches", "Dubai Marina", "DLD buyer fees"].map((chip) => (
+              {["Emaar launches", "Dubai Marina", "DLD buyer fees", "Binghatti Studio"].map((chip) => (
                 <button
                   key={chip}
                   type="button"
-                  onClick={() => setChatInput(chip)}
+                  onClick={() => sendQuery(chip)}
                   className="cursor-pointer rounded-full border border-black/10 bg-white px-3 py-1 text-[11px] text-[#525252] hover:border-[#121212] hover:text-[#121212]"
                 >
                   {chip}
@@ -454,8 +528,17 @@ export function FloatingChrome() {
 
       {/* 6. Saved Shortlist & Side-by-Side Comparison Drawer */}
       {drawerOpen ? (
-        <div className="fixed inset-0 z-[90] flex justify-end bg-[#121212]/45 backdrop-blur-xs">
-          <div className="flex h-full w-full max-w-3xl flex-col bg-white text-[#121212] border-l border-black/10 shadow-2xl">
+        <div
+          className="fixed inset-0 z-[90] flex justify-end bg-[#121212]/45 backdrop-blur-xs"
+          onClick={() => setDrawerOpen(false)}
+        >
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-label="Shortlist and Property Comparison"
+            onClick={(e) => e.stopPropagation()}
+            className="flex h-full w-full max-w-3xl flex-col bg-white text-[#121212] border-l border-black/10 shadow-2xl"
+          >
             <div className="flex items-center justify-between border-b border-black/[0.08] bg-[#f7f7f7] px-6 py-5">
               <div>
                 <p className="text-[11px] font-medium uppercase tracking-[0.22em] text-[#8b8b8b]">
@@ -516,6 +599,7 @@ export function FloatingChrome() {
                                 </Link>
                                 <button
                                   type="button"
+                                  aria-label={`Remove ${item.title} from comparison`}
                                   onClick={() => toggleCompare(item.slug)}
                                   className="cursor-pointer text-[#8b8b8b] hover:text-[#121212]"
                                 >

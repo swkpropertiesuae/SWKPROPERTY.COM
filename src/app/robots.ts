@@ -40,7 +40,7 @@ const AI_AND_SEARCH_AGENTS = [
   "PhindBot",
 ]
 
-const PRIVATE = ["/api/", "/thank-you"]
+const PRIVATE = ["/api/"]
 
 export default function robots(): MetadataRoute.Robots {
   return {
@@ -49,6 +49,5 @@ export default function robots(): MetadataRoute.Robots {
       { userAgent: "*", allow: "/", disallow: PRIVATE },
     ],
     sitemap: `${SITE.url}/sitemap.xml`,
-    host: SITE.url,
   }
 }

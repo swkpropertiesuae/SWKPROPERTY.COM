@@ -39,6 +39,7 @@ export type Project = {
   devName: string
   developer: string
   community: string
+  emirate: Developer["emirate"]
   collection: string
   blurb: string
   summary: string
@@ -76,13 +77,14 @@ const LOGOS: Record<string, string> = {
   "empire-developments": "empire-developments.png",
 }
 
-// Strategic luxury brand ordering: Nakheel, Binghatti, Emaar, DAMAC, Azizi, Sobha, Omniyat, Ellington, Aldar first
+// Strategic luxury brand ordering: Nakheel, Binghatti, Emaar, DAMAC, Azizi, Tarrad, Sobha, Omniyat, Ellington, Aldar first
 const DEVELOPER_PRIORITY_ORDER: string[] = [
   "nakheel",
   "binghatti",
   "emaar",
   "damac",
   "azizi",
+  "tarrad",
   "sobha",
   "omniyat",
   "ellington",
@@ -121,7 +123,9 @@ const EMIRATE: Record<string, Developer["emirate"]> = {
  */
 const EXTRA_PROJECT_IMAGES: Record<string, string> = {
   "nakheel/Palm Springs Beachfront Villas": "/img/projects/nakheel/palm-springs-beachfront-villas.webp",
+  "binghatti/Binghatti Studio Residences": "/img/projects/binghatti/binghatti-jvc-boutique-residences.webp",
   "binghatti/Binghatti JVC Boutique Residences": "/img/projects/binghatti/binghatti-jvc-boutique-residences.webp",
+  "tarrad/Tarrad Residences Dubailand": "/img/projects/tarrad/tarrad-dubailand.webp",
   "emaar/Emaar The Oasis": "/img/projects/emaar/emaar-the-oasis.webp",
   "emaar/Dubai Hills Estate Residences": "/img/projects/emaar/dubai-hills-estate-residences.webp",
   "emaar/Address Residences Al Marjan Island": "/img/projects/emaar/address-residences-al-marjan.webp",
@@ -170,6 +174,15 @@ const EXTRA_PROJECTS_BY_DEV: Record<string, RawProject[]> = {
     },
   ],
   binghatti: [
+    {
+      name: "Binghatti Studio Residences",
+      community: "Jumeirah Village Circle",
+      collection: "Hot Project · High-Yield Studios",
+      blurb: "Architectural entry-level studios by Binghatti starting from AED 550,000* (subject to developer & current market conditions), offering signature hyper-geometric balconies, smart interiors, 0% buyer agency fee, and strong JVC tenant demand.",
+      tags: ["Hot Project", "Studio From AED 550K*", "High Rental Yield"],
+      url: null,
+      video: null,
+    },
     {
       name: "Binghatti JVC Boutique Residences",
       community: "Jumeirah Village Circle",
@@ -326,6 +339,25 @@ type Extra = {
 
 const EXTRAS: Extra[] = [
   {
+    slug: "tarrad",
+    name: "Tarrad Development",
+    emirate: "Dubai",
+    site: "",
+    tagline: "Contemporary Dubailand & DLRC residences engineered for high-yield value.",
+    about:
+      "Tarrad Development delivers contemporary boutique residential buildings across Dubailand and the Dubai Land Residence Complex (DLRC), pairing accessible studio entry pricing with modern amenities, curved glass architecture, and investor-oriented payment schedules.",
+    knownFor: "High-yield Dubailand studios & boutique towers",
+    projects: [
+      {
+        name: "Tarrad Residences Dubailand",
+        community: "Dubailand (DLRC)",
+        collection: "Hot Project · Boutique Studios",
+        blurb: "Contemporary boutique residences by Tarrad Development in Dubailand / DLRC with studios starting from AED 620,000* (subject to developer & current market conditions), landscaped pool podium, and 0% primary buyer commission.",
+        tags: ["Hot Project", "From AED 620K*", "Dubailand / DLRC"],
+      },
+    ],
+  },
+  {
     slug: "ellington",
     name: "Ellington Properties",
     site: "https://www.ellingtonproperties.ae",
@@ -385,7 +417,7 @@ const EXTRAS: Extra[] = [
   {
     slug: "lunaya",
     name: "Lunaya Developments",
-    site: "https://www.swkpropertiesuae.com",
+    site: "",
     tagline: "Boutique biophilic villas and low-density sanctuary homes.",
     about:
       "Lunaya curates low-density residential enclaves and private courtyard villas designed around natural light, greenery, and family privacy.",
@@ -615,6 +647,9 @@ function projectImage(devSlug: string, name: string) {
 }
 
 const PRIORITY_NAMES = new Set([
+  "Binghatti Studio Residences",
+  "Tarrad Residences Dubailand",
+  "Azizi Venice",
   "Palm Springs Beachfront Villas",
   "Palm Jebel Ali",
   "Como Residences",
@@ -625,7 +660,6 @@ const PRIORITY_NAMES = new Set([
   "Emaar The Oasis",
   "DAMAC Lagoons",
   "DAMAC Islands",
-  "Azizi Venice",
   "Riviera",
   "Sobha SeaHaven",
   "Sobha Century",
@@ -644,10 +678,23 @@ const PRIORITY_NAMES = new Set([
   "Sobha Siniya Island",
 ])
 
+function inferProjectEmirate(community: string, fallback: Developer["emirate"]): Developer["emirate"] {
+  const c = community.toLowerCase()
+  if (c.includes("umm al quwain") || c.includes("siniya")) return "Umm Al Quwain"
+  if (c.includes("ras al khaimah") || c.includes("marjan") || c.includes("mina al arab") || c.includes("al hamra") || c.includes("(rak)")) return "Ras Al Khaimah"
+  if (c.includes("sharjah") || c.includes("aljada") || c.includes("masaar")) return "Sharjah"
+  if (c.includes("abu dhabi") || c.includes("yas island") || c.includes("saadiyat") || c.includes("reem") || c.includes("fahid") || c.includes("ramhan") || c.includes("al jubail")) return "Abu Dhabi"
+  return fallback
+}
+
 const seen = new Set<string>()
 function uniqueSlug(name: string, dev: string) {
   let s = slugify(name)
   if (seen.has(s)) s = `${s}-${dev}`
+  let counter = 2
+  while (seen.has(s)) {
+    s = `${slugify(name)}-${dev}-${counter++}`
+  }
   seen.add(s)
   return s
 }
@@ -679,6 +726,7 @@ const fromJson: Developer[] = (
       devName: d.name,
       developer: d.name,
       community: p.community,
+      emirate: inferProjectEmirate(p.community, emirate),
       collection: p.collection,
       blurb: p.blurb,
       summary: p.blurb,
@@ -716,6 +764,7 @@ const fromExtras: Developer[] = EXTRAS.map((e) => {
       devName: e.name,
       developer: e.name,
       community: p.community,
+      emirate: inferProjectEmirate(p.community, emirate),
       collection: p.collection,
       blurb: p.blurb,
       summary: p.blurb,

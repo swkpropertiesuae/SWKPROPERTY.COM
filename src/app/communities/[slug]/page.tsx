@@ -31,12 +31,13 @@ export async function generateMetadata({
       title: "Community Not Found",
       description: "Explore Dubai community guides with SWK Properties.",
       path: "/communities",
+      noIndex: true,
     });
   }
 
   return buildMeta({
     title: `${comm.name} Guide | Properties, Schools & Pros/Cons`,
-    description: `${comm.blurb} Explore properties, transport links, schools, and balanced pros & drawbacks in ${comm.name} with SWK Properties (ORN ${SITE.reraOrn}).`,
+    description: comm.metaDescription || `${comm.blurb} Explore properties, transport links, schools, and balanced pros & drawbacks in ${comm.name} with SWK Properties (ORN ${SITE.reraOrn}).`,
     path: `/communities/${comm.slug}`,
     image: comm.image,
     keywords: [
@@ -46,6 +47,19 @@ export async function generateMetadata({
       `living in ${comm.name}`,
     ],
   });
+}
+
+function matchesCommunityProject(projectCommunity: string, commName: string, commSlug: string): boolean {
+  const pc = projectCommunity.toLowerCase();
+  const cn = commName.toLowerCase();
+  if (pc.includes(cn) || cn.includes(pc)) return true;
+  const slugWords = commSlug.replace(/-/g, " ");
+  if (slugWords.length >= 3 && pc.includes(slugWords)) return true;
+  if (commSlug === "jvc" && (pc.includes("jvc") || pc.includes("jumeirah village circle"))) return true;
+  if (commSlug === "jlt" && (pc.includes("jlt") || pc.includes("jumeirah lakes towers"))) return true;
+  if (commSlug === "mbr-city" && (pc.includes("mbr") || pc.includes("meydan") || pc.includes("mohammed bin rashid"))) return true;
+  if (commSlug === "sheikh-zayed-road" && (pc.includes("sheikh zayed") || pc.includes("szr"))) return true;
+  return false;
 }
 
 export default async function CommunityDetailPage({
@@ -59,7 +73,7 @@ export default async function CommunityDetailPage({
 
   const commListings = getListingsByCommunity(comm.slug);
   const commProjects = projects
-    .filter((p) => p.community.toLowerCase().includes(comm.name.toLowerCase().split(" ")[0]))
+    .filter((p) => matchesCommunityProject(p.community, comm.name, comm.slug))
     .slice(0, 6);
 
   return (

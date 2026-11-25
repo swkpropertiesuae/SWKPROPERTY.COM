@@ -8,10 +8,9 @@ export default function manifest(): MetadataRoute.Manifest {
     short_name: SITE.name,
     description:
       "RERA-licensed Dubai real estate brokerage (ORN 51517): off-plan launches, ready homes, leasing and property management across the UAE.",
-    start_url: "/?utm_source=pwa",
+    start_url: "/",
     scope: "/",
     display: "standalone",
-    orientation: "portrait",
     background_color: "#ffffff",
     theme_color: "#ffffff",
     lang: "en-AE",

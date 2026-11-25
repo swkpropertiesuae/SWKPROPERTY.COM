@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import React, { useId, useMemo, useState } from "react";
+import { motion } from "framer-motion";
 import { Minus, Plus, Search, Sparkles } from "lucide-react";
 import { faqs, SITE } from "@/lib/swk";
 import { SectionEyebrow, SplitHeading } from "@/components/avenlo/motion";
@@ -34,6 +34,7 @@ export function Faq({
   muted?: string;
   compact?: boolean;
 }) {
+  const uid = useId();
   const list = useMemo(() => (items && items.length > 0 ? items : faqs), [items]);
   const [openKey, setOpenKey] = useState<string | null>(list[0]?.q ?? null);
   const [topic, setTopic] = useState<FaqTopic>("All");
@@ -128,7 +129,7 @@ export function Faq({
                         >
                           {active && (
                             <motion.span
-                              layoutId="swk-faq-topic-pill"
+                              layoutId={`${uid}-faq-topic-pill`}
                               transition={{ type: "spring", stiffness: 380, damping: 32 }}
                               className="absolute inset-0 rounded-full bg-[#121212] shadow-md"
                             />
@@ -203,25 +204,21 @@ export function Faq({
                           </span>
                         </button>
 
-                        <AnimatePresence initial={false}>
-                          {open ? (
-                            <motion.div
-                              key="content"
-                              initial={{ height: 0, opacity: 0 }}
-                              animate={{ height: "auto", opacity: 1 }}
-                              exit={{ height: 0, opacity: 0 }}
-                              transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
-                              className="overflow-hidden"
+                        <div
+                          className={`grid transition-[grid-template-rows,opacity] duration-300 ease-out ${
+                            open ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
+                          }`}
+                          aria-hidden={!open}
+                        >
+                          <div className="overflow-hidden">
+                            <div
+                              data-speakable
+                              className="px-6 pb-6 pl-14 sm:px-7 sm:pb-7 sm:pl-16 text-[15px] leading-[1.68] text-[#475569]"
                             >
-                              <div
-                                data-speakable
-                                className="px-6 pb-6 pl-14 sm:px-7 sm:pb-7 sm:pl-16 text-[15px] leading-[1.68] text-[#475569]"
-                              >
-                                {f.a}
-                              </div>
-                            </motion.div>
-                          ) : null}
-                        </AnimatePresence>
+                              {f.a}
+                            </div>
+                          </div>
+                        </div>
                       </motion.div>
                     );
                   })

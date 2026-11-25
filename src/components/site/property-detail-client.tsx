@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import {
   Check,
@@ -14,6 +14,7 @@ import { type PropertyListing, isPermitVerified, permitLabel } from "@/lib/listi
 import { communityHref } from "@/lib/communities";
 import { EnquiryForm } from "@/components/site/enquiry-form";
 import { PropertyCard } from "@/components/site/property-card";
+import { ListingDisclaimer } from "@/components/site/listing-disclaimer";
 import { usePrefs } from "@/lib/prefs";
 import { SITE } from "@/lib/swk";
 import { MapEmbed } from "@/components/site/map-embed";
@@ -41,6 +42,7 @@ export function PropertyDetailClient({
 
   const [activeTab, setActiveTab] = useState<"layout" | "specs" | "dld">("layout");
   const [activeImage, setActiveImage] = useState(0);
+  const heroRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     trackEvent("property_view", {
@@ -108,7 +110,8 @@ export function PropertyDetailClient({
               <button
                 type="button"
                 onClick={() => toggleSaved(listing.slug)}
-                aria-label="Save property"
+                aria-pressed={isSaved}
+                aria-label={isSaved ? "Remove property from shortlist" : "Save property"}
                 className={`inline-flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border transition-colors ${
                   isSaved
                     ? "border-[#121212] bg-[#121212] text-[#51fec0]"
@@ -120,7 +123,8 @@ export function PropertyDetailClient({
               <button
                 type="button"
                 onClick={() => toggleCompare(listing.slug)}
-                aria-label="Compare property"
+                aria-pressed={isCompared}
+                aria-label={isCompared ? "Remove property from comparison" : "Compare property"}
                 className={`inline-flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border transition-colors ${
                   isCompared
                     ? "border-[#121212] bg-[#121212] text-[#51fec0]"
@@ -144,9 +148,9 @@ export function PropertyDetailClient({
 
       {/* Full-Width Hero Residence Image + 4-Stat Architectural Bar */}
       <section className="mx-auto max-w-[1260px] px-4 py-10 sm:px-8 sm:py-14">
-        <div className="relative overflow-hidden rounded-2xl bg-[#f5f5f5]">
+        <div ref={heroRef} className="relative overflow-hidden rounded-2xl bg-[#f5f5f5]">
           <img
-            src={listing.images[activeImage] ?? listing.images[0]}
+            src={listing.images?.[activeImage] ?? listing.images?.[0] ?? "/og-default.jpg"}
             alt={listing.title}
             className="h-[340px] sm:h-[520px] md:h-[620px] w-full object-cover"
           />
@@ -267,7 +271,7 @@ export function PropertyDetailClient({
                   type="button"
                   onClick={() => {
                     setActiveImage(i);
-                    window.scrollTo({ top: 260, behavior: "smooth" });
+                    heroRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
                   }}
                   className={`group cursor-pointer overflow-hidden rounded-2xl border transition-all ${
                     activeImage === i ? "border-[#121212]" : "border-black/[0.06]"
@@ -323,7 +327,7 @@ export function PropertyDetailClient({
               />
             </div>
 
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-2" role="tablist" aria-label="Floor plan specifications">
               {(
                 [
                   ["layout", "Room Dimensions"],
@@ -334,6 +338,8 @@ export function PropertyDetailClient({
                 <button
                   key={key}
                   type="button"
+                  role="tab"
+                  aria-selected={activeTab === key}
                   onClick={() => setActiveTab(key)}
                   className={`cursor-pointer rounded-full px-5 py-2.5 text-xs font-medium transition-colors ${
                     activeTab === key
@@ -401,10 +407,22 @@ export function PropertyDetailClient({
               <BracketLink href="#enquire" variant="light" size="sm">
                 Book a Viewing
               </BracketLink>
-              <BracketLink href={`tel:${SITE.phoneRaw}`} external variant="light" size="sm">
+              <BracketLink href={`tel:${listing.agentPhone || SITE.phoneRaw}`} variant="light" size="sm">
                 Call Us Now
               </BracketLink>
             </div>
+          </div>
+
+          <div className="mt-8">
+            <ListingDisclaimer
+              variant={
+                listing.purpose === "off-plan"
+                  ? "off-plan"
+                  : listing.purpose === "rent"
+                    ? "rent"
+                    : "secondary"
+              }
+            />
           </div>
         </div>
       </section>
