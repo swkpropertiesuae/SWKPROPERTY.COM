@@ -255,6 +255,14 @@ const worker = {
     if (pathname.length > 512 || search.length > 1536) {
       return blockResponse(414, "Request URI exceeds safe length.");
     }
+    let paramCount = 0;
+    const paramIter = url.searchParams.keys();
+    while (!paramIter.next().done) {
+      paramCount++;
+      if (paramCount > 25) {
+        return blockResponse(400, "Excessive query parameters.");
+      }
+    }
     if (pathname.includes("//") || TRAVERSAL_RE.test(pathname) || TRAVERSAL_RE.test(search)) {
       return blockResponse(400, "Malformed path sequence.");
     }
@@ -264,12 +272,21 @@ const worker = {
     const decodedPath = safeDecode(pathname);
     const decodedSearch = safeDecode(search);
     const decodedSearchSpaces = safeDecode(search.replace(/\+/g, " "));
+    const rawReqQuery = request.url.includes("?") ? request.url.slice(request.url.indexOf("?")) : "";
+    const decodedRawQuery = rawReqQuery ? safeDecode(rawReqQuery.replace(/\+/g, " ")) : "";
     if (
       ATTACK_SIGNATURE_RE.test(decodedPath) ||
       ATTACK_SIGNATURE_RE.test(decodedSearch) ||
-      ATTACK_SIGNATURE_RE.test(decodedSearchSpaces)
+      ATTACK_SIGNATURE_RE.test(decodedSearchSpaces) ||
+      (decodedRawQuery && ATTACK_SIGNATURE_RE.test(decodedRawQuery))
     ) {
       return blockResponse(403, "Request blocked by edge security policy.");
+    }
+    if (method === "POST") {
+      const contentLength = Number(request.headers.get("content-length"));
+      if (Number.isFinite(contentLength) && contentLength > 16_384) {
+        return blockResponse(413, "Payload exceeds 16 KiB limit.");
+      }
     }
 
     // 0b. Native Cloudflare Edge Rate Limiters (PoP-wide volumetric protection)
