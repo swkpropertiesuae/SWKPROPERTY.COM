@@ -2,6 +2,7 @@ import communitiesJson from "@/data/communities.json";
 import teamJson from "@/data/team.json";
 import faqJson from "@/data/faq.json";
 import testimonialsJson from "@/data/testimonials.json";
+import siteUpdatesJson from "@/data/site-updates.json";
 
 export const SITE = {
   name: "SWK Properties",
@@ -34,7 +35,9 @@ export const SITE = {
   reraOrn: "51517",
   rera: "RERA ORN 51517",
   announcement:
+    siteUpdatesJson.announcement ||
     "18+ Years UAE Experience · Direct Master Developer Access · Nakheel, Emaar, Binghatti, DAMAC, Azizi, Tarrad & More Across the UAE",
+  liveUpdates: siteUpdatesJson,
   geo: {
     lat: 25.213925,
     lng: 55.277978,
